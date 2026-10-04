@@ -8,6 +8,7 @@ namespace TheCall
     {
         string[] _extraction = Array.Empty<string>();
         string[] _breeding = Array.Empty<string>();
+        string[] _lockedParents;
 
         public int EnergyDue { get; private set; }
 
@@ -39,6 +40,25 @@ namespace TheCall
             InOvertime = false;
             _extraction = new string[5];
             _breeding = new string[2];
+            _lockedParents = null;
+        }
+
+        public void LockBreeding() => _lockedParents = (string[])_breeding.Clone();
+
+        public IReadOnlyList<string> LockedParents => _lockedParents;
+
+        public bool IsLockedParent(string monsterId)
+        {
+            if (_lockedParents == null || string.IsNullOrEmpty(monsterId))
+                return false;
+
+            for (var i = 0; i < _lockedParents.Length; i++)
+            {
+                if (_lockedParents[i] == monsterId)
+                    return true;
+            }
+
+            return false;
         }
 
         public void ClearEnergy() => Energy = 0;

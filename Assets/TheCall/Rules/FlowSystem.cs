@@ -97,6 +97,7 @@ namespace TheCall
             var payment = this.GetSystem<SettlementSystem>().Settle();
             if (payment == PaymentResult.Paid)
             {
+                this.GetModel<LevelModel>().LockBreeding();
                 run.EnterShop();
                 this.GetSystem<ShopSystem>().Open();
             }
@@ -121,6 +122,7 @@ namespace TheCall
                 return;
             }
 
+            this.GetSystem<BreedingSystem>().Spawn();
             var next = run.LevelNumber + 1;
             run.EnterLevelStart(next);
             var levels = this.GetUtility<ILevelCatalog>();

@@ -67,6 +67,8 @@ namespace TheCall
             var run = this.GetModel<RunModel>();
             if (run.Phase != RunPhase.Shop)
                 return;
+            if (this.GetModel<LevelModel>().IsLockedParent(monsterId))
+                return;
             if (!run.TryRemoveFromCage(monsterId, out var monster))
                 return;
 

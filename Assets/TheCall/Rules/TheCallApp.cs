@@ -23,6 +23,7 @@ namespace TheCall
             RegisterSystem(new FlowSystem());
             RegisterSystem(new SettlementSystem());
             RegisterSystem(new ShopSystem());
+            RegisterSystem(new BreedingSystem());
         }
     }
 }
