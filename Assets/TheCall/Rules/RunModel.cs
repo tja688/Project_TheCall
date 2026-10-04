@@ -13,9 +13,14 @@ namespace TheCall
     internal sealed class Monster
     {
         public Monster(string id, SkillInstance skill)
+            : this(id, new[] { skill })
+        {
+        }
+
+        public Monster(string id, IReadOnlyList<SkillInstance> skills)
         {
             Id = id;
-            Skills = new List<SkillInstance> { skill };
+            Skills = new List<SkillInstance>(skills);
         }
 
         public string Id { get; }
@@ -29,6 +34,8 @@ namespace TheCall
         readonly List<Monster> _cage = new List<Monster>();
         readonly Dictionary<string, Monster> _byId = new Dictionary<string, Monster>();
         readonly List<string> _tools = new List<string>();
+        readonly List<string> _shelfMonsters = new List<string>();
+        readonly List<string> _shelfTools = new List<string>();
         readonly List<string> _skillSlots = new List<string>();
         readonly List<string> _unlockedTech = new List<string>();
         int _nextId = 1;
@@ -51,13 +58,59 @@ namespace TheCall
 
         public IReadOnlyList<Monster> Cage => _cage;
 
+        public IReadOnlyList<string> ShelfMonsterIds => _shelfMonsters;
+
+        public IReadOnlyList<string> ShelfToolNames => _shelfTools;
+
         public void EnterOperation(int levelNumber)
         {
             Phase = RunPhase.Operation;
             LevelNumber = levelNumber;
         }
 
-        public void EnterShop() => Phase = RunPhase.Shop;
+        public int ShopVisit { get; private set; }
+
+        int _stockedVisit;
+
+        public bool NeedsShopStock => Phase == RunPhase.Shop && _stockedVisit != ShopVisit;
+
+        public void EnterShop()
+        {
+            Phase = RunPhase.Shop;
+            ShopVisit++;
+        }
+
+        public void MarkShopStocked() => _stockedVisit = ShopVisit;
+
+        public void AddShelfMonster(string id) => _shelfMonsters.Add(id);
+
+        public void AddShelfTool(string name) => _shelfTools.Add(name);
+
+        public bool TryRemoveShelfMonster(string monsterId)
+        {
+            var index = _shelfMonsters.IndexOf(monsterId);
+            if (index < 0)
+                return false;
+
+            _shelfMonsters.RemoveAt(index);
+            return true;
+        }
+
+        public bool TryRemoveShelfTool(string toolName)
+        {
+            var index = _shelfTools.IndexOf(toolName);
+            if (index < 0)
+                return false;
+
+            _shelfTools.RemoveAt(index);
+            return true;
+        }
+
+        public void ClearShelf()
+        {
+            _shelfMonsters.Clear();
+            _shelfTools.Clear();
+        }
 
         public void EnterLevelStart(int levelNumber)
         {
@@ -92,6 +145,17 @@ namespace TheCall
         }
 
         public void AddGold(int amount) => Gold += amount;
+
+        public bool TrySpend(int amount)
+        {
+            if (amount < 0 || Gold < amount)
+                return false;
+
+            Gold -= amount;
+            return true;
+        }
+
+        public void AddTool(string name) => _tools.Add(name);
 
         public void AddTechPoint() => TechPoints += 1;
 
@@ -175,6 +239,8 @@ namespace TheCall
             return true;
         }
 
+        public Monster CreateMonster(IReadOnlyList<string> skillNames) => Create(skillNames);
+
         public Monster Find(string monsterId)
         {
             if (monsterId != null && _byId.TryGetValue(monsterId, out var monster))
@@ -187,9 +253,15 @@ namespace TheCall
         {
         }
 
-        Monster Create(string skillName)
+        Monster Create(string skillName) => Create(new[] { skillName });
+
+        Monster Create(IReadOnlyList<string> skillNames)
         {
-            var monster = new Monster("m" + _nextId++, new SkillInstance(skillName));
+            var skills = new SkillInstance[skillNames.Count];
+            for (var i = 0; i < skills.Length; i++)
+                skills[i] = new SkillInstance(skillNames[i]);
+
+            var monster = new Monster("m" + _nextId++, skills);
             _byId.Add(monster.Id, monster);
             return monster;
         }

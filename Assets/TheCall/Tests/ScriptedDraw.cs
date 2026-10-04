@@ -12,7 +12,12 @@ namespace TheCall.Tests
         public T Choose<T>(IReadOnlyList<T> options)
         {
             if (_names.Count == 0)
-                throw new InvalidOperationException("没有更多预设抽取。");
+            {
+                if (options == null || options.Count == 0)
+                    throw new InvalidOperationException("抽取名单是空的。");
+
+                return options[0];
+            }
 
             var name = _names.Dequeue();
             foreach (var option in options)

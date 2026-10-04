@@ -37,11 +37,18 @@ namespace TheCall.Tests
 
         protected void UseLevel(ILevelCatalog levels, params string[] names)
         {
+            UseRules(new ScriptedDraw(names), levels);
+        }
+
+        protected void UseRules(IDraw draw, ILevelCatalog levels, IToolCatalog tools = null)
+        {
             TheCallApp.Reset();
             TheCallApp.OnRegisterPatch = app =>
             {
-                app.RegisterUtility<IDraw>(new ScriptedDraw(names));
+                app.RegisterUtility(draw);
                 app.RegisterUtility(levels);
+                if (tools != null)
+                    app.RegisterUtility(tools);
             };
             App = TheCallApp.Interface;
         }

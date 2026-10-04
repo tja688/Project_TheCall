@@ -96,7 +96,10 @@ namespace TheCall
 
             var payment = this.GetSystem<SettlementSystem>().Settle();
             if (payment == PaymentResult.Paid)
+            {
                 run.EnterShop();
+                this.GetSystem<ShopSystem>().Open();
+            }
             else if (payment == PaymentResult.Failed)
             {
                 this.GetModel<LevelModel>().ClearProgress();

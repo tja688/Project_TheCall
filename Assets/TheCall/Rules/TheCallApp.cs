@@ -17,10 +17,12 @@ namespace TheCall
             RegisterUtility(new SkillCatalog());
             RegisterUtility<IDraw>(new SystemDraw());
             RegisterUtility<ILevelCatalog>(new LevelCatalog());
+            RegisterUtility<IToolCatalog>(new ToolCatalog());
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterSystem(new FlowSystem());
             RegisterSystem(new SettlementSystem());
+            RegisterSystem(new ShopSystem());
         }
     }
 }
