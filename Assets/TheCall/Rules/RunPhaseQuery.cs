@@ -5,8 +5,10 @@ namespace TheCall
     public enum RunPhase
     {
         Opening,
+        LevelStart,
         Operation,
         Shop,
+        Victory,
         Failed,
     }
 

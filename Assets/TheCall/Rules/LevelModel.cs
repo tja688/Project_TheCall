@@ -23,15 +23,17 @@ namespace TheCall
 
         public IReadOnlyList<string> Breeding => _breeding;
 
-        public void BeginFirstLevel(int energyDue, int excessEnergy)
+        public void BeginLevel(int energyDue, int excessEnergy)
         {
+            ClearProgress();
             EnergyDue = energyDue;
             ExcessEnergy = excessEnergy;
-            ClearProgress();
         }
 
         public void ClearProgress()
         {
+            EnergyDue = 0;
+            ExcessEnergy = 0;
             Energy = 0;
             Shortfall = 0;
             InOvertime = false;

@@ -59,6 +59,25 @@ namespace TheCall
 
         public void EnterShop() => Phase = RunPhase.Shop;
 
+        public void EnterLevelStart(int levelNumber)
+        {
+            Phase = RunPhase.LevelStart;
+            LevelNumber = levelNumber;
+        }
+
+        public void Win()
+        {
+            Phase = RunPhase.Victory;
+            Gold = 0;
+            TechPoints = 0;
+            _tools.Clear();
+            _skillSlots.Clear();
+            _unlockedTech.Clear();
+            _cage.Clear();
+            _candidates.Clear();
+            _byId.Clear();
+        }
+
         public void Lose()
         {
             Phase = RunPhase.Failed;

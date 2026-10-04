@@ -120,14 +120,36 @@ namespace TheCall.Tests
 
     sealed class ScriptedLevelCatalog : ILevelCatalog
     {
+        readonly int[] _energyDue;
+        readonly int[] _excess;
+
         public ScriptedLevelCatalog(int energyDue, int excessEnergy = 60)
+            : this(new[] { energyDue }, new[] { excessEnergy })
         {
-            EnergyDue = energyDue;
-            ExcessEnergy = excessEnergy;
         }
 
-        public int EnergyDue { get; }
+        public ScriptedLevelCatalog(int[] energyDue, int[] excessEnergy)
+        {
+            _energyDue = energyDue;
+            _excess = excessEnergy;
+        }
 
-        public int ExcessEnergy { get; }
+        public int EnergyDue(int levelNumber) => At(_energyDue, levelNumber);
+
+        public int ExcessEnergy(int levelNumber) => At(_excess, levelNumber);
+
+        static int At(int[] values, int levelNumber)
+        {
+            if (values.Length == 0)
+                return 0;
+
+            var index = levelNumber - 1;
+            if (index < 0)
+                return values[0];
+            if (index >= values.Length)
+                return values[values.Length - 1];
+
+            return values[index];
+        }
     }
 }

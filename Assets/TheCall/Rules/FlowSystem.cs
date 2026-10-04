@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using QFramework;
 
 namespace TheCall
@@ -27,13 +28,13 @@ namespace TheCall
 
             run.EnterOperation(1);
             var levels = this.GetUtility<ILevelCatalog>();
-            this.GetModel<LevelModel>().BeginFirstLevel(levels.EnergyDue, levels.ExcessEnergy);
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(1), levels.ExcessEnergy(1));
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
         {
             var run = this.GetModel<RunModel>();
-            if (run.Phase != RunPhase.Operation)
+            if (!EnterOperation(run))
                 return;
 
             var level = this.GetModel<LevelModel>();
@@ -48,7 +49,7 @@ namespace TheCall
         public void ReturnToCage(string monsterId)
         {
             var run = this.GetModel<RunModel>();
-            if (run.Phase != RunPhase.Operation)
+            if (!EnterOperation(run))
                 return;
             if (!this.GetModel<LevelModel>().TryRemove(monsterId))
                 return;
@@ -59,7 +60,7 @@ namespace TheCall
         public void Discard(string monsterId)
         {
             var run = this.GetModel<RunModel>();
-            if (run.Phase != RunPhase.Operation || run.SkillSlots.Count >= 3)
+            if (!EnterOperation(run) || run.SkillSlots.Count >= 3)
                 return;
 
             var monster = run.Find(monsterId);
@@ -81,7 +82,7 @@ namespace TheCall
         public void Equip(string monsterId, int skillSlotIndex)
         {
             var run = this.GetModel<RunModel>();
-            if (run.Phase != RunPhase.Operation)
+            if (!EnterOperation(run))
                 return;
 
             run.TryEquip(monsterId, skillSlotIndex);
@@ -90,7 +91,7 @@ namespace TheCall
         public void Confirm()
         {
             var run = this.GetModel<RunModel>();
-            if (run.Phase != RunPhase.Operation)
+            if (!EnterOperation(run))
                 return;
 
             var payment = this.GetSystem<SettlementSystem>().Settle();
@@ -100,6 +101,55 @@ namespace TheCall
             {
                 this.GetModel<LevelModel>().ClearProgress();
                 run.Lose();
+            }
+        }
+
+        public void LeaveShop()
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase != RunPhase.Shop)
+                return;
+
+            ReturnBoard(run);
+            if (run.LevelNumber >= 7)
+            {
+                this.GetModel<LevelModel>().ClearProgress();
+                run.Win();
+                return;
+            }
+
+            var next = run.LevelNumber + 1;
+            run.EnterLevelStart(next);
+            var levels = this.GetUtility<ILevelCatalog>();
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(next), levels.ExcessEnergy(next));
+        }
+
+        static bool EnterOperation(RunModel run)
+        {
+            if (run.Phase == RunPhase.LevelStart)
+                run.EnterOperation(run.LevelNumber);
+
+            return run.Phase == RunPhase.Operation;
+        }
+
+        void ReturnBoard(RunModel run)
+        {
+            var level = this.GetModel<LevelModel>();
+            ReturnSlots(level.Extraction, run);
+            ReturnSlots(level.Breeding, run);
+        }
+
+        static void ReturnSlots(IReadOnlyList<string> slots, RunModel run)
+        {
+            for (var i = 0; i < slots.Count; i++)
+            {
+                var monsterId = slots[i];
+                if (monsterId == null)
+                    continue;
+
+                var monster = run.Find(monsterId);
+                if (monster != null)
+                    run.AddToCage(monster);
             }
         }
     }
