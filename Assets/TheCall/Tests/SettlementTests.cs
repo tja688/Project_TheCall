@@ -58,10 +58,10 @@ namespace TheCall.Tests
             var landings = App.SendQuery(new SettlementRecordQuery());
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { atZero, atThree }));
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "能量吐息" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 6, 6 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5 }));
-            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(40));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 6, 6 }));
+            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(38));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
         }
 

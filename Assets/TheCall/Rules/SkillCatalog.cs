@@ -3,6 +3,12 @@ using QFramework;
 
 namespace TheCall
 {
+    internal enum CountedSide
+    {
+        Left = -1,
+        Right = 1,
+    }
+
     internal sealed class SkillCatalog : IUtility
     {
         public IReadOnlyList<string> Names { get; } = new[]
@@ -52,8 +58,47 @@ namespace TheCall
                 return true;
             }
 
+            if (skillName == "孤独心")
+            {
+                quote = 4;
+                return true;
+            }
+
             quote = 0;
             return false;
+        }
+
+        public bool TrySideCount(string skillName, out CountedSide side, out int perMonster)
+        {
+            if (skillName == "左能量体")
+            {
+                side = CountedSide.Right;
+                perMonster = 2;
+                return true;
+            }
+
+            if (skillName == "右能量体")
+            {
+                side = CountedSide.Left;
+                perMonster = 2;
+                return true;
+            }
+
+            side = CountedSide.Right;
+            perMonster = 0;
+            return false;
+        }
+
+        public bool DoublesWhenIsolated(string skillName) => skillName == "孤独心";
+
+        public int AddedToOthers(string skillName)
+        {
+            if (skillName == "增量小手")
+                return 1;
+            if (skillName == "增量大手")
+                return 2;
+
+            return 0;
         }
 
         static readonly string[] White =

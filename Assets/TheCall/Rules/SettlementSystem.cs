@@ -67,12 +67,16 @@ namespace TheCall
                 for (var index = 0; index < skills.Count; index++)
                 {
                     var skillName = skills[index].Name;
-                    if (!catalog.TryEnergyQuote(skillName, out var quote))
+                    if (!TryQuote(catalog, cells, cell, skillName, out var quote))
                         continue;
 
-                    const int multiplier = 1;
-                    var energy = quote * multiplier;
-                    _landings.Add(new SettlementLanding(monsterId, skillName, quote, multiplier, energy));
+                    var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId);
+                    var multiplier = 1;
+                    if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
+                        multiplier = 2;
+
+                    var energy = baseValue * multiplier;
+                    _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
                     level.AddEnergy(energy);
                 }
             }
@@ -80,6 +84,54 @@ namespace TheCall
 
         protected override void OnInit()
         {
+        }
+
+        static bool TryQuote(SkillCatalog catalog, IReadOnlyList<string> cells, int cell, string skillName, out int quote)
+        {
+            if (catalog.TryEnergyQuote(skillName, out quote))
+                return true;
+
+            if (!catalog.TrySideCount(skillName, out var side, out var perMonster))
+            {
+                quote = 0;
+                return false;
+            }
+
+            var count = 0;
+            var direction = (int)side;
+            for (var index = cell + direction; index >= 0 && index < cells.Count; index += direction)
+            {
+                if (cells[index] != null)
+                    count++;
+            }
+
+            quote = perMonster * count;
+            return true;
+        }
+
+        static int AddedByOthers(SkillCatalog catalog, RunModel run, IReadOnlyList<string> cells, string monsterId)
+        {
+            var added = 0;
+            for (var cell = 0; cell < cells.Count; cell++)
+            {
+                var otherId = cells[cell];
+                if (otherId == null || otherId == monsterId)
+                    continue;
+
+                var skills = run.Find(otherId).Skills;
+                for (var index = 0; index < skills.Count; index++)
+                    added += catalog.AddedToOthers(skills[index].Name);
+            }
+
+            return added;
+        }
+
+        static bool HasNeighbor(IReadOnlyList<string> cells, int cell)
+        {
+            if (cell > 0 && cells[cell - 1] != null)
+                return true;
+
+            return cell + 1 < cells.Count && cells[cell + 1] != null;
         }
     }
 }
