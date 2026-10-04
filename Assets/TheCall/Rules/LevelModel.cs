@@ -167,6 +167,12 @@ namespace TheCall
             Energy = 0;
         }
 
+        public void ClearDebt()
+        {
+            Shortfall = 0;
+            InOvertime = false;
+        }
+
         public void AddEnergy(int amount) => Energy += amount;
 
         public void Pay(int amount) => Energy -= amount;

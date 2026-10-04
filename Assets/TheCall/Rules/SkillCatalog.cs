@@ -102,6 +102,8 @@ namespace TheCall
 
         public bool DoublesWhenIsolated(string skillName) => skillName == "孤独心";
 
+        public bool DoublesAdjacentEnergy(string skillName) => skillName == "鼓励嘴";
+
         public int AddedToOthers(string skillName)
         {
             if (skillName == "增量小手")

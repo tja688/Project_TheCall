@@ -1,0 +1,16 @@
+ts	phase	decision	why	evidence	result
+2026-10-04T12:08:09Z	frame	验收范围是 issue 1 的规则代码和现有编辑模式测试，改动只修规格违背和会让表现层接错的缝	用户要验收后自己改，表现层还没做，状态划分已经写在 ADR 里不再重开	gh issue 1; docs/adr/0001-0005; CONTEXT.md	open
+2026-10-04T12:08:09Z	frame	完成标准是每条范围内的用户故事要么有一条会失败的行为测试并且编辑模式全绿，要么写明推迟和理由。表现层只能走命令、查询和结算记录。规则代码不调用场景、场景时间和 Unity 随机	证明看真实测试结果，不看编译通过或自述	issue 1 Testing Decisions; adr/0004	open
+2026-10-04T12:08:09Z	workflow	先跑现有编辑模式测试当基线，再分四路只读核对流程账本、结算、培育商店科技、表现层接缝，然后按证据逐条修，每条修完再测	风险最大的是结算和接缝，先量再改。不并行改同一份检出	playbook .audit/issue-1-playbook.md	open
+2026-10-04T12:16:00Z	baseline	现有编辑模式测试 143 条全部通过，参数没被命令行吃进去所以先跑了全部模式，随后取消了误启动的播放模式	改代码前要有一条真实通过数，播放模式不在这次验收里	unity run_tests Summary Total 143 Passed 143; cancel_tests status cancelled	tests green
+2026-10-04T12:31:51Z	seam	结算记录改成按发生顺序的落地、换位、消灭和支付，删掉单独的扣除查询和消灭查询	画面要回放同一次确认里交错发生的事，两份平行查询对不上顺序	Assets/TheCall/Rules/SettlementRecordQuery.cs; Assets/TheCall/Tests/SettlementRecordTests.cs	tests 149 passed
+2026-10-04T12:31:51Z	seam	偿付成功后清掉欠额和加班标记	商店阶段再查欠额会把已经还清的数显示出来	LevelModel.ClearDebt; DeductionTests	tests 151 passed
+2026-10-04T12:31:51Z	seam	怪物查询返回技能名、报价、稀有度、不动和产能，货架工具带上稀有度	摆进槽位的怪物会离开怪物笼，画面原来看不到它	Assets/TheCall/Rules/MonsterQuery.cs; MonsterQueryTests	tests 151 passed
+2026-10-04T12:31:51Z	defer	没有加调整工具次序的命令	领域说明允许调整，议题的命令名单没有这条，先不扩大命令	CONTEXT.md 工具次序; issue 1 Implementation Decisions	open
+2026-10-04T12:40:16Z	settle	鼓励嘴按这一刻的相邻把产能量计分乘进倍率，不乘自己，隔一格不乘	故事 73 原来只有名字没有效果	SkillCatalog.DoublesAdjacentEnergy; SideScoreTests	tests green
+2026-10-04T12:40:16Z	settle	太阳能头先支付已有产能再加新层，不报价的技能结束时也支付已有产能	故事 65 和 66 要求获得层数的那一次不计新层，之后每次主动执行都支付已有层。旧测试把漏付锁成了期望	CapacityTests	tests green
+2026-10-04T12:40:16Z	settle	产能落地的底数加上这只怪物的修正	科学培育的加二要进入产能量计分，产能那一条原来把修正写成 0	TechTests 科学培育的加二也加进产能另开的底数	tests green
+2026-10-04T12:40:16Z	settle	能量吐息和孤独心按技能实例上的报价落地，目录里的 5 和 4 只是起点	写回之后的下一次计分要读得到。延迟写回打在这两项上原来仍然是常数	SwapAndClockTests	tests green
+2026-10-04T12:40:16Z	close	编辑模式 156 条通过。开局、商店、培育的主路径与议题一致，没有再改行为	繁殖和流程核对没有给出高置信度的相反行为。欠额在偿付成功后已经清掉	.audit/editmode-tests.json Total 156 Passed 156	tests green
+2026-10-04T12:40:16Z	defer	没有补上卖锁定亲本、已持有工具不再上架、失败前先有金币再清空这几条会失败的测试	代码路径和议题一致，但现有断言在守卫被删掉时仍可能通过。这次只改了会算错能量的规则	BreedingTests.cs:252; ShopSystem.cs:141; DeductionTests 失败清空	open
+2026-10-04T12:41:55Z	correct	结算记录的顺序是计分途中的落地和立刻消灭，然后全部换位，然后结束消灭，最后支付。换位不插进计分时钟	上一行用了交错，容易读成换位和落地按同一时钟穿插。议题要求换位等全部计分结束	SettlementSystem.Settle Score then ExecuteSwaps then ExecuteEndRemovals	supersedes seam row

@@ -25,7 +25,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("双重吐息"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "左能量体");
+            var landing = Landings().Single(item => item.SkillName == "左能量体");
             Assert.That(landing.MonsterId, Is.EqualTo(leftId));
             Assert.That(landing.Base, Is.EqualTo(4));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
@@ -52,7 +52,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "右能量体");
+            var landing = Landings().Single(item => item.SkillName == "右能量体");
             Assert.That(landing.MonsterId, Is.EqualTo(rightId));
             Assert.That(landing.Base, Is.EqualTo(4));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
@@ -80,7 +80,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             var left = landings.Single(item => item.SkillName == "左能量体");
             var right = landings.Single(item => item.SkillName == "右能量体");
             Assert.That(left.MonsterId, Is.EqualTo(leftId));
@@ -112,7 +112,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("吞噬大嘴"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "孤独心");
+            var landing = Landings().Single(item => item.SkillName == "孤独心");
             Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
             Assert.That(landing.Base, Is.EqualTo(4));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
@@ -137,7 +137,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "孤独心");
+            var landing = Landings().Single(item => item.SkillName == "孤独心");
             Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
             Assert.That(landing.Base, Is.EqualTo(4));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
@@ -163,7 +163,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("吞噬大嘴"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "孤独心");
+            var landing = Landings().Single(item => item.SkillName == "孤独心");
             Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
             Assert.That(landing.Base, Is.EqualTo(4));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
@@ -198,7 +198,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("增量大手"), OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "孤独心");
+            var landing = Landings().Single(item => item.SkillName == "孤独心");
             Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
             Assert.That(landing.Base, Is.EqualTo(7));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
@@ -224,7 +224,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single(item => item.SkillName == "左能量体");
+            var landing = Landings().Single(item => item.SkillName == "左能量体");
             Assert.That(landing.MonsterId, Is.EqualTo(leftId));
             Assert.That(landing.Base, Is.EqualTo(3));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
@@ -251,7 +251,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(IdOf("增量大手"), OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single();
+            var landing = Landings().Single();
             Assert.That(landing.MonsterId, Is.EqualTo(breathId));
             Assert.That(landing.SkillName, Is.EqualTo("能量吐息"));
             Assert.That(landing.Base, Is.EqualTo(5));
@@ -280,7 +280,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 3));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "孤独心" }));
             Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5, 4 }));
             Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 2 }));
@@ -310,12 +310,47 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(otherId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(item => item.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, otherId }));
             Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "能量吐息" }));
             Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5, otherBase }));
             Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
             Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 5, otherBase }));
+        }
+
+        [Test]
+        public void 鼓励嘴让这一刻相邻怪物的产能量计分翻倍且不翻自己和隔格()
+        {
+            Open(
+                "鼓励嘴",
+                "左能量体",
+                "右能量体",
+                "能量吐息",
+                "能量吐息",
+                "增量小手",
+                "残留提取腺体",
+                "孤独心",
+                "吞噬大嘴");
+
+            var mouthId = IdOf("鼓励嘴");
+            var breaths = App.SendQuery(new MonsterCageQuery())
+                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Select(monster => monster.Id)
+                .ToArray();
+            App.SendCommand(new PlaceMonsterCommand(mouthId, OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(breaths[0], OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(breaths[1], OperationArea.Extraction, 3));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var adjacent = Landings().Single(landing => landing.MonsterId == breaths[0]);
+            var distant = Landings().Single(landing => landing.MonsterId == breaths[1]);
+            Assert.That(adjacent.Base, Is.EqualTo(5));
+            Assert.That(adjacent.Multiplier, Is.EqualTo(2));
+            Assert.That(adjacent.Energy, Is.EqualTo(10));
+            Assert.That(distant.Base, Is.EqualTo(5));
+            Assert.That(distant.Multiplier, Is.EqualTo(1));
+            Assert.That(distant.Energy, Is.EqualTo(5));
+            Assert.That(Landings().Any(landing => landing.MonsterId == mouthId), Is.False);
         }
 
         void Open(params string[] names)

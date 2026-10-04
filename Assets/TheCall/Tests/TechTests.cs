@@ -416,7 +416,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(parent, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var first = App.SendQuery(new SettlementRecordQuery());
+            var first = Landings();
             Assert.That(Landing(first, child.Id).Base, Is.EqualTo(7));
             Assert.That(Landing(first, child.Id).Energy, Is.EqualTo(7));
             Assert.That(Landing(first, parent).Base, Is.EqualTo(5));
@@ -428,7 +428,50 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(child.Id, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(Landing(App.SendQuery(new SettlementRecordQuery()), child.Id).Base, Is.EqualTo(7));
+            Assert.That(Landing(Landings(), child.Id).Base, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void 科学培育的加二也加进产能另开的底数且不写进报价()
+        {
+            var names = new[]
+            {
+                "太阳能头",
+                "左能量体",
+                "右能量体",
+                "增量小手",
+                "增量大手",
+                "残留提取腺体",
+                "孤独心",
+                "吞噬大嘴",
+                "双重吐息",
+            };
+            var draw = new TechDraw(names, true);
+            UseRules(draw, new ScriptedLevelCatalog(new[] { 0, 0, 3 }, new[] { 0, 0, 60 }));
+            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            EarnTechPoint();
+            App.SendCommand(new UnlockTechCommand("科学培育"));
+            var before = CageIds();
+            App.SendCommand(new PlaceMonsterCommand(Parent("太阳能头"), OperationArea.Breeding, 0));
+            App.SendCommand(new ConfirmSettlementCommand());
+            App.SendCommand(new LeaveShopCommand());
+
+            var child = Offspring(before);
+            Assert.That(child.Modifier, Is.EqualTo(2));
+            App.SendCommand(new PlaceMonsterCommand(child.Id, OperationArea.Extraction, 0));
+            App.SendCommand(new ConfirmSettlementCommand());
+            Assert.That(Landings(), Is.Empty);
+            Assert.That(App.SendQuery(new MonsterQuery(child.Id)).Skills.Single().Quote, Is.EqualTo(0));
+
+            App.SendCommand(new ConfirmSettlementCommand());
+            var landing = Landings().Single();
+            Assert.That(landing.MonsterId, Is.EqualTo(child.Id));
+            Assert.That(landing.SkillName, Is.EqualTo("产能"));
+            Assert.That(landing.Base, Is.EqualTo(3));
+            Assert.That(landing.Multiplier, Is.EqualTo(1));
+            Assert.That(landing.Energy, Is.EqualTo(3));
+            Assert.That(landing.Writeback, Is.EqualTo(0));
+            Assert.That(App.SendQuery(new MonsterQuery(child.Id)).Skills.Single().Quote, Is.EqualTo(0));
         }
 
         [Test]
@@ -450,7 +493,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(child.Id, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(Landing(App.SendQuery(new SettlementRecordQuery()), child.Id).Base, Is.EqualTo(5));
+            Assert.That(Landing(Landings(), child.Id).Base, Is.EqualTo(5));
         }
 
         [Test]

@@ -13,21 +13,16 @@ namespace TheCall
 
     internal sealed class SettlementSystem : AbstractSystem
     {
-        readonly List<SettlementLanding> _landings = new List<SettlementLanding>();
+        readonly List<SettlementEntry> _entries = new List<SettlementEntry>();
         readonly List<PendingSwap> _swaps = new List<PendingSwap>();
         readonly List<PendingRemoval> _endRemovals = new List<PendingRemoval>();
-        readonly List<string> _removed = new List<string>();
         readonly Dictionary<string, decimal> _forceReady = new Dictionary<string, decimal>();
         readonly Dictionary<string, int> _nextBonus = new Dictionary<string, int>();
         int _removalSequence;
         bool _doubleFirstEnergy;
         bool _doubleSingleAffix;
 
-        public IReadOnlyList<SettlementLanding> Landings => _landings;
-
-        public IReadOnlyList<string> Removed => _removed;
-
-        public int Deducted { get; private set; }
+        public IReadOnlyList<SettlementEntry> Entries => _entries;
 
         public PaymentResult Settle()
         {
@@ -35,38 +30,43 @@ namespace TheCall
             ExecuteSwaps();
             ExecuteEndRemovals();
             var level = this.GetModel<LevelModel>();
-            var due = level.InOvertime ? level.Shortfall : level.EnergyDue;
+            var wasOvertime = level.InOvertime;
+            var due = wasOvertime ? level.Shortfall : level.EnergyDue;
             if (level.Energy < due)
             {
-                Deducted = 0;
-                if (level.InOvertime)
+                var gap = due - level.Energy;
+                if (wasOvertime)
                 {
                     level.ClearEnergy();
+                    _entries.Add(new SettlementPayment(0, gap, true, true, false, 0));
                     return PaymentResult.Failed;
                 }
 
-                level.RecordShortfall(level.EnergyDue - level.Energy);
+                level.RecordShortfall(gap);
+                _entries.Add(new SettlementPayment(0, gap, true, false, false, 0));
                 return PaymentResult.Short;
             }
 
             var remaining = level.Energy - due;
-            Deducted = due;
             level.Pay(due);
             level.ClearEnergy();
             var run = this.GetModel<RunModel>();
-            if (remaining >= level.ExcessEnergy)
+            var excess = remaining >= level.ExcessEnergy;
+            if (excess)
                 run.AddTechPoint();
 
-            run.AddGold(level.InOvertime ? 20 : 40);
+            var wage = wasOvertime ? 20 : 40;
+            run.AddGold(wage);
+            level.ClearDebt();
+            _entries.Add(new SettlementPayment(due, 0, wasOvertime, false, excess, wage));
             return PaymentResult.Paid;
         }
 
         void Score()
         {
-            _landings.Clear();
+            _entries.Clear();
             _swaps.Clear();
             _endRemovals.Clear();
-            _removed.Clear();
             _forceReady.Clear();
             _nextBonus.Clear();
             _removalSequence = 0;
@@ -276,6 +276,7 @@ namespace TheCall
             var skillName = skill.Name;
             if (catalog.TryGainCapacity(skillName, out var layers))
             {
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 var host = run.Find(monsterId);
                 if (host != null)
                     host.AddCapacity(layers);
@@ -316,8 +317,18 @@ namespace TheCall
                 return;
             }
 
-            if (!TryQuote(catalog, cells, cell, skillName, out var quote))
+            if (catalog.TryEnergyQuote(skillName, out _))
+            {
+                Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, doubleFirstExecution);
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
+            }
+
+            if (!TryQuote(catalog, cells, cell, skillName, out var quote))
+            {
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
+                return;
+            }
 
             Land(level, run, catalog, cells, cell, monsterId, skillName, quote, doubleFirstExecution);
             OpenCapacity(level, run, catalog, cells, cell, monsterId);
@@ -364,7 +375,7 @@ namespace TheCall
         {
             for (var time = 0; time < times; time++)
             {
-                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote, doubleFirstExecution);
+                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote, doubleFirstExecution, writeback);
                 if (writeback != 0)
                     skill.Add(writeback, permanent);
             }
@@ -379,21 +390,24 @@ namespace TheCall
             string monsterId,
             string skillName,
             int quote,
-            bool doubleFirstExecution)
+            bool doubleFirstExecution,
+            int writeback = 0)
         {
-            var modifier = skillName == "产能" ? 0 : run.Find(monsterId).Modifier;
+            var host = run.Find(monsterId);
+            var modifier = host == null ? 0 : host.Modifier;
             _nextBonus.TryGetValue(monsterId, out var bonus);
             var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
                 multiplier *= 2;
+            multiplier *= AdjacentEnergyDouble(run, catalog, cells, cell);
             if (doubleFirstExecution)
                 multiplier *= 2;
             if (_doubleSingleAffix && IsSingleAffix(run, catalog, monsterId))
                 multiplier *= 2;
 
             var energy = baseValue * multiplier;
-            _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
+            _entries.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy, writeback));
             level.AddEnergy(energy);
             RespondToLanding(level, run, catalog, monsterId, skillName);
         }
@@ -456,7 +470,10 @@ namespace TheCall
             if (cell + 1 < cells.Count && cells[cell + 1] != null)
                 options.Add(cells[cell + 1]);
             if (options.Count == 0)
+            {
+                _entries.Add(new SettlementRemoval(null, false));
                 return;
+            }
 
             var target = this.GetUtility<IDraw>().Choose(options);
             RemoveFromPlay(target);
@@ -469,19 +486,7 @@ namespace TheCall
             for (var i = 0; i < _swaps.Count; i++)
             {
                 var swap = _swaps[i];
-                if (string.IsNullOrEmpty(swap.TargetId))
-                    continue;
-
-                var actor = run.Find(swap.ActorId);
-                var target = run.Find(swap.TargetId);
-                if (actor == null || target == null || target.Immovable)
-                    continue;
-                if (IndexOf(level.Extraction, swap.ActorId) < 0 || IndexOf(level.Extraction, swap.TargetId) < 0)
-                    continue;
-                if (!level.TrySwapExtraction(swap.ActorId, swap.TargetId))
-                    continue;
-
-                actor.MakeImmovable(false);
+                _entries.Add(new SettlementSwap(swap.ActorId, swap.TargetId, TrySwap(level, run, swap)));
             }
         }
 
@@ -569,7 +574,7 @@ namespace TheCall
 
         void LandPoison(string monsterId, int damage)
         {
-            _landings.Add(new SettlementLanding(monsterId, "毒跳伤", damage, 1, damage));
+            _entries.Add(new SettlementLanding(monsterId, "毒跳伤", damage, 1, damage, 0));
             this.GetModel<LevelModel>().AddEnergy(damage);
         }
 
@@ -585,18 +590,45 @@ namespace TheCall
         bool RemoveFromPlay(string monsterId)
         {
             if (string.IsNullOrEmpty(monsterId))
+            {
+                _entries.Add(new SettlementRemoval(monsterId, false));
                 return false;
+            }
 
             var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
             if (IndexOf(level.Extraction, monsterId) < 0)
+            {
+                _entries.Add(new SettlementRemoval(monsterId, false));
                 return false;
+            }
 
             level.TryRemove(monsterId);
             if (!run.TryDestroy(monsterId))
+            {
+                _entries.Add(new SettlementRemoval(monsterId, false));
+                return false;
+            }
+
+            _entries.Add(new SettlementRemoval(monsterId, true));
+            return true;
+        }
+
+        static bool TrySwap(LevelModel level, RunModel run, PendingSwap swap)
+        {
+            if (string.IsNullOrEmpty(swap.TargetId))
                 return false;
 
-            _removed.Add(monsterId);
+            var actor = run.Find(swap.ActorId);
+            var target = run.Find(swap.TargetId);
+            if (actor == null || target == null || target.Immovable)
+                return false;
+            if (IndexOf(level.Extraction, swap.ActorId) < 0 || IndexOf(level.Extraction, swap.TargetId) < 0)
+                return false;
+            if (!level.TrySwapExtraction(swap.ActorId, swap.TargetId))
+                return false;
+
+            actor.MakeImmovable(false);
             return true;
         }
 
@@ -721,6 +753,33 @@ namespace TheCall
                 return true;
 
             return cell + 1 < cells.Count && cells[cell + 1] != null;
+        }
+
+        static int AdjacentEnergyDouble(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell)
+        {
+            var multiplier = 1;
+            multiplier *= NeighborEnergyDouble(run, catalog, cells, cell - 1);
+            multiplier *= NeighborEnergyDouble(run, catalog, cells, cell + 1);
+            return multiplier;
+        }
+
+        static int NeighborEnergyDouble(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell)
+        {
+            if (cell < 0 || cell >= cells.Count || cells[cell] == null)
+                return 1;
+
+            var neighbor = run.Find(cells[cell]);
+            if (neighbor == null)
+                return 1;
+
+            var skills = neighbor.Skills;
+            for (var index = 0; index < skills.Count; index++)
+            {
+                if (catalog.DoublesAdjacentEnergy(skills[index].Name))
+                    return 2;
+            }
+
+            return 1;
         }
     }
 }

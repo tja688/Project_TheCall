@@ -1,0 +1,1126 @@
+{
+  "success": true,
+  "command": "command run_tests",
+  "data": {
+    "command": "run_tests",
+    "parameters": {},
+    "result": {
+      "Summary": {
+        "Total": 156,
+        "Passed": 156,
+        "Failed": 0,
+        "Skipped": 0,
+        "Inconclusive": 0
+      },
+      "Results": [
+        {
+          "FullName": "TheCall.Tests.BreedingTests.涓€鍙翰鏈湪涓嬩竴鍏冲紑濮嬬敓鎴愬甫鏈夎鎶€鑳界殑鍚庝唬浜叉湰浠嶇暀鍦ㄦ€墿绗?,
+          "Status": "Passed",
+          "Duration": 0.116847,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.涓ゅ彧鍗曟妧鑳戒翰鏈妧鑳戒笉鍚屾椂鍚庝唬鎸変翰鏈『搴忓緱鍒拌繖涓や釜鎶€鑳?,
+          "Status": "Passed",
+          "Duration": 0.0006424,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.涓ゅ彧鍗曟妧鑳戒翰鏈妧鑳界浉鍚屾椂鍚庝唬鍙湁杩欎竴涓妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.000331,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.浜叉湰涓嶅叏鏄崟鎶€鑳借€屽張鎶藉埌鍚屽悕鏃跺悗浠ｅ緱鍒颁袱涓笉鍚屾妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0136871,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.浜叉湰鏈夊涓妧鑳芥椂鍚庝唬寰楀埌鎶戒腑鐨勯偅涓€涓?,
+          "Status": "Passed",
+          "Duration": 0.0003106,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.鍔犵彮鍙互鏀规帀灏氭湭鏈€缁堥攣瀹氱殑鏂规閿佸畾鍚庣殑浜叉湰涓嶈兘鍑哄敭",
+          "Status": "Passed",
+          "Duration": 0.0034159,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.鍩硅偛妲藉彧鏈変袱涓翰鏈綅鏀句笉杩涚涓夊彧涔熶笉鍚冩妧鑳芥Ы",
+          "Status": "Passed",
+          "Duration": 0.0004943,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.鎶藉埌鍚屽悕鏃朵笉浼氭妸鍚屼竴鎶€鑳藉啀闅忔満涓€娆?,
+          "Status": "Passed",
+          "Duration": 0.000509,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.绌虹殑鍩硅偛妲戒笉浼氱敓鎴愬悗浠?,
+          "Status": "Passed",
+          "Duration": 0.000348,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.涓嶆姤浠风殑鎶€鑳戒篃浼氭敮浠樺凡缁忔寔鏈夌殑浜ц兘",
+          "Status": "Passed",
+          "Duration": 0.0010697,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.浜ц兘鎸変富鍔ㄦ墽琛岃娆″洜姝ゅ弻閲嶅悙鎭彧鍙﹀紑涓€娆?,
+          "Status": "Passed",
+          "Duration": 0.0010302,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.浜ц兘閲忔妧鑳界殑鍐嶈蛋娆℃暟鏄澶栬Е鍙戜笌浜ц兘棰濆娆℃暟鐩稿姞涓旂鐐瑰厛璧板畬",
+          "Status": "Passed",
+          "Duration": 0.0006398,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.鍐嶅洖棣栧ご鍦ㄥ彸渚х浉閭诲仠鐣欏紑濮嬫椂缁欐妧鑳藉啀璧颁竴娆′笖涓€旀柊娆℃暟涓嶇畻",
+          "Status": "Passed",
+          "Duration": 0.0004951,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.鍐嶈蛋鏄柊鐨勪富鍔ㄦ墽琛屽苟閲嶆柊鎶ヤ环涓斿仠鐣欏紑濮嬫椂璁颁笅鐨勬鏁颁笉鍥犳潵婧愭秷澶辫€屽彇娑?,
+          "Status": "Passed",
+          "Duration": 0.0010645,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.鍙湁澶槼鑳藉ご鏃朵笅涓€娆′富鍔ㄦ墽琛屾敮浠樺凡缁忔寔鏈夌殑灞?,
+          "Status": "Passed",
+          "Duration": 0.000683,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.鍚屼竴鍏充箣鍚庣殑涓诲姩鎵ц鎸夊眰鏁板彟寮€涓€鐐逛笖浜ц兘璁″垎鑷韩涓嶅啀鍚骇鑳?,
+          "Status": "Passed",
+          "Duration": 0.0004767,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.澶槼鑳藉ご鑾峰緱涓€灞備骇鑳戒笖鑾峰緱鐨勯偅涓€娆′富鍔ㄦ墽琛屼笉璁?,
+          "Status": "Passed",
+          "Duration": 0.0003585,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.鏃堕棿鎿嶆帶鍣ㄥ畼鍙粰宸︿晶鐩搁偦鐨勪骇鑳介噺鎶€鑳藉姞涓€娆′骇鑳介澶栨鏁?,
+          "Status": "Passed",
+          "Duration": 0.0005256,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.娌℃湁姘镐箙鐨勪骇鑳界寮€鍏冲崱鏃舵竻鎺?,
+          "Status": "Passed",
+          "Duration": 0.0005266,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.闅斾竴鏍间笉绠楃浉閭绘墍浠ュ啀鍥為澶村拰鏃堕棿鎿嶆帶鍣ㄥ畼閮戒笉缁欏啀璧?,
+          "Status": "Passed",
+          "Duration": 0.0003921,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鍋夸粯鎴愬姛涓斿墿浣欒兘閲忚揪鍒拌秴棰濊兘閲忔椂鑾峰緱涓€鐐圭鎶€鐐?,
+          "Status": "Passed",
+          "Duration": 0.0006978,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鍋夸粯鎴愬姛浣嗗墿浣欒兘閲忔湭杈惧埌瓒呴鑳介噺鏃舵病鏈夌鎶€鐐?,
+          "Status": "Passed",
+          "Duration": 0.0002302,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鍔犵彮鍙墸闄ゆ瑺棰濅笉閲嶆柊鏀粯鏁村叧搴斾氦鑳介噺",
+          "Status": "Passed",
+          "Duration": 0.0007158,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鍔犵彮鍚庝粛涓嶈冻鍒欏湪鎵ｉ櫎澶勬父鎴忓け璐ュ苟娓呯┖鎬墿绗奸噾甯佺鎶€鐐圭鎶€宸ュ叿鍜屾妧鑳芥Ы",
+          "Status": "Passed",
+          "Duration": 0.0039399,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鍔犵彮鍚庡墿浣欒兘閲忚揪鍒拌秴棰濊兘閲忔椂鑾峰緱涓€鐐圭鎶€鐐瑰苟涓斿伐璧勬槸浜屽崄",
+          "Status": "Passed",
+          "Duration": 0.0005814,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.鏈叧鍔犺繃鐝椂鍋夸粯鎴愬姛鐨勫伐璧勬槸浜屽崄閲戝竵",
+          "Status": "Passed",
+          "Duration": 0.0006121,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.绗竴鍏宠秴棰濊兘閲忔槸鍏崄",
+          "Status": "Passed",
+          "Duration": 0.0002159,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.绗竴娆¤兘閲忎笉瓒虫椂璁颁笅娆犻骞舵竻鎺夊凡鍋夸粯鑳介噺鍥炲埌鎿嶄綔闃舵",
+          "Status": "Passed",
+          "Duration": 0.0003324,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.涓ゅ彧娈嬬暀鎻愬彇鑵轰綋鎸変粠宸﹀埌鍙冲悇钀藉湴涓€鐐逛笖涓嶅搷搴斿悓鍚嶈惤鍦?,
+          "Status": "Passed",
+          "Duration": 0.001166,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.鍒嗕韩涔嬫墜鐨勫姞涓変笉鍐欒繘鎶€鑳芥姤浠蜂笖鏈缁撶畻缁撴潫鍗冲け鏁?,
+          "Status": "Passed",
+          "Duration": 0.000861,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.鍒嗕韩涔嬫墜钀藉湴涓ょ偣涓斿彧缁欑┖妗ｅ悗鐨勪笅涓€鍙悗缁骇鑳介噺璁″垎鍔犱笁",
+          "Status": "Passed",
+          "Duration": 0.0004933,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.鍚屼竴鎵逛粠宸﹀埌鍙冲搷搴斾笖涓嶅湪鏈€涓婄殑娈嬬暀鎻愬彇鑵轰綋涔熶細钀藉湴",
+          "Status": "Passed",
+          "Duration": 0.0004948,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.鍩硅偛妲介噷鐨勬畫鐣欐彁鍙栬吅浣撲笉鍝嶅簲鎻愬彇钀藉湴",
+          "Status": "Passed",
+          "Duration": 0.0004637,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.娈嬬暀鎻愬彇鑵轰綋涓嶅搷搴旇嚜宸辫繖鍙€墿鐨勮惤鍦?,
+          "Status": "Passed",
+          "Duration": 0.0003972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.娈嬬暀鎻愬彇鑵轰綋鍦ㄥ叾浠栨€墿钀藉湴鑳介噺鏃惰嚜宸辩珛鍒诲啀钀藉湴涓€鐐?,
+          "Status": "Passed",
+          "Duration": 0.000474,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.娌℃湁涓嬩竴涓€墿鏃跺垎浜箣鎵嬬殑鍔犱笁娑堝け",
+          "Status": "Passed",
+          "Duration": 0.0003786,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterQueryTests.鎹綅鎴愬姛鍚庢煡璇㈣兘鐪嬪埌涓嶅姩澶槼鑳藉ご缁撶畻鍚庤兘鐪嬪埌浜ц兘",
+          "Status": "Passed",
+          "Duration": 0.0016909,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterQueryTests.鎽嗕笂鎻愬彇妲藉悗鎬墿绗奸噷娌℃湁瀹冧絾鏌ヨ浠嶈繑鍥炴妧鑳芥姤浠峰拰绋€鏈夊害",
+          "Status": "Passed",
+          "Duration": 0.0008099,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.寮€灞€鏃堕噾甯佺鎶€鐐瑰伐鍏锋妧鑳芥Ы鍜屽凡瑙ｉ攣绉戞妧閮芥槸绌虹殑",
+          "Status": "Passed",
+          "Duration": 0.000623,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.寮€灞€缁欏嚭涓夊彧鍗曟妧鑳藉€欓€変笖鎬墿绗间负绌?,
+          "Status": "Passed",
+          "Duration": 0.0009438,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.鐣欎笅涓€鍙悗钀介€変笉杩涚骞惰ˉ鍒颁竷鍙崟鎶€鑳?,
+          "Status": "Passed",
+          "Duration": 0.0012473,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.鐣欎笅鍚庤繘鍏ョ涓€鍏虫搷浣滈樁娈典笖搴斾氦鑳介噺涓?0鎻愬彇妲芥湁浜旀牸",
+          "Status": "Passed",
+          "Duration": 0.001237,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.鍚屼竴鍙€墿涓嶈兘鍚屾椂澶勪簬鎻愬彇妲藉拰鍩硅偛妲?,
+          "Status": "Passed",
+          "Duration": 0.0008997,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.鎿嶄綔闃舵鍙互鎶婃€墿鎽嗕笂鎻愬彇妲藉苟鍦ㄧ‘璁ゅ墠鎷垮洖",
+          "Status": "Passed",
+          "Duration": 0.0007944,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.涓婄骇鍛樺伐璇佷娇鎻愬彇妲藉涓€鏍间笖绗叚鏍煎弬涓庣粨绠?,
+          "Status": "Passed",
+          "Duration": 0.0012022,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鍐嶈蛋鏄箣鍚庣殑涓诲姩鎵ц鎬ユ€ヨ缃笉缈?,
+          "Status": "Passed",
+          "Duration": 0.0005771,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鍚屾椂甯︽秷鐏拰姘镐箙鎴栬€呮病鏈夎瘝鏉￠兘涓嶆槸鍗曡瘝鏉?,
+          "Status": "Passed",
+          "Duration": 0.0007078,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鎬ユ€ュ拰鐙鍙犱箻杩涘€嶇巼涓旇鍒嗕笉鏀瑰彉宸ュ叿娆″簭",
+          "Status": "Passed",
+          "Duration": 0.0005972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鎬ユ€ヨ缃笉缈荤涓€娈垫墽琛屽甫鍑虹殑浜ц兘",
+          "Status": "Passed",
+          "Duration": 0.0004069,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鎬ユ€ヨ缃妸绗竴娈典富鍔ㄦ墽琛岄噷鐨勬瘡娆℃姤浠烽兘缈诲€?,
+          "Status": "Passed",
+          "Duration": 0.0004364,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鎬ユ€ヨ缃妸绗竴娈典骇鑳介噺涓诲姩鎵ц鐨勮惤鍦拌兘閲忕炕鍊嶄箣鍚庣殑涓嶇炕",
+          "Status": "Passed",
+          "Duration": 0.0004482,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鎬ユ€ヨ缃殑缈诲€嶄箻杩涘鐙績宸叉湁鐨勫€嶇巼",
+          "Status": "Passed",
+          "Duration": 0.000304,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.鐙瑁呯疆鎶婂崟璇嶆潯鎬墿鐨勪骇鑳介噺璁″垎缈诲€?,
+          "Status": "Passed",
+          "Duration": 0.0004626,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.韬笂鍚堣捣鏉ユ湁涓や釜璇嶆潯鐨勬€墿涓嶆槸鍗曡瘝鏉?,
+          "Status": "Passed",
+          "Duration": 0.0004188,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.鍙岄噸鍚愭伅鍦ㄤ竴娆′富鍔ㄦ墽琛岄噷鎶ヤ环涓ゆ涓旀瘡娆¤惤鍦颁袱鐐?,
+          "Status": "Passed",
+          "Duration": 0.0006065,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.鍚屼竴鎵归噷鍙︿竴鍙悶鍣ぇ鍢翠粛鐢ㄨ嚜宸辩殑鎶ヤ环",
+          "Status": "Passed",
+          "Duration": 0.0004856,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.鍚屼竴鎵归噷鍚庨潰鐨勬妧鑳戒笉娌跨敤鍚炲櫖澶у槾鍒氳惤鍦扮殑搴曟暟",
+          "Status": "Passed",
+          "Duration": 0.0004922,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.鍚炲櫖澶у槾鎸夋娊鍙栨秷鐏寚瀹氱殑鐩搁偦鑰屼笉鏄浐瀹氬乏渚?,
+          "Status": "Passed",
+          "Duration": 0.0130652,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.鍚炲櫖澶у槾钀藉湴鍥涚偣骞剁珛鍒绘秷鐏浉閭绘€墿涓旀牸瀛愪笉鎸姩",
+          "Status": "Passed",
+          "Duration": 0.0007567,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.姘镐箙鍐欏洖鐣欏埌涓嬩竴鍏充笖娌℃湁姘镐箙鍔犳垚鐨勬妧鑳芥姤浠蜂笉鍙?,
+          "Status": "Passed",
+          "Duration": 0.0005084,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.娌℃湁鐩搁偦鏃跺悶鍣ぇ鍢翠粛鐒惰惤鍦颁笖涓嬩竴娆¤鍒嗕娇鐢ㄥ啓鍥炲悗鐨勬姤浠?,
+          "Status": "Passed",
+          "Duration": 0.0005388,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.鍋夸粯鎴愬姛涓旇揪鍒拌秴棰濇椂璁板綍鎵ｉ櫎瓒呴鍜屽伐璧?,
+          "Status": "Passed",
+          "Duration": 0.001099,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.鍔犵彮澶辫触鐨勬敮浠樿褰曠暀涓嬫瑺棰濆拰澶辫触涓斿懡浠よ繑鍥炲悗浠嶈兘璇诲埌",
+          "Status": "Passed",
+          "Duration": 0.0007886,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.鎹綅鎴愬姛鏃惰褰曞彂鐢熶笖鎺掑湪钀藉湴涔嬪悗",
+          "Status": "Passed",
+          "Duration": 0.0145969,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.娌℃湁宸︿晶鐩爣鏃舵崲浣嶈褰曚负娌℃湁鍙戠敓",
+          "Status": "Passed",
+          "Duration": 0.0002946,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.娌℃湁鐩搁偦鏃跺悶鍣ぇ鍢寸殑璁板綍鎸夎惤鍦版秷鐏拰鏀粯鐨勯『搴忓啓涓嬪啓鍥炰笌鏈彂鐢熺殑娑堢伃",
+          "Status": "Passed",
+          "Duration": 0.0006596,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.绔嬪埢娑堢伃鍐欏湪璇ユ钀藉湴涔嬪悗骞惰涓嬭鎷胯蛋鐨勬€墿",
+          "Status": "Passed",
+          "Duration": 0.0003595,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.鎾斁澶存寜杩欎竴鍒荤殑鏍煎瓙浠庡乏鍒板彸璧颁笖姣忓彧鎬墿鍙惤鍦颁竴娆?,
+          "Status": "Passed",
+          "Duration": 0.000632,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.鑳介噺鍒氬ソ绛変簬搴斾氦鏃朵篃鍙戝洓鍗侀噾甯佸苟鍋滃湪鍟嗗簵",
+          "Status": "Passed",
+          "Duration": 0.0004125,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.鑳介噺鍚愭伅钀藉湴浜旂偣涓斾笉瓒虫椂娓呮帀鏈叧鑳介噺",
+          "Status": "Passed",
+          "Duration": 0.0006148,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.鑳介噺瓒呰繃搴斾氦鏃朵竴娆＄‘璁ゅ氨娓呴浂鍓╀綑鑳介噺鍙戞斁鍥涘崄閲戝竵骞跺仠鍦ㄥ晢搴?,
+          "Status": "Passed",
+          "Duration": 0.0002392,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.涓冨叧搴斾氦鑳介噺鍜岃秴棰濊兘閲忔寜鍏冲崱琛?,
+          "Status": "Passed",
+          "Duration": 0.0002221,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.涓嶅湪鍟嗗簵鏃剁寮€涓嶈繘鍏ヤ笅涓€鍏?,
+          "Status": "Passed",
+          "Duration": 0.0001959,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.涓嶆槸绗竷鍏虫椂绂诲紑鍟嗗簵杩涘叆涓嬩竴鍏冲紑濮嬮樁娈靛苟娓呯┖鏈叧",
+          "Status": "Passed",
+          "Duration": 0.0008137,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.绗竷鍏崇寮€鍟嗗簵鍚庢父鎴忚儨鍒╁苟娓呯┖",
+          "Status": "Passed",
+          "Duration": 0.00106,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.涔板緱璧风殑鎬墿杩涘叆鎬墿绗煎苟浠庤揣鏋舵嬁璧拌€屼笖涓嶈ˉ鏂拌揣",
+          "Status": "Passed",
+          "Duration": 0.0026772,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍑哄敭鎬墿绗奸噷鐨勬€墿鎸夌█鏈夊害涓€鍗婂緱閲戝竵",
+          "Status": "Passed",
+          "Duration": 0.0004994,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍙屾妧鑳藉晢鍝佺殑鍞环鏄袱涓█鏈夊害鐩稿姞",
+          "Status": "Passed",
+          "Duration": 0.000247,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍚屼竴鍙晢鍝佹€墿涓嶄細鎶藉埌涓や釜鍚屽悕鎶€鑳?,
+          "Status": "Passed",
+          "Duration": 0.0002309,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍟嗗簵涔嬪涓嶈兘涔板崠",
+          "Status": "Passed",
+          "Duration": 0.0004921,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍟嗗簵寮€濮嬫椂鎸夋敞鍏ョ粨鏋滄憜鍑哄洓鍙€墿骞舵寜绋€鏈夊害鏍囦环",
+          "Status": "Passed",
+          "Duration": 0.0007753,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鍟嗗簵鎸変節鎴愪竴鍙竴鎴愪袱鍙互鍙婁竷鎴愮櫧涓ゆ垚钃濅竴鎴愰噾鎶藉彇",
+          "Status": "Passed",
+          "Duration": 0.0135036,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.宸ュ叿绉嶇被涓嶈冻涓や欢鏃惰揣鏋跺皯寮€浣嶆暟",
+          "Status": "Passed",
+          "Duration": 0.0004159,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.宸ュ叿璐ф灦鎬墿鍜屾彁鍙栨Ы閲岀殑鎬墿閮戒笉鑳藉嚭鍞?,
+          "Status": "Passed",
+          "Duration": 0.0004729,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鏂颁拱鐨勫伐鍏锋寜璐拱椤哄簭鎺掑湪宸ュ叿娆″簭鏈熬",
+          "Status": "Passed",
+          "Duration": 0.0002904,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.鏈樁娈典笉鑳芥洿鎹㈣揣鐗╃寮€鏃舵病涔扮殑娑堝け",
+          "Status": "Passed",
+          "Duration": 0.0005374,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.娌℃湁鍙崠鐨勫伐鍏锋椂璐ф灦涓嶆斁宸ュ叿",
+          "Status": "Passed",
+          "Duration": 0.0001947,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.璐ф灦鏈€澶氫袱浠朵笉鍚屽悕宸ュ叿骞舵寜绋€鏈夊害鏉冮噸鍜屾爣浠锋娊鍙?,
+          "Status": "Passed",
+          "Duration": 0.0013444,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.閲戝竵涓嶈冻鏃惰喘涔颁笉鍙戠敓璐х墿浠嶇暀鍦ㄨ揣鏋?,
+          "Status": "Passed",
+          "Duration": 0.0004896,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.涓棿绌烘。涓嶅彇娑堟洿杩滅殑鎬墿",
+          "Status": "Passed",
+          "Duration": 0.0005846,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.鍙宠兘閲忎綋鎸夊乏渚х幇鍦ㄨ繕鏈夌殑姣忓彧鎬墿钀藉湴涓ょ偣",
+          "Status": "Passed",
+          "Duration": 0.0002813,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.鍩硅偛妲戒笂鐨勫閲忓厜鐜笉鏀规彁鍙栬鍒?,
+          "Status": "Passed",
+          "Duration": 0.0002299,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.澧為噺鍔犺繘宸﹀彸璁℃暟鐨勫簳鏁?,
+          "Status": "Passed",
+          "Duration": 0.0002612,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.澧為噺澶ф墜缁欏叾浠栨€墿鐨勪骇鑳介噺璁″垎鍔犱簩涓斾笉鍔犵粰鑷繁",
+          "Status": "Passed",
+          "Duration": 0.0004584,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.澧為噺灏忔墜缁欏叾浠栨€墿鐨勪骇鑳介噺璁″垎鍔犱竴涓斾笉鍔犵粰鑷繁",
+          "Status": "Passed",
+          "Duration": 0.0000906,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.澶栭儴鍔犳硶杩涘叆搴曟暟澶栭儴涔樻硶杩涘叆鍊嶇巼",
+          "Status": "Passed",
+          "Duration": 0.0002532,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.瀛ょ嫭蹇冪炕鍊嶅彧浣滅敤浜庤繖娆¤鍒?,
+          "Status": "Passed",
+          "Duration": 0.0003487,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.宸﹁兘閲忎綋鎸夊彸渚х幇鍦ㄨ繕鏈夌殑姣忓彧鎬墿钀藉湴涓ょ偣",
+          "Status": "Passed",
+          "Duration": 0.0002632,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.鏈夌浉閭绘€墿鏃跺鐙績钀藉湴鍥涚偣",
+          "Status": "Passed",
+          "Duration": 0.0002307,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.娌℃湁鐩搁偦鎬墿鏃跺鐙績杩欐鑳介噺缈诲€?,
+          "Status": "Passed",
+          "Duration": 0.000213,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.鐩搁偦鍙畻鏍煎瓙鎸ㄧ潃鐨勬€墿",
+          "Status": "Passed",
+          "Duration": 0.0002281,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.榧撳姳鍢磋杩欎竴鍒荤浉閭绘€墿鐨勪骇鑳介噺璁″垎缈诲€嶄笖涓嶇炕鑷繁鍜岄殧鏍?,
+          "Status": "Passed",
+          "Duration": 0.0004333,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.搴熷純澶氭妧鑳芥€墿鏃舵斁杩涙妧鑳芥Ы鐨勬槸鎶藉埌鐨勯偅涓€涓?,
+          "Status": "Passed",
+          "Duration": 0.000546,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.搴熷純宸茬粡鎽嗕笂鎻愬彇妲界殑鎬墿鍚庢牸瀛愮┖鍑哄苟涓旀€墿娑堝け",
+          "Status": "Passed",
+          "Duration": 0.0003758,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.搴熷純绔嬪埢娑堢伃鎬墿骞舵妸鎶藉埌鐨勬妧鑳芥斁鍏ユ妧鑳芥Ы",
+          "Status": "Passed",
+          "Duration": 0.0002713,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.寮€灞€闃舵搴熷純鍊欓€変笉浼氭秷鐏畠涔熶笉浼氬緱鍒版妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0002721,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.鎶€鑳芥Ы宸叉弧鏃跺簾寮冧笉鍙戠敓鎬墿杩樺湪",
+          "Status": "Passed",
+          "Duration": 0.0003205,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.鎶€鑳芥Ы鑳芥斁涓嬩笁浠藉苟涓斿悓鍚嶅彲浠ュ苟瀛?,
+          "Status": "Passed",
+          "Duration": 0.000187,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.瑁呬笂鎬墿鍚庢妧鑳芥帓鍦ㄦ妧鑳芥搴忔湯灏?,
+          "Status": "Passed",
+          "Duration": 0.0002232,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.韬笂宸叉湁鍚屽悕鎶€鑳芥椂杩欎竴浠界暀鍦ㄦ妧鑳芥Ы",
+          "Status": "Passed",
+          "Duration": 0.000257,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.韬笂宸叉湁鍥涗釜鎶€鑳芥椂涓嶈兘鍐嶈",
+          "Status": "Passed",
+          "Duration": 0.0002741,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.杩炵画瑁呬笂鐨勬妧鑳芥寜鑾峰緱椤哄簭鐣欏湪鏈熬",
+          "Status": "Passed",
+          "Duration": 0.0002393,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.涓や釜绉掔偣鍚勮嚜鎶婃瘨璺充激鍐嶇粨绠椾竴閬?,
+          "Status": "Passed",
+          "Duration": 0.0024852,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鍊掓斁浠嶆寜鎹綅鍓嶇殑鏍煎瓙缁欏乏鑳介噺浣撴姤浠?,
+          "Status": "Passed",
+          "Duration": 0.0008402,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鍏ㄩ儴璁″垎缁撴潫鍚庢崲浣嶆墜鎵嶄笌宸︿晶鐩搁偦鎬墿浜ゆ崲",
+          "Status": "Passed",
+          "Duration": 0.0003588,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鍐嶈蛋涓€閬嶄粛鎸夋崲浣嶅墠鐨勬牸瀛愮粰宸﹁兘閲忎綋鎶ヤ环",
+          "Status": "Passed",
+          "Duration": 0.0003647,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鍚屼竴鍙€墿瑕佺瓑闆剁偣涓€閫昏緫绉掓墠鑳藉啀娆¤寮哄埗瑙﹀彂",
+          "Status": "Passed",
+          "Duration": 0.0014757,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鍚屼竴鏃跺埢鐧昏鐨勭粨鏉熸秷鐏寜浠庡乏鍒板彸鎷胯蛋",
+          "Status": "Passed",
+          "Duration": 0.0013283,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.澶氫釜閲嶈Е鍙戞潵婧愪篃鍙妸姣掕烦浼ゅ啀缁撶畻涓€閬?,
+          "Status": "Passed",
+          "Duration": 0.0002245,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鎵ц鏃剁洰鏍囧凡琚珛鍒绘秷鐏垯鎹綅涓嶅彂鐢熶篃涓嶈幏寰椾笉鍔?,
+          "Status": "Passed",
+          "Duration": 0.0004082,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鎹綅鎴愬姛鍚庤幏寰楃殑涓嶅姩璁╁悗闈㈢殑鎹綅澶辫触",
+          "Status": "Passed",
+          "Duration": 0.0001847,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鎹綅鎵嬩笉鎶婄┖妗ｅ闈㈢殑鎬墿褰撴垚宸︿晶鐩搁偦",
+          "Status": "Passed",
+          "Duration": 0.0001345,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鏇存棭鐧昏鐨勭粨鏉熸秷鐏厛浜庡乏杈圭殑鎬墿鎷胯蛋",
+          "Status": "Passed",
+          "Duration": 0.0001648,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.姘镐箙涓嶅姩绂诲紑鍏冲崱鍚庝粛鐒舵尅浣忔崲浣?,
+          "Status": "Passed",
+          "Duration": 0.0002582,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.娌℃湁宸︿晶鐩爣鏃舵崲浣嶄笉鍙戠敓涔熶笉鑾峰緱涓嶅姩",
+          "Status": "Passed",
+          "Duration": 0.0001379,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.娌℃湁姘镐箙鐨勪笉鍔ㄥ湪绂诲紑鍏冲崱鍚庝笉鍐嶆尅浣忔崲浣?,
+          "Status": "Passed",
+          "Duration": 0.0002122,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鐩爣甯︽湁涓嶅姩鏃舵崲浣嶄笉鍙戠敓涔熶笉鑾峰緱涓嶅姩",
+          "Status": "Passed",
+          "Duration": 0.0001963,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.绋嶅悗閫昏緫鏃跺埢鎵嶈惤涓嬬殑鍐欏洖鍦ㄨ惤涓嬪墠鐨勮鍒嗛噷璇讳笉鍒?,
+          "Status": "Passed",
+          "Duration": 0.0005508,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.缁撴潫娑堢伃鍦ㄦ崲浣嶄箣鍚庢嬁璧颁笖鎵ｉ櫎浠嶈鍏ュ畠钀藉湴鐨勮兘閲?,
+          "Status": "Passed",
+          "Duration": 0.0003834,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鑳介噺鍚愭伅鍜屽鐙績鐨勪笅涓€娆¤鍒嗚鎶€鑳藉疄渚嬩笂鐨勬姤浠?,
+          "Status": "Passed",
+          "Duration": 0.000787,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.鑾峰緱涓嶅姩鍚庢搷浣滈樁娈典粛鍙妸鎬墿鏀规斁鍒板埆鐨勬牸瀛?,
+          "Status": "Passed",
+          "Duration": 0.000219,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.閲嶈Е鍙戣姣忎釜绉掔偣鐨勬瘨璺充激鍐嶇粨绠椾竴閬嶄笖涓嶉噸璧版妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0001905,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.涓嶅瓨鍦ㄧ殑绉戞妧涓嶆秷鑰楃鎶€鐐?,
+          "Status": "Passed",
+          "Duration": 0.0004492,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.涓ら」鍙樺紓閮芥娊涓椂鍙拷鍔犱竴涓妧鑳藉拰鍔犱簩淇",
+          "Status": "Passed",
+          "Duration": 0.0137388,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.浜旈」绉戞妧娌℃湁鍓嶇疆涓斿悇娑堣€椾竴鐐?,
+          "Status": "Passed",
+          "Duration": 0.0002803,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍙樺紓瀛﹁鎶戒腑鏃跺悗浠ｅ啀鑾峰緱鎸囧畾鎶€鑳?,
+          "Status": "Passed",
+          "Duration": 0.0003051,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍙樺紓瀛﹁娌℃娊涓椂鍚庝唬涓嶈幏寰楅澶栨妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0002447,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍚屼竴绉戞妧涓嶈兘鍐嶆瑙ｉ攣",
+          "Status": "Passed",
+          "Duration": 0.0001885,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍚庝唬宸茬粡鏈夊洓涓妧鑳芥椂鍙樺紓瀛﹁涓嶅啀杩藉姞",
+          "Status": "Passed",
+          "Duration": 0.0005889,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍟嗗簵闃舵涓嶈兘瑙ｉ攣绉戞妧",
+          "Status": "Passed",
+          "Duration": 0.0002164,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍩硅偛鎶€鑳戒笌鍚庝唬宸叉湁鎶€鑳戒笉鍚屽悕鏃朵氦缁欏悗浠?,
+          "Status": "Passed",
+          "Duration": 0.0004295,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍩硅偛鎶€鑳戒笌鍚庝唬宸叉湁鎶€鑳藉悓鍚嶆椂涓嶄氦缁欏悗浠?,
+          "Status": "Passed",
+          "Duration": 0.0005041,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鍩哄洜瀹為獙浣挎瘡涓煿鑲叉Ы鏀惧叆涓€涓煿鑲叉妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0006037,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.澶т贡鐐栦娇姣忎釜鍩硅偛妲界殑浜叉湰瀹归噺鍔犱竴",
+          "Status": "Passed",
+          "Duration": 0.0003183,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鎵╁鍚庣殑涓や釜鍩硅偛妲介兘鑳藉啀鏀句竴鍙翰鏈苟鍚勮嚜鐢熸垚鍚庝唬",
+          "Status": "Passed",
+          "Duration": 0.0004371,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鎶€鑳芥Ы宸叉弧鏃朵笉鑳戒粠鍩硅偛妲芥嬁鍥炴妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0003817,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.鏈В閿佸彉寮傛椂鎶戒腑涔熶笉浼氭敼鍙樺悗浠?,
+          "Status": "Passed",
+          "Duration": 0.0002607,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.妲戒綅鎵╁澧炲姞涓€涓嫭绔嬪煿鑲叉Ы涓斿悇鑷攣瀹氭柟妗?,
+          "Status": "Passed",
+          "Duration": 0.0004144,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.姣忎釜鍩硅偛妲界殑鍩硅偛鎶€鑳藉彧浜ょ粰璇ユЫ鐨勫悗浠?,
+          "Status": "Passed",
+          "Duration": 0.0004097,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.娌℃湁鍩哄洜瀹為獙鏃跺煿鑲叉Ы涓嶆帴鏀舵妧鑳?,
+          "Status": "Passed",
+          "Duration": 0.0001825,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.娌℃湁绉戞妧鐐规椂閲戝竵涓嶈兘瑙ｉ攣绉戞妧",
+          "Status": "Passed",
+          "Duration": 0.0008928,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.绉戝鍩硅偛鎶戒腑鏃跺悗浠ｈ幏寰楀姞浜屼慨姝ｄ笖鍙弬鍔犺嚜宸辩殑浜ц兘閲忚鍒?,
+          "Status": "Passed",
+          "Duration": 0.0005799,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.绉戝鍩硅偛娌℃娊涓椂娌℃湁鎬墿淇",
+          "Status": "Passed",
+          "Duration": 0.0002765,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.绉戝鍩硅偛鐨勫姞浜屼篃鍔犺繘浜ц兘鍙﹀紑鐨勫簳鏁颁笖涓嶅啓杩涙姤浠?,
+          "Status": "Passed",
+          "Duration": 0.0004723,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.瑙ｉ攣绉戞妧娑堣€椾竴鐐圭鎶€鐐逛笖涓嶆秷鑰楅噾甯佸拰鑳介噺",
+          "Status": "Passed",
+          "Duration": 0.000218,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.閿佸畾鍓嶅彲浠ユ妸鍩硅偛鎶€鑳芥嬁鍥炴妧鑳芥Ы",
+          "Status": "Passed",
+          "Duration": 0.0002748,
+          "Message": null,
+          "StackTrace": null
+        }
+      ],
+      "Duration": 4.78,
+      "StatusPath": "Temp/pipeline_test_status.json",
+      "Mode": "All",
+      "FilterApplied": null,
+      "success": true,
+      "result": "playmode_running",
+      "message": "EditMode complete: 156/156 passed. PlayMode tests started asynchronously 鈥?poll the test_status command for their results."
+    },
+    "target": {
+      "host": "localhost",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

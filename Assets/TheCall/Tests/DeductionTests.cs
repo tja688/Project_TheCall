@@ -50,7 +50,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(10));
-            Assert.That(App.SendQuery(new SettlementDeductionQuery()), Is.EqualTo(5));
+            Assert.That(Payment().Deducted, Is.EqualTo(5));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
@@ -79,6 +79,7 @@ namespace TheCall.Tests
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(20));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
 
@@ -185,10 +186,11 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(10));
-            Assert.That(App.SendQuery(new SettlementDeductionQuery()), Is.EqualTo(5));
+            Assert.That(Payment().Deducted, Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(20));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
 

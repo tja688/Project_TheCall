@@ -178,7 +178,7 @@ namespace TheCall
             for (var i = 0; i < names.Count; i++)
             {
                 TryTool(names[i], out var tool);
-                tools[i] = new ShelfTool(tool.Name, tool.Price);
+                tools[i] = new ShelfTool(tool.Name, tool.Price, tool.Rarity);
             }
 
             return tools;

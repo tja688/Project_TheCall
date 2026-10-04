@@ -25,7 +25,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId, breathId }));
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "双重吐息", "双重吐息" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 2 }));
@@ -56,7 +56,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(stayingId, OperationArea.Extraction, 3));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { victimId, devourerId }));
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "吞噬大嘴" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 4 }));
@@ -95,7 +95,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var first = App.SendQuery(new SettlementRecordQuery());
+            var first = Landings();
             Assert.That(first.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "吞噬大嘴" }));
             Assert.That(first.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 4 }));
             Assert.That(first.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
@@ -104,7 +104,7 @@ namespace TheCall.Tests
 
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var second = App.SendQuery(new SettlementRecordQuery());
+            var second = Landings();
             Assert.That(second.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "吞噬大嘴" }));
             Assert.That(second.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 6 }));
             Assert.That(second.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
@@ -143,7 +143,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(rightId));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
             Assert.That(
-                App.SendQuery(new SettlementRecordQuery()).Single(landing => landing.MonsterId == leftId).Energy,
+                Landings().Single(landing => landing.MonsterId == leftId).Energy,
                 Is.EqualTo(5));
         }
 
@@ -169,7 +169,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(secondId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { firstId, secondId }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 4, 4 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
@@ -197,7 +197,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "吞噬大嘴", "双重吐息", "双重吐息" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 4, 2, 2 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
@@ -231,7 +231,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landings = App.SendQuery(new SettlementRecordQuery());
+            var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId, devourerId }));
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "吞噬大嘴" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 6 }));

@@ -4,15 +4,20 @@ using QFramework;
 
 namespace TheCall
 {
-    public sealed class SettlementLanding
+    public abstract class SettlementEntry
     {
-        public SettlementLanding(string monsterId, string skillName, int baseValue, int multiplier, int energy)
+    }
+
+    public sealed class SettlementLanding : SettlementEntry
+    {
+        public SettlementLanding(string monsterId, string skillName, int baseValue, int multiplier, int energy, int writeback)
         {
             MonsterId = monsterId;
             SkillName = skillName;
             Base = baseValue;
             Multiplier = multiplier;
             Energy = energy;
+            Writeback = writeback;
         }
 
         public string MonsterId { get; }
@@ -24,17 +29,67 @@ namespace TheCall
         public int Multiplier { get; }
 
         public int Energy { get; }
+
+        public int Writeback { get; }
     }
 
-    public sealed class SettlementRecordQuery : AbstractQuery<IReadOnlyList<SettlementLanding>>
+    public sealed class SettlementSwap : SettlementEntry
     {
-        protected override IReadOnlyList<SettlementLanding> OnDo() =>
-            this.GetSystem<SettlementSystem>().Landings.ToArray();
+        public SettlementSwap(string actorId, string targetId, bool happened)
+        {
+            ActorId = actorId;
+            TargetId = targetId;
+            Happened = happened;
+        }
+
+        public string ActorId { get; }
+
+        public string TargetId { get; }
+
+        public bool Happened { get; }
     }
 
-    public sealed class SettlementRemovalQuery : AbstractQuery<IReadOnlyList<string>>
+    public sealed class SettlementRemoval : SettlementEntry
     {
-        protected override IReadOnlyList<string> OnDo() =>
-            this.GetSystem<SettlementSystem>().Removed.ToArray();
+        public SettlementRemoval(string monsterId, bool happened)
+        {
+            MonsterId = monsterId;
+            Happened = happened;
+        }
+
+        public string MonsterId { get; }
+
+        public bool Happened { get; }
+    }
+
+    public sealed class SettlementPayment : SettlementEntry
+    {
+        public SettlementPayment(int deducted, int shortfall, bool overtime, bool failed, bool excess, int wage)
+        {
+            Deducted = deducted;
+            Shortfall = shortfall;
+            Overtime = overtime;
+            Failed = failed;
+            Excess = excess;
+            Wage = wage;
+        }
+
+        public int Deducted { get; }
+
+        public int Shortfall { get; }
+
+        public bool Overtime { get; }
+
+        public bool Failed { get; }
+
+        public bool Excess { get; }
+
+        public int Wage { get; }
+    }
+
+    public sealed class SettlementRecordQuery : AbstractQuery<IReadOnlyList<SettlementEntry>>
+    {
+        protected override IReadOnlyList<SettlementEntry> OnDo() =>
+            this.GetSystem<SettlementSystem>().Entries.ToArray();
     }
 }

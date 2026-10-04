@@ -6,7 +6,10 @@ namespace TheCall
 {
     public sealed class OpeningCandidatesQuery : AbstractQuery<IReadOnlyList<MonsterView>>
     {
-        protected override IReadOnlyList<MonsterView> OnDo() =>
-            this.GetModel<RunModel>().Candidates.Select(MonsterViews.From).ToArray();
+        protected override IReadOnlyList<MonsterView> OnDo()
+        {
+            var run = this.GetModel<RunModel>();
+            return run.Candidates.Select(run.ToView).ToArray();
+        }
     }
 }

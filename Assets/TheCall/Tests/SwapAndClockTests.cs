@@ -12,7 +12,7 @@ namespace TheCall.Tests
             intents.WalkAgain();
             var leftId = PlacePair(intents, "左能量体", "换位手");
 
-            var landings = App.SendQuery(new SettlementRecordQuery())
+            var landings = Landings()
                 .Where(landing => landing.SkillName == "左能量体")
                 .ToArray();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId }));
@@ -28,7 +28,7 @@ namespace TheCall.Tests
             intents.PlayReverse();
             var leftId = PlacePair(intents, "左能量体", "换位手");
 
-            var landings = App.SendQuery(new SettlementRecordQuery())
+            var landings = Landings()
                 .Where(landing => landing.SkillName == "左能量体")
                 .ToArray();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId }));
@@ -47,7 +47,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(swapId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = App.SendQuery(new SettlementRecordQuery()).Single();
+            var landing = Landings().Single();
             Assert.That(landing.MonsterId, Is.EqualTo(leftId));
             Assert.That(landing.SkillName, Is.EqualTo("左能量体"));
             Assert.That(landing.Base, Is.EqualTo(2));
@@ -117,7 +117,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(victim));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
             Assert.That(
-                App.SendQuery(new SettlementRecordQuery()).Select(landing => landing.Energy).ToArray(),
+                Landings().Select(landing => landing.Energy).ToArray(),
                 Is.EqualTo(new[] { 5, 4 }));
         }
 
@@ -212,7 +212,7 @@ namespace TheCall.Tests
             AssertCells(swapper, null, null, null, null);
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(victim));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
-            Assert.That(App.SendQuery(new SettlementRecordQuery()).Single().Energy, Is.EqualTo(5));
+            Assert.That(Landings().Single().Energy, Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
         }
@@ -230,7 +230,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(right, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(App.SendQuery(new SettlementRemovalQuery()), Is.EqualTo(new[] { left, right }));
+            Assert.That(RemovedIds(), Is.EqualTo(new[] { left, right }));
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(right, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(App.SendQuery(new SettlementRemovalQuery()), Is.EqualTo(new[] { right, left }));
+            Assert.That(RemovedIds(), Is.EqualTo(new[] { right, left }));
         }
 
         [Test]
@@ -333,6 +333,29 @@ namespace TheCall.Tests
             Assert.That(Energies(), Is.EqualTo(new[] { 2, 2, 2, 2, 6, 6 }));
         }
 
+        [Test]
+        public void 能量吐息和孤独心的下一次计分读技能实例上的报价()
+        {
+            var intents = new ClockIntents();
+            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息", "孤独心");
+            var breathId = IdOf("能量吐息");
+            var lonelyId = Ids("孤独心")[0];
+            intents.WriteLater(breathId, "能量吐息", 4, 1);
+            intents.WriteLater(lonelyId, "孤独心", 3, 1);
+            intents.ForceTrigger(breathId, 0.5);
+            intents.ForceTrigger(lonelyId, 0.5);
+            intents.ForceTrigger(breathId, 2);
+            intents.ForceTrigger(lonelyId, 2);
+            App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 1));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var breath = Landings().Where(landing => landing.MonsterId == breathId).Select(landing => landing.Base).ToArray();
+            var lonely = Landings().Where(landing => landing.MonsterId == lonelyId).Select(landing => landing.Base).ToArray();
+            Assert.That(breath, Is.EqualTo(new[] { 5, 5, 9 }));
+            Assert.That(lonely, Is.EqualTo(new[] { 4, 4, 7 }));
+        }
+
         string PlacePair(ClockIntents intents, string leftSkill, string rightSkill)
         {
             Begin(intents, new ScriptedLevelCatalog(50), leftSkill, rightSkill);
@@ -366,15 +389,15 @@ namespace TheCall.Tests
         void AssertLanding(params string[] skillNames)
         {
             Assert.That(
-                App.SendQuery(new SettlementRecordQuery()).Select(landing => landing.SkillName).ToArray(),
+                Landings().Select(landing => landing.SkillName).ToArray(),
                 Is.EqualTo(skillNames));
         }
 
         int[] Bases() =>
-            App.SendQuery(new SettlementRecordQuery()).Select(landing => landing.Base).ToArray();
+            Landings().Select(landing => landing.Base).ToArray();
 
         int[] Energies() =>
-            App.SendQuery(new SettlementRecordQuery()).Select(landing => landing.Energy).ToArray();
+            Landings().Select(landing => landing.Energy).ToArray();
 
         string IdOf(string skillName) => Ids(skillName).Single();
 

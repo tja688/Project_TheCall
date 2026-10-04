@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using QFramework;
 
@@ -58,5 +60,18 @@ namespace TheCall.Tests
             };
             App = TheCallApp.Interface;
         }
+
+        protected IReadOnlyList<SettlementLanding> Landings() =>
+            App.SendQuery(new SettlementRecordQuery()).OfType<SettlementLanding>().ToArray();
+
+        protected SettlementPayment Payment() =>
+            App.SendQuery(new SettlementRecordQuery()).OfType<SettlementPayment>().Single();
+
+        protected IReadOnlyList<string> RemovedIds() =>
+            App.SendQuery(new SettlementRecordQuery())
+                .OfType<SettlementRemoval>()
+                .Where(item => item.Happened)
+                .Select(item => item.MonsterId)
+                .ToArray();
     }
 }

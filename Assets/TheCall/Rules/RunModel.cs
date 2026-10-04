@@ -341,6 +341,15 @@ namespace TheCall
             return null;
         }
 
+        public MonsterView ToView(Monster monster) =>
+            MonsterViews.From(monster, this.GetUtility<SkillCatalog>());
+
+        public MonsterView FindView(string monsterId)
+        {
+            var monster = Find(monsterId);
+            return monster == null ? null : ToView(monster);
+        }
+
         protected override void OnInit()
         {
         }

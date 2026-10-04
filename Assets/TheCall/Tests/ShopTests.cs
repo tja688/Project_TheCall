@@ -121,6 +121,7 @@ namespace TheCall.Tests
             Assert.That(toolLists[1], Is.EqualTo(new[] { "上级员工证", "上级员工证", "独孤装置" }));
             Assert.That(shelf.Tools.Select(tool => tool.Name).ToArray(), Is.EqualTo(new[] { "急急装置", "上级员工证" }));
             Assert.That(shelf.Tools.Select(tool => tool.Price).ToArray(), Is.EqualTo(new[] { 30, 40 }));
+            Assert.That(shelf.Tools.Select(tool => tool.Rarity).ToArray(), Is.EqualTo(new[] { Rarity.White, Rarity.Blue }));
             Assert.That(shelf.Tools.Select(tool => tool.Name), Does.Not.Contain("独孤装置"));
         }
 

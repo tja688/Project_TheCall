@@ -21,15 +21,18 @@ namespace TheCall
 
     public sealed class ShelfTool
     {
-        public ShelfTool(string name, int price)
+        public ShelfTool(string name, int price, Rarity rarity)
         {
             Name = name;
             Price = price;
+            Rarity = rarity;
         }
 
         public string Name { get; }
 
         public int Price { get; }
+
+        public Rarity Rarity { get; }
     }
 
     public sealed class Shelf
