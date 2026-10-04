@@ -35,18 +35,15 @@ namespace TheCall
         {
         }
 
-        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0)
+        public Monster(string id, IReadOnlyList<SkillInstance> skills)
         {
             Id = id;
             Skills = new List<SkillInstance>(skills);
-            Modifier = modifier;
         }
 
         public string Id { get; }
 
         public List<SkillInstance> Skills { get; }
-
-        public int Modifier { get; }
 
         public bool Immovable { get; private set; }
 
@@ -199,19 +196,6 @@ namespace TheCall
 
         public void AddTechPoint() => TechPoints += 1;
 
-        public bool TrySpendTechPoint(int amount)
-        {
-            if (amount < 0 || TechPoints < amount)
-                return false;
-
-            TechPoints -= amount;
-            return true;
-        }
-
-        public bool HasTech(string name) => _unlockedTech.Contains(name);
-
-        public void AddUnlockedTech(string name) => _unlockedTech.Add(name);
-
         public Monster AddCandidate(string skillName)
         {
             var monster = Create(skillName);
@@ -271,17 +255,6 @@ namespace TheCall
 
         public void PutSkillInSlot(string skillName) => _skillSlots.Add(skillName);
 
-        public bool TryTakeSkillAt(int index, out string skillName)
-        {
-            skillName = null;
-            if (index < 0 || index >= _skillSlots.Count)
-                return false;
-
-            skillName = _skillSlots[index];
-            _skillSlots.RemoveAt(index);
-            return true;
-        }
-
         public bool TryEquip(string monsterId, int skillSlotIndex)
         {
             if (skillSlotIndex < 0 || skillSlotIndex >= _skillSlots.Count)
@@ -303,8 +276,7 @@ namespace TheCall
             return true;
         }
 
-        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0) =>
-            Create(skillNames, modifier);
+        public Monster CreateMonster(IReadOnlyList<string> skillNames) => Create(skillNames);
 
         public void ClearTemporaryQuotes()
         {
@@ -336,15 +308,15 @@ namespace TheCall
         SkillInstance MakeSkill(string name) =>
             new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name));
 
-        Monster Create(string skillName) => Create(new[] { skillName }, 0);
+        Monster Create(string skillName) => Create(new[] { skillName });
 
-        Monster Create(IReadOnlyList<string> skillNames, int modifier)
+        Monster Create(IReadOnlyList<string> skillNames)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
                 skills[i] = MakeSkill(skillNames[i]);
 
-            var monster = new Monster("m" + _nextId++, skills, modifier);
+            var monster = new Monster("m" + _nextId++, skills);
             _byId.Add(monster.Id, monster);
             return monster;
         }

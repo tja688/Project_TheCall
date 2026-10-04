@@ -266,7 +266,7 @@ namespace TheCall
             string skillName,
             int quote)
         {
-            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + run.Find(monsterId).Modifier;
+            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId);
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
                 multiplier = 2;
