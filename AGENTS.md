@@ -26,6 +26,17 @@
 - Do not create or use Git worktrees.
 - Do not create or switch branches unless the user explicitly requests that operation. Task implementation or isolation is not implicit authorization.
 
+## Architecture
+
+Gameplay code uses QFramework. One `Architecture<T>` registers every Model, System, and Utility. `SendCommand`, `SendQuery`, and `SendEvent` on that Architecture are the write path, the read path, and the notification path.
+
+- A Controller changes Model or System state by sending a Command. A read that leaves state unchanged is a Query. The Model or System that owns the change notifies Controllers through an Event or a `BindableProperty`.
+- Commands and Queries hold no fields. Each piece of mutable state has one Model owner.
+- Controllers, Systems, Commands, and Queries call downward with `GetSystem`, `GetModel`, and `GetUtility`.
+- A Command or Query that exists to keep this routing stays. Fold a further one-caller wrapper that adds no rule into the type that owns the rule.
+
+When calling or implementing a QFramework type, read `Assets/Notes/QFramework API.md`.
+
 ## Agent skills
 
 ### Issue tracker
