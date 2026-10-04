@@ -115,6 +115,7 @@ namespace TheCall
                 return;
 
             ReturnBoard(run);
+            run.ClearTemporaryQuotes();
             if (run.LevelNumber >= 7)
             {
                 this.GetModel<LevelModel>().ClearProgress();

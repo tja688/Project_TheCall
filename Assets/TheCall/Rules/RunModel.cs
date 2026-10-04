@@ -5,9 +5,27 @@ namespace TheCall
 {
     internal sealed class SkillInstance
     {
-        public SkillInstance(string name) => Name = name;
+        public SkillInstance(string name, int quote)
+        {
+            Name = name;
+            Quote = quote;
+            _permanentQuote = quote;
+        }
 
         public string Name { get; }
+
+        public int Quote { get; private set; }
+
+        int _permanentQuote;
+
+        public void Add(int amount, bool permanent)
+        {
+            Quote += amount;
+            if (permanent)
+                _permanentQuote += amount;
+        }
+
+        public void ClearTemporary() => Quote = _permanentQuote;
     }
 
     internal sealed class Monster
@@ -235,11 +253,20 @@ namespace TheCall
             }
 
             _skillSlots.RemoveAt(skillSlotIndex);
-            monster.Skills.Add(new SkillInstance(skillName));
+            monster.Skills.Add(MakeSkill(skillName));
             return true;
         }
 
         public Monster CreateMonster(IReadOnlyList<string> skillNames) => Create(skillNames);
+
+        public void ClearTemporaryQuotes()
+        {
+            foreach (var monster in _byId.Values)
+            {
+                for (var i = 0; i < monster.Skills.Count; i++)
+                    monster.Skills[i].ClearTemporary();
+            }
+        }
 
         public Monster Find(string monsterId)
         {
@@ -253,13 +280,16 @@ namespace TheCall
         {
         }
 
+        SkillInstance MakeSkill(string name) =>
+            new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name));
+
         Monster Create(string skillName) => Create(new[] { skillName });
 
         Monster Create(IReadOnlyList<string> skillNames)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
-                skills[i] = new SkillInstance(skillNames[i]);
+                skills[i] = MakeSkill(skillNames[i]);
 
             var monster = new Monster("m" + _nextId++, skills);
             _byId.Add(monster.Id, monster);

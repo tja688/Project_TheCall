@@ -101,6 +101,44 @@ namespace TheCall
             return 0;
         }
 
+        public int StartingQuote(string skillName)
+        {
+            if (skillName == "吞噬大嘴")
+                return 4;
+            if (skillName == "双重吐息")
+                return 2;
+            if (TryEnergyQuote(skillName, out var quote))
+                return quote;
+
+            return 0;
+        }
+
+        public bool TryDevour(string skillName, out int writeback, out bool permanent)
+        {
+            if (skillName == "吞噬大嘴")
+            {
+                writeback = 2;
+                permanent = true;
+                return true;
+            }
+
+            writeback = 0;
+            permanent = false;
+            return false;
+        }
+
+        public bool TryRepeatedQuote(string skillName, out int times)
+        {
+            if (skillName == "双重吐息")
+            {
+                times = 2;
+                return true;
+            }
+
+            times = 0;
+            return false;
+        }
+
         static readonly string[] White =
         {
             "能量吐息",

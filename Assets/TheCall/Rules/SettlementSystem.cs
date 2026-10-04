@@ -65,21 +65,92 @@ namespace TheCall
 
                 var skills = run.Find(monsterId).Skills;
                 for (var index = 0; index < skills.Count; index++)
-                {
-                    var skillName = skills[index].Name;
-                    if (!TryQuote(catalog, cells, cell, skillName, out var quote))
-                        continue;
-
-                    var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId);
-                    var multiplier = 1;
-                    if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
-                        multiplier = 2;
-
-                    var energy = baseValue * multiplier;
-                    _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
-                    level.AddEnergy(energy);
-                }
+                    ScoreSkill(level, run, catalog, cells, cell, monsterId, skills[index]);
             }
+        }
+
+        void ScoreSkill(
+            LevelModel level,
+            RunModel run,
+            SkillCatalog catalog,
+            IReadOnlyList<string> cells,
+            int cell,
+            string monsterId,
+            SkillInstance skill)
+        {
+            var skillName = skill.Name;
+            if (catalog.TryDevour(skillName, out var writeback, out var permanent))
+            {
+                Quote(level, run, catalog, cells, cell, monsterId, skill, 1, writeback, permanent);
+                DestroyAdjacent(level, run, cells, cell);
+                return;
+            }
+
+            if (catalog.TryRepeatedQuote(skillName, out var times))
+            {
+                Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false);
+                return;
+            }
+
+            if (!TryQuote(catalog, cells, cell, skillName, out var quote))
+                return;
+
+            Land(level, run, catalog, cells, cell, monsterId, skillName, quote);
+        }
+
+        void Quote(
+            LevelModel level,
+            RunModel run,
+            SkillCatalog catalog,
+            IReadOnlyList<string> cells,
+            int cell,
+            string monsterId,
+            SkillInstance skill,
+            int times,
+            int writeback,
+            bool permanent)
+        {
+            for (var time = 0; time < times; time++)
+            {
+                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote);
+                if (writeback != 0)
+                    skill.Add(writeback, permanent);
+            }
+        }
+
+        void Land(
+            LevelModel level,
+            RunModel run,
+            SkillCatalog catalog,
+            IReadOnlyList<string> cells,
+            int cell,
+            string monsterId,
+            string skillName,
+            int quote)
+        {
+            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId);
+            var multiplier = 1;
+            if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
+                multiplier = 2;
+
+            var energy = baseValue * multiplier;
+            _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
+            level.AddEnergy(energy);
+        }
+
+        void DestroyAdjacent(LevelModel level, RunModel run, IReadOnlyList<string> cells, int cell)
+        {
+            var options = new List<string>();
+            if (cell > 0 && cells[cell - 1] != null)
+                options.Add(cells[cell - 1]);
+            if (cell + 1 < cells.Count && cells[cell + 1] != null)
+                options.Add(cells[cell + 1]);
+            if (options.Count == 0)
+                return;
+
+            var target = this.GetUtility<IDraw>().Choose(options);
+            level.TryRemove(target);
+            run.TryDestroy(target);
         }
 
         protected override void OnInit()
