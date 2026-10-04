@@ -30,6 +30,7 @@ namespace TheCall
             var levels = this.GetUtility<ILevelCatalog>();
             this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(1), levels.ExcessEnergy(1));
             FitBreeding(run);
+            FitExtraction(run);
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
@@ -170,12 +171,19 @@ namespace TheCall
             var levels = this.GetUtility<ILevelCatalog>();
             this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(next), levels.ExcessEnergy(next));
             FitBreeding(run);
+            FitExtraction(run);
         }
 
         void FitBreeding(RunModel run)
         {
             var tech = this.GetUtility<TechCatalog>();
             this.GetModel<LevelModel>().ApplyShape(tech.SlotCount(run.UnlockedTech), tech.ParentCapacity(run.UnlockedTech));
+        }
+
+        void FitExtraction(RunModel run)
+        {
+            var tools = this.GetUtility<IToolCatalog>();
+            this.GetModel<LevelModel>().FitExtraction(tools.ExtractionCells(run.Tools));
         }
 
         static bool EnterOperation(RunModel run)

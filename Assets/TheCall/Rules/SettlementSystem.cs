@@ -20,6 +20,8 @@ namespace TheCall
         readonly Dictionary<string, decimal> _forceReady = new Dictionary<string, decimal>();
         readonly Dictionary<string, int> _nextBonus = new Dictionary<string, int>();
         int _removalSequence;
+        bool _doubleFirstEnergy;
+        bool _doubleSingleAffix;
 
         public IReadOnlyList<SettlementLanding> Landings => _landings;
 
@@ -73,6 +75,9 @@ namespace TheCall
             var catalog = this.GetUtility<SkillCatalog>();
             var intents = this.GetUtility<ClockIntents>();
             level.ClearEnergy();
+            var tools = this.GetUtility<IToolCatalog>();
+            _doubleFirstEnergy = tools.DoublesFirstEnergyExecution(run.Tools);
+            _doubleSingleAffix = tools.DoublesSingleAffixEnergy(run.Tools);
             GrantPermanentImmovable(run, intents);
 
             var ticks = new List<ClockTick>();
@@ -286,9 +291,10 @@ namespace TheCall
                 return;
             }
 
+            var doubleFirstExecution = TakeFirstEnergyDouble(catalog, skillName);
             if (catalog.TryDevour(skillName, out var writeback, out var permanent))
             {
-                Quote(level, run, catalog, cells, cell, monsterId, skill, 1, writeback, permanent);
+                Quote(level, run, catalog, cells, cell, monsterId, skill, 1, writeback, permanent, doubleFirstExecution);
                 DestroyAdjacent(cells, cell);
                 OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
@@ -296,7 +302,7 @@ namespace TheCall
 
             if (catalog.TryRepeatedQuote(skillName, out var times))
             {
-                Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false);
+                Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false, doubleFirstExecution);
                 OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
             }
@@ -304,7 +310,7 @@ namespace TheCall
             var nextBonus = catalog.NextEnergyBonus(skillName);
             if (nextBonus > 0)
             {
-                Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
+                Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, doubleFirstExecution);
                 AddNextBonus(level.Extraction, cell, nextBonus);
                 OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
@@ -313,8 +319,17 @@ namespace TheCall
             if (!TryQuote(catalog, cells, cell, skillName, out var quote))
                 return;
 
-            Land(level, run, catalog, cells, cell, monsterId, skillName, quote);
+            Land(level, run, catalog, cells, cell, monsterId, skillName, quote, doubleFirstExecution);
             OpenCapacity(level, run, catalog, cells, cell, monsterId);
+        }
+
+        bool TakeFirstEnergyDouble(SkillCatalog catalog, string skillName)
+        {
+            if (!_doubleFirstEnergy || !catalog.ProducesEnergy(skillName))
+                return false;
+
+            _doubleFirstEnergy = false;
+            return true;
         }
 
         void OpenCapacity(
@@ -331,7 +346,7 @@ namespace TheCall
 
             var layers = monster.Capacity;
             for (var layer = 0; layer < layers; layer++)
-                Land(level, run, catalog, cells, cell, monsterId, "产能", 1);
+                Land(level, run, catalog, cells, cell, monsterId, "产能", 1, false);
         }
 
         void Quote(
@@ -344,11 +359,12 @@ namespace TheCall
             SkillInstance skill,
             int times,
             int writeback,
-            bool permanent)
+            bool permanent,
+            bool doubleFirstExecution)
         {
             for (var time = 0; time < times; time++)
             {
-                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote);
+                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote, doubleFirstExecution);
                 if (writeback != 0)
                     skill.Add(writeback, permanent);
             }
@@ -362,14 +378,19 @@ namespace TheCall
             int cell,
             string monsterId,
             string skillName,
-            int quote)
+            int quote,
+            bool doubleFirstExecution)
         {
             var modifier = skillName == "产能" ? 0 : run.Find(monsterId).Modifier;
             _nextBonus.TryGetValue(monsterId, out var bonus);
             var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
-                multiplier = 2;
+                multiplier *= 2;
+            if (doubleFirstExecution)
+                multiplier *= 2;
+            if (_doubleSingleAffix && IsSingleAffix(run, catalog, monsterId))
+                multiplier *= 2;
 
             var energy = baseValue * multiplier;
             _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
@@ -401,7 +422,7 @@ namespace TheCall
                     if (!catalog.TryLandingResponse(skills[index].Name, causeSkill, out var responseQuote))
                         continue;
 
-                    Land(level, run, catalog, cells, cell, id, skills[index].Name, responseQuote);
+                    Land(level, run, catalog, cells, cell, id, skills[index].Name, responseQuote, false);
                 }
             }
         }
@@ -581,6 +602,21 @@ namespace TheCall
 
         protected override void OnInit()
         {
+        }
+
+        static bool IsSingleAffix(RunModel run, SkillCatalog catalog, string monsterId)
+        {
+            var monster = run.Find(monsterId);
+            if (monster == null)
+                return false;
+
+            var seen = SkillAffix.None;
+            var skills = monster.Skills;
+            for (var i = 0; i < skills.Count; i++)
+                seen |= catalog.Affixes(skills[i].Name);
+
+            var bits = (int)seen;
+            return bits != 0 && (bits & (bits - 1)) == 0;
         }
 
         static decimal Logical(double time) =>

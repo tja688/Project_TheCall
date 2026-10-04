@@ -22,6 +22,29 @@ namespace TheCall
     public interface IToolCatalog : IUtility
     {
         IReadOnlyList<ToolDefinition> Tools { get; }
+
+        int ExtractionCells(IReadOnlyList<string> held) =>
+            Holds(held, "上级员工证") ? 6 : 5;
+
+        bool DoublesFirstEnergyExecution(IReadOnlyList<string> held) =>
+            Holds(held, "急急装置");
+
+        bool DoublesSingleAffixEnergy(IReadOnlyList<string> held) =>
+            Holds(held, "独孤装置");
+
+        private static bool Holds(IReadOnlyList<string> names, string name)
+        {
+            if (names == null || name == null)
+                return false;
+
+            for (var i = 0; i < names.Count; i++)
+            {
+                if (names[i] == name)
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     internal sealed class ToolCatalog : IToolCatalog

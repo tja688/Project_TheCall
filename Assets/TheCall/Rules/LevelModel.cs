@@ -84,6 +84,14 @@ namespace TheCall
             _locked = null;
         }
 
+        public void FitExtraction(int cellCount)
+        {
+            if (cellCount == _extraction.Length)
+                return;
+
+            _extraction = new string[cellCount];
+        }
+
         public void ApplyShape(int slotCount, int parentCapacity)
         {
             _slots = Rebuild(_slots, slotCount, parentCapacity);

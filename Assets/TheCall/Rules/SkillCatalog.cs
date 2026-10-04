@@ -1,8 +1,19 @@
+using System;
 using System.Collections.Generic;
 using QFramework;
 
 namespace TheCall
 {
+    [Flags]
+    internal enum SkillAffix
+    {
+        None = 0,
+        Destroy = 1,
+        Permanent = 2,
+        Capacity = 4,
+        Immovable = 8,
+    }
+
     internal enum CountedSide
     {
         Left = -1,
@@ -141,6 +152,18 @@ namespace TheCall
             TryDevour(skillName, out _, out _) ||
             TryRepeatedQuote(skillName, out _) ||
             NextEnergyBonus(skillName) > 0;
+
+        public SkillAffix Affixes(string skillName)
+        {
+            if (skillName == "吞噬大嘴")
+                return SkillAffix.Destroy | SkillAffix.Permanent;
+            if (skillName == "太阳能头")
+                return SkillAffix.Capacity;
+            if (skillName == "换位手")
+                return SkillAffix.Immovable;
+
+            return SkillAffix.None;
+        }
 
         public bool TryGainCapacity(string skillName, out int layers)
         {
