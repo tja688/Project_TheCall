@@ -115,6 +115,30 @@ namespace TheCall
 
         public bool SwapsWithLeft(string skillName) => skillName == "换位手";
 
+        public int ExtraWalksForRightNeighbor(string skillName) =>
+            skillName == "再回首头" ? 1 : 0;
+
+        public int CapacityExtraForLeftNeighbor(string skillName) =>
+            skillName == "时间操控器官" ? 1 : 0;
+
+        public bool ProducesEnergy(string skillName) =>
+            TryEnergyQuote(skillName, out _) ||
+            TrySideCount(skillName, out _, out _) ||
+            TryDevour(skillName, out _, out _) ||
+            TryRepeatedQuote(skillName, out _);
+
+        public bool TryGainCapacity(string skillName, out int layers)
+        {
+            if (skillName == "太阳能头")
+            {
+                layers = 1;
+                return true;
+            }
+
+            layers = 0;
+            return false;
+        }
+
         public bool TryDevour(string skillName, out int writeback, out bool permanent)
         {
             if (skillName == "吞噬大嘴")

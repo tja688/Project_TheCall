@@ -117,6 +117,7 @@ namespace TheCall
             ReturnBoard(run);
             run.ClearTemporaryQuotes();
             run.ClearTemporaryImmovable();
+            run.ClearCapacity();
             if (run.LevelNumber >= 7)
             {
                 this.GetModel<LevelModel>().ClearProgress();

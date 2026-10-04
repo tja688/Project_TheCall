@@ -171,16 +171,73 @@ namespace TheCall
             int cell,
             string monsterId)
         {
-            var points = SecondPointCount(monsterId);
+            if (cell >= cells.Count || cells[cell] == null)
+                return;
+
+            var stayingId = cells[cell];
+            var extraTrigger = ExtraWalksAtStayStart(run, catalog, cells, cell);
+            var capacityExtra = CapacityExtraAtStayStart(run, catalog, cells, cell);
+            var points = SecondPointCount(stayingId);
             for (var point = 0; point < points; point++)
             {
-                if (cell >= cells.Count || cells[cell] == null)
+                if (cell >= cells.Count || cells[cell] != stayingId)
                     return;
 
-                WalkSkills(level, run, catalog, cells, cell, cells[cell]);
-                if (cells[cell] != null)
-                    SettlePoison(cells[cell]);
+                WalkSkills(level, run, catalog, cells, cell, stayingId);
+                if (cell < cells.Count && cells[cell] == stayingId)
+                    SettlePoison(stayingId);
             }
+
+            if (cell >= cells.Count || cells[cell] != stayingId)
+                return;
+
+            var monster = run.Find(stayingId);
+            if (monster == null)
+                return;
+
+            var skills = monster.Skills;
+            for (var index = 0; index < skills.Count; index++)
+            {
+                var skill = skills[index];
+                var extra = catalog.ProducesEnergy(skill.Name) ? extraTrigger + capacityExtra : extraTrigger;
+                for (var time = 0; time < extra; time++)
+                {
+                    if (cell >= cells.Count || cells[cell] != stayingId)
+                        return;
+
+                    ScoreSkill(level, run, catalog, cells, cell, stayingId, skill);
+                }
+            }
+        }
+
+        static int CapacityExtraAtStayStart(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell)
+        {
+            if (cell + 1 >= cells.Count || cells[cell + 1] == null)
+                return 0;
+
+            return SumNeighbor(run, cells[cell + 1], catalog.CapacityExtraForLeftNeighbor);
+        }
+
+        static int ExtraWalksAtStayStart(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell)
+        {
+            if (cell == 0 || cells[cell - 1] == null)
+                return 0;
+
+            return SumNeighbor(run, cells[cell - 1], catalog.ExtraWalksForRightNeighbor);
+        }
+
+        static int SumNeighbor(RunModel run, string monsterId, System.Func<string, int> amount)
+        {
+            var neighbor = run.Find(monsterId);
+            if (neighbor == null)
+                return 0;
+
+            var extra = 0;
+            var skills = neighbor.Skills;
+            for (var index = 0; index < skills.Count; index++)
+                extra += amount(skills[index].Name);
+
+            return extra;
         }
 
         void WalkSkills(
@@ -210,10 +267,20 @@ namespace TheCall
             SkillInstance skill)
         {
             var skillName = skill.Name;
+            if (catalog.TryGainCapacity(skillName, out var layers))
+            {
+                var host = run.Find(monsterId);
+                if (host != null)
+                    host.AddCapacity(layers);
+
+                return;
+            }
+
             if (catalog.SwapsWithLeft(skillName))
             {
                 var target = cell > 0 ? cells[cell - 1] : null;
                 _swaps.Add(new PendingSwap(monsterId, target));
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
             }
 
@@ -221,12 +288,14 @@ namespace TheCall
             {
                 Quote(level, run, catalog, cells, cell, monsterId, skill, 1, writeback, permanent);
                 DestroyAdjacent(cells, cell);
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
             }
 
             if (catalog.TryRepeatedQuote(skillName, out var times))
             {
                 Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false);
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 return;
             }
 
@@ -234,6 +303,24 @@ namespace TheCall
                 return;
 
             Land(level, run, catalog, cells, cell, monsterId, skillName, quote);
+            OpenCapacity(level, run, catalog, cells, cell, monsterId);
+        }
+
+        void OpenCapacity(
+            LevelModel level,
+            RunModel run,
+            SkillCatalog catalog,
+            IReadOnlyList<string> cells,
+            int cell,
+            string monsterId)
+        {
+            var monster = run.Find(monsterId);
+            if (monster == null)
+                return;
+
+            var layers = monster.Capacity;
+            for (var layer = 0; layer < layers; layer++)
+                Land(level, run, catalog, cells, cell, monsterId, "产能", 1);
         }
 
         void Quote(

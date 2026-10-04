@@ -47,6 +47,12 @@ namespace TheCall
 
         public bool Immovable { get; private set; }
 
+        public int Capacity { get; private set; }
+
+        public void AddCapacity(int layers) => Capacity += layers;
+
+        public void ClearCapacity() => Capacity = 0;
+
         bool _immovableIsPermanent;
 
         public void MakeImmovable(bool permanent)
@@ -291,6 +297,12 @@ namespace TheCall
         {
             foreach (var monster in _byId.Values)
                 monster.ClearTemporaryImmovable();
+        }
+
+        public void ClearCapacity()
+        {
+            foreach (var monster in _byId.Values)
+                monster.ClearCapacity();
         }
 
         public Monster Find(string monsterId)
