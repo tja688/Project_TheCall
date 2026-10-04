@@ -18,6 +18,7 @@ namespace TheCall
         readonly List<PendingRemoval> _endRemovals = new List<PendingRemoval>();
         readonly List<string> _removed = new List<string>();
         readonly Dictionary<string, decimal> _forceReady = new Dictionary<string, decimal>();
+        readonly Dictionary<string, int> _nextBonus = new Dictionary<string, int>();
         int _removalSequence;
 
         public IReadOnlyList<SettlementLanding> Landings => _landings;
@@ -65,6 +66,7 @@ namespace TheCall
             _endRemovals.Clear();
             _removed.Clear();
             _forceReady.Clear();
+            _nextBonus.Clear();
             _removalSequence = 0;
             var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
@@ -299,6 +301,15 @@ namespace TheCall
                 return;
             }
 
+            var nextBonus = catalog.NextEnergyBonus(skillName);
+            if (nextBonus > 0)
+            {
+                Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
+                AddNextBonus(level.Extraction, cell, nextBonus);
+                OpenCapacity(level, run, catalog, cells, cell, monsterId);
+                return;
+            }
+
             if (!TryQuote(catalog, cells, cell, skillName, out var quote))
                 return;
 
@@ -354,7 +365,8 @@ namespace TheCall
             int quote)
         {
             var modifier = skillName == "产能" ? 0 : run.Find(monsterId).Modifier;
-            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier;
+            _nextBonus.TryGetValue(monsterId, out var bonus);
+            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
                 multiplier = 2;
@@ -362,6 +374,57 @@ namespace TheCall
             var energy = baseValue * multiplier;
             _landings.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy));
             level.AddEnergy(energy);
+            RespondToLanding(level, run, catalog, monsterId, skillName);
+        }
+
+        void RespondToLanding(
+            LevelModel level,
+            RunModel run,
+            SkillCatalog catalog,
+            string sourceId,
+            string causeSkill)
+        {
+            var cells = level.Extraction;
+            for (var cell = 0; cell < cells.Count; cell++)
+            {
+                var id = cells[cell];
+                if (id == null || id == sourceId)
+                    continue;
+
+                var monster = run.Find(id);
+                if (monster == null)
+                    continue;
+
+                var skills = monster.Skills;
+                for (var index = 0; index < skills.Count; index++)
+                {
+                    if (!catalog.TryLandingResponse(skills[index].Name, causeSkill, out var responseQuote))
+                        continue;
+
+                    Land(level, run, catalog, cells, cell, id, skills[index].Name, responseQuote);
+                }
+            }
+        }
+
+        void AddNextBonus(IReadOnlyList<string> cells, int cell, int bonus)
+        {
+            var next = NextMonster(cells, cell);
+            if (next == null)
+                return;
+
+            _nextBonus.TryGetValue(next, out var current);
+            _nextBonus[next] = current + bonus;
+        }
+
+        static string NextMonster(IReadOnlyList<string> cells, int cell)
+        {
+            for (var index = cell + 1; index < cells.Count; index++)
+            {
+                if (cells[index] != null)
+                    return cells[index];
+            }
+
+            return null;
         }
 
         void DestroyAdjacent(IReadOnlyList<string> cells, int cell)

@@ -101,11 +101,25 @@ namespace TheCall
             return 0;
         }
 
+        public int NextEnergyBonus(string skillName) => skillName == "分享之手" ? 3 : 0;
+
+        public bool TryLandingResponse(string skillName, string causeSkillName, out int quote)
+        {
+            if (skillName == "残留提取腺体" && skillName != causeSkillName)
+            {
+                quote = 1;
+                return true;
+            }
+
+            quote = 0;
+            return false;
+        }
+
         public int StartingQuote(string skillName)
         {
             if (skillName == "吞噬大嘴")
                 return 4;
-            if (skillName == "双重吐息")
+            if (skillName == "双重吐息" || skillName == "分享之手")
                 return 2;
             if (TryEnergyQuote(skillName, out var quote))
                 return quote;
@@ -125,7 +139,8 @@ namespace TheCall
             TryEnergyQuote(skillName, out _) ||
             TrySideCount(skillName, out _, out _) ||
             TryDevour(skillName, out _, out _) ||
-            TryRepeatedQuote(skillName, out _);
+            TryRepeatedQuote(skillName, out _) ||
+            NextEnergyBonus(skillName) > 0;
 
         public bool TryGainCapacity(string skillName, out int layers)
         {
