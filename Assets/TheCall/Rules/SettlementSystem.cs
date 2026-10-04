@@ -353,7 +353,8 @@ namespace TheCall
             string skillName,
             int quote)
         {
-            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId);
+            var modifier = skillName == "产能" ? 0 : run.Find(monsterId).Modifier;
+            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier;
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
                 multiplier = 2;

@@ -7,33 +7,84 @@ namespace TheCall
     {
         public void Spawn()
         {
-            var parents = Parents();
-            if (parents.Count == 0)
-                return;
-
+            var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
-            run.AddToCage(run.CreateMonster(Inherit(parents, this.GetUtility<IDraw>())));
+            var draw = this.GetUtility<IDraw>();
+            for (var slot = 0; slot < level.LockedSlotCount; slot++)
+            {
+                var parents = Parents(level, run, slot);
+                var skill = level.LockedSkill(slot);
+                if (parents.Count == 0)
+                {
+                    ReturnSkill(run, skill);
+                    continue;
+                }
+
+                var names = Inherit(parents, draw);
+                var tech = this.GetUtility<TechCatalog>();
+                if (!string.IsNullOrEmpty(skill))
+                {
+                    if (!names.Contains(skill) && names.Count < 4)
+                        names.Add(skill);
+                    else
+                        ReturnSkill(run, skill);
+                }
+
+                if (tech.GrantsExtraSkill(run.UnlockedTech))
+                {
+                    var pool = Addable(this.GetUtility<SkillCatalog>(), names);
+                    if (pool.Count > 0 && draw.Chance(TechCatalog.Percent))
+                        names.Add(draw.Choose(pool));
+                }
+
+                var modifier = 0;
+                if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(TechCatalog.Percent))
+                    modifier += TechCatalog.ModifierAmount;
+
+                run.AddToCage(run.CreateMonster(names, modifier));
+            }
         }
 
-        List<Monster> Parents()
+        static List<Monster> Parents(LevelModel level, RunModel run, int slot)
         {
-            var locked = this.GetModel<LevelModel>().LockedParents;
-            if (locked == null)
-                return new List<Monster>();
-
-            var run = this.GetModel<RunModel>();
             var parents = new List<Monster>();
-            for (var i = 0; i < locked.Count; i++)
+            var count = level.LockedParentCount(slot);
+            for (var seat = 0; seat < count; seat++)
             {
-                if (locked[i] == null)
+                var id = level.LockedParent(slot, seat);
+                if (id == null)
                     continue;
 
-                var parent = run.Find(locked[i]);
+                var parent = run.Find(id);
                 if (parent != null && parent.Skills.Count > 0)
                     parents.Add(parent);
             }
 
             return parents;
+        }
+
+        static void ReturnSkill(RunModel run, string skill)
+        {
+            if (string.IsNullOrEmpty(skill) || run.SkillSlots.Count >= 3)
+                return;
+
+            run.PutSkillInSlot(skill);
+        }
+
+        static List<string> Addable(SkillCatalog catalog, List<string> names)
+        {
+            var pool = new List<string>();
+            if (names.Count >= 4)
+                return pool;
+
+            var all = catalog.Names;
+            for (var i = 0; i < all.Count; i++)
+            {
+                if (!names.Contains(all[i]))
+                    pool.Add(all[i]);
+            }
+
+            return pool;
         }
 
         static List<string> Inherit(List<Monster> parents, IDraw draw)

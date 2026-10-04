@@ -18,6 +18,7 @@ namespace TheCall
             RegisterUtility<IDraw>(new SystemDraw());
             RegisterUtility<ILevelCatalog>(new LevelCatalog());
             RegisterUtility<IToolCatalog>(new ToolCatalog());
+            RegisterUtility(new TechCatalog());
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterSystem(new FlowSystem());

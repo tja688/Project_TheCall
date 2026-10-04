@@ -29,6 +29,7 @@ namespace TheCall
             run.EnterOperation(1);
             var levels = this.GetUtility<ILevelCatalog>();
             this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(1), levels.ExcessEnergy(1));
+            FitBreeding(run);
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
@@ -88,6 +89,44 @@ namespace TheCall
             run.TryEquip(monsterId, skillSlotIndex);
         }
 
+        public void Unlock(string name)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || !this.GetUtility<TechCatalog>().Contains(name) || run.HasTech(name))
+                return;
+            if (!run.TrySpendTechPoint(1))
+                return;
+
+            run.AddUnlockedTech(name);
+            FitBreeding(run);
+        }
+
+        public void PlaceBreedingSkill(int slot, int skillSlotIndex)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || !this.GetUtility<TechCatalog>().AllowsBreedingSkill(run.UnlockedTech))
+                return;
+
+            var level = this.GetModel<LevelModel>();
+            if (slot < 0 || slot >= level.BreedingSlotCount || level.SkillAt(slot) != null)
+                return;
+            if (!run.TryTakeSkillAt(skillSlotIndex, out var skillName))
+                return;
+            if (!level.TryPutSkill(slot, skillName))
+                run.PutSkillInSlot(skillName);
+        }
+
+        public void ReturnBreedingSkill(int slot)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || run.SkillSlots.Count >= 3)
+                return;
+            if (!this.GetModel<LevelModel>().TryTakeSkill(slot, out var skillName))
+                return;
+
+            run.PutSkillInSlot(skillName);
+        }
+
         public void Confirm()
         {
             var run = this.GetModel<RunModel>();
@@ -130,6 +169,13 @@ namespace TheCall
             run.EnterLevelStart(next);
             var levels = this.GetUtility<ILevelCatalog>();
             this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(next), levels.ExcessEnergy(next));
+            FitBreeding(run);
+        }
+
+        void FitBreeding(RunModel run)
+        {
+            var tech = this.GetUtility<TechCatalog>();
+            this.GetModel<LevelModel>().ApplyShape(tech.SlotCount(run.UnlockedTech), tech.ParentCapacity(run.UnlockedTech));
         }
 
         static bool EnterOperation(RunModel run)

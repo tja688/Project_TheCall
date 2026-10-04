@@ -14,5 +14,15 @@ namespace TheCall
 
             return options[_random.Next(options.Count)];
         }
+
+        public bool Chance(int percent)
+        {
+            if (percent <= 0)
+                return false;
+            if (percent >= 100)
+                return true;
+
+            return _random.Next(100) < percent;
+        }
     }
 }

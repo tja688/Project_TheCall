@@ -342,5 +342,7 @@ namespace TheCall.Tests
 
             return options[0];
         }
+
+        public bool Chance(int percent) => false;
     }
 }

@@ -280,5 +280,7 @@ namespace TheCall.Tests
 
             throw new System.InvalidOperationException("抽取名单里没有 " + name);
         }
+
+        public bool Chance(int percent) => false;
     }
 }
