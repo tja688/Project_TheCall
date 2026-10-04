@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using QFramework;
+
+namespace TheCall
+{
+    internal sealed class LevelModel : AbstractModel
+    {
+        string[] _extraction = Array.Empty<string>();
+        string[] _breeding = Array.Empty<string>();
+
+        public int EnergyDue { get; private set; }
+
+        public IReadOnlyList<string> Extraction => _extraction;
+
+        public IReadOnlyList<string> Breeding => _breeding;
+
+        public void BeginFirstLevel()
+        {
+            EnergyDue = 50;
+            _extraction = new string[5];
+            _breeding = new string[2];
+        }
+
+        public bool Occupies(string monsterId) =>
+            Holds(_extraction, monsterId) || Holds(_breeding, monsterId);
+
+        public bool CanPlace(OperationArea area, int index) => CanPlace(Slots(area), index);
+
+        public void Put(OperationArea area, int index, string monsterId) =>
+            Slots(area)[index] = monsterId;
+
+        public bool TryRemove(string monsterId) =>
+            TryClear(_extraction, monsterId) || TryClear(_breeding, monsterId);
+
+        protected override void OnInit()
+        {
+        }
+
+        string[] Slots(OperationArea area) =>
+            area == OperationArea.Extraction ? _extraction : _breeding;
+
+        static bool CanPlace(string[] slots, int index) =>
+            index >= 0 && index < slots.Length && slots[index] == null;
+
+        static bool Holds(string[] slots, string monsterId)
+        {
+            if (monsterId == null)
+                return false;
+
+            for (var i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] == monsterId)
+                    return true;
+            }
+
+            return false;
+        }
+
+        static bool TryClear(string[] slots, string monsterId)
+        {
+            for (var i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] != monsterId)
+                    continue;
+
+                slots[i] = null;
+                return true;
+            }
+
+            return false;
+        }
+    }
+}
