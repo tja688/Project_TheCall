@@ -55,6 +55,37 @@ namespace TheCall
             run.AddToCage(run.Find(monsterId));
         }
 
+        public void Discard(string monsterId)
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase != RunPhase.Operation || run.SkillSlots.Count >= 3)
+                return;
+
+            var monster = run.Find(monsterId);
+            if (monster == null)
+                return;
+
+            var names = new string[monster.Skills.Count];
+            for (var i = 0; i < names.Length; i++)
+                names[i] = monster.Skills[i].Name;
+
+            var skillName = this.GetUtility<IDraw>().Choose(names);
+            this.GetModel<LevelModel>().TryRemove(monsterId);
+            if (!run.TryDestroy(monsterId))
+                return;
+
+            run.PutSkillInSlot(skillName);
+        }
+
+        public void Equip(string monsterId, int skillSlotIndex)
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase != RunPhase.Operation)
+                return;
+
+            run.TryEquip(monsterId, skillSlotIndex);
+        }
+
         public void Confirm()
         {
             var run = this.GetModel<RunModel>();

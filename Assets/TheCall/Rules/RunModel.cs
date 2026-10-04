@@ -108,6 +108,39 @@ namespace TheCall
             return true;
         }
 
+        public bool TryDestroy(string monsterId)
+        {
+            if (string.IsNullOrEmpty(monsterId) || !_byId.ContainsKey(monsterId))
+                return false;
+
+            TryRemoveFromCage(monsterId, out _);
+            _byId.Remove(monsterId);
+            return true;
+        }
+
+        public void PutSkillInSlot(string skillName) => _skillSlots.Add(skillName);
+
+        public bool TryEquip(string monsterId, int skillSlotIndex)
+        {
+            if (skillSlotIndex < 0 || skillSlotIndex >= _skillSlots.Count)
+                return false;
+
+            var monster = Find(monsterId);
+            if (monster == null || monster.Skills.Count >= 4)
+                return false;
+
+            var skillName = _skillSlots[skillSlotIndex];
+            for (var i = 0; i < monster.Skills.Count; i++)
+            {
+                if (monster.Skills[i].Name == skillName)
+                    return false;
+            }
+
+            _skillSlots.RemoveAt(skillSlotIndex);
+            monster.Skills.Add(new SkillInstance(skillName));
+            return true;
+        }
+
         public Monster Find(string monsterId)
         {
             if (monsterId != null && _byId.TryGetValue(monsterId, out var monster))
