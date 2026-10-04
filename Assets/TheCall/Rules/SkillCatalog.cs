@@ -113,6 +113,8 @@ namespace TheCall
             return 0;
         }
 
+        public bool SwapsWithLeft(string skillName) => skillName == "换位手";
+
         public bool TryDevour(string skillName, out int writeback, out bool permanent)
         {
             if (skillName == "吞噬大嘴")

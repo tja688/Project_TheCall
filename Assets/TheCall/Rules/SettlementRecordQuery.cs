@@ -31,4 +31,10 @@ namespace TheCall
         protected override IReadOnlyList<SettlementLanding> OnDo() =>
             this.GetSystem<SettlementSystem>().Landings.ToArray();
     }
+
+    public sealed class SettlementRemovalQuery : AbstractQuery<IReadOnlyList<string>>
+    {
+        protected override IReadOnlyList<string> OnDo() =>
+            this.GetSystem<SettlementSystem>().Removed.ToArray();
+    }
 }

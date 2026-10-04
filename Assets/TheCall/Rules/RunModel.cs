@@ -35,15 +35,37 @@ namespace TheCall
         {
         }
 
-        public Monster(string id, IReadOnlyList<SkillInstance> skills)
+        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0)
         {
             Id = id;
             Skills = new List<SkillInstance>(skills);
+            Modifier = modifier;
         }
 
         public string Id { get; }
 
         public List<SkillInstance> Skills { get; }
+
+        public int Modifier { get; }
+
+        public bool Immovable { get; private set; }
+
+        bool _immovableIsPermanent;
+
+        public void MakeImmovable(bool permanent)
+        {
+            Immovable = true;
+            if (permanent)
+                _immovableIsPermanent = true;
+        }
+
+        public void ClearTemporaryImmovable()
+        {
+            if (_immovableIsPermanent)
+                return;
+
+            Immovable = false;
+        }
     }
 
     internal sealed class RunModel : AbstractModel
@@ -177,6 +199,19 @@ namespace TheCall
 
         public void AddTechPoint() => TechPoints += 1;
 
+        public bool TrySpendTechPoint(int amount)
+        {
+            if (amount < 0 || TechPoints < amount)
+                return false;
+
+            TechPoints -= amount;
+            return true;
+        }
+
+        public bool HasTech(string name) => _unlockedTech.Contains(name);
+
+        public void AddUnlockedTech(string name) => _unlockedTech.Add(name);
+
         public Monster AddCandidate(string skillName)
         {
             var monster = Create(skillName);
@@ -236,6 +271,17 @@ namespace TheCall
 
         public void PutSkillInSlot(string skillName) => _skillSlots.Add(skillName);
 
+        public bool TryTakeSkillAt(int index, out string skillName)
+        {
+            skillName = null;
+            if (index < 0 || index >= _skillSlots.Count)
+                return false;
+
+            skillName = _skillSlots[index];
+            _skillSlots.RemoveAt(index);
+            return true;
+        }
+
         public bool TryEquip(string monsterId, int skillSlotIndex)
         {
             if (skillSlotIndex < 0 || skillSlotIndex >= _skillSlots.Count)
@@ -257,7 +303,8 @@ namespace TheCall
             return true;
         }
 
-        public Monster CreateMonster(IReadOnlyList<string> skillNames) => Create(skillNames);
+        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0) =>
+            Create(skillNames, modifier);
 
         public void ClearTemporaryQuotes()
         {
@@ -266,6 +313,12 @@ namespace TheCall
                 for (var i = 0; i < monster.Skills.Count; i++)
                     monster.Skills[i].ClearTemporary();
             }
+        }
+
+        public void ClearTemporaryImmovable()
+        {
+            foreach (var monster in _byId.Values)
+                monster.ClearTemporaryImmovable();
         }
 
         public Monster Find(string monsterId)
@@ -283,15 +336,15 @@ namespace TheCall
         SkillInstance MakeSkill(string name) =>
             new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name));
 
-        Monster Create(string skillName) => Create(new[] { skillName });
+        Monster Create(string skillName) => Create(new[] { skillName }, 0);
 
-        Monster Create(IReadOnlyList<string> skillNames)
+        Monster Create(IReadOnlyList<string> skillNames, int modifier)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
                 skills[i] = MakeSkill(skillNames[i]);
 
-            var monster = new Monster("m" + _nextId++, skills);
+            var monster = new Monster("m" + _nextId++, skills, modifier);
             _byId.Add(monster.Id, monster);
             return monster;
         }

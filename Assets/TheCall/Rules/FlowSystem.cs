@@ -88,6 +88,48 @@ namespace TheCall
             run.TryEquip(monsterId, skillSlotIndex);
         }
 
+        public void Unlock(string name)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || !this.GetUtility<TechCatalog>().Contains(name) || run.HasTech(name))
+                return;
+            if (!run.TrySpendTechPoint(1))
+                return;
+
+            run.AddUnlockedTech(name);
+            var level = this.GetModel<LevelModel>();
+            if (name == "槽位扩容")
+                level.GrowBreedingSlots(2);
+            else if (name == "大乱炖")
+                level.GrowParentCapacity(3);
+        }
+
+        public void PlaceBreedingSkill(int slot, int skillSlotIndex)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || !run.HasTech("基因实验"))
+                return;
+
+            var level = this.GetModel<LevelModel>();
+            if (slot < 0 || slot >= level.BreedingSlotCount || level.SkillAt(slot) != null)
+                return;
+            if (!run.TryTakeSkillAt(skillSlotIndex, out var skillName))
+                return;
+            if (!level.TryPutSkill(slot, skillName))
+                run.PutSkillInSlot(skillName);
+        }
+
+        public void ReturnBreedingSkill(int slot)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run) || run.SkillSlots.Count >= 3)
+                return;
+            if (!this.GetModel<LevelModel>().TryTakeSkill(slot, out var skillName))
+                return;
+
+            run.PutSkillInSlot(skillName);
+        }
+
         public void Confirm()
         {
             var run = this.GetModel<RunModel>();
@@ -116,6 +158,7 @@ namespace TheCall
 
             ReturnBoard(run);
             run.ClearTemporaryQuotes();
+            run.ClearTemporaryImmovable();
             if (run.LevelNumber >= 7)
             {
                 this.GetModel<LevelModel>().ClearProgress();

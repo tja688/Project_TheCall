@@ -40,7 +40,11 @@ namespace TheCall.Tests
             UseRules(new ScriptedDraw(names), levels);
         }
 
-        protected void UseRules(IDraw draw, ILevelCatalog levels, IToolCatalog tools = null)
+        protected void UseRules(
+            IDraw draw,
+            ILevelCatalog levels,
+            IToolCatalog tools = null,
+            ClockIntents intents = null)
         {
             TheCallApp.Reset();
             TheCallApp.OnRegisterPatch = app =>
@@ -49,6 +53,8 @@ namespace TheCall.Tests
                 app.RegisterUtility(levels);
                 if (tools != null)
                     app.RegisterUtility(tools);
+                if (intents != null)
+                    app.RegisterUtility(intents);
             };
             App = TheCallApp.Interface;
         }
