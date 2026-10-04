@@ -6,7 +6,7 @@ namespace TheCall.Tests
     public sealed class SettlementTests : RulesFixture
     {
         [Test]
-        public void 能量吐息落地五点且本关能量记为五点()
+        public void 能量吐息落地五点且不足时清掉本关能量()
         {
             var keptId = App.SendQuery(new OpeningCandidatesQuery())[0].Id;
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
@@ -22,7 +22,8 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5 }));
-            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(5));
+            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(45));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(0));
         }
@@ -60,7 +61,8 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5 }));
-            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(10));
+            Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(40));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
         }
 
         [Test]
@@ -118,8 +120,14 @@ namespace TheCall.Tests
 
     sealed class ScriptedLevelCatalog : ILevelCatalog
     {
-        public ScriptedLevelCatalog(int energyDue) => EnergyDue = energyDue;
+        public ScriptedLevelCatalog(int energyDue, int excessEnergy = 60)
+        {
+            EnergyDue = energyDue;
+            ExcessEnergy = excessEnergy;
+        }
 
         public int EnergyDue { get; }
+
+        public int ExcessEnergy { get; }
     }
 }

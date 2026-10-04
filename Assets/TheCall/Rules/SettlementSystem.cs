@@ -3,23 +3,49 @@ using QFramework;
 
 namespace TheCall
 {
+    internal enum PaymentResult
+    {
+        Paid,
+        Short,
+        Failed,
+    }
+
     internal sealed class SettlementSystem : AbstractSystem
     {
         readonly List<SettlementLanding> _landings = new List<SettlementLanding>();
 
         public IReadOnlyList<SettlementLanding> Landings => _landings;
 
-        public bool Settle()
+        public int Deducted { get; private set; }
+
+        public PaymentResult Settle()
         {
             Score();
             var level = this.GetModel<LevelModel>();
-            if (level.Energy < level.EnergyDue)
-                return false;
+            var due = level.InOvertime ? level.Shortfall : level.EnergyDue;
+            if (level.Energy < due)
+            {
+                Deducted = 0;
+                if (level.InOvertime)
+                {
+                    level.ClearEnergy();
+                    return PaymentResult.Failed;
+                }
 
-            level.Pay(level.EnergyDue);
+                level.RecordShortfall(level.EnergyDue - level.Energy);
+                return PaymentResult.Short;
+            }
+
+            var remaining = level.Energy - due;
+            Deducted = due;
+            level.Pay(due);
             level.ClearEnergy();
-            this.GetModel<RunModel>().AddGold(40);
-            return true;
+            var run = this.GetModel<RunModel>();
+            if (remaining >= level.ExcessEnergy)
+                run.AddTechPoint();
+
+            run.AddGold(level.InOvertime ? 20 : 40);
+            return PaymentResult.Paid;
         }
 
         void Score()

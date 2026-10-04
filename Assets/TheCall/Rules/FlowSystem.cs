@@ -26,7 +26,8 @@ namespace TheCall
                 run.AddNewToCage(draw.Choose(catalog.Names));
 
             run.EnterOperation(1);
-            this.GetModel<LevelModel>().BeginFirstLevel(this.GetUtility<ILevelCatalog>().EnergyDue);
+            var levels = this.GetUtility<ILevelCatalog>();
+            this.GetModel<LevelModel>().BeginFirstLevel(levels.EnergyDue, levels.ExcessEnergy);
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
@@ -92,8 +93,14 @@ namespace TheCall
             if (run.Phase != RunPhase.Operation)
                 return;
 
-            if (this.GetSystem<SettlementSystem>().Settle())
+            var payment = this.GetSystem<SettlementSystem>().Settle();
+            if (payment == PaymentResult.Paid)
                 run.EnterShop();
+            else if (payment == PaymentResult.Failed)
+            {
+                this.GetModel<LevelModel>().ClearProgress();
+                run.Lose();
+            }
         }
     }
 }

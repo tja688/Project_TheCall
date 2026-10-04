@@ -4,15 +4,18 @@ namespace TheCall
 {
     public sealed class LevelTarget
     {
-        public LevelTarget(int levelNumber, int energyDue)
+        public LevelTarget(int levelNumber, int energyDue, int excessEnergy)
         {
             LevelNumber = levelNumber;
             EnergyDue = energyDue;
+            ExcessEnergy = excessEnergy;
         }
 
         public int LevelNumber { get; }
 
         public int EnergyDue { get; }
+
+        public int ExcessEnergy { get; }
     }
 
     public sealed class LevelTargetQuery : AbstractQuery<LevelTarget>
@@ -21,7 +24,7 @@ namespace TheCall
         {
             var run = this.GetModel<RunModel>();
             var level = this.GetModel<LevelModel>();
-            return new LevelTarget(run.LevelNumber, level.EnergyDue);
+            return new LevelTarget(run.LevelNumber, level.EnergyDue, level.ExcessEnergy);
         }
     }
 }

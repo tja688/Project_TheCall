@@ -11,21 +11,42 @@ namespace TheCall
 
         public int EnergyDue { get; private set; }
 
+        public int ExcessEnergy { get; private set; }
+
+        public int Shortfall { get; private set; }
+
+        public bool InOvertime { get; private set; }
+
         public int Energy { get; private set; }
 
         public IReadOnlyList<string> Extraction => _extraction;
 
         public IReadOnlyList<string> Breeding => _breeding;
 
-        public void BeginFirstLevel(int energyDue)
+        public void BeginFirstLevel(int energyDue, int excessEnergy)
         {
             EnergyDue = energyDue;
+            ExcessEnergy = excessEnergy;
+            ClearProgress();
+        }
+
+        public void ClearProgress()
+        {
             Energy = 0;
+            Shortfall = 0;
+            InOvertime = false;
             _extraction = new string[5];
             _breeding = new string[2];
         }
 
         public void ClearEnergy() => Energy = 0;
+
+        public void RecordShortfall(int shortfall)
+        {
+            Shortfall = shortfall;
+            InOvertime = true;
+            Energy = 0;
+        }
 
         public void AddEnergy(int amount) => Energy += amount;
 
