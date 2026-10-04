@@ -26,5 +26,24 @@ namespace TheCall.Tests
 
         [TearDown]
         public void TearDown() => TheCallApp.Reset();
+
+        protected void UseDraw(params string[] names)
+        {
+            TheCallApp.Reset();
+            TheCallApp.OnRegisterPatch = app =>
+                app.RegisterUtility<IDraw>(new ScriptedDraw(names));
+            App = TheCallApp.Interface;
+        }
+
+        protected void UseLevel(ILevelCatalog levels, params string[] names)
+        {
+            TheCallApp.Reset();
+            TheCallApp.OnRegisterPatch = app =>
+            {
+                app.RegisterUtility<IDraw>(new ScriptedDraw(names));
+                app.RegisterUtility(levels);
+            };
+            App = TheCallApp.Interface;
+        }
     }
 }

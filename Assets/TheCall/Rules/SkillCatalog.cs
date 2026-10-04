@@ -23,5 +23,17 @@ namespace TheCall
             "换位手",
             "鼓励嘴",
         };
+
+        public bool TryEnergyQuote(string skillName, out int quote)
+        {
+            if (skillName == "能量吐息")
+            {
+                quote = 5;
+                return true;
+            }
+
+            quote = 0;
+            return false;
+        }
     }
 }

@@ -57,6 +57,10 @@ namespace TheCall
             LevelNumber = levelNumber;
         }
 
+        public void EnterShop() => Phase = RunPhase.Shop;
+
+        public void AddGold(int amount) => Gold += amount;
+
         public Monster AddCandidate(string skillName)
         {
             var monster = Create(skillName);

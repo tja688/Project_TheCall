@@ -16,9 +16,11 @@ namespace TheCall
         {
             RegisterUtility(new SkillCatalog());
             RegisterUtility<IDraw>(new SystemDraw());
+            RegisterUtility<ILevelCatalog>(new LevelCatalog());
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterSystem(new FlowSystem());
+            RegisterSystem(new SettlementSystem());
         }
     }
 }

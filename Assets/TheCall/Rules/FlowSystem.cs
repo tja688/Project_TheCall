@@ -26,7 +26,7 @@ namespace TheCall
                 run.AddNewToCage(draw.Choose(catalog.Names));
 
             run.EnterOperation(1);
-            this.GetModel<LevelModel>().BeginFirstLevel();
+            this.GetModel<LevelModel>().BeginFirstLevel(this.GetUtility<ILevelCatalog>().EnergyDue);
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
@@ -53,6 +53,16 @@ namespace TheCall
                 return;
 
             run.AddToCage(run.Find(monsterId));
+        }
+
+        public void Confirm()
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase != RunPhase.Operation)
+                return;
+
+            if (this.GetSystem<SettlementSystem>().Settle())
+                run.EnterShop();
         }
     }
 }

@@ -6,6 +6,7 @@ namespace TheCall
     {
         Opening,
         Operation,
+        Shop,
     }
 
     public sealed class RunPhaseQuery : AbstractQuery<RunPhase>

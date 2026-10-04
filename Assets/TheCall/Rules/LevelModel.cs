@@ -11,16 +11,25 @@ namespace TheCall
 
         public int EnergyDue { get; private set; }
 
+        public int Energy { get; private set; }
+
         public IReadOnlyList<string> Extraction => _extraction;
 
         public IReadOnlyList<string> Breeding => _breeding;
 
-        public void BeginFirstLevel()
+        public void BeginFirstLevel(int energyDue)
         {
-            EnergyDue = 50;
+            EnergyDue = energyDue;
+            Energy = 0;
             _extraction = new string[5];
             _breeding = new string[2];
         }
+
+        public void ClearEnergy() => Energy = 0;
+
+        public void AddEnergy(int amount) => Energy += amount;
+
+        public void Pay(int amount) => Energy -= amount;
 
         public bool Occupies(string monsterId) =>
             Holds(_extraction, monsterId) || Holds(_breeding, monsterId);
