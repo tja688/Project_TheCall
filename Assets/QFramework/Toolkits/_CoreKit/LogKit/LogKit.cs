@@ -244,7 +244,7 @@ LogKit.Level = LogKit.LogLevel.Max;
 
         // 处理asset打开的callback函数
         [OnOpenAsset(-1)]
-        static bool OnOpenAsset(int instance, int line)
+        static bool OnOpenAsset(EntityId entityId, int line)
         {
             if (m_hasForceMono) return false;
 
