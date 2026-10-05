@@ -49,4 +49,4 @@ Use the five default canonical triage labels. Before applying triage labels, rea
 
 ### Domain docs
 
-Use a single-context layout: root `CONTEXT.md` and `docs/adr/`. Before exploring the codebase or proposing domain or architecture changes, read `docs/agents/domain.md` and follow its consumer rules.
+Use a single-context layout: root `GLOSSARY.md` and `docs/adr/`. Before exploring the codebase or proposing domain or architecture changes, read `docs/agents/domain.md` and follow its consumer rules.
