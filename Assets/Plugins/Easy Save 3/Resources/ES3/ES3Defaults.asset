@@ -33,6 +33,13 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AudioKit
+    - Febucci.Attributes.Runtime
+    - Febucci.TextAnimator.Demo.Runtime
+    - Febucci.TextAnimator.Demo.Sounds.Runtime
+    - Febucci.TextAnimatorForUnity.Input.Runtime
+    - Febucci.TextAnimatorForUnity.Runtime
+    - Febucci.TextAnimatorForUnity.TMP.Runtime
+    - Febucci.TextAnimatorForUnity.UITk.Runtime
     - QFramework
     - QFramework.CoreKit
     - ResKit
