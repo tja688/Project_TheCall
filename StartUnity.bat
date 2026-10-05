@@ -1,11 +1,10 @@
 @echo off
 setlocal EnableExtensions
-chcp 65001 >nul 2>&1
 cd /d "%~dp0"
 
 where unity >nul 2>&1
 if errorlevel 1 (
-    echo [é”™è¯¯] æœªæ‰¾åˆ° unity CLIï¼Œè¯·å…ˆå®‰è£…å¹¶åŠ å…¥ PATHã€‚
+    echo [´íÎó] Î´ÕÒµ½ unity CLI£¬ÇëÏÈ°²×°²¢¼ÓÈë PATH¡£
     exit /b 1
 )
 

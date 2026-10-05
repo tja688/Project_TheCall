@@ -64,19 +64,48 @@ function Invoke-UnityStatus {
     )
 }
 
-function Test-EditorRunningLocally {
+function Test-EditorProcessRunning {
     param([string]$NormalizedProject)
 
-    $pipelineJson = Get-UnityJsonOutput @(
-        '--no-banner',
-        '--non-interactive',
-        'pipeline',
-        'list',
-        '--format', 'json'
-    )
+    # CLI 1.0.0-beta.1 的 pipeline list 会把当前目录下的 Unity 项目
+    # 当成正在运行的编辑器，即使没有 Unity.exe。以进程命令行为准。
+    $needle = $NormalizedProject.TrimEnd('\')
+    $processes = @(Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" -ErrorAction SilentlyContinue)
+    foreach ($proc in $processes) {
+        $exe = [string]$proc.ExecutablePath
+        if ($exe -notmatch '\\Editor\\Unity\.exe$') {
+            continue
+        }
+
+        $command = ([string]$proc.CommandLine) -replace '/', '\'
+        if ($command.IndexOf($needle, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Get-PipelineInstance {
+    param([string]$NormalizedProject)
+
+    $previous = Get-Location
+    try {
+        Set-Location -LiteralPath $env:SystemRoot
+        $pipelineJson = Get-UnityJsonOutput @(
+            '--no-banner',
+            '--non-interactive',
+            'pipeline',
+            'list',
+            '--format', 'json'
+        )
+    }
+    finally {
+        Set-Location -LiteralPath $previous.Path
+    }
 
     if (-not $pipelineJson -or -not $pipelineJson.success) {
-        return $false
+        return $null
     }
 
     foreach ($instance in @($pipelineJson.data.instances)) {
@@ -85,12 +114,12 @@ function Test-EditorRunningLocally {
         }
 
         $instancePath = Get-NormalizedPath $instance.projectPath
-        if ($instancePath -eq $NormalizedProject -and $instance.isRunning) {
-            return $true
+        if ($instancePath -eq $NormalizedProject) {
+            return $instance
         }
     }
 
-    return $false
+    return $null
 }
 
 function Wait-ForReadyInstance {
@@ -152,25 +181,53 @@ if ($instance) {
     exit (Wait-ForReadyInstance -ProjectPath $normalizedProject -NormalizedProject $normalizedProject)
 }
 
-if (Test-EditorRunningLocally -NormalizedProject $normalizedProject) {
+if (Test-EditorProcessRunning -NormalizedProject $normalizedProject) {
+    $pipelineInstance = Get-PipelineInstance -NormalizedProject $normalizedProject
+    if ($pipelineInstance -and $pipelineInstance.safeMode -and $pipelineInstance.safeMode.detected) {
+        Write-Host '[错误] Unity 处于 Safe Mode，Pipeline 无法连接。请先修复脚本编译错误后重新启动。' -ForegroundColor Red
+        exit 1
+    }
+
     Write-Host '检测到 Unity 编辑器已在运行，但 Pipeline 尚未连接，等待就绪...'
     exit (Wait-ForReadyInstance -ProjectPath $normalizedProject -NormalizedProject $normalizedProject)
 }
 
 Write-Host '未找到本项目的 Unity 实例，正在启动编辑器...'
-$openJson = Get-UnityJsonOutput @(
-    '--no-banner',
-    '--non-interactive',
-    'open',
-    $normalizedProject,
-    '--args', '-automated',
-    '--format', 'json'
-)
+$openOut = Join-Path $env:TEMP 'StartUnity-open.out.txt'
+$openErr = Join-Path $env:TEMP 'StartUnity-open.err.txt'
+Remove-Item -LiteralPath $openOut, $openErr -Force -ErrorAction SilentlyContinue
 
-if ($openJson -and $openJson.success -eq $false) {
-    $message = ($openJson.errors | ForEach-Object { $_.message }) -join '; '
+# unity open 拉起的编辑器会继承调用方的 stdout。用管道接住时，管道要等编辑器退出才关闭。
+$openArgLine = '--no-banner --non-interactive open "{0}" --args -automated --format json' -f $normalizedProject
+$openProc = Start-Process -FilePath 'unity' -ArgumentList $openArgLine -Wait -PassThru -WindowStyle Hidden `
+    -RedirectStandardOutput $openOut -RedirectStandardError $openErr
+
+$openText = ''
+foreach ($logPath in @($openOut, $openErr)) {
+    if (Test-Path -LiteralPath $logPath) {
+        $openText += [System.IO.File]::ReadAllText($logPath)
+    }
+}
+
+$openJson = $null
+$jsonStart = $openText.IndexOf('{')
+if ($jsonStart -ge 0) {
+    try {
+        $openJson = $openText.Substring($jsonStart) | ConvertFrom-Json
+    }
+    catch {
+        $openJson = $null
+    }
+}
+
+if ($openProc.ExitCode -ne 0 -or ($openJson -and $openJson.success -eq $false)) {
+    $message = ''
+    if ($openJson -and $openJson.errors) {
+        $message = ($openJson.errors | ForEach-Object { $_.message }) -join '; '
+    }
+
     if (-not $message) {
-        $message = '打开 Unity 项目失败'
+        $message = "打开 Unity 项目失败 (exit $($openProc.ExitCode))"
     }
 
     Write-Host "[错误] $message" -ForegroundColor Red

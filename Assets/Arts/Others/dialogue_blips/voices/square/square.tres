@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BlipVoice" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://addons/dialogue_blips/blip_voice.gd" id="1"]
+[ext_resource type="AudioStream" path="res://addons/dialogue_blips/voices/square/square_1.wav" id="2"]
+[ext_resource type="AudioStream" path="res://addons/dialogue_blips/voices/square/square_2.wav" id="3"]
+[ext_resource type="AudioStream" path="res://addons/dialogue_blips/voices/square/square_3.wav" id="4"]
+[ext_resource type="AudioStream" path="res://addons/dialogue_blips/voices/square/square_4.wav" id="5"]
+[ext_resource type="AudioStream" path="res://addons/dialogue_blips/voices/square/square_5.wav" id="6"]
+
+[resource]
+script = ExtResource("1")
+sounds = Array[AudioStream]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])

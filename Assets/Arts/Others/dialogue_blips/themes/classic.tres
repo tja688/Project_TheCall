@@ -1,0 +1,79 @@
+[gd_resource type="Theme" load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://addons/dialogue_blips/styles/classic/panel.png" id="1_panel"]
+[ext_resource type="Texture2D" path="res://addons/dialogue_blips/styles/classic/name.png" id="2_name"]
+[ext_resource type="Texture2D" path="res://addons/dialogue_blips/styles/classic/pick.png" id="3_pick"]
+[ext_resource type="Texture2D" path="res://addons/dialogue_blips/styles/classic/next.png" id="next"]
+[ext_resource type="FontFile" path="res://addons/dialogue_blips/fonts/hearth.fnt" id="font"]
+
+[sub_resource type="StyleBoxTexture" id="sb_1"]
+texture = ExtResource("1_panel")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+content_margin_left = 7.0
+content_margin_top = 7.0
+content_margin_right = 7.0
+content_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="sb_2"]
+texture = ExtResource("2_name")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="sb_3"]
+content_margin_left = 10.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxTexture" id="sb_4"]
+texture = ExtResource("3_pick")
+texture_margin_left = 10.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+content_margin_left = 10.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+
+[resource]
+default_font = ExtResource("font")
+default_font_size = 8
+DialogueBox/base_type = &"PanelContainer"
+DialogueBox/constants/name_x = 6
+DialogueBox/constants/name_y = 11
+DialogueBox/constants/separation = 4
+DialogueBox/constants/next_blink = 0
+DialogueBox/icons/next = ExtResource("next")
+DialogueBox/styles/panel = SubResource("sb_1")
+DialogueName/base_type = &"PanelContainer"
+DialogueName/styles/panel = SubResource("sb_2")
+DialogueNameLabel/base_type = &"Label"
+DialogueNameLabel/colors/font_color = Color(1.000, 0.871, 0.392, 1.0)
+DialogueText/base_type = &"RichTextLabel"
+DialogueText/colors/default_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueText/colors/font_shadow_color = Color(0.031, 0.031, 0.094, 1.0)
+DialogueText/constants/shadow_offset_x = 1
+DialogueText/constants/shadow_offset_y = 1
+DialogueText/constants/line_separation = 2
+DialogueChoice/base_type = &"Button"
+DialogueChoice/colors/font_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueChoice/colors/font_hover_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueChoice/colors/font_pressed_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueChoice/colors/font_focus_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueChoice/colors/font_hover_pressed_color = Color(0.980, 0.980, 1.000, 1.0)
+DialogueChoice/styles/normal = SubResource("sb_3")
+DialogueChoice/styles/hover = SubResource("sb_4")
+DialogueChoice/styles/pressed = SubResource("sb_4")
+DialogueChoice/styles/focus = SubResource("sb_4")
+DialogueChoice/styles/hover_pressed = SubResource("sb_4")
+DialogueChoice/styles/disabled = SubResource("sb_3")
