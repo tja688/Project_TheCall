@@ -204,7 +204,7 @@ void BuildChrome(Transform screen, string title, out RectTransform window)
     window.pivot = new Vector2(0.5f, 0.5f);
     window.sizeDelta = new Vector2(ww, wh);
     window.anchoredPosition = Vector2.zero;
-    Sliced(windowGo, Sp("paper_9slice"), false, Frame);
+    Sliced(windowGo, Sp("panel_9slice"), false, Slice);
 
     var titleGo = Node("Title", window);
     Place(Rt(titleGo), 94f * S, 4f * S, 104f * S, 24f * S, ww, wh);
@@ -224,11 +224,20 @@ void BuildChrome(Transform screen, string title, out RectTransform window)
     Plain(closeIcon, Sp("close"), false);
 }
 
+void ContentPaper(Transform window, float x, float y, float w, float h, float parentW, float parentH)
+{
+    var paper = Node("Content", window);
+    Place(Rt(paper), x * S, y * S, w * S, h * S, parentW, parentH);
+    Sliced(paper, Sp("paper_9slice"), false, Slice);
+    paper.transform.SetAsFirstSibling();
+}
+
 HearthwoodCatalogPanel BuildCatalog(Transform screen, string title, string footer, string action)
 {
     BuildChrome(screen, title, out var window);
     float ww = 292f * S;
     float wh = 156f * S;
+    ContentPaper(window, 10f, 34f, 181f, 116f, ww, wh);
 
     var panel = window.gameObject.AddComponent<HearthwoodCatalogPanel>();
     var frames = new Image[catalogItems.Length];
@@ -335,6 +344,7 @@ void BuildSettings(Transform screen)
     BuildChrome(screen, "SETTINGS", out var window);
     float ww = 292f * S;
     float wh = 156f * S;
+    ContentPaper(window, 8f, 34f, 266f, 116f, ww, wh);
 
     void RowLabel(string text, float centerY)
     {
