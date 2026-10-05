@@ -169,3 +169,7 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# TextMesh Pro SDF font assets (embedded atlas; often 100MB+)
+# Pattern must not contain spaces (line tokenization); matches "* SDF.asset" names.
+**/*[[:space:]]SDF.asset lfs

@@ -1,0 +1,1115 @@
+{
+  "image": "hearthwood.png",
+  "origin": "top-left",
+  "padding": 2,
+  "assets": [
+    {
+      "name": "button_wide_normal",
+      "category": "components",
+      "width": 72,
+      "height": 24,
+      "file": "png/components/button_wide_normal.png",
+      "source": "source/components/button_wide_normal.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 2,
+        "y": 2,
+        "w": 72,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_wide_hover",
+      "category": "components",
+      "width": 72,
+      "height": 24,
+      "file": "png/components/button_wide_hover.png",
+      "source": "source/components/button_wide_hover.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 78,
+        "y": 2,
+        "w": 72,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_wide_pressed",
+      "category": "components",
+      "width": 72,
+      "height": 24,
+      "file": "png/components/button_wide_pressed.png",
+      "source": "source/components/button_wide_pressed.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 154,
+        "y": 2,
+        "w": 72,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_wide_disabled",
+      "category": "components",
+      "width": 72,
+      "height": 24,
+      "file": "png/components/button_wide_disabled.png",
+      "source": "source/components/button_wide_disabled.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 230,
+        "y": 2,
+        "w": 72,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_small_normal",
+      "category": "components",
+      "width": 40,
+      "height": 24,
+      "file": "png/components/button_small_normal.png",
+      "source": "source/components/button_small_normal.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 306,
+        "y": 2,
+        "w": 40,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_small_hover",
+      "category": "components",
+      "width": 40,
+      "height": 24,
+      "file": "png/components/button_small_hover.png",
+      "source": "source/components/button_small_hover.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 350,
+        "y": 2,
+        "w": 40,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_small_pressed",
+      "category": "components",
+      "width": 40,
+      "height": 24,
+      "file": "png/components/button_small_pressed.png",
+      "source": "source/components/button_small_pressed.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 394,
+        "y": 2,
+        "w": 40,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_small_disabled",
+      "category": "components",
+      "width": 40,
+      "height": 24,
+      "file": "png/components/button_small_disabled.png",
+      "source": "source/components/button_small_disabled.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 438,
+        "y": 2,
+        "w": 40,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_square_normal",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/button_square_normal.png",
+      "source": "source/components/button_square_normal.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 482,
+        "y": 2,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_square_hover",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/button_square_hover.png",
+      "source": "source/components/button_square_hover.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 2,
+        "y": 30,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_square_pressed",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/button_square_pressed.png",
+      "source": "source/components/button_square_pressed.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 30,
+        "y": 30,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "button_square_disabled",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/button_square_disabled.png",
+      "source": "source/components/button_square_disabled.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 58,
+        "y": 30,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "tab_normal",
+      "category": "components",
+      "width": 48,
+      "height": 20,
+      "file": "png/components/tab_normal.png",
+      "source": "source/components/tab_normal.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 86,
+        "y": 30,
+        "w": 48,
+        "h": 20
+      }
+    },
+    {
+      "name": "tab_hover",
+      "category": "components",
+      "width": 48,
+      "height": 20,
+      "file": "png/components/tab_hover.png",
+      "source": "source/components/tab_hover.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 138,
+        "y": 30,
+        "w": 48,
+        "h": 20
+      }
+    },
+    {
+      "name": "tab_pressed",
+      "category": "components",
+      "width": 48,
+      "height": 20,
+      "file": "png/components/tab_pressed.png",
+      "source": "source/components/tab_pressed.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 190,
+        "y": 30,
+        "w": 48,
+        "h": 20
+      }
+    },
+    {
+      "name": "tab_disabled",
+      "category": "components",
+      "width": 48,
+      "height": 20,
+      "file": "png/components/tab_disabled.png",
+      "source": "source/components/tab_disabled.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 242,
+        "y": 30,
+        "w": 48,
+        "h": 20
+      }
+    },
+    {
+      "name": "panel_9slice",
+      "category": "components",
+      "width": 32,
+      "height": 32,
+      "file": "png/components/panel_9slice.png",
+      "source": "source/components/panel_9slice.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 294,
+        "y": 30,
+        "w": 32,
+        "h": 32
+      }
+    },
+    {
+      "name": "paper_9slice",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/paper_9slice.png",
+      "source": "source/components/paper_9slice.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 330,
+        "y": 30,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "tooltip_9slice",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/tooltip_9slice.png",
+      "source": "source/components/tooltip_9slice.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 358,
+        "y": 30,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "title_plate",
+      "category": "components",
+      "width": 104,
+      "height": 24,
+      "file": "png/components/title_plate.png",
+      "source": "source/components/title_plate.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 386,
+        "y": 30,
+        "w": 104,
+        "h": 24
+      }
+    },
+    {
+      "name": "slot_normal",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/slot_normal.png",
+      "source": "source/components/slot_normal.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 2,
+        "y": 66,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "slot_hover",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/slot_hover.png",
+      "source": "source/components/slot_hover.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 30,
+        "y": 66,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "slot_selected",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/slot_selected.png",
+      "source": "source/components/slot_selected.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 58,
+        "y": 66,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "slot_disabled",
+      "category": "components",
+      "width": 24,
+      "height": 24,
+      "file": "png/components/slot_disabled.png",
+      "source": "source/components/slot_disabled.svg",
+      "nine_slice": {
+        "left": 6,
+        "top": 6,
+        "right": 6,
+        "bottom": 6
+      },
+      "atlas_rect": {
+        "x": 86,
+        "y": 66,
+        "w": 24,
+        "h": 24
+      }
+    },
+    {
+      "name": "checkbox_off",
+      "category": "components",
+      "width": 16,
+      "height": 16,
+      "file": "png/components/checkbox_off.png",
+      "source": "source/components/checkbox_off.svg",
+      "atlas_rect": {
+        "x": 114,
+        "y": 66,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "checkbox_on",
+      "category": "components",
+      "width": 16,
+      "height": 16,
+      "file": "png/components/checkbox_on.png",
+      "source": "source/components/checkbox_on.svg",
+      "atlas_rect": {
+        "x": 134,
+        "y": 66,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "radio_off",
+      "category": "components",
+      "width": 16,
+      "height": 16,
+      "file": "png/components/radio_off.png",
+      "source": "source/components/radio_off.svg",
+      "atlas_rect": {
+        "x": 154,
+        "y": 66,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "radio_on",
+      "category": "components",
+      "width": 16,
+      "height": 16,
+      "file": "png/components/radio_on.png",
+      "source": "source/components/radio_on.svg",
+      "atlas_rect": {
+        "x": 174,
+        "y": 66,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "bar_background",
+      "category": "components",
+      "width": 96,
+      "height": 12,
+      "file": "png/components/bar_background.png",
+      "source": "source/components/bar_background.svg",
+      "nine_slice": {
+        "left": 5,
+        "top": 5,
+        "right": 5,
+        "bottom": 5
+      },
+      "atlas_rect": {
+        "x": 194,
+        "y": 66,
+        "w": 96,
+        "h": 12
+      }
+    },
+    {
+      "name": "bar_fill_health",
+      "category": "components",
+      "width": 88,
+      "height": 4,
+      "file": "png/components/bar_fill_health.png",
+      "source": "source/components/bar_fill_health.svg",
+      "atlas_rect": {
+        "x": 294,
+        "y": 66,
+        "w": 88,
+        "h": 4
+      }
+    },
+    {
+      "name": "bar_fill_energy",
+      "category": "components",
+      "width": 88,
+      "height": 4,
+      "file": "png/components/bar_fill_energy.png",
+      "source": "source/components/bar_fill_energy.svg",
+      "atlas_rect": {
+        "x": 386,
+        "y": 66,
+        "w": 88,
+        "h": 4
+      }
+    },
+    {
+      "name": "bar_fill_water",
+      "category": "components",
+      "width": 88,
+      "height": 4,
+      "file": "png/components/bar_fill_water.png",
+      "source": "source/components/bar_fill_water.svg",
+      "atlas_rect": {
+        "x": 2,
+        "y": 94,
+        "w": 88,
+        "h": 4
+      }
+    },
+    {
+      "name": "bar_fill_experience",
+      "category": "components",
+      "width": 88,
+      "height": 4,
+      "file": "png/components/bar_fill_experience.png",
+      "source": "source/components/bar_fill_experience.svg",
+      "atlas_rect": {
+        "x": 94,
+        "y": 94,
+        "w": 88,
+        "h": 4
+      }
+    },
+    {
+      "name": "slider_track",
+      "category": "components",
+      "width": 80,
+      "height": 12,
+      "file": "png/components/slider_track.png",
+      "source": "source/components/slider_track.svg",
+      "nine_slice": {
+        "left": 4,
+        "top": 3,
+        "right": 4,
+        "bottom": 3
+      },
+      "atlas_rect": {
+        "x": 186,
+        "y": 94,
+        "w": 80,
+        "h": 12
+      }
+    },
+    {
+      "name": "slider_thumb",
+      "category": "components",
+      "width": 12,
+      "height": 16,
+      "file": "png/components/slider_thumb.png",
+      "source": "source/components/slider_thumb.svg",
+      "atlas_rect": {
+        "x": 270,
+        "y": 94,
+        "w": 12,
+        "h": 16
+      }
+    },
+    {
+      "name": "close",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/close.png",
+      "source": "source/components/close.svg",
+      "atlas_rect": {
+        "x": 286,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "arrow_left",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/arrow_left.png",
+      "source": "source/components/arrow_left.svg",
+      "atlas_rect": {
+        "x": 302,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "arrow_right",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/arrow_right.png",
+      "source": "source/components/arrow_right.svg",
+      "atlas_rect": {
+        "x": 318,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "arrow_up",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/arrow_up.png",
+      "source": "source/components/arrow_up.svg",
+      "atlas_rect": {
+        "x": 334,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "arrow_down",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/arrow_down.png",
+      "source": "source/components/arrow_down.svg",
+      "atlas_rect": {
+        "x": 350,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "plus",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/plus.png",
+      "source": "source/components/plus.svg",
+      "atlas_rect": {
+        "x": 366,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "minus",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/minus.png",
+      "source": "source/components/minus.svg",
+      "atlas_rect": {
+        "x": 382,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "check",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/check.png",
+      "source": "source/components/check.svg",
+      "atlas_rect": {
+        "x": 398,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "cursor",
+      "category": "components",
+      "width": 12,
+      "height": 12,
+      "file": "png/components/cursor.png",
+      "source": "source/components/cursor.svg",
+      "atlas_rect": {
+        "x": 414,
+        "y": 94,
+        "w": 12,
+        "h": 12
+      }
+    },
+    {
+      "name": "carrot",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/carrot.png",
+      "source": "source/icons/carrot.svg",
+      "atlas_rect": {
+        "x": 430,
+        "y": 94,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "turnip",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/turnip.png",
+      "source": "source/icons/turnip.svg",
+      "atlas_rect": {
+        "x": 450,
+        "y": 94,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "beet",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/beet.png",
+      "source": "source/icons/beet.svg",
+      "atlas_rect": {
+        "x": 470,
+        "y": 94,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "apple",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/apple.png",
+      "source": "source/icons/apple.svg",
+      "atlas_rect": {
+        "x": 490,
+        "y": 94,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "tomato",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/tomato.png",
+      "source": "source/icons/tomato.svg",
+      "atlas_rect": {
+        "x": 2,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "orange",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/orange.png",
+      "source": "source/icons/orange.svg",
+      "atlas_rect": {
+        "x": 22,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "corn",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/corn.png",
+      "source": "source/icons/corn.svg",
+      "atlas_rect": {
+        "x": 42,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "wheat",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/wheat.png",
+      "source": "source/icons/wheat.svg",
+      "atlas_rect": {
+        "x": 62,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "berry",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/berry.png",
+      "source": "source/icons/berry.svg",
+      "atlas_rect": {
+        "x": 82,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "mushroom",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/mushroom.png",
+      "source": "source/icons/mushroom.svg",
+      "atlas_rect": {
+        "x": 102,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "seed_bag",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/seed_bag.png",
+      "source": "source/icons/seed_bag.svg",
+      "atlas_rect": {
+        "x": 122,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "axe",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/axe.png",
+      "source": "source/icons/axe.svg",
+      "atlas_rect": {
+        "x": 142,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "pickaxe",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/pickaxe.png",
+      "source": "source/icons/pickaxe.svg",
+      "atlas_rect": {
+        "x": 162,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "hoe",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/hoe.png",
+      "source": "source/icons/hoe.svg",
+      "atlas_rect": {
+        "x": 182,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "watering_can",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/watering_can.png",
+      "source": "source/icons/watering_can.svg",
+      "atlas_rect": {
+        "x": 202,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "wood_log",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/wood_log.png",
+      "source": "source/icons/wood_log.svg",
+      "atlas_rect": {
+        "x": 222,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "stone",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/stone.png",
+      "source": "source/icons/stone.svg",
+      "atlas_rect": {
+        "x": 242,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "iron_ore",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/iron_ore.png",
+      "source": "source/icons/iron_ore.svg",
+      "atlas_rect": {
+        "x": 262,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "coin",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/coin.png",
+      "source": "source/icons/coin.svg",
+      "atlas_rect": {
+        "x": 282,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "gem",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/gem.png",
+      "source": "source/icons/gem.svg",
+      "atlas_rect": {
+        "x": 302,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "key",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/key.png",
+      "source": "source/icons/key.svg",
+      "atlas_rect": {
+        "x": 322,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "potion",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/potion.png",
+      "source": "source/icons/potion.svg",
+      "atlas_rect": {
+        "x": 342,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "bread",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/bread.png",
+      "source": "source/icons/bread.svg",
+      "atlas_rect": {
+        "x": 362,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    },
+    {
+      "name": "fish",
+      "category": "icons",
+      "width": 16,
+      "height": 16,
+      "file": "png/icons/fish.png",
+      "source": "source/icons/fish.svg",
+      "atlas_rect": {
+        "x": 382,
+        "y": 114,
+        "w": 16,
+        "h": 16
+      }
+    }
+  ]
+}
