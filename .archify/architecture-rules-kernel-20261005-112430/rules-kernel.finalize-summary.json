@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+    "sha256": "2bd83f730c56034dbe7dc04b91bf7afb89679c3c5c78a5e023ddb05a02a13d92",
+    "bytes": 12012
+  },
+  "artifact": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+    "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+    "bytes": 782628
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.finalize.json",
+    "summaryReceipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.0.1",
+    "availableVersion": "3.0.1",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-05T03:32:18.779Z",
+    "source": "network",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3255,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 7,
+      "routesOverSuggestedBends": 5,
+      "routesOverSuggestedStretch": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "caller-commands",
+            "from": "caller",
+            "to": "commands",
+            "label": "SendCommand",
+            "collectionIndex": 0,
+            "artifactIndex": 1
+          },
+          "right": {
+            "id": "breeding-run",
+            "from": "breeding",
+            "to": "run",
+            "label": "后代进笼",
+            "collectionIndex": 17,
+            "artifactIndex": 18
+          },
+          "point": [
+            205.60000000000002,
+            274
+          ]
+        },
+        {
+          "left": {
+            "id": "commands-shop",
+            "from": "commands",
+            "to": "shop",
+            "label": "购买与离店",
+            "collectionIndex": 2,
+            "artifactIndex": 3
+          },
+          "right": {
+            "id": "flow-run",
+            "from": "flow",
+            "to": "run",
+            "label": "阶段与胜负",
+            "collectionIndex": 7,
+            "artifactIndex": 8
+          },
+          "point": [
+            510,
+            360.5
+          ]
+        },
+        {
+          "left": {
+            "id": "commands-run",
+            "from": "commands",
+            "to": "run",
+            "label": "查询阶段与笼",
+            "collectionIndex": 3,
+            "artifactIndex": 4
+          },
+          "right": {
+            "id": "breeding-run",
+            "from": "breeding",
+            "to": "run",
+            "label": "后代进笼",
+            "collectionIndex": 17,
+            "artifactIndex": 18
+          },
+          "point": [
+            371.99999999999994,
+            416
+          ],
+          "sharedNode": "run"
+        },
+        {
+          "left": {
+            "id": "settlement-catalogs",
+            "from": "settlement",
+            "to": "catalogs",
+            "label": "按名查行为",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "right": {
+            "id": "breeding-level",
+            "from": "breeding",
+            "to": "level",
+            "label": "读取锁定方案",
+            "collectionIndex": 16,
+            "artifactIndex": 17
+          },
+          "point": [
+            978,
+            140
+          ]
+        },
+        {
+          "left": {
+            "id": "settlement-run",
+            "from": "settlement",
+            "to": "run",
+            "label": "工资与科技点",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "shop-level",
+            "from": "shop",
+            "to": "level",
+            "label": "锁定亲本禁售",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "point": [
+            844.2,
+            506
+          ]
+        },
+        {
+          "left": {
+            "id": "settlement-run",
+            "from": "settlement",
+            "to": "run",
+            "label": "工资与科技点",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "shop-draw",
+            "from": "shop",
+            "to": "draw",
+            "label": "进货时抽取",
+            "collectionIndex": 14,
+            "artifactIndex": 15
+          },
+          "point": [
+            673.0000000000001,
+            564.0000000000001
+          ]
+        },
+        {
+          "left": {
+            "id": "settlement-clock",
+            "from": "settlement",
+            "to": "clock",
+            "label": "测试才注入",
+            "collectionIndex": 11,
+            "artifactIndex": 12
+          },
+          "right": {
+            "id": "breeding-level",
+            "from": "breeding",
+            "to": "level",
+            "label": "读取锁定方案",
+            "collectionIndex": 16,
+            "artifactIndex": 17
+          },
+          "point": [
+            1100,
+            274
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "id": "commands-shop",
+            "from": "commands",
+            "to": "shop",
+            "label": "购买与离店",
+            "collectionIndex": 2,
+            "artifactIndex": 3
+          },
+          "bends": 3,
+          "stretch": 1
+        },
+        {
+          "relationship": {
+            "id": "settlement-run",
+            "from": "settlement",
+            "to": "run",
+            "label": "工资与科技点",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "bends": 4,
+          "stretch": 1.06
+        },
+        {
+          "relationship": {
+            "id": "shop-level",
+            "from": "shop",
+            "to": "level",
+            "label": "锁定亲本禁售",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "bends": 4,
+          "stretch": 1.271
+        },
+        {
+          "relationship": {
+            "id": "breeding-level",
+            "from": "breeding",
+            "to": "level",
+            "label": "读取锁定方案",
+            "collectionIndex": 16,
+            "artifactIndex": 17
+          },
+          "bends": 3,
+          "stretch": 1.063
+        },
+        {
+          "relationship": {
+            "id": "breeding-run",
+            "from": "breeding",
+            "to": "run",
+            "label": "后代进笼",
+            "collectionIndex": 17,
+            "artifactIndex": 18
+          },
+          "bends": 3,
+          "stretch": 1.647
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "caller → commands crosses breeding → run: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "commands → shop crosses flow → run: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "commands → run and breeding → run cross next to run: move node commands or breeding so the two reach run from different sides (for example one level with it, one directly above or below it).",
+      "settlement → catalogs crosses breeding → level: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "settlement → run crosses shop → level: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "settlement → run crosses shop → draw: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "settlement → clock crosses breeding → level: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "commands → shop needs 3 bends: move node commands or shop so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

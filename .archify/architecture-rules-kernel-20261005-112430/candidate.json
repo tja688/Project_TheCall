@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "规则内核如何走完一局",
+    "locale": "zh-CN",
+    "output": ".archify/architecture-rules-kernel-20261005-112430/rules-kernel.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": { "label": "调用方" },
+        "backend": { "label": "规则" },
+        "database": { "label": "内存状态" }
+      }
+    },
+    "repository": {
+      "url": "https://github.com/tja688/Project_TheCall.git",
+      "provider": "github",
+      "revision": "38c2f0ac0bce9710a067652dc51541bbf0ce4b29"
+    }
+  },
+  "components": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "调用方",
+      "sublabel": "编辑模式测试",
+      "icon": "person",
+      "pos": [28, 236],
+      "size": [156, 76],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Tests/RulesFixture.cs",
+          "line": 14,
+          "end_line": 26,
+          "label": "测试取得架构并注入抽取"
+        }
+      ]
+    },
+    {
+      "id": "commands",
+      "type": "backend",
+      "label": "命令与查询",
+      "sublabel": "输入调用后即弃",
+      "pos": [300, 228],
+      "size": [186, 92],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/ConfirmSettlementCommand.cs",
+          "line": 5,
+          "end_line": 7,
+          "label": "确认只转给流程"
+        },
+        {
+          "path": "Assets/TheCall/Rules/LeaveShopCommand.cs",
+          "line": 5,
+          "end_line": 11,
+          "label": "离店先关店再换关"
+        },
+        {
+          "path": "Assets/TheCall/Rules/ShelfQuery.cs",
+          "line": 51,
+          "end_line": 54,
+          "label": "货架查询不改状态"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "type": "backend",
+      "label": "流程",
+      "sublabel": "FlowSystem",
+      "tag": "胜负会清空对局",
+      "pos": [580, 228],
+      "size": [186, 92],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/FlowSystem.cs",
+          "line": 8,
+          "end_line": 34,
+          "label": "开局抽候选并进第1关"
+        },
+        {
+          "path": "Assets/TheCall/Rules/FlowSystem.cs",
+          "line": 36,
+          "end_line": 49,
+          "label": "操作阶段才允许摆放"
+        },
+        {
+          "path": "Assets/TheCall/Rules/FlowSystem.cs",
+          "line": 131,
+          "end_line": 175,
+          "label": "确认与离店推进阶段"
+        }
+      ]
+    },
+    {
+      "id": "settlement",
+      "type": "backend",
+      "label": "结算",
+      "sublabel": "SettlementSystem",
+      "tag": "Short 留在操作",
+      "icon": "clock",
+      "pos": [880, 228],
+      "size": [196, 92],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/SettlementSystem.cs",
+          "line": 27,
+          "end_line": 63,
+          "label": "计分后按三种结果偿付"
+        },
+        {
+          "path": "Assets/TheCall/Rules/SettlementSystem.cs",
+          "line": 65,
+          "end_line": 108,
+          "label": "播放头沿提取槽走动"
+        }
+      ]
+    },
+    {
+      "id": "shop",
+      "type": "backend",
+      "label": "商店",
+      "sublabel": "ShopSystem",
+      "icon": "briefcase",
+      "pos": [580, 440],
+      "size": [186, 92],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/ShopSystem.cs",
+          "line": 27,
+          "end_line": 77,
+          "label": "进货、购买与出售"
+        },
+        {
+          "path": "Assets/TheCall/Rules/ShopSystem.cs",
+          "line": 93,
+          "end_line": 128,
+          "label": "货架怪物与工具抽取"
+        }
+      ]
+    },
+    {
+      "id": "breeding",
+      "type": "backend",
+      "label": "培育",
+      "sublabel": "BreedingSystem",
+      "pos": [580, 36],
+      "size": [186, 80],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/BreedingSystem.cs",
+          "line": 8,
+          "end_line": 46,
+          "label": "按锁定方案生成后代"
+        }
+      ]
+    },
+    {
+      "id": "run",
+      "type": "database",
+      "label": "对局",
+      "sublabel": "RunModel",
+      "icon": "database",
+      "pos": [300, 440],
+      "size": [186, 100],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/RunModel.cs",
+          "line": 89,
+          "end_line": 115,
+          "label": "阶段、金币、笼与货架"
+        },
+        {
+          "path": "Assets/TheCall/Rules/RunModel.cs",
+          "line": 167,
+          "end_line": 191,
+          "label": "胜负清空跨关状态"
+        },
+        {
+          "path": "Assets/TheCall/Rules/RunPhaseQuery.cs",
+          "line": 15,
+          "end_line": 18,
+          "label": "阶段查询只读"
+        }
+      ]
+    },
+    {
+      "id": "level",
+      "type": "database",
+      "label": "关卡",
+      "sublabel": "LevelModel",
+      "tag": "离开关卡即清空",
+      "icon": "database",
+      "pos": [880, 440],
+      "size": [196, 100],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/LevelModel.cs",
+          "line": 66,
+          "end_line": 85,
+          "label": "开关与清空本关进度"
+        },
+        {
+          "path": "Assets/TheCall/Rules/LevelModel.cs",
+          "line": 102,
+          "end_line": 115,
+          "label": "偿付成功锁定培育"
+        },
+        {
+          "path": "Assets/TheCall/Rules/LevelModel.cs",
+          "line": 163,
+          "end_line": 174,
+          "label": "不足则记欠额并加班"
+        }
+      ]
+    },
+    {
+      "id": "catalogs",
+      "type": "backend",
+      "label": "内容目录",
+      "sublabel": "技能、工具、科技、关卡",
+      "pos": [880, 36],
+      "size": [196, 80],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/TheCallApp.cs",
+          "line": 15,
+          "end_line": 28,
+          "label": "架构注册目录与规则"
+        },
+        {
+          "path": "Assets/TheCall/Rules/SkillCatalog.cs",
+          "line": 23,
+          "end_line": 44,
+          "label": "技能名到行为的查找"
+        },
+        {
+          "path": "Assets/TheCall/Rules/TechCatalog.cs",
+          "line": 23,
+          "end_line": 31,
+          "label": "科技决定培育形状"
+        }
+      ]
+    },
+    {
+      "id": "draw",
+      "type": "backend",
+      "label": "抽取",
+      "sublabel": "IDraw / SystemDraw",
+      "pos": [580, 656],
+      "size": [186, 80],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/IDraw.cs",
+          "line": 6,
+          "end_line": 11,
+          "label": "抽取由工具注入"
+        },
+        {
+          "path": "Assets/TheCall/Rules/SystemDraw.cs",
+          "line": 6,
+          "end_line": 26,
+          "label": "默认用 System.Random"
+        },
+        {
+          "path": "Assets/TheCall/Tests/RulesFixture.cs",
+          "line": 45,
+          "end_line": 60,
+          "label": "测试可换成脚本抽取"
+        }
+      ]
+    },
+    {
+      "id": "clock",
+      "type": "backend",
+      "label": "时钟意图",
+      "sublabel": "ClockIntents",
+      "icon": "clock",
+      "pos": [1200, 232],
+      "size": [168, 84],
+      "sources": [
+        {
+          "path": "Assets/TheCall/Rules/ClockIntents.cs",
+          "line": 6,
+          "end_line": 30,
+          "label": "倒放、再走与延迟效果"
+        },
+        {
+          "path": "Assets/TheCall/Rules/SettlementSystem.cs",
+          "line": 86,
+          "end_line": 99,
+          "label": "未注册时跳过这些遍"
+        },
+        {
+          "path": "Assets/TheCall/Tests/RulesFixture.cs",
+          "line": 48,
+          "end_line": 59,
+          "label": "测试才注册时钟意图"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "TheCallApp 规则层：不调用 Unity 场景、时间或随机",
+      "wraps": ["commands", "flow", "settlement", "shop", "breeding", "run", "level", "catalogs", "draw", "clock"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "caller-commands",
+      "from": "caller",
+      "to": "commands",
+      "label": "SendCommand",
+      "variant": "emphasis"
+    },
+    {
+      "id": "commands-flow",
+      "from": "commands",
+      "to": "flow",
+      "label": "开局与确认"
+    },
+    {
+      "id": "commands-shop",
+      "from": "commands",
+      "to": "shop",
+      "label": "购买与离店"
+    },
+    {
+      "id": "commands-run",
+      "from": "commands",
+      "to": "run",
+      "label": "查询阶段与笼",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "flow-settlement",
+      "from": "flow",
+      "to": "settlement",
+      "label": "确认后结算"
+    },
+    {
+      "id": "flow-shop",
+      "from": "flow",
+      "to": "shop",
+      "label": "偿付成功才开店",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "flow-breeding",
+      "from": "flow",
+      "to": "breeding",
+      "label": "未满七关生成",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "flow-run",
+      "from": "flow",
+      "to": "run",
+      "label": "阶段与胜负"
+    },
+    {
+      "id": "settlement-level",
+      "from": "settlement",
+      "to": "level",
+      "label": "能量与欠额",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "settlement-catalogs",
+      "from": "settlement",
+      "to": "catalogs",
+      "label": "按名查行为",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "settlement-run",
+      "from": "settlement",
+      "to": "run",
+      "label": "工资与科技点"
+    },
+    {
+      "id": "settlement-clock",
+      "from": "settlement",
+      "to": "clock",
+      "label": "测试才注入",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "shop-run",
+      "from": "shop",
+      "to": "run",
+      "label": "金币与货架",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "shop-level",
+      "from": "shop",
+      "to": "level",
+      "label": "锁定亲本禁售",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "shop-draw",
+      "from": "shop",
+      "to": "draw",
+      "label": "进货时抽取",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "breeding-catalogs",
+      "from": "breeding",
+      "to": "catalogs",
+      "label": "遗传时查目录",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "breeding-level",
+      "from": "breeding",
+      "to": "level",
+      "label": "读取锁定方案"
+    },
+    {
+      "id": "breeding-run",
+      "from": "breeding",
+      "to": "run",
+      "label": "后代进笼"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "阶段",
+      "items": [
+        "Keep 后进入第 1 关操作；能量不足只记欠额，阶段仍是操作",
+        "Paid 锁定培育并进商店；离店时满七关胜利，否则生成后代并开下一关",
+        "加班后仍不足则 Failed，胜负都清空怪物笼、金币、科技和工具"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "偿付",
+      "items": [
+        "一次确认里先计分、换位、战斗结束消灭，再扣除",
+        "加班只补欠额；失败不发工资。成功时超额加 1 科技点",
+        "工资：普通 40，加班 20。技能只提供行为，由结算统一执行"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "状态主人",
+      "items": [
+        "对局持有阶段、金币、科技点、工具、技能槽、怪物笼和货架",
+        "关卡持有应交、欠额、加班、能量、提取槽和培育方案",
+        "目录只存静态定义。开局、废弃、遗传也走 IDraw，不调用 Unity 随机"
+      ]
+    }
+  ]
+}

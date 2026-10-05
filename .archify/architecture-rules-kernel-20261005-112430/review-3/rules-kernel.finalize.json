@@ -1,0 +1,1238 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "startedAt": "2026-10-05T03:37:58.059Z",
+  "specification": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+    "sha256": "2bd83f730c56034dbe7dc04b91bf7afb89679c3c5c78a5e023ddb05a02a13d92",
+    "bytes": 12012
+  },
+  "artifact": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+    "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+    "bytes": 782628
+  },
+  "stages": {
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "D:\\BaiduSyncdisk\\MySkills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "architecture",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "2bd83f730c56034dbe7dc04b91bf7afb89679c3c5c78a5e023ddb05a02a13d92",
+          "bytes": 12012
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 990,
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "D:\\BaiduSyncdisk\\MySkills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "architecture",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "9b196d13-8358-4429-8b03-5d56c416ea10",
+        "ok": true,
+        "command": "deliver",
+        "type": "architecture",
+        "input": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+        "output": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "specification": {
+          "sha256": "2bd83f730c56034dbe7dc04b91bf7afb89679c3c5c78a5e023ddb05a02a13d92",
+          "bytes": 12012
+        },
+        "artifact": {
+          "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+          "bytes": 782628
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "evidence": {
+          "verified": true,
+          "repository": "https://github.com/tja688/Project_TheCall",
+          "revision": "38c2f0ac0bce9710a067652dc51541bbf0ce4b29",
+          "references": 27
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 184,
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "D:\\BaiduSyncdisk\\MySkills\\archify\\bin\\archify.mjs",
+        "check",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "artifact": {
+          "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+          "bytes": 782628
+        },
+        "checks": [
+          {
+            "name": "single_svg",
+            "ok": true,
+            "details": [
+              "found 1 <svg> block(s)"
+            ]
+          },
+          {
+            "name": "finite_svg",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "orthogonal_arrows",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "label_route_clearance",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_crossings",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_corridors",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "container_border_runs",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "route_rhythm",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "legend_clearance",
+            "ok": true,
+            "details": []
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "metrics": {
+            "properCrossings": 0,
+            "resolvedCrossovers": 7,
+            "ambiguousCorridors": 0,
+            "arrowheadCollisions": 0,
+            "containerBorderRuns": 0,
+            "labelRouteClearanceIssues": 0,
+            "labelCanvasOverflowIssues": 0,
+            "minLabelRouteClearance": 5,
+            "desktopReadabilityIssues": 0,
+            "viewportHeightIssues": 0,
+            "minProjectedNodeTextPx": 7.5,
+            "maxBends": 4,
+            "routesOverSuggestedBends": 5,
+            "maxStretch": 1.647,
+            "routesOverSuggestedStretch": 1,
+            "minSegmentPx": 16,
+            "minInteriorSegmentPx": 16,
+            "shortSegmentCount": 0,
+            "shortEndpointSegmentCount": 0,
+            "shortInteriorSegmentCount": 0,
+            "microSegmentCount": 0
+          },
+          "suggestedLimits": {
+            "bendsPerRelationship": 2,
+            "stretch": 1.35,
+            "segmentPx": 16,
+            "microSegmentPx": 8
+          },
+          "routeReview": {
+            "crossings": [
+              {
+                "left": {
+                  "id": "caller-commands",
+                  "from": "caller",
+                  "to": "commands",
+                  "label": "SendCommand",
+                  "collectionIndex": 0,
+                  "artifactIndex": 1
+                },
+                "right": {
+                  "id": "breeding-run",
+                  "from": "breeding",
+                  "to": "run",
+                  "label": "后代进笼",
+                  "collectionIndex": 17,
+                  "artifactIndex": 18
+                },
+                "point": [
+                  205.60000000000002,
+                  274
+                ]
+              },
+              {
+                "left": {
+                  "id": "commands-shop",
+                  "from": "commands",
+                  "to": "shop",
+                  "label": "购买与离店",
+                  "collectionIndex": 2,
+                  "artifactIndex": 3
+                },
+                "right": {
+                  "id": "flow-run",
+                  "from": "flow",
+                  "to": "run",
+                  "label": "阶段与胜负",
+                  "collectionIndex": 7,
+                  "artifactIndex": 8
+                },
+                "point": [
+                  510,
+                  360.5
+                ]
+              },
+              {
+                "left": {
+                  "id": "commands-run",
+                  "from": "commands",
+                  "to": "run",
+                  "label": "查询阶段与笼",
+                  "collectionIndex": 3,
+                  "artifactIndex": 4
+                },
+                "right": {
+                  "id": "breeding-run",
+                  "from": "breeding",
+                  "to": "run",
+                  "label": "后代进笼",
+                  "collectionIndex": 17,
+                  "artifactIndex": 18
+                },
+                "point": [
+                  371.99999999999994,
+                  416
+                ],
+                "sharedNode": "run"
+              },
+              {
+                "left": {
+                  "id": "settlement-catalogs",
+                  "from": "settlement",
+                  "to": "catalogs",
+                  "label": "按名查行为",
+                  "collectionIndex": 9,
+                  "artifactIndex": 10
+                },
+                "right": {
+                  "id": "breeding-level",
+                  "from": "breeding",
+                  "to": "level",
+                  "label": "读取锁定方案",
+                  "collectionIndex": 16,
+                  "artifactIndex": 17
+                },
+                "point": [
+                  978,
+                  140
+                ]
+              },
+              {
+                "left": {
+                  "id": "settlement-run",
+                  "from": "settlement",
+                  "to": "run",
+                  "label": "工资与科技点",
+                  "collectionIndex": 10,
+                  "artifactIndex": 11
+                },
+                "right": {
+                  "id": "shop-level",
+                  "from": "shop",
+                  "to": "level",
+                  "label": "锁定亲本禁售",
+                  "collectionIndex": 13,
+                  "artifactIndex": 14
+                },
+                "point": [
+                  844.2,
+                  506
+                ]
+              },
+              {
+                "left": {
+                  "id": "settlement-run",
+                  "from": "settlement",
+                  "to": "run",
+                  "label": "工资与科技点",
+                  "collectionIndex": 10,
+                  "artifactIndex": 11
+                },
+                "right": {
+                  "id": "shop-draw",
+                  "from": "shop",
+                  "to": "draw",
+                  "label": "进货时抽取",
+                  "collectionIndex": 14,
+                  "artifactIndex": 15
+                },
+                "point": [
+                  673.0000000000001,
+                  564.0000000000001
+                ]
+              },
+              {
+                "left": {
+                  "id": "settlement-clock",
+                  "from": "settlement",
+                  "to": "clock",
+                  "label": "测试才注入",
+                  "collectionIndex": 11,
+                  "artifactIndex": 12
+                },
+                "right": {
+                  "id": "breeding-level",
+                  "from": "breeding",
+                  "to": "level",
+                  "label": "读取锁定方案",
+                  "collectionIndex": 16,
+                  "artifactIndex": 17
+                },
+                "point": [
+                  1100,
+                  274
+                ]
+              }
+            ],
+            "detours": [
+              {
+                "relationship": {
+                  "id": "commands-shop",
+                  "from": "commands",
+                  "to": "shop",
+                  "label": "购买与离店",
+                  "collectionIndex": 2,
+                  "artifactIndex": 3
+                },
+                "bends": 3,
+                "stretch": 1
+              },
+              {
+                "relationship": {
+                  "id": "settlement-run",
+                  "from": "settlement",
+                  "to": "run",
+                  "label": "工资与科技点",
+                  "collectionIndex": 10,
+                  "artifactIndex": 11
+                },
+                "bends": 4,
+                "stretch": 1.06
+              },
+              {
+                "relationship": {
+                  "id": "shop-level",
+                  "from": "shop",
+                  "to": "level",
+                  "label": "锁定亲本禁售",
+                  "collectionIndex": 13,
+                  "artifactIndex": 14
+                },
+                "bends": 4,
+                "stretch": 1.271
+              },
+              {
+                "relationship": {
+                  "id": "breeding-level",
+                  "from": "breeding",
+                  "to": "level",
+                  "label": "读取锁定方案",
+                  "collectionIndex": 16,
+                  "artifactIndex": 17
+                },
+                "bends": 3,
+                "stretch": 1.063
+              },
+              {
+                "relationship": {
+                  "id": "breeding-run",
+                  "from": "breeding",
+                  "to": "run",
+                  "label": "后代进笼",
+                  "collectionIndex": 17,
+                  "artifactIndex": 18
+                },
+                "bends": 3,
+                "stretch": 1.647
+              }
+            ]
+          },
+          "leadingSpace": {
+            "measured": true,
+            "emptyTopPx": 11,
+            "emptyTopRatio": 0.013,
+            "occupiedTop": 11,
+            "viewBoxTop": 0,
+            "canvasHeight": 824,
+            "typicalNodeHeight": 92,
+            "reviewSuggested": false
+          },
+          "desktopReadability": {
+            "budgetBasis": "recognized-declared-wide",
+            "readerContract": "declared-wide-v1",
+            "availableDiagramWidth": 1336.875,
+            "actualBudgetPx": 1336.875,
+            "actualReaderWidth": 1366.875,
+            "desiredReaderWidth": 1366.875,
+            "viewportCap": 1376,
+            "limit": "source-size",
+            "requestedTargetPx": 7.5,
+            "requestedTargetMet": true,
+            "hardFloorPx": 6,
+            "hardFloorMet": true,
+            "minimumOwner": {
+              "kind": "edge",
+              "id": "caller-commands",
+              "from": "caller",
+              "to": "commands"
+            },
+            "minimumSourceTextPx": 8,
+            "minimumProjectedTextPx": 7.5,
+            "semanticTextCount": 41
+          },
+          "issues": []
+        },
+        "provenance": "current",
+        "deliveryReceiptId": "9b196d13-8358-4429-8b03-5d56c416ea10"
+      }
+    },
+    "browser-check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 1115,
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "D:\\BaiduSyncdisk\\MySkills\\archify\\bin\\archify.mjs",
+        "browser-check",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+        "--json",
+        "--require-provenance",
+        "--out-dir",
+        "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-3"
+      ],
+      "execution": "in-process",
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "browser-check",
+        "evidenceKind": "automated-browser",
+        "status": "pass",
+        "visualReview": "not-requested",
+        "provenance": "current",
+        "deliveryReceiptId": "9b196d13-8358-4429-8b03-5d56c416ea10",
+        "artifact": {
+          "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+          "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+          "bytes": 782628
+        },
+        "state": {
+          "detail": "read",
+          "motion": "still"
+        },
+        "chrome": {
+          "status": "available",
+          "executable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        "diagnostics": [],
+        "containment": {
+          "status": "pass",
+          "policy": "fit-or-reader-declared-readable-vertical-scroll",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 915,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1367,
+              "diagramWidth": 1337,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 773,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.50070126227209,
+              "minimumProjectedNonEdgeTextPx": 8.4382889200561,
+              "minimumProjectedEdgeTextPx": 7.50070126227209,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1380,
+              "diagramWidth": 1350,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 780,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.5736325385694245,
+              "minimumProjectedNonEdgeTextPx": 8.520336605890602,
+              "minimumProjectedEdgeTextPx": 7.5736325385694245,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1518,
+              "diagramWidth": 1488,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 860,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 1081,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "themeStates": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            }
+          ]
+        },
+        "readability": {
+          "status": "pass",
+          "minimumProjectedNodeTextPx": 6,
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 915,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1367,
+              "diagramWidth": 1337,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 773,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.50070126227209,
+              "minimumProjectedNonEdgeTextPx": 8.4382889200561,
+              "minimumProjectedEdgeTextPx": 7.50070126227209,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1380,
+              "diagramWidth": 1350,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 780,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.5736325385694245,
+              "minimumProjectedNonEdgeTextPx": 8.520336605890602,
+              "minimumProjectedEdgeTextPx": 7.5736325385694245,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1518,
+              "diagramWidth": 1488,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 860,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 1081,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "viewerChrome": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 915,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1367,
+              "diagramWidth": 1337,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 773,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.50070126227209,
+              "minimumProjectedNonEdgeTextPx": 8.4382889200561,
+              "minimumProjectedEdgeTextPx": 7.50070126227209,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1380,
+              "diagramWidth": 1350,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 780,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 7.5736325385694245,
+              "minimumProjectedNonEdgeTextPx": 8.520336605890602,
+              "minimumProjectedEdgeTextPx": 7.5736325385694245,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1518,
+              "diagramWidth": 1488,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 860,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 1081,
+                "cardsPx": 0,
+                "viewBoxHeight": 824
+              },
+              "viewBoxWidth": 1426,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "SendCommand",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "caller-commands",
+                "from": "caller",
+                "to": "commands"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "captures": {
+          "status": "not-requested",
+          "screenshots": [],
+          "contactSheet": null
+        },
+        "sidecars": {
+          "directory": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-3",
+          "receipt": "rules-kernel.browser-check.json",
+          "files": []
+        }
+      }
+    }
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-3\\rules-kernel.finalize.json",
+    "summaryReceipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-3\\rules-kernel.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-3\\rules-kernel.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-10-05T03:38:01.083Z",
+  "durationMs": 3023,
+  "update": {
+    "status": "current",
+    "installedVersion": "3.0.1",
+    "availableVersion": "3.0.1",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-05T03:32:18.779Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  }
+}

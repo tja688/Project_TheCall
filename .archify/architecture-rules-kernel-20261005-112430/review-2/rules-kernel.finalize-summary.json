@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+    "sha256": "2eedb0dcc0fe2d6e852ae9139ff0ebfa7cf04f46a56358bb34de1a1842faa6e9",
+    "bytes": 12015
+  },
+  "artifact": {
+    "path": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+    "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+    "bytes": 782628
+  },
+  "gates": {
+    "validate": "fail",
+    "deliver": "not-run",
+    "check": "not-run",
+    "browser-check": "not-run"
+  },
+  "failedStage": "validate",
+  "diagnostics": [
+    {
+      "code": "layout/boundary-out-of-bounds",
+      "severity": "error",
+      "message": "Boundary \"TheCallApp 规则层：不调用 Unity 场景、时间或随机\" extends outside the viewBox (top by 1px) — preserve wraps membership and repair the measured canvas side.",
+      "subject": {
+        "diagramType": "architecture",
+        "boundary": {
+          "kind": "region",
+          "label": "TheCallApp 规则层：不调用 Unity 场景、时间或随机",
+          "wraps": [
+            "commands",
+            "flow",
+            "settlement",
+            "shop",
+            "breeding",
+            "run",
+            "level",
+            "catalogs",
+            "draw",
+            "clock"
+          ]
+        }
+      },
+      "evidence": {
+        "bounds": {
+          "x": 182,
+          "y": -1,
+          "width": 1256,
+          "height": 779
+        },
+        "viewBox": [
+          1478,
+          846
+        ],
+        "overflow": {
+          "left": 0,
+          "top": 1,
+          "right": 0,
+          "bottom": 0
+        },
+        "members": [
+          {
+            "id": "commands",
+            "type": "backend",
+            "label": "命令与查询",
+            "x": 430,
+            "y": 200,
+            "width": 164,
+            "height": 96,
+            "pos": [
+              430,
+              200
+            ]
+          },
+          {
+            "id": "flow",
+            "type": "backend",
+            "label": "流程",
+            "x": 710,
+            "y": 200,
+            "width": 164,
+            "height": 96,
+            "pos": [
+              710,
+              200
+            ]
+          },
+          {
+            "id": "settlement",
+            "type": "backend",
+            "label": "结算",
+            "x": 1000,
+            "y": 200,
+            "width": 170,
+            "height": 96,
+            "pos": [
+              1000,
+              200
+            ]
+          },
+          {
+            "id": "shop",
+            "type": "backend",
+            "label": "商店",
+            "x": 710,
+            "y": 452,
+            "width": 164,
+            "height": 96,
+            "pos": [
+              710,
+              452
+            ]
+          },
+          {
+            "id": "breeding",
+            "type": "backend",
+            "label": "培育",
+            "x": 200,
+            "y": 460,
+            "width": 140,
+            "height": 84,
+            "pos": [
+              200,
+              460
+            ]
+          },
+          {
+            "id": "run",
+            "type": "database",
+            "label": "对局",
+            "x": 430,
+            "y": 448,
+            "width": 164,
+            "height": 100,
+            "pos": [
+              430,
+              448
+            ]
+          },
+          {
+            "id": "level",
+            "type": "database",
+            "label": "关卡",
+            "x": 1000,
+            "y": 448,
+            "width": 170,
+            "height": 100,
+            "pos": [
+              1000,
+              448
+            ]
+          },
+          {
+            "id": "catalogs",
+            "type": "backend",
+            "label": "内容目录",
+            "x": 1000,
+            "y": 24,
+            "width": 170,
+            "height": 78,
+            "pos": [
+              1000,
+              24
+            ]
+          },
+          {
+            "id": "draw",
+            "type": "backend",
+            "label": "抽取",
+            "x": 710,
+            "y": 680,
+            "width": 164,
+            "height": 78,
+            "pos": [
+              710,
+              680
+            ]
+          },
+          {
+            "id": "clock",
+            "type": "backend",
+            "label": "时钟意图",
+            "x": 1290,
+            "y": 206,
+            "width": 130,
+            "height": 84,
+            "pos": [
+              1290,
+              206
+            ]
+          }
+        ]
+      },
+      "supportedFixes": [
+        "move the wrapped components right by at least 0px and down by at least 1px, then revalidate connected routes and the opposite canvas sides; enlarging meta.viewBox cannot fix left/top overflow"
+      ]
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-2\\rules-kernel.finalize.json",
+    "summaryReceipt": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\review-2\\rules-kernel.finalize-summary.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.0.1",
+    "availableVersion": "3.0.1",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-05T03:32:18.779Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 970,
+  "nextAction": {
+    "action": "edit-in-place",
+    "candidate": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+    "constraint": "Preserve all semantics and user-fixed geometry. Use references/architecture-layout-repair.md to choose a local repair or connected-scene reflow; edit the existing candidate.",
+    "then": "finalize-once"
+  }
+}

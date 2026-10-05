@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "9b196d13-8358-4429-8b03-5d56c416ea10",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\candidate.json",
+  "output": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall\\.archify\\architecture-rules-kernel-20261005-112430\\rules-kernel.html",
+  "specification": {
+    "sha256": "2bd83f730c56034dbe7dc04b91bf7afb89679c3c5c78a5e023ddb05a02a13d92",
+    "bytes": 12012
+  },
+  "artifact": {
+    "sha256": "b701f9900dfb1a178ae30b68ce212582fb1ea743caef7a8448807f493537d45f",
+    "bytes": 782628
+  }
+}
