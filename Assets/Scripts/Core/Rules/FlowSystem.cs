@@ -33,6 +33,13 @@ namespace TheCall
             FitExtraction(run);
         }
 
+        public void BeginLevel()
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase == RunPhase.LevelStart)
+                run.EnterOperation(run.LevelNumber);
+        }
+
         public void Place(string monsterId, OperationArea area, int cell)
         {
             var run = this.GetModel<RunModel>();

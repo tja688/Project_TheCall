@@ -3,7 +3,7 @@ using QFramework;
 
 namespace TheCall
 {
-    internal sealed class TechCatalog : IUtility
+    public sealed class TechCatalog : IUtility
     {
         public const int Percent = 10;
 
