@@ -1,0 +1,53 @@
+{
+  "economy": {
+    "wage": 40,
+    "overtimeWage": 20,
+    "price": { "White": 10, "Blue": 20, "Gold": 30 },
+    "weight": { "White": 7, "Blue": 2, "Gold": 1 },
+    "techPercent": 10,
+    "modifierAmount": 2,
+    "baseExtractionCells": 5,
+    "baseBreedingSlots": 1,
+    "expandedBreedingSlots": 2,
+    "baseParents": 2,
+    "expandedParents": 3
+  },
+  "levels": [
+    { "due": 50, "excess": 60 },
+    { "due": 75, "excess": 90 },
+    { "due": 100, "excess": 120 },
+    { "due": 150, "excess": 175 },
+    { "due": 200, "excess": 230 },
+    { "due": 250, "excess": 285 },
+    { "due": 300, "excess": 350 }
+  ],
+  "tools": [
+    { "name": "急急装置", "price": 30, "rarity": "White", "effect": "DoubleFirstEnergy" },
+    { "name": "上级员工证", "price": 40, "rarity": "Blue", "effect": "ExtractionCells", "cells": 6 },
+    { "name": "独孤装置", "price": 50, "rarity": "Gold", "effect": "DoubleSingleAffix" }
+  ],
+  "techs": [
+    { "name": "基因实验", "flag": "BreedingSkill" },
+    { "name": "槽位扩容", "flag": "ExtraBreedingSlot" },
+    { "name": "变异学说", "flag": "ExtraSkill" },
+    { "name": "大乱炖", "flag": "ExtraParent" },
+    { "name": "科学培育", "flag": "Modifier" }
+  ],
+  "skills": [
+    { "name": "能量吐息", "rarity": "White", "poolIndex": 0, "use": "Active", "affix": [], "effects": [ { "kind": "EnergyQuote", "quote": 5 } ] },
+    { "name": "左能量体", "rarity": "White", "poolIndex": 1, "use": "Active", "affix": [], "effects": [ { "kind": "SideCount", "side": "Right", "perMonster": 2 } ] },
+    { "name": "右能量体", "rarity": "White", "poolIndex": 2, "use": "Active", "affix": [], "effects": [ { "kind": "SideCount", "side": "Left", "perMonster": 2 } ] },
+    { "name": "增量小手", "rarity": "White", "poolIndex": 3, "use": "Passive", "affix": [], "effects": [ { "kind": "AddToOthers", "amount": 1 } ] },
+    { "name": "增量大手", "rarity": "Blue", "poolIndex": 0, "use": "Passive", "affix": [], "effects": [ { "kind": "AddToOthers", "amount": 2 } ] },
+    { "name": "残留提取腺体", "rarity": "Blue", "poolIndex": 1, "use": "Passive", "affix": [], "effects": [ { "kind": "LandingResponse", "quote": 1 } ] },
+    { "name": "孤独心", "rarity": "Blue", "poolIndex": 2, "use": "Active", "affix": [], "effects": [ { "kind": "EnergyQuote", "quote": 4 }, { "kind": "DoubleWhenIsolated" } ] },
+    { "name": "吞噬大嘴", "rarity": "White", "poolIndex": 4, "use": "Active", "affix": [ "Destroy", "Permanent" ], "effects": [ { "kind": "EnergyQuote", "quote": 4 }, { "kind": "Devour", "writeback": 2, "permanent": true } ] },
+    { "name": "双重吐息", "rarity": "White", "poolIndex": 5, "use": "Active", "affix": [], "effects": [ { "kind": "EnergyQuote", "quote": 2 }, { "kind": "RepeatQuote", "times": 2 } ] },
+    { "name": "时间操控器官", "rarity": "Blue", "poolIndex": 3, "use": "Passive", "affix": [], "effects": [ { "kind": "CapacityExtraForLeftNeighbor", "layers": 1 } ] },
+    { "name": "再回首头", "rarity": "Gold", "poolIndex": 0, "use": "Passive", "affix": [], "effects": [ { "kind": "ExtraWalksForRightNeighbor", "walks": 1 } ] },
+    { "name": "分享之手", "rarity": "White", "poolIndex": 6, "use": "Active", "affix": [], "effects": [ { "kind": "EnergyQuote", "quote": 2 }, { "kind": "NextEnergyBonus", "amount": 3 } ] },
+    { "name": "太阳能头", "rarity": "White", "poolIndex": 7, "use": "Active", "affix": [ "Capacity" ], "effects": [ { "kind": "GainCapacity", "layers": 1 } ] },
+    { "name": "换位手", "rarity": "Blue", "poolIndex": 4, "use": "Active", "affix": [ "Immovable" ], "effects": [ { "kind": "SwapWithLeft" } ] },
+    { "name": "鼓励嘴", "rarity": "Gold", "poolIndex": 1, "use": "Passive", "affix": [], "effects": [ { "kind": "DoubleAdjacentEnergy" } ] }
+  ]
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>能量产出台</title>
+  <link rel="stylesheet" href="./bench.css">
+</head>
+<body>
+  <div id="app">
+    <header id="bar">
+      <p id="status">正在装入规则。</p>
+      <label>关卡 <select id="level"></select></label>
+      <div id="tools"></div>
+      <button id="settle" type="button">结算</button>
+      <p id="report"></p>
+    </header>
+    <section id="bench-panel">
+      <h1>能量产出台</h1>
+      <div id="cells"></div>
+    </section>
+    <div id="lower">
+      <section id="library">
+        <h2>怪物库</h2>
+        <div id="monster-grid"></div>
+      </section>
+      <div id="side">
+        <section id="skill-slots">
+          <h2>技能槽</h2>
+          <div id="slot-row"></div>
+        </section>
+        <section id="skill-library">
+          <h2>技能库</h2>
+          <div id="skill-grid"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="./bench.js"></script>
+</body>
+</html>
