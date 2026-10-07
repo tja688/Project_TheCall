@@ -774,7 +774,7 @@ function renderLanding(step, order, labels, running) {
   addMath(math, "底数", baseText(step));
   addMath(math, "倍率", factorText(step));
   addMath(math, "能量", step.base + " × " + step.multiplier + " = " + step.energy, "sum");
-  addMath(math, "写回", step.writeback + "。下次这张技能报价读这个数");
+  addMath(math, "写回", writebackText(step));
   addMath(math, "累计", "到这一步，产出合计 " + running);
   beat.append(math);
   return beat;
@@ -915,6 +915,13 @@ function factorText(step) {
 
 function addedOf(step) {
   return (step.adds || []).reduce((total, add) => total + add.amount, 0);
+}
+
+function writebackText(step) {
+  if (!step.writeback)
+    return "没有写回";
+
+  return "写回 " + signed(step.writeback) + "，加进这张技能，下次计分读得到";
 }
 
 function signed(amount) {
