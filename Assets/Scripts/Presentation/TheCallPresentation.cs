@@ -32,8 +32,6 @@ namespace TheCall
         bool _sellTab;
         bool _wired;
         bool _busy;
-        string _selectedMonster;
-        int _selectedSkill = -1;
         string _selectedTech = "基因实验";
         float _noticeUntil;
 
@@ -57,8 +55,6 @@ namespace TheCall
         {
             _back = BackTarget.None;
             _sellTab = false;
-            _selectedMonster = null;
-            _selectedSkill = -1;
             _busy = false;
             if (_toast != null)
                 _toast.SetActive(false);
@@ -106,13 +102,8 @@ namespace TheCall
             Listen(_operation != null ? _operation.researchButton : null, () => OpenResearch(BackTarget.Operation));
             Listen(_operation != null ? _operation.titleButton : null, OnTitle);
             Listen(_operation != null ? _operation.nextDayButton : null, OnSettle);
-            Listen(_operation != null ? _operation.discardButton : null, OnDiscard);
-            Listen(_operation != null ? _operation.equipButton : null, OnEquip);
-            ListenSlots(_operation != null ? _operation.cageSlots : null, OnCage);
-            ListenSlots(_operation != null ? _operation.extractionSlots : null, OnExtraction);
-            ListenSlots(_operation != null ? _operation.breedingSlots : null, OnBreeding);
-            ListenChips(_operation != null ? _operation.breedingSkills : null, OnBreedingSkill);
-            ListenChips(_operation != null ? _operation.skillChips : null, OnSkill);
+            if (_operation != null && _operation.pointer != null)
+                _operation.pointer.Attach(this);
             Listen(_research != null ? _research.researchButton : null, OnResearch);
             Listen(_research != null ? _research.backButton : null, CloseResearch);
             ListenNodes(_research != null ? _research.nodes : null);
@@ -128,7 +119,7 @@ namespace TheCall
             Listen(_result != null ? _result.restartButton : null, OnTitle);
         }
 
-        void Refresh()
+        internal void Refresh()
         {
             if (_opening == null)
                 return;
@@ -200,11 +191,8 @@ namespace TheCall
                 ? "补上欠额"
                 : target.LevelNumber >= 7 ? "结束第7天" : "进入第" + (target.LevelNumber + 1) + "天";
 
-            if (!CageContains(_selectedMonster))
-                _selectedMonster = null;
-
             var cage = this.SendQuery(new MonsterCageQuery());
-            FillList(_operation.cageSlots, cage, _selectedMonster);
+            FillList(_operation.cageSlots, cage, ArmedMonsterId());
             FillCells(_operation.extractionSlots, this.SendQuery(new ExtractionSlotsQuery()));
             FillParents(_operation.breedingSlots, this.SendQuery(new BreedingSlotsQuery()));
             FillSkills(_operation.skillChips, run.SkillSlots);
@@ -341,7 +329,7 @@ namespace TheCall
                 chips[i].index = i;
                 chips[i].label.text = has ? skills[i] : "空";
                 if (chips[i].selection != null)
-                    chips[i].selection.SetActive(has && _selectedSkill == i);
+                    chips[i].selection.SetActive(has && IsArmed(DropPayload.SkillChip(i)));
                 if (chips[i].button != null)
                     chips[i].button.interactable = has;
             }
@@ -358,6 +346,9 @@ namespace TheCall
 
                 chips[i].index = plans[i].Index;
                 chips[i].label.text = string.IsNullOrEmpty(plans[i].SkillName) ? "投入技能" : plans[i].SkillName;
+                if (chips[i].selection != null)
+                    chips[i].selection.SetActive(
+                        !string.IsNullOrEmpty(plans[i].SkillName) && IsArmed(DropPayload.BreedingSkill(plans[i].Index)));
             }
         }
 
@@ -392,7 +383,7 @@ namespace TheCall
                 return;
             }
 
-            FillMonster(slot, this.SendQuery(new MonsterQuery(monsterId)), false);
+            FillMonster(slot, this.SendQuery(new MonsterQuery(monsterId)), monsterId == ArmedMonsterId());
         }
 
         void FillMonsterCard(ShopCardView card, ShelfMonster item, int gold)
@@ -480,164 +471,34 @@ namespace TheCall
                 "这一关还不能开始。");
         }
 
-        void OnCage(MonsterSlotView slot)
+        string ArmedMonsterId()
         {
-            if (string.IsNullOrEmpty(slot.monsterId))
-                return;
+            var armed = _operation != null && _operation.pointer != null ? _operation.pointer.Armed : null;
+            if (armed == null || armed.Value.Kind != PayloadKind.Monster)
+                return null;
 
-            _selectedMonster = _selectedMonster == slot.monsterId ? null : slot.monsterId;
-            Refresh();
+            return armed.Value.MonsterId;
         }
 
-        void OnExtraction(MonsterSlotView slot)
+        bool IsArmed(DropPayload payload)
         {
-            if (!string.IsNullOrEmpty(slot.monsterId))
-            {
-                var id = slot.monsterId;
-                Run(
-                    () => this.SendCommand(new ReturnMonsterCommand(id)),
-                    () => CageContains(id),
-                    "已放回收容笼。",
-                    "没能取回。");
-                return;
-            }
+            var armed = _operation != null && _operation.pointer != null ? _operation.pointer.Armed : null;
+            if (armed == null || armed.Value.Kind != payload.Kind)
+                return false;
 
-            if (string.IsNullOrEmpty(_selectedMonster))
-            {
-                Notice("先在收容笼点一只怪物。");
-                return;
-            }
+            if (payload.Kind == PayloadKind.Monster)
+                return armed.Value.MonsterId == payload.MonsterId;
 
-            var monsterId = _selectedMonster;
-            var index = slot.index;
-            Run(
-                () => this.SendCommand(new PlaceMonsterCommand(monsterId, OperationArea.Extraction, index)),
-                () => CellMonster(index) == monsterId,
-                "已放入生产区。",
-                "这个格子放不进去。");
+            return armed.Value.Index == payload.Index;
         }
 
-        void OnBreeding(MonsterSlotView slot)
+        internal bool CommitDrop(OperationDrop drop)
         {
-            if (!string.IsNullOrEmpty(slot.monsterId))
-            {
-                var id = slot.monsterId;
-                Run(
-                    () => this.SendCommand(new ReturnMonsterCommand(id)),
-                    () => CageContains(id),
-                    "亲本已放回。",
-                    "没能取回。");
-                return;
-            }
+            var applied = this.SendCommand(new CommitOperationDropCommand(drop));
+            if (applied)
+                Refresh();
 
-            if (string.IsNullOrEmpty(_selectedMonster))
-            {
-                Notice("先在收容笼点一只亲本。");
-                return;
-            }
-
-            var monsterId = _selectedMonster;
-            var index = slot.index;
-            Run(
-                () => this.SendCommand(new PlaceMonsterCommand(monsterId, OperationArea.Breeding, index)),
-                () => ParentMonster(index) == monsterId,
-                "已放入培育室。",
-                "这个培育位放不进去。");
-        }
-
-        void OnDiscard()
-        {
-            if (string.IsNullOrEmpty(_selectedMonster))
-            {
-                Notice("先在收容笼点要废弃的怪物。");
-                return;
-            }
-
-            var run = this.SendQuery(new RunLedgerQuery());
-            if (run.SkillSlots.Count >= 3)
-            {
-                Notice("技能槽已满，废弃不会发生。");
-                return;
-            }
-
-            var id = _selectedMonster;
-            Run(
-                () => this.SendCommand(new DiscardMonsterCommand(id)),
-                () => !CageContains(id),
-                "已废弃，一个技能进了技能槽。",
-                "没能废弃。");
-        }
-
-        void OnSkill(SkillChipView chip)
-        {
-            var skills = this.SendQuery(new RunLedgerQuery()).SkillSlots;
-            if (chip.index < 0 || chip.index >= skills.Count)
-                return;
-
-            _selectedSkill = _selectedSkill == chip.index ? -1 : chip.index;
-            Refresh();
-        }
-
-        void OnEquip()
-        {
-            if (string.IsNullOrEmpty(_selectedMonster) || _selectedSkill < 0)
-            {
-                Notice("先点一只怪物，再点技能槽里的技能。");
-                return;
-            }
-
-            var monsterId = _selectedMonster;
-            var index = _selectedSkill;
-            var before = this.SendQuery(new RunLedgerQuery()).SkillSlots.Count;
-            Run(
-                () => this.SendCommand(new EquipSkillCommand(monsterId, index)),
-                () => this.SendQuery(new RunLedgerQuery()).SkillSlots.Count < before,
-                "技能已装上。",
-                "这个技能装不上去。");
-        }
-
-        void OnBreedingSkill(SkillChipView chip)
-        {
-            var plans = this.SendQuery(new BreedingPlansQuery());
-            BreedingPlanView plan = null;
-            for (var i = 0; i < plans.Count; i++)
-                if (plans[i].Index == chip.index)
-                    plan = plans[i];
-
-            if (plan == null)
-                return;
-
-            if (!string.IsNullOrEmpty(plan.SkillName))
-            {
-                var slot = plan.Index;
-                Run(
-                    () => this.SendCommand(new ReturnBreedingSkillCommand(slot)),
-                    () => string.IsNullOrEmpty(PlanSkill(slot)),
-                    "培育技能已拿回。",
-                    "没能拿回。");
-                return;
-            }
-
-            if (_selectedSkill < 0)
-            {
-                Notice("先点技能槽里的技能。");
-                return;
-            }
-
-            var ledger = this.SendQuery(new RunLedgerQuery());
-            if (!Contains(ledger.UnlockedTech, "基因实验"))
-            {
-                Notice("先研究基因实验，才能把技能投进培育。");
-                return;
-            }
-
-            var skillIndex = _selectedSkill;
-            var slotIndex = plan.Index;
-            Run(
-                () => this.SendCommand(new PlaceBreedingSkillCommand(slotIndex, skillIndex)),
-                () => !string.IsNullOrEmpty(PlanSkill(slotIndex)),
-                "培育技能已投入。",
-                "这个技能投不进去。");
+            return applied;
         }
 
         void OnSettle()
@@ -648,8 +509,6 @@ namespace TheCall
             _busy = true;
             this.SendCommand(new ConfirmSettlementCommand());
             _busy = false;
-            _selectedMonster = null;
-            _selectedSkill = -1;
             var phase = this.SendQuery(new RunPhaseQuery());
             if (phase == RunPhase.Shop)
                 Notice("结算完成，商店开了。");
@@ -781,14 +640,7 @@ namespace TheCall
             _busy = true;
             send();
             _busy = false;
-            if (succeeded())
-            {
-                _selectedMonster = null;
-                _selectedSkill = -1;
-                Notice(success);
-            }
-            else
-                Notice(failure);
+            Notice(succeeded() ? success : failure);
 
             Refresh();
         }
@@ -829,36 +681,6 @@ namespace TheCall
                     return true;
 
             return false;
-        }
-
-        string CellMonster(int index)
-        {
-            var cells = this.SendQuery(new ExtractionSlotsQuery());
-            for (var i = 0; i < cells.Count; i++)
-                if (cells[i].Index == index)
-                    return cells[i].MonsterId;
-
-            return null;
-        }
-
-        string ParentMonster(int index)
-        {
-            var parents = this.SendQuery(new BreedingSlotsQuery());
-            for (var i = 0; i < parents.Count; i++)
-                if (parents[i].Index == index)
-                    return parents[i].MonsterId;
-
-            return null;
-        }
-
-        string PlanSkill(int slot)
-        {
-            var plans = this.SendQuery(new BreedingPlansQuery());
-            for (var i = 0; i < plans.Count; i++)
-                if (plans[i].Index == slot)
-                    return plans[i].SkillName;
-
-            return null;
         }
 
         static bool Contains(IReadOnlyList<string> values, string value)
@@ -913,19 +735,6 @@ namespace TheCall
                 var slot = slots[i];
                 if (slot != null && slot.button != null)
                     slot.button.onClick.AddListener(() => handler(slot));
-            }
-        }
-
-        static void ListenChips(SkillChipView[] chips, Action<SkillChipView> handler)
-        {
-            if (chips == null)
-                return;
-
-            for (var i = 0; i < chips.Length; i++)
-            {
-                var chip = chips[i];
-                if (chip != null && chip.button != null)
-                    chip.button.onClick.AddListener(() => handler(chip));
             }
         }
 

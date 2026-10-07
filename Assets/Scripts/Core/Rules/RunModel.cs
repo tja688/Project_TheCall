@@ -74,6 +74,19 @@ namespace TheCall
         }
     }
 
+    internal readonly struct CageCapture
+    {
+        public CageCapture(Monster[] inCage, Monster[] living)
+        {
+            InCage = inCage;
+            Living = living;
+        }
+
+        public Monster[] InCage { get; }
+
+        public Monster[] Living { get; }
+    }
+
     internal sealed class RunModel : AbstractModel
     {
         readonly List<Monster> _candidates = new List<Monster>();
@@ -247,6 +260,50 @@ namespace TheCall
         }
 
         public void AddToCage(Monster monster) => _cage.Add(monster);
+
+        internal CageCapture CaptureCage()
+        {
+            var inCage = new Monster[_cage.Count];
+            for (var i = 0; i < inCage.Length; i++)
+                inCage[i] = _cage[i];
+
+            var living = new Monster[_byId.Count];
+            var index = 0;
+            foreach (var monster in _byId.Values)
+                living[index++] = monster;
+
+            return new CageCapture(inCage, living);
+        }
+
+        internal void RestoreCage(CageCapture capture)
+        {
+            _cage.Clear();
+            for (var i = 0; i < capture.InCage.Length; i++)
+                _cage.Add(capture.InCage[i]);
+
+            _byId.Clear();
+            for (var i = 0; i < capture.Living.Length; i++)
+            {
+                var monster = capture.Living[i];
+                _byId[monster.Id] = monster;
+            }
+        }
+
+        internal string[] CaptureSkillSlots()
+        {
+            var copy = new string[_skillSlots.Count];
+            for (var i = 0; i < copy.Length; i++)
+                copy[i] = _skillSlots[i];
+
+            return copy;
+        }
+
+        internal void RestoreSkillSlots(string[] slots)
+        {
+            _skillSlots.Clear();
+            for (var i = 0; i < slots.Length; i++)
+                _skillSlots.Add(slots[i]);
+        }
 
         public void AddNewToCage(string skillName) => _cage.Add(Create(skillName));
 

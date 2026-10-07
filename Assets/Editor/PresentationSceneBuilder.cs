@@ -46,7 +46,8 @@ namespace TheCall.Editor
         [MenuItem("The Call/重建表现层界面")]
         public static void RebuildFromMenu()
         {
-            if (!EditorUtility.DisplayDialog(
+            // -automated 下没有人点确认，对话框会把这次菜单调用挂住。
+            if (!LaunchedAutomated() && !EditorUtility.DisplayDialog(
                     "重建表现层",
                     "会覆盖场景里的 UICanvas 和怪物画像预制体。已经在这些物体上改过的位置和图片会丢掉。",
                     "重建",
@@ -54,6 +55,18 @@ namespace TheCall.Editor
                 return;
 
             Build();
+        }
+
+        static bool LaunchedAutomated()
+        {
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "-automated")
+                    return true;
+            }
+
+            return false;
         }
 
         public static string Build()
@@ -183,6 +196,14 @@ namespace TheCall.Editor
         static OperationScreenView BuildOperation(Transform parent)
         {
             var screen = Screen(parent, "OperationScreen");
+            var background = screen.transform.Find("BackgroundImage").GetComponent<Image>();
+            background.raycastTarget = true;
+            Zone(background.gameObject, LandingPlace.EmptySpace, null, null);
+            var pointer = screen.AddComponent<OperationPointer>();
+            var dragLayerObject = new GameObject("DragLayer", typeof(RectTransform));
+            dragLayerObject.transform.SetParent(screen.transform, false);
+            Stretch(dragLayerObject.GetComponent<RectTransform>());
+            pointer.dragLayer = dragLayerObject.GetComponent<RectTransform>();
             var title = Label(screen.transform, "Title", "怪物育成公司", 28, Ink, TextAlignmentOptions.Left);
             At(title, 64, 18, 360, 40);
             var targetCaption = Label(screen.transform, "TargetCaption", "次日目标", 18, Muted, TextAlignmentOptions.Left);
@@ -225,11 +246,21 @@ namespace TheCall.Editor
             seats[3] = MonsterCard(breeding.transform, "BreedingSeat_3", 48, 358, 200, 64, 0.4f, null, true);
             seats[4] = MonsterCard(breeding.transform, "BreedingSeat_4", 260, 358, 200, 64, 0.4f, null, true);
             seats[5] = MonsterCard(breeding.transform, "BreedingSeat_5", 472, 358, 200, 64, 0.4f, null, true);
+            for (var i = 0; i < seats.Length; i++)
+            {
+                Zone(seats[i].gameObject, LandingPlace.BreedingSeat, seats[i], null);
+                Drag(seats[i].gameObject, PayloadKind.Monster, pointer);
+            }
             var breedSkills = new SkillChipView[2];
             breedSkills[0] = Chip(breeding.transform, "BreedingSkill_0", 1048, 110, 270, 96);
             breedSkills[1] = Chip(breeding.transform, "BreedingSkill_1", 1048, 230, 270, 96);
             breedSkills[0].label.text = "投入技能";
             breedSkills[1].label.text = "投入技能";
+            for (var i = 0; i < breedSkills.Length; i++)
+            {
+                Zone(breedSkills[i].gameObject, LandingPlace.BreedingSocket, null, breedSkills[i]);
+                Drag(breedSkills[i].gameObject, PayloadKind.BreedingSkill, pointer);
+            }
 
             var production = Box(screen.transform, "生产区", Panel);
             At(production, 64, 554, 1360, 498);
@@ -242,14 +273,18 @@ namespace TheCall.Editor
             belt.enabled = false;
             var extracts = new MonsterSlotView[6];
             for (var i = 0; i < extracts.Length; i++)
+            {
                 extracts[i] = MonsterCard(production.transform, "ExtractionSlot_" + i, 40 + i * 218, 168, 200, 230, 1.15f, null, true);
+                Zone(extracts[i].gameObject, LandingPlace.Extraction, extracts[i], null);
+                Drag(extracts[i].gameObject, PayloadKind.Monster, pointer);
+            }
 
             var cagePanel = Box(screen.transform, "收容笼", Panel);
             At(cagePanel, 1440, 108, 456, 430);
             var cageTitle = Label(cagePanel.transform, "Caption", "收容笼", 24, Ink, TextAlignmentOptions.Left);
             At(cageTitle, 20, 12, 200, 36);
-            var cageScroll = Scroll(cagePanel.transform, "CageScroll", out var cageContent);
-            At(cageScroll, 16, 56, 424, 358);
+            var cageScroll = Scroll(cagePanel.transform, "CageScroll", out var cageContent, true);
+            At(cageScroll, 16, 56, 440, 358);
             cageContent.sizeDelta = new Vector2(0f, 9 * 118f + 8f);
             var cage = new MonsterSlotView[18];
             for (var i = 0; i < cage.Length; i++)
@@ -257,16 +292,23 @@ namespace TheCall.Editor
                 var column = i % 2;
                 var row = i / 2;
                 cage[i] = MonsterCard(cageContent, "CageCard_" + i, 8 + column * 204, 4 + row * 118, 196, 112, 0.48f, null);
+                Zone(cage[i].gameObject, LandingPlace.Cage, cage[i], null);
+                Drag(cage[i].gameObject, PayloadKind.Monster, pointer);
             }
+
+            Zone(cageScroll.GetComponent<ScrollRect>().viewport.gameObject, LandingPlace.Cage, null, null);
 
             var discard = Click(screen.transform, "废弃回收", "废弃回收", Danger, Danger, 22, out var discardLabel);
             At(discard, 1440, 554, 456, 148);
             At(discardLabel, 16, 12, 424, 36);
             var recycle = Icon(discard.transform, "RecycleIcon", "recycle", 150, 52, 72, 72);
             var trash = Icon(discard.transform, "TrashIcon", "trash", 250, 52, 72, 72);
+            Zone(discard.gameObject, LandingPlace.Discard, null, null);
 
             var skills = Box(screen.transform, "技能槽", Panel);
             At(skills, 1440, 718, 456, 230);
+            skills.raycastTarget = true;
+            Zone(skills.gameObject, LandingPlace.SkillSlot, null, null);
             var skillTitle = Label(skills.transform, "Caption", "技能槽", 22, Ink, TextAlignmentOptions.Left);
             At(skillTitle, 16, 12, 160, 32);
             var chips = new[]
@@ -275,8 +317,14 @@ namespace TheCall.Editor
                 Chip(skills.transform, "SkillChip_1", 160, 56, 136, 72),
                 Chip(skills.transform, "SkillChip_2", 304, 56, 136, 72),
             };
+            for (var i = 0; i < chips.Length; i++)
+            {
+                Zone(chips[i].gameObject, LandingPlace.SkillSlot, null, chips[i]);
+                Drag(chips[i].gameObject, PayloadKind.SkillChip, pointer);
+            }
             var equip = Click(skills.transform, "EquipButton", "装入", Mint, MintInk, 18, out _);
             At(equip, 16, 148, 424, 64);
+            equip.gameObject.SetActive(false);
 
             var next = Click(screen.transform, "NextDayButton", "进入下一天", Mint, MintInk, 22, out var nextLabel);
             At(next, 1440, 968, 456, 72);
@@ -297,6 +345,9 @@ namespace TheCall.Editor
             view.breedingSlots = seats;
             view.breedingSkills = breedSkills;
             view.skillChips = chips;
+            view.dragLayer = pointer.dragLayer;
+            view.pointer = pointer;
+            dragLayerObject.transform.SetAsLastSibling();
             return view;
         }
 
@@ -740,7 +791,7 @@ namespace TheCall.Editor
             return go;
         }
 
-        static RectTransform Scroll(Transform parent, string name, out RectTransform content)
+        static RectTransform Scroll(Transform parent, string name, out RectTransform content, bool bar = false)
         {
             var root = new GameObject(name, typeof(RectTransform));
             root.transform.SetParent(parent, false);
@@ -766,7 +817,58 @@ namespace TheCall.Editor
             content.sizeDelta = new Vector2(0f, 800f);
             scroll.viewport = viewportObject.GetComponent<RectTransform>();
             scroll.content = content;
+            if (bar)
+                AddVerticalBar(scroll);
+
             return root.GetComponent<RectTransform>();
+        }
+
+        static void AddVerticalBar(ScrollRect scroll)
+        {
+            var viewport = scroll.viewport;
+            viewport.offsetMax = new Vector2(-16f, viewport.offsetMax.y);
+            var barObject = new GameObject("Scrollbar", typeof(RectTransform));
+            barObject.transform.SetParent(scroll.transform, false);
+            var barRect = barObject.GetComponent<RectTransform>();
+            barRect.anchorMin = new Vector2(1f, 0f);
+            barRect.anchorMax = new Vector2(1f, 1f);
+            barRect.pivot = new Vector2(1f, 1f);
+            barRect.sizeDelta = new Vector2(14f, 0f);
+            barRect.anchoredPosition = Vector2.zero;
+            var barImage = barObject.AddComponent<Image>();
+            barImage.color = PanelDeep;
+            var scrollbar = barObject.AddComponent<Scrollbar>();
+            scrollbar.direction = Scrollbar.Direction.BottomToTop;
+            var sliding = new GameObject("Sliding Area", typeof(RectTransform));
+            sliding.transform.SetParent(barObject.transform, false);
+            Stretch(sliding.GetComponent<RectTransform>());
+            var handle = new GameObject("Handle", typeof(RectTransform));
+            handle.transform.SetParent(sliding.transform, false);
+            var handleRect = handle.GetComponent<RectTransform>();
+            Stretch(handleRect);
+            handleRect.offsetMin = new Vector2(2f, 2f);
+            handleRect.offsetMax = new Vector2(-2f, -2f);
+            var handleImage = handle.AddComponent<Image>();
+            handleImage.color = Muted;
+            scrollbar.handleRect = handleRect;
+            scrollbar.targetGraphic = handleImage;
+            scroll.verticalScrollbar = scrollbar;
+            scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
+        }
+
+        static void Zone(GameObject go, LandingPlace place, MonsterSlotView monster, SkillChipView chip)
+        {
+            var zone = go.AddComponent<OperationZone>();
+            zone.Place = place;
+            zone.monsterView = monster;
+            zone.chipView = chip;
+        }
+
+        static void Drag(GameObject go, PayloadKind kind, OperationPointer session)
+        {
+            var drag = go.AddComponent<OperationPayloadDrag>();
+            drag.payloadKind = kind;
+            drag.session = session;
         }
 
         static void Pipe(Transform parent, string name, float x, float y, float w, float h)

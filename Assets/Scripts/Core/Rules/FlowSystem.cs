@@ -40,6 +40,20 @@ namespace TheCall
                 run.EnterOperation(run.LevelNumber);
         }
 
+        public bool Commit(OperationDrop drop)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run))
+                return false;
+
+            var level = this.GetModel<LevelModel>();
+            var facts = Facts(run, level);
+            if (!OperationTransition.TryPlan(facts, drop, out var plan))
+                return false;
+
+            return Apply(plan, run, level);
+        }
+
         public void Place(string monsterId, OperationArea area, int cell)
         {
             var run = this.GetModel<RunModel>();
@@ -191,6 +205,185 @@ namespace TheCall
         {
             var tools = this.GetUtility<IToolCatalog>();
             this.GetModel<LevelModel>().FitExtraction(tools.ExtractionCells(run.Tools));
+        }
+
+        bool Apply(TransitionPlan plan, RunModel run, LevelModel level)
+        {
+            string drawn = null;
+            if (plan.Effect == TransitionEffect.Discard)
+            {
+                var monster = run.Find(plan.SourceMonsterId);
+                if (monster == null || monster.Skills.Count == 0)
+                    return false;
+
+                var names = new string[monster.Skills.Count];
+                for (var i = 0; i < names.Length; i++)
+                    names[i] = monster.Skills[i].Name;
+
+                drawn = this.GetUtility<IDraw>().Choose(names);
+            }
+
+            // 笼、技能槽、提取格、培育位分属两个模型。写入中途失败时写回这四份副本。
+            var cage = run.CaptureCage();
+            var skillSlots = run.CaptureSkillSlots();
+            var extraction = level.CaptureExtraction();
+            var breeding = level.CaptureBreeding();
+
+            void Restore()
+            {
+                run.RestoreCage(cage);
+                run.RestoreSkillSlots(skillSlots);
+                level.RestoreExtraction(extraction);
+                level.RestoreBreeding(breeding);
+            }
+
+            try
+            {
+                if (Write(plan, drawn, run, level))
+                    return true;
+
+                Restore();
+                return false;
+            }
+            catch
+            {
+                Restore();
+                throw;
+            }
+        }
+
+        static bool Write(TransitionPlan plan, string drawnSkill, RunModel run, LevelModel level)
+        {
+            switch (plan.Effect)
+            {
+                case TransitionEffect.Move:
+                    if (plan.SourceWhere == MonsterWhere.Cage)
+                    {
+                        if (!run.TryRemoveFromCage(plan.SourceMonsterId, out _))
+                            return false;
+
+                        level.Put(plan.ToArea, plan.ToCell, plan.SourceMonsterId);
+                        return true;
+                    }
+
+                    level.MoveCell(plan.FromArea, plan.FromCell, plan.ToArea, plan.ToCell);
+                    return true;
+                case TransitionEffect.Replace:
+                    var occupant = run.Find(plan.OtherMonsterId);
+                    if (occupant == null)
+                        return false;
+
+                    level.Put(plan.ToArea, plan.ToCell, plan.SourceMonsterId);
+                    run.AddToCage(occupant);
+                    return run.TryRemoveFromCage(plan.SourceMonsterId, out _);
+                case TransitionEffect.Exchange:
+                    level.ExchangeCells(plan.FromArea, plan.FromCell, plan.ToArea, plan.ToCell);
+                    return true;
+                case TransitionEffect.Return:
+                    if (!level.TryRemove(plan.SourceMonsterId))
+                        return false;
+
+                    var returning = run.Find(plan.SourceMonsterId);
+                    if (returning == null)
+                        return false;
+
+                    run.AddToCage(returning);
+                    return true;
+                case TransitionEffect.Discard:
+                    if (plan.SourceWhere != MonsterWhere.Cage && !level.TryRemove(plan.SourceMonsterId))
+                        return false;
+                    if (!run.TryDestroy(plan.SourceMonsterId))
+                        return false;
+
+                    run.PutSkillInSlot(drawnSkill);
+                    return true;
+                case TransitionEffect.Equip:
+                    return run.TryEquip(plan.EquipMonsterId, plan.SkillSlotIndex);
+                case TransitionEffect.Invest:
+                    if (!run.TryTakeSkillAt(plan.SkillSlotIndex, out var invested))
+                        return false;
+
+                    return level.TryPutSkill(plan.BreedingSlot, invested);
+                case TransitionEffect.ReturnBreedingSkill:
+                    if (!level.TryTakeSkill(plan.BreedingSlot, out var returned))
+                        return false;
+
+                    run.PutSkillInSlot(returned);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        TransitionFacts Facts(RunModel run, LevelModel level)
+        {
+            var skillNames = run.CaptureSkillSlots();
+            var extraction = level.CaptureExtraction();
+            var breedingCells = level.Breeding;
+            var breeding = new string[breedingCells.Count];
+            for (var i = 0; i < breeding.Length; i++)
+                breeding[i] = breedingCells[i];
+
+            var breedingSkills = new string[level.BreedingSlotCount];
+            for (var slot = 0; slot < breedingSkills.Length; slot++)
+                breedingSkills[slot] = level.SkillAt(slot);
+
+            var monsters = new List<MonsterFact>();
+            var cage = run.Cage;
+            for (var i = 0; i < cage.Count; i++)
+                SetMonster(monsters, Fact(cage[i], MonsterWhere.Cage, OperationArea.Extraction, -1));
+
+            for (var i = 0; i < extraction.Length; i++)
+            {
+                if (extraction[i] == null)
+                    continue;
+
+                var monster = run.Find(extraction[i]);
+                if (monster != null)
+                    SetMonster(monsters, Fact(monster, MonsterWhere.Extraction, OperationArea.Extraction, i));
+            }
+
+            for (var i = 0; i < breeding.Length; i++)
+            {
+                if (breeding[i] == null)
+                    continue;
+
+                var monster = run.Find(breeding[i]);
+                if (monster != null)
+                    SetMonster(monsters, Fact(monster, MonsterWhere.Breeding, OperationArea.Breeding, i));
+            }
+
+            return new TransitionFacts(
+                run.Phase == RunPhase.Operation,
+                this.GetUtility<TechCatalog>().AllowsBreedingSkill(run.UnlockedTech),
+                skillNames,
+                extraction,
+                breeding,
+                breedingSkills,
+                monsters.ToArray());
+        }
+
+        static MonsterFact Fact(Monster monster, MonsterWhere where, OperationArea area, int cell)
+        {
+            var names = new string[monster.Skills.Count];
+            for (var i = 0; i < names.Length; i++)
+                names[i] = monster.Skills[i].Name;
+
+            return new MonsterFact(monster.Id, where, area, cell, names);
+        }
+
+        static void SetMonster(List<MonsterFact> monsters, MonsterFact fact)
+        {
+            for (var i = 0; i < monsters.Count; i++)
+            {
+                if (monsters[i].Id != fact.Id)
+                    continue;
+
+                monsters[i] = fact;
+                return;
+            }
+
+            monsters.Add(fact);
         }
 
         static bool EnterOperation(RunModel run)

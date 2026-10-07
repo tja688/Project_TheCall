@@ -188,16 +188,57 @@ namespace TheCall
             return TrySeat(index, out var slot, out var seat) && _slots[slot].Parents[seat] == null;
         }
 
-        public void Put(OperationArea area, int index, string monsterId)
-        {
-            if (area == OperationArea.Extraction)
-            {
-                _extraction[index] = monsterId;
-                return;
-            }
+        public void Put(OperationArea area, int index, string monsterId) =>
+            Write(area, index, monsterId);
 
-            TrySeat(index, out var slot, out var seat);
-            _slots[slot].Parents[seat] = monsterId;
+        internal void MoveCell(OperationArea fromArea, int fromCell, OperationArea toArea, int toCell)
+        {
+            var moving = Read(fromArea, fromCell);
+            Write(fromArea, fromCell, null);
+            Write(toArea, toCell, moving);
+        }
+
+        internal void ExchangeCells(
+            OperationArea firstArea,
+            int firstCell,
+            OperationArea secondArea,
+            int secondCell)
+        {
+            var firstId = Read(firstArea, firstCell);
+            var secondId = Read(secondArea, secondCell);
+            Write(firstArea, firstCell, secondId);
+            Write(secondArea, secondCell, firstId);
+        }
+
+        internal string[] CaptureExtraction()
+        {
+            var copy = new string[_extraction.Length];
+            Array.Copy(_extraction, copy, _extraction.Length);
+            return copy;
+        }
+
+        internal void RestoreExtraction(string[] cells)
+        {
+            _extraction = new string[cells.Length];
+            Array.Copy(cells, _extraction, cells.Length);
+        }
+
+        internal BreedingSeat[] CaptureBreeding()
+        {
+            var copy = new BreedingSeat[_slots.Length];
+            for (var i = 0; i < copy.Length; i++)
+                copy[i] = _slots[i].Copy();
+
+            return copy;
+        }
+
+        internal void RestoreBreeding(BreedingSeat[] seats)
+        {
+            var copy = new BreedingSeat[seats.Length];
+            for (var i = 0; i < copy.Length; i++)
+                copy[i] = seats[i].Copy();
+
+            _slots = copy;
         }
 
         public bool TryRemove(string monsterId)
@@ -291,6 +332,27 @@ namespace TheCall
             }
 
             return next;
+        }
+
+        string Read(OperationArea area, int index)
+        {
+            if (area == OperationArea.Extraction)
+                return _extraction[index];
+
+            TrySeat(index, out var slot, out var seat);
+            return _slots[slot].Parents[seat];
+        }
+
+        void Write(OperationArea area, int index, string monsterId)
+        {
+            if (area == OperationArea.Extraction)
+            {
+                _extraction[index] = monsterId;
+                return;
+            }
+
+            TrySeat(index, out var slot, out var seat);
+            _slots[slot].Parents[seat] = monsterId;
         }
 
         static bool CanPlace(string[] slots, int index) =>

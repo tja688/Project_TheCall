@@ -21,5 +21,7 @@ namespace TheCall
         public MonsterSlotView[] breedingSlots;
         public SkillChipView[] breedingSkills;
         public SkillChipView[] skillChips;
+        public RectTransform dragLayer;
+        public OperationPointer pointer;
     }
 }
