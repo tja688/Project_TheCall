@@ -35,11 +35,12 @@ namespace TheCall
         {
         }
 
-        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0)
+        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null)
         {
             Id = id;
             Skills = new List<SkillInstance>(skills);
             Modifier = modifier;
+            Appearance = appearance ?? MonsterAppearance.FromSeed(StableSeed(id));
         }
 
         public string Id { get; }
@@ -47,6 +48,7 @@ namespace TheCall
         public List<SkillInstance> Skills { get; }
 
         public int Modifier { get; }
+        public MonsterAppearance Appearance { get; }
 
         public bool Immovable { get; private set; }
 
@@ -72,6 +74,14 @@ namespace TheCall
 
             Immovable = false;
         }
+        static int StableSeed(string id)
+        {
+            var hash = 17;
+            for (var i = 0; i < id.Length; i++)
+                hash = hash * 31 + id[i];
+            return hash;
+        }
+
     }
 
     internal readonly struct CageCapture
@@ -366,8 +376,8 @@ namespace TheCall
             return true;
         }
 
-        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0) =>
-            Create(skillNames, modifier);
+        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0, MonsterAppearance? appearance = null) =>
+            Create(skillNames, modifier, appearance);
 
         public void ClearTemporaryQuotes()
         {
@@ -414,17 +424,19 @@ namespace TheCall
         SkillInstance MakeSkill(string name) =>
             new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name));
 
-        Monster Create(string skillName) => Create(new[] { skillName }, 0);
+        Monster Create(string skillName) => Create(new[] { skillName }, 0, null);
 
-        Monster Create(IReadOnlyList<string> skillNames, int modifier)
+        Monster Create(IReadOnlyList<string> skillNames, int modifier, MonsterAppearance? appearance = null)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
                 skills[i] = MakeSkill(skillNames[i]);
 
-            var monster = new Monster("m" + _nextId++, skills, modifier);
+            var id = "m" + _nextId++;
+            var monster = new Monster(id, skills, modifier, appearance);
             _byId.Add(monster.Id, monster);
             return monster;
         }
+
     }
 }

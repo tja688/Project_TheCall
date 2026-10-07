@@ -4,12 +4,10 @@ using UnityEngine.UI;
 namespace TheCall
 {
     /// <summary>
-    /// 一只怪物的分层画像。各层是场景里已摆好的 Image，运行时只更换 Sprite，不改位置、缩放和层级。
-    /// 部件画在同一张 142×102 画布上，所以各层应铺满同一个矩形。要微调拼接，直接拖这些 Image。
+    /// Renders an authored compatible recipe. Every part shares the original 142x102 canvas.
     /// </summary>
     public sealed class MonsterPortrait : MonoBehaviour
     {
-        [Header("各层应铺满同一个矩形。改拼接时拖这些 Image，运行时不会改它们的位置。")]
         [SerializeField] Image _tail;
         [SerializeField] Image _foot;
         [SerializeField] Image _body;
@@ -19,51 +17,85 @@ namespace TheCall
         [SerializeField] Image _mouth;
         [SerializeField] Image _hat;
         [SerializeField] Image _accessory;
+        [SerializeField] Transform _headGroup;
+        [SerializeField] Transform _feetGroup;
 
-        public void Show(string monsterId)
+        public static readonly Color[] Palette =
+        {
+            new Color32(238, 115, 101, 255),
+            new Color32(100, 190, 132, 255),
+            new Color32(100, 166, 218, 255),
+            new Color32(236, 190, 85, 255),
+            new Color32(185, 133, 210, 255),
+            new Color32(88, 196, 191, 255),
+        };
+
+        public void Show(string monsterId) => Show(MonsterAppearance.FromSeed(Seed(monsterId)));
+
+        public void Show(MonsterAppearance appearance)
         {
             MonsterPartLibrary.Ensure();
-            var seed = Seed(monsterId);
-            Apply(_tail, MonsterPartLibrary.Tail, seed);
-            Apply(_foot, MonsterPartLibrary.Foot, seed + 1);
-            Apply(_body, MonsterPartLibrary.Body, seed + 2);
-            Apply(_hand, MonsterPartLibrary.Hand, seed + 3);
-            Apply(_head, MonsterPartLibrary.Head, seed + 4);
-            Apply(_eye, MonsterPartLibrary.Eye, seed + 5);
-            Apply(_mouth, MonsterPartLibrary.Mouth, seed + 6);
-            Apply(_hat, MonsterPartLibrary.Hat, seed + 7);
-            Apply(_accessory, MonsterPartLibrary.Accessory, seed + 8);
+            var recipe = appearance.Recipe;
+            var palette = Palette[appearance.Palette];
+
+            Apply(_tail, MonsterPartLibrary.Tail, recipe == 2 ? 2 : -1, Color.white);
+            Apply(_foot, MonsterPartLibrary.Foot, recipe % 3, palette);
+            Apply(_body, MonsterPartLibrary.Body, recipe, palette);
+            Apply(_hand, MonsterPartLibrary.Hand, recipe % 5, Color.white);
+            Apply(_head, MonsterPartLibrary.Head, recipe % 4, palette);
+            Apply(_eye, MonsterPartLibrary.Eye, recipe % 5, Color.white);
+            Apply(_mouth, MonsterPartLibrary.Mouth, recipe, Color.white);
+            Apply(_hat, MonsterPartLibrary.Hat, recipe == 0 || recipe == 3 ? recipe : -1, Color.white);
+            Apply(_accessory, MonsterPartLibrary.Accessory, recipe == 1 || recipe == 4 ? recipe % 3 : -1, Color.white);
+            RestoreMotion();
+        }
+
+        public void SetSpringMotion(float headAngle, float feetAngle)
+        {
+            if (_headGroup != null)
+                _headGroup.localRotation = Quaternion.Euler(0f, 0f, headAngle);
+            if (_feetGroup != null)
+                _feetGroup.localRotation = Quaternion.Euler(0f, 0f, feetAngle);
+        }
+
+        public void SetDragMotion(Vector2 velocity)
+        {
+            var drive = Mathf.Clamp(velocity.x / 700f, -1f, 1f);
+            SetSpringMotion(-drive * 7f, drive * 5f);
+        }
+
+        public void RestoreMotion()
+        {
+            if (_headGroup != null)
+                _headGroup.localRotation = Quaternion.identity;
+            if (_feetGroup != null)
+                _feetGroup.localRotation = Quaternion.identity;
         }
 
         public void Clear()
         {
-            Apply(_tail, null, 0);
-            Apply(_foot, null, 0);
-            Apply(_body, null, 0);
-            Apply(_hand, null, 0);
-            Apply(_head, null, 0);
-            Apply(_eye, null, 0);
-            Apply(_mouth, null, 0);
-            Apply(_hat, null, 0);
-            Apply(_accessory, null, 0);
+            Apply(_tail, null, -1, Color.white);
+            Apply(_foot, null, -1, Color.white);
+            Apply(_body, null, -1, Color.white);
+            Apply(_hand, null, -1, Color.white);
+            Apply(_head, null, -1, Color.white);
+            Apply(_eye, null, -1, Color.white);
+            Apply(_mouth, null, -1, Color.white);
+            Apply(_hat, null, -1, Color.white);
+            Apply(_accessory, null, -1, Color.white);
+            RestoreMotion();
         }
 
-        static void Apply(Image image, Sprite[] options, int seed)
+        static void Apply(Image image, Sprite[] options, int index, Color tint)
         {
             if (image == null)
                 return;
 
-            var sprite = options == null ? null : Pick(options, seed);
-            image.sprite = sprite;
-            image.enabled = sprite != null;
-        }
-
-        static Sprite Pick(Sprite[] sprites, int seed)
-        {
-            if (sprites.Length == 0)
-                return null;
-
-            return sprites[(seed & int.MaxValue) % sprites.Length];
+            var valid = options != null && index >= 0 && index < options.Length;
+            image.sprite = valid ? options[index] : null;
+            image.color = tint;
+            image.enabled = valid;
+            image.preserveAspect = true;
         }
 
         static int Seed(string id)
@@ -74,8 +106,7 @@ namespace TheCall
             var seed = 17;
             for (var i = 0; i < id.Length; i++)
                 seed = seed * 31 + id[i];
-
-            return seed & int.MaxValue;
+            return seed;
         }
     }
 

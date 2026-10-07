@@ -35,7 +35,8 @@ namespace TheCall
             IReadOnlyList<MonsterSkillDetail> skills,
             int modifier,
             bool immovable,
-            int capacity)
+            int capacity,
+            MonsterAppearance appearance)
         {
             if (skills == null || skills.Count == 0 || skills.Count > 4)
                 throw new ArgumentException("A monster needs 1 to 4 skills.", nameof(skills));
@@ -55,6 +56,7 @@ namespace TheCall
             Modifier = modifier;
             Immovable = immovable;
             Capacity = capacity;
+            Appearance = appearance;
         }
 
         public string Id { get; }
@@ -64,6 +66,7 @@ namespace TheCall
         public int Modifier { get; }
 
         public bool Immovable { get; }
+        public MonsterAppearance Appearance { get; }
 
         public int Capacity { get; }
     }

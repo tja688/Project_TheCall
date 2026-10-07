@@ -277,6 +277,7 @@ namespace TheCall.Editor
             shop.gameObject.SetActive(false);
             result.gameObject.SetActive(false);
             toast.SetActive(false);
+            BuildHoverWindow();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -697,25 +698,46 @@ namespace TheCall.Editor
             var rect = root.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(142f, 102f);
             var portrait = root.AddComponent<MonsterPortrait>();
-            var layers = new Dictionary<string, Image>
-            {
-                ["_tail"] = Layer(root.transform, "Tail", "Tail"),
-                ["_foot"] = Layer(root.transform, "Foot", "Foot"),
-                ["_body"] = Layer(root.transform, "Body", "Body"),
-                ["_hand"] = Layer(root.transform, "Hand", "Hand"),
-                ["_head"] = Layer(root.transform, "Head", "Head"),
-                ["_eye"] = Layer(root.transform, "Eye", "Eye"),
-                ["_mouth"] = Layer(root.transform, "Mouth", "Mouth"),
-                ["_hat"] = Layer(root.transform, "Hat", "Hat"),
-                ["_accessory"] = Layer(root.transform, "Accessory", "Accessory"),
-            };
+            var tail = Layer(root.transform, "Tail", "Tail");
+            var feet = PivotGroup(root.transform, "FeetMotion", new Vector2(0.5f, 0.22f));
+            var foot = Layer(feet, "Foot", "Foot");
+            var body = Layer(root.transform, "Body", "Body");
+            var hand = Layer(root.transform, "Hand", "Hand");
+            var headGroup = PivotGroup(root.transform, "HeadMotion", new Vector2(0.5f, 0.67f));
+            var head = Layer(headGroup, "Head", "Head");
+            var eye = Layer(headGroup, "Eye", "Eye");
+            var mouth = Layer(headGroup, "Mouth", "Mouth");
+            var accessory = Layer(root.transform, "Accessory", "Accessory");
+            var hat = Layer(root.transform, "Hat", "Hat");
             var serialized = new SerializedObject(portrait);
-            foreach (var pair in layers)
-                serialized.FindProperty(pair.Key).objectReferenceValue = pair.Value;
+            serialized.FindProperty("_tail").objectReferenceValue = tail;
+            serialized.FindProperty("_foot").objectReferenceValue = foot;
+            serialized.FindProperty("_body").objectReferenceValue = body;
+            serialized.FindProperty("_hand").objectReferenceValue = hand;
+            serialized.FindProperty("_head").objectReferenceValue = head;
+            serialized.FindProperty("_eye").objectReferenceValue = eye;
+            serialized.FindProperty("_mouth").objectReferenceValue = mouth;
+            serialized.FindProperty("_hat").objectReferenceValue = hat;
+            serialized.FindProperty("_accessory").objectReferenceValue = accessory;
+            serialized.FindProperty("_headGroup").objectReferenceValue = headGroup;
+            serialized.FindProperty("_feetGroup").objectReferenceValue = feet;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, PortraitPath);
             UnityEngine.Object.DestroyImmediate(root);
             return prefab;
+        }
+
+        static Transform PivotGroup(Transform parent, string name, Vector2 pivot)
+        {
+            var group = new GameObject(name, typeof(RectTransform));
+            group.transform.SetParent(parent, false);
+            var rect = group.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            rect.pivot = pivot;
+            return group.transform;
         }
 
         static Image Layer(Transform parent, string name, string folder)
@@ -730,7 +752,7 @@ namespace TheCall.Editor
             image.sprite = FirstSprite("Assets/Resources/MonsterParts/" + folder);
             image.color = Color.white;
             image.raycastTarget = false;
-            image.preserveAspect = false;
+            image.preserveAspect = true;
             return image;
         }
 
@@ -1200,6 +1222,7 @@ namespace TheCall.Editor
             return image;
         }
 
+
         static Sprite Face(Color background)
         {
             if (_btnMint != null && Same(background, Mint))
@@ -1208,6 +1231,7 @@ namespace TheCall.Editor
                 return _btnDanger;
             return _btnDark;
         }
+
 
         static bool Same(Color a, Color b)
         {
@@ -1377,8 +1401,8 @@ namespace TheCall.Editor
             settings.filterMode = FilterMode.Point;
             settings.spriteMeshType = SpriteMeshType.FullRect;
             settings.spriteAlignment = (int)SpriteAlignment.Center;
+            settings.spritePivot = new Vector2(0.5f, 0.5f);
             settings.spritePixelsPerUnit = 100f;
-            importer.SetTextureSettings(settings);
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.alphaIsTransparency = true;
@@ -1441,7 +1465,7 @@ namespace TheCall.Editor
             DrawDefaultInspector();
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox(
-                "界面已经放在场景里。点下面的按钮只显示其中一个，方便换图片、挪位置。运行时由这个组件按游戏阶段切换。工具图标在商店界面的「工具图标」物体上，选中后可以换每件工具的图和说明。怪物拼接改 MonsterPortrait 预制体里的各层 Image。",
+                "界面已经放在场景里。点下面的按钮只显示其中一个，方便换图片、挪位置。怪物外观配方、调色和动态枢轴由 MonsterPortrait 控制；各层共用原画 142x102 画布。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
                 MessageType.Info);
             using (new EditorGUILayout.HorizontalScope())
             {

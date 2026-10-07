@@ -79,7 +79,7 @@ namespace TheCall
             _capacity.text = "产能 " + details.Capacity;
             _immovable.SetActive(details.Immovable);
             _immovable.GetComponent<TMP_Text>().text = "不动";
-            _portrait.Show(details.Id);
+            _portrait.Show(details.Appearance);
             _window.anchoredPosition = placement.WindowAnchoredPosition;
 
             for (var i = 0; i < _subpanels.Length; i++)

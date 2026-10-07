@@ -24,6 +24,13 @@ namespace TheCall
         bool _dragging;
         bool _finished = true;
         GameObject _ghost;
+        Vector2 _previousPointer;
+        Vector2 _pointerVelocity;
+        MonsterPortrait _ghostPortrait;
+        float _headAngle;
+        float _headVelocity;
+        float _footAngle;
+        float _footVelocity;
         Vector2 _ghostOffset;
         readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
@@ -48,6 +55,9 @@ namespace TheCall
 
             _dragging = true;
             _hasArmed = false;
+            _previousPointer = eventData.position;
+            _pointerVelocity = Vector2.zero;
+            ResetSpring();
             if (_hasPressedPayload && source == _pressed)
                 SpawnGhost(source, eventData);
         }
@@ -57,7 +67,11 @@ namespace TheCall
             if (_ghost == null)
                 return;
 
+            var deltaTime = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
+            _pointerVelocity = Vector2.ClampMagnitude((eventData.position - _previousPointer) / deltaTime, 1000f);
+            _previousPointer = eventData.position;
             _ghost.transform.position = eventData.position + _ghostOffset;
+            AdvanceSpring(deltaTime);
         }
 
         public void Finish(PointerEventData eventData)
@@ -131,6 +145,9 @@ namespace TheCall
             var copy = _ghost.GetComponent<OperationPayloadDrag>();
             if (copy != null)
                 copy.enabled = false;
+            _ghostPortrait = _ghost.GetComponentInChildren<MonsterPortrait>(true);
+            if (_ghostPortrait != null && _ghostPortrait.gameObject.activeInHierarchy)
+                _ghostPortrait.SetDragMotion(_pointerVelocity);
         }
 
         DropLanding RayLanding(PointerEventData eventData)
@@ -161,11 +178,39 @@ namespace TheCall
 
         void ClearGhost()
         {
+            if (_ghostPortrait != null)
+                _ghostPortrait.RestoreMotion();
+            _ghostPortrait = null;
             if (_ghost == null)
                 return;
 
             Destroy(_ghost);
             _ghost = null;
+        }
+
+        void AdvanceSpring(float deltaTime)
+        {
+            if (_ghostPortrait == null)
+                return;
+
+            var drive = Mathf.Clamp(_pointerVelocity.x / 700f, -1f, 1f);
+            StepSpring(ref _headAngle, ref _headVelocity, -drive * 7f, deltaTime);
+            StepSpring(ref _footAngle, ref _footVelocity, drive * 5f, deltaTime);
+            _ghostPortrait.SetSpringMotion(_headAngle, _footAngle);
+        }
+
+        static void StepSpring(ref float angle, ref float velocity, float target, float deltaTime)
+        {
+            const float stiffness = 90f;
+            const float damping = 18f;
+            var acceleration = (target - angle) * stiffness - velocity * damping;
+            velocity += acceleration * deltaTime;
+            angle += velocity * deltaTime;
+        }
+
+        void ResetSpring()
+        {
+            _headAngle = _headVelocity = _footAngle = _footVelocity = 0f;
         }
 
         void Paint()

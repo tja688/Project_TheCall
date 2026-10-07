@@ -5,17 +5,19 @@ namespace TheCall
 {
     public sealed class ShelfMonster
     {
-        public ShelfMonster(string id, IReadOnlyList<string> skillNames, int price)
+        public ShelfMonster(string id, IReadOnlyList<string> skillNames, int price, MonsterAppearance appearance)
         {
             Id = id;
             SkillNames = skillNames;
             Price = price;
+            Appearance = appearance;
         }
 
         public string Id { get; }
 
         public IReadOnlyList<string> SkillNames { get; }
 
+        public MonsterAppearance Appearance { get; }
         public int Price { get; }
     }
 

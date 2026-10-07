@@ -165,7 +165,7 @@ namespace TheCall
                 for (var skill = 0; skill < names.Length; skill++)
                     names[skill] = monster.Skills[skill].Name;
 
-                monsters[i] = new ShelfMonster(monster.Id, names, MonsterPrice(monster));
+                monsters[i] = new ShelfMonster(monster.Id, names, MonsterPrice(monster), monster.Appearance);
             }
 
             return monsters;

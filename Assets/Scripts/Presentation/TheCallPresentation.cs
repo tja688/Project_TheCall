@@ -66,6 +66,9 @@ namespace TheCall
         {
             if (_toast != null && _toast.activeSelf && Time.unscaledTime >= _noticeUntil)
                 _toast.SetActive(false);
+
+            if (Input.GetKeyDown(KeyCode.Escape) && CanQuitFromOpening())
+                QuitGame();
         }
 
 #if UNITY_EDITOR
@@ -96,6 +99,8 @@ namespace TheCall
                 return;
 
             _wired = true;
+            BindOpeningExitButton();
+            Listen(_opening != null ? _opening.exitButton : null, QuitGame);
             ListenSlots(_opening != null ? _opening.candidates : null, OnKeep);
             Listen(_levelStart != null ? _levelStart.beginButton : null, OnBegin);
             Listen(_operation != null ? _operation.shopButton : null, OnShopLocked);
@@ -276,7 +281,7 @@ namespace TheCall
                 ? "这一局结束。怪物笼、金币和科技都已清空。"
                 : "加班后仍未补足欠额。这一局结束。";
             if (_result.portrait != null)
-                _result.portrait.Show(victory ? "victory" : "failed");
+                _result.portrait.Show(MonsterAppearance.FromSeed(victory ? 73 : 29));
         }
 
         void FillList(MonsterSlotView[] slots, IReadOnlyList<MonsterView> monsters, string selectedId)
@@ -360,7 +365,7 @@ namespace TheCall
             {
                 slot.portrait.gameObject.SetActive(occupied);
                 if (occupied)
-                    slot.portrait.Show(monster.Id);
+                    slot.portrait.Show(monster.Appearance);
                 else
                     slot.portrait.Clear();
             }
@@ -394,7 +399,7 @@ namespace TheCall
             if (card.portrait != null)
             {
                 card.portrait.gameObject.SetActive(true);
-                card.portrait.Show(item.Id);
+                card.portrait.Show(item.Appearance);
             }
 
             if (card.icon != null)
@@ -630,6 +635,33 @@ namespace TheCall
             TheCallApp.Reset();
             StartSession();
             Notice("回到开局。");
+        }
+
+        void BindOpeningExitButton()
+        {
+            if (_opening == null || _opening.exitButton != null)
+                return;
+
+            var exit = _opening.transform.Find("ExitButton");
+            if (exit != null)
+                _opening.exitButton = exit.GetComponent<UnityEngine.UI.Button>();
+        }
+
+        bool CanQuitFromOpening()
+        {
+            if (_busy || _opening == null || !_opening.gameObject.activeInHierarchy)
+                return false;
+
+            return this.SendQuery(new RunPhaseQuery()) == RunPhase.Opening;
+        }
+
+        static void QuitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         void Run(Action send, Func<bool> succeeded, string success, string failure)

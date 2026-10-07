@@ -21,9 +21,11 @@
 ## 换自己的图
 
 - 背景、面板、按钮、科研图标、博士立绘：选中对应物体上的 `Image`，把 Sprite 换成自己的图。物体名里带 `BackgroundImage`、`PanelImage`、`IconImage`、`PortraitImage`、`BeltImage`、`RecycleIcon`、`TrashIcon` 的都是预留位。
-- 怪物拼接：编辑预制体 `Assets/Prefabs/UI/MonsterPortrait.prefab`。`Body`、`Tail`、`Foot`、`Hand`、`Head`、`Eye`、`Mouth`、`Hat`、`Accessory` 各是一层，画在同一张 142×102 画布上，所以默认铺满同一个矩形。要微调，拖这些层，不要改代码。运行时只替换 Sprite，位置会保留。
-- 部件图放在 `Assets/Resources/MonsterParts` 各文件夹。同一只怪物用稳定组合，在收容笼、生产区、培育室和商店里长得一样。
-- 工具图和说明在商店界面的 `工具图标` 上。这个物体默认隐藏，在层级里选中后给 `急急装置`、`上级员工证`、`独孤装置` 指定 Sprite 和说明。
+ - 怪物拼接：`Assets/Prefabs/UI/MonsterPortrait.prefab` 使用 142x102 原画坐标；每层保持同尺寸完整透明画布、Full Rect 网格、中心 pivot、Point 过滤和未压缩导入。不要裁透明边或单独拉伸图层。头部组包含头和脸部细节，绘制在身体上方；脚部组绘制在身体下方。运动只旋转组根，不改图片层矩形或 pivot。
+ - 运行时画像配方集中在 `MonsterPortrait.Show(MonsterAppearance)`。当前 6 个已配对的头、身体、眼、嘴、手、脚配方显示兼容组合；帽子、尾巴与胸饰按配方选择性显示。主色只给身体、头和脚着色，黑色轮廓与表情保留原色。零件数据在 `Assets/Resources/MonsterParts`，源稿在 `Assets/Arts/Others/怪物部位`。改稿后同步运行时资源，并保持同名、同尺寸和同像素坐标。
+ - 每只怪物在 `Monster` 中保存不可变的 `MonsterAppearance`（配方索引、调色板索引），由怪物查询和商店查询传给 UI。同一怪物在收容笼、操作区、商店和悬浮详情保持同一外观。后代取第一位亲本的兼容配方、第二位亲本的主色；单亲本时两者都来自该亲本。外观不参与技能、报价、战斗效果或售价。
+ - 操作区拖拽只为当前拖拽副本积分一个受限阻尼弹簧：头部最多转 7 度、脚部最多转 5 度；原画像静止，松手后拖拽副本销毁。这是 UI 弹簧响应，不包含刚体碰撞模拟。
+ - 工具图和说明在商店界面的 `工具图标` 上。这个物体默认隐藏，在层级里选中后给 `急急装置`、`上级员工证`、`独孤装置` 指定 Sprite 和说明。
 
 菜单 `The Call/重建表现层界面` 会按脚本重搭整套界面，并覆盖已经改过的位置和图片。日常改界面不要用它。
 

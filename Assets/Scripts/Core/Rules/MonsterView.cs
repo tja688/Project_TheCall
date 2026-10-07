@@ -29,12 +29,13 @@ namespace TheCall
                     .ToArray(),
                 monster.Modifier,
                 monster.Immovable,
-                monster.Capacity);
+                monster.Capacity,
+                monster.Appearance);
     }
 
     public sealed class MonsterView
     {
-        public MonsterView(string id, IReadOnlyList<SkillView> skills, int modifier, bool immovable, int capacity)
+        public MonsterView(string id, IReadOnlyList<SkillView> skills, int modifier, bool immovable, int capacity, MonsterAppearance appearance)
         {
             Id = id;
             Skills = skills;
@@ -42,6 +43,7 @@ namespace TheCall
             Modifier = modifier;
             Immovable = immovable;
             Capacity = capacity;
+            Appearance = appearance;
         }
 
         public string Id { get; }
@@ -53,6 +55,7 @@ namespace TheCall
         public int Modifier { get; }
 
         public bool Immovable { get; }
+        public MonsterAppearance Appearance { get; }
 
         public int Capacity { get; }
     }

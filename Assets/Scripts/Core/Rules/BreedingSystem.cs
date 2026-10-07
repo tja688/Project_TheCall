@@ -20,6 +20,9 @@ namespace TheCall
                     continue;
                 }
 
+                var firstAppearance = parents[slot % parents.Count].Appearance;
+                var secondAppearance = parents[(slot + 1) % parents.Count].Appearance;
+                var appearance = new MonsterAppearance(firstAppearance.Recipe, secondAppearance.Palette);
                 var names = Inherit(parents, draw);
                 var tech = this.GetUtility<TechCatalog>();
                 if (!string.IsNullOrEmpty(skill))
@@ -41,7 +44,7 @@ namespace TheCall
                 if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(TechCatalog.Percent))
                     modifier += TechCatalog.ModifierAmount;
 
-                run.AddToCage(run.CreateMonster(names, modifier));
+                run.AddToCage(run.CreateMonster(names, modifier, appearance));
             }
         }
 
