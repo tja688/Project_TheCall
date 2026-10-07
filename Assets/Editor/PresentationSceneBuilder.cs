@@ -47,6 +47,19 @@ namespace TheCall.Editor
             if (EditorApplication.isPlaying)
                 return "请先退出播放模式。";
 
+            EditorApplication.LockReloadAssemblies();
+            try
+            {
+                return BuildInternal();
+            }
+            finally
+            {
+                EditorApplication.UnlockReloadAssemblies();
+            }
+        }
+
+        static string BuildInternal()
+        {
             ConfigureParts();
             EnsureFolder("Assets/Prefabs", "UI");
             _ui = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
@@ -800,32 +813,59 @@ namespace TheCall.Editor
         static void ConfigureParts()
         {
             var guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Resources/MonsterParts" });
-            foreach (var guid in guids)
+            AssetDatabase.StartAssetEditing();
+            try
             {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
-                    continue;
+                foreach (var guid in guids)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(guid);
+                    if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
+                        continue;
 
-                var settings = new TextureImporterSettings();
-                importer.ReadTextureSettings(settings);
-                settings.textureType = TextureImporterType.Sprite;
-                settings.spriteMode = (int)SpriteImportMode.Single;
-                settings.alphaIsTransparency = true;
-                settings.mipmapEnabled = false;
-                settings.filterMode = FilterMode.Point;
-                settings.spriteMeshType = SpriteMeshType.FullRect;
-                settings.spriteAlignment = (int)SpriteAlignment.Center;
-                settings.spritePixelsPerUnit = 100f;
-                importer.SetTextureSettings(settings);
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                importer.alphaIsTransparency = true;
-                importer.mipmapEnabled = false;
-                importer.filterMode = FilterMode.Point;
-                importer.spritePixelsPerUnit = 100f;
-                importer.textureCompression = TextureImporterCompression.Uncompressed;
-                importer.SaveAndReimport();
+                    if (PartImportSettingsMatch(importer))
+                        continue;
+
+                    ApplyPartImportSettings(importer);
+                    importer.SaveAndReimport();
+                }
             }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+        }
+
+        static bool PartImportSettingsMatch(TextureImporter importer)
+        {
+            return importer.textureType == TextureImporterType.Sprite
+                   && importer.spriteImportMode == SpriteImportMode.Single
+                   && importer.alphaIsTransparency
+                   && !importer.mipmapEnabled
+                   && importer.filterMode == FilterMode.Point
+                   && Mathf.Approximately(importer.spritePixelsPerUnit, 100f)
+                   && importer.textureCompression == TextureImporterCompression.Uncompressed;
+        }
+
+        static void ApplyPartImportSettings(TextureImporter importer)
+        {
+            var settings = new TextureImporterSettings();
+            importer.ReadTextureSettings(settings);
+            settings.textureType = TextureImporterType.Sprite;
+            settings.spriteMode = (int)SpriteImportMode.Single;
+            settings.alphaIsTransparency = true;
+            settings.mipmapEnabled = false;
+            settings.filterMode = FilterMode.Point;
+            settings.spriteMeshType = SpriteMeshType.FullRect;
+            settings.spriteAlignment = (int)SpriteAlignment.Center;
+            settings.spritePixelsPerUnit = 100f;
+            importer.SetTextureSettings(settings);
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.filterMode = FilterMode.Point;
+            importer.spritePixelsPerUnit = 100f;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
         }
 
         static Sprite FirstSprite(string folder)
@@ -864,7 +904,7 @@ namespace TheCall.Editor
 
         static void DestroyNamed(string name)
         {
-            var objects = UnityEngine.Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var objects = UnityEngine.Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include);
             foreach (var candidate in objects)
             {
                 if (candidate != null && candidate.name == name && candidate.transform.parent == null)

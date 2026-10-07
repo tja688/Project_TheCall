@@ -49,12 +49,12 @@ MonoBehaviour:
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
-  addAllPrefabsToManager: 1
+  addAllPrefabsToManager: 0
   collectDependenciesDepth: 4
   collectDependenciesTimeout: 10
-  updateReferencesWhenSceneChanges: 1
-  updateReferencesWhenSceneIsSaved: 1
-  updateReferencesWhenSceneIsOpened: 1
+  updateReferencesWhenSceneChanges: 0
+  updateReferencesWhenSceneIsSaved: 0
+  updateReferencesWhenSceneIsOpened: 0
   referenceFolders: []
   logDebugInfo: 0
   logWarnings: 1

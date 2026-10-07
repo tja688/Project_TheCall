@@ -46,8 +46,9 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
 
     private static void PlayModeStateChanged(PlayModeStateChange state)
     {
-        if (state == PlayModeStateChange.ExitingEditMode)
-            UpdateAssembliesContainingES3Types();
+        if (state == PlayModeStateChange.ExitingEditMode
+            && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
+            ScheduleUpdateAssembliesContainingES3Types();
     }
 
     private static void OnSceneOpened(Scene scene, OpenSceneMode mode)
@@ -171,13 +172,28 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
         {
             if(ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences && ES3Settings.defaultSettingsScriptableObject.updateReferencesWhenSceneIsSaved)
                 RefreshReferences();
-            UpdateAssembliesContainingES3Types();
+            if (ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
+                ScheduleUpdateAssembliesContainingES3Types();
         }
         return paths;
     }
 
     #endregion
 
+    static bool s_PendingAssemblyUpdate;
+
+    static void ScheduleUpdateAssembliesContainingES3Types()
+    {
+        if (s_PendingAssemblyUpdate)
+            return;
+
+        s_PendingAssemblyUpdate = true;
+        EditorApplication.delayCall += () =>
+        {
+            s_PendingAssemblyUpdate = false;
+            UpdateAssembliesContainingES3Types();
+        };
+    }
 
     private static void UpdateAssembliesContainingES3Types()
     {
