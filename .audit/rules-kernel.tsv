@@ -3,3 +3,4 @@ ts	phase	decision	why	evidence	result
 2026-10-07T08:40:00Z	frame	done means four checks all pass	the designer needs one calculation both Unity and the published page run	.audit/grounding.md	open
 2026-10-07T08:50:00Z	phase-b	three kernel slices are in; three package designs are writing to separate folders	the host boundary is a one-way door, so the designs stay apart until one is picked	.audit/explorer-findings.md	open
 2026-10-07T09:05:00Z	phase-c	picked the dual compile and one content book	Unity presentation keeps the real QFramework commands, and the web build does not reference Unity	.audit/SYNTHESIS.md	tests green
+2026-10-07T09:10:00Z	audit	the live page is thecall-bench, not the private game repo	the private plan refused GitHub Pages, so the public bench is a snapshot and dev pushes only run dotnet test	https://tja688.github.io/thecall-bench/	supersedes phase-c tests green
