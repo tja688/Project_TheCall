@@ -29,7 +29,7 @@ namespace TheCall
 
     internal sealed class BenchReport
     {
-        public BenchReport(int produced, int due, int excessAt, bool meetsDue, bool meetsExcess, IReadOnlyList<SettlementEntry> entries)
+        public BenchReport(int produced, int due, int excessAt, bool meetsDue, bool meetsExcess, IReadOnlyList<SettlementEntry> entries, IReadOnlyList<string> placed)
         {
             Produced = produced;
             Due = due;
@@ -37,6 +37,7 @@ namespace TheCall
             MeetsDue = meetsDue;
             MeetsExcess = meetsExcess;
             Entries = entries;
+            Placed = placed ?? Array.Empty<string>();
         }
 
         public int Produced { get; }
@@ -50,6 +51,8 @@ namespace TheCall
         public bool MeetsExcess { get; }
 
         public IReadOnlyList<SettlementEntry> Entries { get; }
+
+        public IReadOnlyList<string> Placed { get; }
     }
 
     internal sealed class BenchRejectedException : Exception
@@ -75,8 +78,9 @@ namespace TheCall
             var tools = architecture.GetUtility<IToolCatalog>();
             Check(board, skills, tools);
             architecture.GetSystem<FlowSystem>().Lay(board);
+            var placed = architecture.GetModel<LevelModel>().CaptureExtraction();
             architecture.GetSystem<SettlementSystem>().Settle();
-            return Report(architecture);
+            return Report(architecture, placed);
         }
 
         static void Check(BenchBoard board, SkillCatalog skills, IToolCatalog tools)
@@ -112,7 +116,7 @@ namespace TheCall
             }
         }
 
-        static BenchReport Report(IArchitecture architecture)
+        static BenchReport Report(IArchitecture architecture, IReadOnlyList<string> placed)
         {
             var entries = architecture.GetSystem<SettlementSystem>().Entries;
             var produced = 0;
@@ -131,7 +135,7 @@ namespace TheCall
             var level = architecture.GetModel<LevelModel>();
             var meetsDue = payment != null && payment.Shortfall == 0 && !payment.Failed;
             var meetsExcess = payment != null && payment.Excess;
-            return new BenchReport(produced, level.EnergyDue, level.ExcessEnergy, meetsDue, meetsExcess, entries);
+            return new BenchReport(produced, level.EnergyDue, level.ExcessEnergy, meetsDue, meetsExcess, entries, placed);
         }
 
         static bool Known(SkillCatalog skills, string name)

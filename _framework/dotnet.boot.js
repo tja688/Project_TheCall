@@ -1,7 +1,7 @@
 export const config = /*json-start*/{
   "mainAssemblyName": "TheCall.Page.dll",
   "resources": {
-    "hash": "sha256-vDzaCRrj4tn5hMIDa3TAZ+NP4ZFcGr0DPGMwfip72Ec=",
+    "hash": "sha256-XmQEfu8jZwNRCXWopIk7aVnPrfp8G3a9uXXvmuBNIE0=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.js"
@@ -74,17 +74,17 @@ export const config = /*json-start*/{
       {
         "virtualPath": "TheCall.Page.wasm",
         "name": "TheCall.Page.wasm",
-        "hash": "sha256-95+T1O1l+u/oGVZ7KbYYWS/XDGQ7Zk5XHzzMAmUNn4c="
+        "hash": "sha256-i5TUz5u1lPUpSP77RhvVA6xx2yTtrEcTq4NR/arVyTM="
       },
       {
         "virtualPath": "TheCall.QfSubset.wasm",
         "name": "TheCall.QfSubset.wasm",
-        "hash": "sha256-bZEPr6e7JfULl4F4IRWVoaIPh5UzFxMdZPRj8kOKewY="
+        "hash": "sha256-682guxO1Lda5ExfgbSo/NIQshlS6zflYX5X74Kc1XZk="
       },
       {
         "virtualPath": "TheCall.Rules.wasm",
         "name": "TheCall.Rules.wasm",
-        "hash": "sha256-4P4GQ9d3DtWvC2bIEQw9IWZRqeSGmG+JpBx40VfXbtU="
+        "hash": "sha256-Ril614guWwV9tLUrKVKKafoGwD81UDF8QYHYoDq5n8Q="
       }
     ]
   },

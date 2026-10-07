@@ -61,6 +61,9 @@ namespace TheCall.Tests
             Assert.That(side.SideCount, Is.EqualTo(1));
             Assert.That(side.Base, Is.EqualTo(2));
             Assert.That(side.Energy, Is.EqualTo(2));
+            Assert.That(side.MonsterId, Is.EqualTo(report.Placed[1]));
+            Assert.That(report.Placed[0], Is.Not.EqualTo(report.Placed[1]));
+            Assert.That(report.Placed[3], Is.Null);
         }
     }
 }

@@ -154,6 +154,16 @@ namespace TheCall
             buffer.Append(",\"excessAt\":").Append(report.ExcessAt);
             buffer.Append(",\"meetsDue\":").Append(report.MeetsDue ? "true" : "false");
             buffer.Append(",\"meetsExcess\":").Append(report.MeetsExcess ? "true" : "false");
+            buffer.Append(",\"placed\":[");
+            for (var i = 0; i < report.Placed.Count; i++)
+            {
+                if (i > 0)
+                    buffer.Append(',');
+
+                buffer.Append(Quote(report.Placed[i]));
+            }
+
+            buffer.Append(']');
             buffer.Append(",\"landings\":[");
             var landingIndex = 0;
             var swapIndex = 0;
@@ -229,8 +239,98 @@ namespace TheCall
                 removalIndex++;
             }
 
-            buffer.Append("]}");
+            buffer.Append(']');
+            AppendSteps(buffer, report);
+            buffer.Append('}');
             return buffer.ToString();
+        }
+
+        static void AppendSteps(StringBuilder buffer, BenchReport report)
+        {
+            buffer.Append(",\"steps\":[");
+            var first = true;
+            for (var i = 0; i < report.Entries.Count; i++)
+            {
+                var entry = report.Entries[i];
+                var landing = entry as SettlementLanding;
+                var swap = entry as SettlementSwap;
+                var removal = entry as SettlementRemoval;
+                var payment = entry as SettlementPayment;
+                if (landing == null && swap == null && removal == null && payment == null)
+                    continue;
+
+                if (!first)
+                    buffer.Append(',');
+
+                first = false;
+                if (landing != null)
+                    AppendLandingStep(buffer, landing);
+                else if (swap != null)
+                    AppendSwapStep(buffer, swap);
+                else if (removal != null)
+                    AppendRemovalStep(buffer, removal);
+                else
+                    AppendPaymentStep(buffer, payment);
+            }
+
+            buffer.Append(']');
+        }
+
+        static void AppendLandingStep(StringBuilder buffer, SettlementLanding landing)
+        {
+            buffer.Append("{\"kind\":\"landing\",\"monsterId\":").Append(Quote(landing.MonsterId));
+            buffer.Append(",\"skillName\":").Append(Quote(landing.SkillName));
+            buffer.Append(",\"quote\":").Append(landing.Quote);
+            buffer.Append(",\"sideCount\":").Append(landing.SideCount);
+            buffer.Append(",\"side\":").Append(landing.Side ? "true" : "false");
+            buffer.Append(",\"adds\":[");
+            for (var i = 0; i < landing.Adds.Count; i++)
+            {
+                if (i > 0)
+                    buffer.Append(',');
+
+                buffer.Append("{\"label\":").Append(Quote(landing.Adds[i].Label));
+                buffer.Append(",\"amount\":").Append(landing.Adds[i].Amount).Append('}');
+            }
+
+            buffer.Append("],\"factors\":[");
+            for (var i = 0; i < landing.Factors.Count; i++)
+            {
+                if (i > 0)
+                    buffer.Append(',');
+
+                buffer.Append("{\"label\":").Append(Quote(landing.Factors[i].Label));
+                buffer.Append(",\"factor\":").Append(landing.Factors[i].Factor).Append('}');
+            }
+
+            buffer.Append("],\"base\":").Append(landing.Base);
+            buffer.Append(",\"multiplier\":").Append(landing.Multiplier);
+            buffer.Append(",\"energy\":").Append(landing.Energy);
+            buffer.Append(",\"writeback\":").Append(landing.Writeback).Append('}');
+        }
+
+        static void AppendSwapStep(StringBuilder buffer, SettlementSwap swap)
+        {
+            buffer.Append("{\"kind\":\"swap\",\"actorId\":").Append(Quote(swap.ActorId));
+            buffer.Append(",\"targetId\":").Append(Quote(swap.TargetId));
+            buffer.Append(",\"happened\":").Append(swap.Happened ? "true" : "false").Append('}');
+        }
+
+        static void AppendRemovalStep(StringBuilder buffer, SettlementRemoval removal)
+        {
+            buffer.Append("{\"kind\":\"removal\",\"monsterId\":").Append(Quote(removal.MonsterId));
+            buffer.Append(",\"sourceId\":").Append(Quote(removal.SourceId));
+            buffer.Append(",\"happened\":").Append(removal.Happened ? "true" : "false").Append('}');
+        }
+
+        static void AppendPaymentStep(StringBuilder buffer, SettlementPayment payment)
+        {
+            buffer.Append("{\"kind\":\"payment\",\"deducted\":").Append(payment.Deducted);
+            buffer.Append(",\"shortfall\":").Append(payment.Shortfall);
+            buffer.Append(",\"overtime\":").Append(payment.Overtime ? "true" : "false");
+            buffer.Append(",\"failed\":").Append(payment.Failed ? "true" : "false");
+            buffer.Append(",\"excess\":").Append(payment.Excess ? "true" : "false");
+            buffer.Append(",\"wage\":").Append(payment.Wage).Append('}');
         }
 
         static string Join(BenchReport report, Func<SettlementEntry, bool> match, Action<SettlementEntry, bool> write)

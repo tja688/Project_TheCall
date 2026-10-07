@@ -12,7 +12,7 @@
       <label>关卡 <select id="level"></select></label>
       <div id="tools"></div>
       <button id="settle" type="button">结算</button>
-      <p id="report"></p>
+      <p id="report" class="pending">尚未结算</p>
     </header>
     <section id="bench-panel">
       <h1>能量产出台</h1>
@@ -20,7 +20,10 @@
     </section>
     <div id="lower">
       <section id="library">
-        <h2>怪物库</h2>
+        <div class="panel-head">
+          <h2>怪物库</h2>
+          <p class="panel-note">拖进格子后按出现顺序编号，例如 1号怪物、2号怪物。编号一直跟着这只怪物，不跟技能名走。</p>
+        </div>
         <div id="monster-grid"></div>
       </section>
       <div id="side">
@@ -35,10 +38,17 @@
       </div>
     </div>
     <section id="ledger">
-      <h2>结算记录</h2>
-      <p id="ledger-note">每一次落地单独一行。底数先把报价和加项相加；侧向技能再乘那一侧的怪物数；能量等于底数乘倍率。</p>
+      <h2>结算</h2>
+      <div id="ledger-summary">
+        <p class="stat"><span>本次产出</span><strong>—</strong></p>
+        <p class="stat"><span>本关应交</span><strong>—</strong></p>
+        <p class="stat"><span>交款</span><strong>尚未结算</strong></p>
+        <p class="stat"><span>超额线</span><strong>—</strong></p>
+        <p class="stat"><span>超额</span><strong>尚未结算</strong></p>
+      </div>
+      <p id="ledger-note">按时间顺序读。每一条是一只怪物触发的一次技能：先报价，再加项，得到底数；侧向技能还要乘那一侧的怪物数；能量等于底数乘倍率。</p>
       <div id="ledger-body">
-        <p class="ledger-empty">点结算后，这里列出报价、加项、倍率、底数、能量和写回。</p>
+        <p class="ledger-empty">还没有结算。怪物放上格子后点结算，时间线会列在这里。</p>
       </div>
     </section>
   </div>

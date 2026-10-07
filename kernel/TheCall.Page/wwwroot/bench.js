@@ -56,21 +56,18 @@ for (const skill of catalog.skills)
   skill.aura = auraFrom(skill.effects);
 
 byName = new Map(catalog.skills.map((skill) => [skill.name, skill]));
-status.textContent = "单击拿起再放下，或直接拖。怪物回库即撤下，技能上卡即装上，技能回库即卸下。";
+status.textContent = "单击拿起再放下，或直接拖。格子上的怪物按出现顺序编号。怪物回库即撤下，技能上卡即装上，技能回库即卸下。";
 renderLevels();
 renderTools();
 fitBench(readCells());
 renderBoard();
+renderLedger(null, null);
 
 document.querySelector("#settle").addEventListener("click", settle);
 window.addEventListener("pointerdown", onDown);
 window.addEventListener("pointermove", onMove);
 window.addEventListener("pointerup", onUp);
 window.addEventListener("pointercancel", cancelGesture);
-window.addEventListener("resize", () => {
-  if (!drag)
-    renderBoard();
-});
 
 function renderLevels() {
   levelSelect.replaceChildren();
@@ -160,9 +157,6 @@ function renderBench() {
 
 function renderLibrary() {
   const grid = document.querySelector("#monster-grid");
-  const shape = pack(catalog.skills.length, monsterColumns());
-  grid.style.setProperty("--cols", String(shape.cols));
-  grid.style.setProperty("--rows", String(shape.rows));
   grid.replaceChildren();
   for (const skill of catalog.skills)
     grid.append(buildCard({ skills: [skill.name] }, null, "template"));
@@ -186,9 +180,6 @@ function renderSlots() {
 
 function renderSkillLibrary() {
   const grid = document.querySelector("#skill-grid");
-  const shape = pack(catalog.skills.length, skillColumns());
-  grid.style.setProperty("--cols", String(shape.cols));
-  grid.style.setProperty("--rows", String(shape.rows));
   grid.replaceChildren();
   for (const skill of catalog.skills) {
     const chip = skillChip(skill.name);
@@ -207,15 +198,22 @@ function buildCard(monster, adjust, payload) {
   else
     card.dataset.id = monster.id;
 
+  const named = payload === "monster";
   const head = el("div", "head");
   const glyph = el("div", "glyph");
   glyph.innerHTML = monsterSvg(first.name, first.rarity);
   const who = el("div", "who");
-  who.append(el("strong", rarityClass(first.rarity), first.name));
-  who.append(el("span", "meta", metaLine(first)));
+  if (named) {
+    who.append(el("span", "kicker", "怪物"));
+    who.append(el("strong", "", monsterTitle(monster)));
+  } else {
+    who.append(el("span", "kicker", "技能"));
+    who.append(el("strong", rarityClass(first.rarity), first.name));
+    who.append(el("span", "meta", metaLine(first)));
+  }
   head.append(glyph, who);
-  if (payload === "monster")
-    pressable(head, first.name);
+  if (named)
+    pressable(head, monsterTitle(monster));
   else
     pressable(card, first.name);
 
@@ -224,14 +222,14 @@ function buildCard(monster, adjust, payload) {
   monster.skills.forEach((name, index) => {
     const skill = byName.get(name);
     const line = el("p", "line");
-    if (payload === "monster") {
+    if (named) {
       line.dataset.payload = "worn";
       line.dataset.id = monster.id;
       line.dataset.index = String(index);
       pressable(line, skill.name);
     }
 
-    if (monster.skills.length > 1) {
+    if (named || monster.skills.length > 1) {
       line.append(el("b", rarityClass(skill.rarity), skill.name));
       line.append(document.createTextNode(" "));
       line.append(el("span", "meta", metaLine(skill)));
@@ -281,24 +279,6 @@ function skillsOf(id) {
 
 function auraOf(name) {
   return byName.get(name).aura;
-}
-
-function monsterColumns() {
-  if (window.innerWidth < 1100)
-    return 3;
-  if (window.innerWidth < 1400)
-    return 4;
-
-  return 5;
-}
-
-function skillColumns() {
-  return window.innerWidth < 1200 ? 2 : 3;
-}
-
-function pack(count, columns) {
-  const cols = Math.max(1, Math.min(columns, count));
-  return { cols, rows: Math.ceil(count / cols) };
 }
 
 function onDown(event) {
@@ -439,10 +419,15 @@ function removeMonster(id) {
 }
 
 function createMonster(skill) {
-  const id = String(nextId);
+  const number = nextId;
   nextId += 1;
-  monsters.set(id, { id, skills: [skill] });
+  const id = String(number);
+  monsters.set(id, { id, number, skills: [skill] });
   return id;
+}
+
+function monsterTitle(monster) {
+  return monster.number + "号怪物";
 }
 
 function equipOnto(id, skill) {
@@ -641,7 +626,7 @@ function ghostLabel(payload) {
   if (payload.type === "template" || payload.type === "skill-copy")
     return payload.skill;
   if (payload.type === "monster")
-    return monsters.get(payload.id).skills[0];
+    return monsterTitle(monsters.get(payload.id));
   if (payload.type === "skill-chip")
     return skillSlots[payload.index];
 
@@ -697,14 +682,11 @@ function settle() {
 }
 
 function summaryText(result) {
-  return "产出 " + result.produced +
-    " · 应交 " + result.due +
-    " · " + (result.meetsDue ? "达到应交" : "未达应交") +
-    " · 超额 " + result.excessAt +
-    " · " + (result.meetsExcess ? "达到超额" : "未达超额");
+  return "产出 " + result.produced + " · 应交 " + result.due + " · " + (result.meetsDue ? "达到应交" : "未达应交");
 }
 
 function renderLedger(result, error) {
+  renderSummary(result);
   const body = document.querySelector("#ledger-body");
   body.replaceChildren();
   if (error) {
@@ -712,84 +694,267 @@ function renderLedger(result, error) {
     return;
   }
 
-  const summary = el("p", result.meetsDue ? "hit" : "miss", summaryText(result));
-  body.append(summary);
-  const labels = engineLabels();
-  if (result.landings.length === 0) {
-    body.append(el("p", "ledger-empty", "这次没有落地。"));
-  } else {
-    body.append(landingTable(result.landings, labels));
+  if (!result) {
+    body.append(el("p", "ledger-empty", "还没有结算。怪物放上格子后点结算，时间线会列在这里。"));
+    return;
   }
 
-  if (result.swaps.length > 0) {
-    body.append(el("p", "ledger-extra", "换位　" + result.swaps.map((swap) =>
-      placedName(labels, swap.actorId) + " → " + placedName(labels, swap.targetId) + (swap.happened ? " 发生" : " 未发生")
-    ).join(" · ")));
+  const steps = timelineOf(result);
+  if (steps.length === 0) {
+    body.append(el("p", "ledger-empty", "这次没有任何记录。"));
+    return;
   }
 
-  if (result.removals.length > 0) {
-    body.append(el("p", "ledger-extra", "消灭　" + result.removals.map((removal) =>
-      placedName(labels, removal.monsterId) + (removal.happened ? " 已消灭" : " 未消灭")
-    ).join(" · ")));
-  }
-}
+  const labels = engineLabels(result.placed);
+  let running = 0;
+  steps.forEach((step, index) => {
+    const order = index + 1;
+    if (step.kind === "landing") {
+      running += step.energy;
+      body.append(renderLanding(step, order, labels, running));
+      return;
+    }
 
-function landingTable(landings, labels) {
-  const table = document.createElement("table");
-  const head = document.createElement("tr");
-  for (const title of ["次序", "怪物", "技能", "报价", "加项", "侧向", "倍率", "底数", "能量", "写回", "算式"])
-    head.append(el("th", "", title));
-
-  table.append(head);
-  landings.forEach((landing, index) => {
-    const added = landing.adds.reduce((sum, add) => sum + add.amount, 0);
-    const side = isSideSkill(landing.skillName);
-    const line = document.createElement("tr");
-    const values = [
-      String(index + 1),
-      placedName(labels, landing.monsterId),
-      landing.skillName,
-      String(landing.quote),
-      landing.adds.length ? landing.adds.map((add) => add.label + " +" + add.amount).join("，") : "无",
-      side ? String(landing.sideCount) : "—",
-      landing.factors.length ? landing.factors.map((factor) => factor.label + " ×" + factor.factor).join("，") : "×1",
-      String(landing.base),
-      String(landing.energy),
-      String(landing.writeback),
-    ];
-    for (const value of values)
-      line.append(el("td", "", value));
-
-    line.append(el("td", "formula", landingFormula(landing, added, side)));
-    table.append(line);
+    if (step.kind === "swap")
+      body.append(renderSwap(step, order, labels));
+    else if (step.kind === "removal")
+      body.append(renderRemoval(step, order, labels));
+    else if (step.kind === "payment")
+      body.append(renderPayment(step, order, result));
   });
-  return table;
 }
 
-function landingFormula(landing, added, side) {
-  const quote = added === 0 ? String(landing.quote) : landing.quote + " + " + added;
-  const tail = " × " + landing.multiplier + " = " + landing.energy;
-  if (side)
-    return "(" + quote + ") × " + landing.sideCount + tail;
-
-  return "(" + quote + ")" + tail;
+function renderSummary(result) {
+  const host = document.querySelector("#ledger-summary");
+  const rows = result
+    ? [
+      ["本次产出", String(result.produced), result.meetsDue ? "hit" : "miss"],
+      ["本关应交", String(result.due), ""],
+      ["交款", result.meetsDue ? "达到应交" : "未达应交", result.meetsDue ? "hit" : "miss"],
+      ["超额线", String(result.excessAt), ""],
+      ["超额", result.meetsExcess ? "达到超额" : "未达超额", result.meetsExcess ? "hit" : "miss"],
+    ]
+    : [
+      ["本次产出", "—", ""],
+      ["本关应交", "—", ""],
+      ["交款", "尚未结算", ""],
+      ["超额线", "—", ""],
+      ["超额", "尚未结算", ""],
+    ];
+  host.replaceChildren();
+  for (const [label, value, tone] of rows) {
+    const stat = el("p", "stat");
+    stat.append(el("span", "", label));
+    stat.append(el("strong", tone, value));
+    host.append(stat);
+  }
 }
 
-function isSideSkill(name) {
-  const skill = byName.get(name);
+function timelineOf(result) {
+  if (Array.isArray(result.steps))
+    return result.steps;
+
+  const steps = [];
+  for (const landing of result.landings)
+    steps.push(Object.assign({ kind: "landing" }, landing));
+  for (const swap of result.swaps)
+    steps.push(Object.assign({ kind: "swap" }, swap));
+  for (const removal of result.removals)
+    steps.push(Object.assign({ kind: "removal" }, removal));
+
+  return steps;
+}
+
+function renderLanding(step, order, labels, running) {
+  const beat = el("article", "beat");
+  beat.append(beatHead(order, placedName(labels, step.monsterId), step.skillName));
+  const math = el("dl", "math");
+  addMath(math, "报价", quoteText(step));
+  addMath(math, "加项", addsText(step));
+  addMath(math, "底数", baseText(step));
+  addMath(math, "倍率", factorText(step));
+  addMath(math, "能量", step.base + " × " + step.multiplier + " = " + step.energy, "sum");
+  addMath(math, "写回", step.writeback + "。下次这张技能报价读这个数");
+  addMath(math, "累计", "到这一步，产出合计 " + running);
+  beat.append(math);
+  return beat;
+}
+
+function renderSwap(step, order, labels) {
+  const actor = placedName(labels, step.actorId);
+  const target = placedName(labels, step.targetId);
+  const text = step.happened
+    ? actor + " 和 " + target + " 交换了位置。"
+    : actor + " 想和 " + target + " 交换位置，这次没有换成。";
+  return plainBeat(order, "换位", text);
+}
+
+function renderRemoval(step, order, labels) {
+  let text;
+  if (step.happened)
+    text = placedName(labels, step.monsterId) + " 离开了这一排。已经落地的能量还在。";
+  else if (!step.monsterId && step.sourceId)
+    text = placedName(labels, step.sourceId) + " 想消灭相邻的怪物，旁边没有可以消灭的。";
+  else if (!step.monsterId)
+    text = "这次消灭没有找到目标。";
+  else
+    text = placedName(labels, step.monsterId) + " 还在这一排上，没有被消灭。";
+
+  return plainBeat(order, "消灭", text);
+}
+
+function renderPayment(step, order, result) {
+  let text;
+  if (step.failed)
+    text = "加班后仍差 " + step.shortfall + "，这局失败。";
+  else if (step.shortfall > 0)
+    text = "还差 " + step.shortfall + "，进入加班。下次只要补上这个差额。";
+  else
+    text = "扣除应交 " + step.deducted + "，已经付清。";
+
+  if (result.meetsExcess)
+    text += "产出达到超额线 " + result.excessAt + "。";
+  else
+    text += "产出未达超额线 " + result.excessAt + "。";
+
+  if (!step.failed && step.shortfall === 0 && step.wage)
+    text += "这次得到金币 " + step.wage + "。";
+
+  return plainBeat(order, "交款", text);
+}
+
+function beatHead(order, monsterName, skillName) {
+  const head = el("header", "beat-head");
+  head.append(el("span", "beat-index", String(order)));
+  const title = el("p", "beat-title");
+  title.append(el("strong", "", monsterName));
+  title.append(document.createTextNode(" 触发了技能 "));
+  title.append(el("b", "skill-name", skillName));
+  head.append(title);
+  return head;
+}
+
+function plainBeat(order, label, text) {
+  const beat = el("article", "beat plain");
+  const head = el("header", "beat-head");
+  head.append(el("span", "beat-index", String(order)));
+  const title = el("p", "beat-title");
+  title.append(el("strong", "", label));
+  head.append(title);
+  beat.append(head);
+  beat.append(el("p", "event-line", text));
+  return beat;
+}
+
+function addMath(list, term, text, className) {
+  list.append(el("dt", "", term));
+  list.append(el("dd", className || "", text));
+}
+
+function quoteText(step) {
+  if (landingIsSide(step))
+    return "每只 " + step.quote;
+
+  return String(step.quote);
+}
+
+function addsText(step) {
+  const adds = step.adds || [];
+  if (adds.length === 0)
+    return "没有加项";
+
+  const parts = adds.map(describeAdd);
+  if (adds.length === 1)
+    return parts[0];
+
+  return parts.join("，") + "。加项合计 " + signed(addedOf(step));
+}
+
+function describeAdd(add) {
+  const amount = signed(add.amount);
+  if (add.label === "宿主修正")
+    return "怪物修正 " + amount;
+  if (add.label === "下家")
+    return "上一只怪物留下的加项 " + amount;
+
+  return "其他怪物的技能「" + add.label + "」" + amount;
+}
+
+function baseText(step) {
+  const added = addedOf(step);
+  const core = joined(step.quote, added);
+  if (landingIsSide(step))
+    return "（" + core + "）× " + sideWord(step.skillName) + " " + step.sideCount + " 只 = " + step.base;
+
+  if (added === 0)
+    return step.base + "，就是报价本身";
+
+  return core + " = " + step.base;
+}
+
+function joined(quote, added) {
+  if (added === 0)
+    return String(quote);
+  if (added > 0)
+    return quote + " + " + added;
+
+  return quote + " - " + Math.abs(added);
+}
+
+function factorText(step) {
+  const factors = step.factors || [];
+  if (factors.length === 0)
+    return "没有额外倍率，按 ×1";
+
+  const parts = factors.map((factor) => "「" + factor.label + "」×" + factor.factor);
+  if (factors.length === 1)
+    return parts[0];
+
+  return parts.join("，") + "。连乘后 ×" + step.multiplier;
+}
+
+function addedOf(step) {
+  return (step.adds || []).reduce((total, add) => total + add.amount, 0);
+}
+
+function signed(amount) {
+  if (amount > 0)
+    return "+" + amount;
+
+  return String(amount);
+}
+
+function landingIsSide(step) {
+  if (typeof step.side === "boolean")
+    return step.side;
+
+  const skill = byName.get(step.skillName);
   return Boolean(skill && skill.effects.some((effect) => effect.kind === "SideCount"));
 }
 
-function engineLabels() {
+function sideWord(name) {
+  const skill = byName.get(name);
+  if (!skill)
+    return "这一侧";
+
+  const effect = skill.effects.find((item) => item.kind === "SideCount");
+  if (!effect)
+    return "这一侧";
+
+  return effect.b < 0 ? "左侧" : "右侧";
+}
+
+function engineLabels(placed) {
   const labels = new Map();
-  let number = 1;
-  bench.forEach((id, index) => {
-    if (!id)
+  if (!placed)
+    return labels;
+
+  placed.forEach((engineId, index) => {
+    const id = bench[index];
+    if (!engineId || !id)
       return;
 
-    const skills = monsters.get(id).skills;
-    labels.set("m" + number, "第 " + (index + 1) + " 格 · " + skills[0]);
-    number += 1;
+    labels.set(engineId, monsterTitle(monsters.get(id)));
   });
   return labels;
 }
