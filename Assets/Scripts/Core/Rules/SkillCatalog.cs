@@ -22,56 +22,51 @@ namespace TheCall
 
     internal sealed class SkillCatalog : IUtility
     {
-        public IReadOnlyList<string> Names { get; } = new[]
+        readonly ContentBook _book;
+
+        public SkillCatalog(ContentBook book) => _book = book;
+
+        public IReadOnlyList<string> Names
         {
-            "能量吐息",
-            "左能量体",
-            "右能量体",
-            "增量小手",
-            "增量大手",
-            "残留提取腺体",
-            "孤独心",
-            "吞噬大嘴",
-            "双重吐息",
-            "时间操控器官",
-            "再回首头",
-            "分享之手",
-            "太阳能头",
-            "换位手",
-            "鼓励嘴",
-        };
+            get
+            {
+                var names = new string[_book.Skills.Count];
+                for (var i = 0; i < names.Length; i++)
+                    names[i] = _book.Skills[i].Name;
+
+                return names;
+            }
+        }
 
         public IReadOnlyList<string> NamesOf(Rarity rarity)
         {
-            if (rarity == Rarity.Blue)
-                return Blue;
-            if (rarity == Rarity.Gold)
-                return Gold;
+            var matches = new List<SkillDef>();
+            for (var i = 0; i < _book.Skills.Count; i++)
+            {
+                if (_book.Skills[i].Rarity == rarity)
+                    matches.Add(_book.Skills[i]);
+            }
 
-            return White;
+            matches.Sort((left, right) => left.PoolIndex.CompareTo(right.PoolIndex));
+            var names = new string[matches.Count];
+            for (var i = 0; i < names.Length; i++)
+                names[i] = matches[i].Name;
+
+            return names;
         }
 
         public Rarity RarityOf(string skillName)
         {
-            if (Contains(Blue, skillName))
-                return Rarity.Blue;
-            if (Contains(Gold, skillName))
-                return Rarity.Gold;
-
-            return Rarity.White;
+            var skill = _book.FindSkill(skillName);
+            return skill == null ? Rarity.White : skill.Rarity;
         }
 
         public bool TryEnergyQuote(string skillName, out int quote)
         {
-            if (skillName == "能量吐息")
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.EnergyQuote))
             {
-                quote = 5;
-                return true;
-            }
-
-            if (skillName == "孤独心")
-            {
-                quote = 4;
+                quote = skill.Get(EffectKind.EnergyQuote).A;
                 return true;
             }
 
@@ -81,17 +76,12 @@ namespace TheCall
 
         public bool TrySideCount(string skillName, out CountedSide side, out int perMonster)
         {
-            if (skillName == "左能量体")
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.SideCount))
             {
-                side = CountedSide.Right;
-                perMonster = 2;
-                return true;
-            }
-
-            if (skillName == "右能量体")
-            {
-                side = CountedSide.Left;
-                perMonster = 2;
+                var effect = skill.Get(EffectKind.SideCount);
+                side = (CountedSide)effect.B;
+                perMonster = effect.A;
                 return true;
             }
 
@@ -100,27 +90,36 @@ namespace TheCall
             return false;
         }
 
-        public bool DoublesWhenIsolated(string skillName) => skillName == "孤独心";
+        public bool DoublesWhenIsolated(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.DoubleWhenIsolated);
+        }
 
-        public bool DoublesAdjacentEnergy(string skillName) => skillName == "鼓励嘴";
+        public bool DoublesAdjacentEnergy(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.DoubleAdjacentEnergy);
+        }
 
         public int AddedToOthers(string skillName)
         {
-            if (skillName == "增量小手")
-                return 1;
-            if (skillName == "增量大手")
-                return 2;
-
-            return 0;
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.AddToOthers) ? skill.Get(EffectKind.AddToOthers).A : 0;
         }
 
-        public int NextEnergyBonus(string skillName) => skillName == "分享之手" ? 3 : 0;
+        public int NextEnergyBonus(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.NextEnergyBonus) ? skill.Get(EffectKind.NextEnergyBonus).A : 0;
+        }
 
         public bool TryLandingResponse(string skillName, string causeSkillName, out int quote)
         {
-            if (skillName == "残留提取腺体" && skillName != causeSkillName)
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.LandingResponse) && skillName != causeSkillName)
             {
-                quote = 1;
+                quote = skill.Get(EffectKind.LandingResponse).A;
                 return true;
             }
 
@@ -130,48 +129,60 @@ namespace TheCall
 
         public int StartingQuote(string skillName)
         {
-            if (skillName == "吞噬大嘴")
-                return 4;
-            if (skillName == "双重吐息" || skillName == "分享之手")
-                return 2;
-            if (TryEnergyQuote(skillName, out var quote))
+            int quote;
+            if (TryEnergyQuote(skillName, out quote))
                 return quote;
 
             return 0;
         }
 
-        public bool SwapsWithLeft(string skillName) => skillName == "换位手";
+        public bool SwapsWithLeft(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.SwapWithLeft);
+        }
 
-        public int ExtraWalksForRightNeighbor(string skillName) =>
-            skillName == "再回首头" ? 1 : 0;
+        public int ExtraWalksForRightNeighbor(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.ExtraWalksForRightNeighbor)
+                ? skill.Get(EffectKind.ExtraWalksForRightNeighbor).A
+                : 0;
+        }
 
-        public int CapacityExtraForLeftNeighbor(string skillName) =>
-            skillName == "时间操控器官" ? 1 : 0;
+        public int CapacityExtraForLeftNeighbor(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(EffectKind.CapacityExtraForLeftNeighbor)
+                ? skill.Get(EffectKind.CapacityExtraForLeftNeighbor).A
+                : 0;
+        }
 
-        public bool ProducesEnergy(string skillName) =>
-            TryEnergyQuote(skillName, out _) ||
-            TrySideCount(skillName, out _, out _) ||
-            TryDevour(skillName, out _, out _) ||
-            TryRepeatedQuote(skillName, out _) ||
-            NextEnergyBonus(skillName) > 0;
+        public bool ProducesEnergy(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill == null)
+                return false;
+
+            return skill.Has(EffectKind.EnergyQuote) ||
+                   skill.Has(EffectKind.SideCount) ||
+                   skill.Has(EffectKind.Devour) ||
+                   skill.Has(EffectKind.RepeatQuote) ||
+                   skill.Has(EffectKind.NextEnergyBonus);
+        }
 
         public SkillAffix Affixes(string skillName)
         {
-            if (skillName == "吞噬大嘴")
-                return SkillAffix.Destroy | SkillAffix.Permanent;
-            if (skillName == "太阳能头")
-                return SkillAffix.Capacity;
-            if (skillName == "换位手")
-                return SkillAffix.Immovable;
-
-            return SkillAffix.None;
+            var skill = _book.FindSkill(skillName);
+            return skill == null ? SkillAffix.None : skill.Affix;
         }
 
         public bool TryGainCapacity(string skillName, out int layers)
         {
-            if (skillName == "太阳能头")
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.GainCapacity))
             {
-                layers = 1;
+                layers = skill.Get(EffectKind.GainCapacity).A;
                 return true;
             }
 
@@ -181,10 +192,12 @@ namespace TheCall
 
         public bool TryDevour(string skillName, out int writeback, out bool permanent)
         {
-            if (skillName == "吞噬大嘴")
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.Devour))
             {
-                writeback = 2;
-                permanent = true;
+                var effect = skill.Get(EffectKind.Devour);
+                writeback = effect.A;
+                permanent = effect.B == 1;
                 return true;
             }
 
@@ -195,47 +208,14 @@ namespace TheCall
 
         public bool TryRepeatedQuote(string skillName, out int times)
         {
-            if (skillName == "双重吐息")
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.RepeatQuote))
             {
-                times = 2;
+                times = skill.Get(EffectKind.RepeatQuote).A;
                 return true;
             }
 
             times = 0;
-            return false;
-        }
-
-        static readonly string[] White =
-        {
-            "能量吐息",
-            "左能量体",
-            "右能量体",
-            "增量小手",
-            "吞噬大嘴",
-            "双重吐息",
-            "分享之手",
-            "太阳能头",
-        };
-
-        static readonly string[] Blue =
-        {
-            "增量大手",
-            "残留提取腺体",
-            "孤独心",
-            "时间操控器官",
-            "换位手",
-        };
-
-        static readonly string[] Gold = { "再回首头", "鼓励嘴" };
-
-        static bool Contains(string[] names, string skillName)
-        {
-            for (var i = 0; i < names.Length; i++)
-            {
-                if (names[i] == skillName)
-                    return true;
-            }
-
             return false;
         }
     }

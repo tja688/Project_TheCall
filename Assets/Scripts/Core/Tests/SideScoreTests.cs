@@ -269,14 +269,14 @@ namespace TheCall.Tests
         {
             Open(
                 "右能量体",
-                "能量吐息",
+                "孤独心",
+                "吞噬大嘴",
                 "能量吐息",
                 "增量小手",
                 "残留提取腺体",
-                "孤独心",
-                "吞噬大嘴",
                 "双重吐息",
-                "分享之手");
+                "分享之手",
+                "左能量体");
 
             var rightId = IdOf("右能量体");
             App.SendCommand(new PlaceMonsterCommand(IdOf("能量吐息"), OperationArea.Extraction, 0));
@@ -309,11 +309,12 @@ namespace TheCall.Tests
                 .Where(monster => monster.SkillNames.Single() == "左能量体")
                 .Select(monster => monster.Id)
                 .ToArray();
+            var handId = IdOf("增量小手");
             App.SendCommand(new PlaceMonsterCommand(bodies[0], OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(IdOf("鼓励嘴"), OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(bodies[1], OperationArea.Extraction, 2));
             App.SendCommand(new PlaceMonsterCommand(IdOf("时间操控器官"), OperationArea.Extraction, 3));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 4));
+            App.SendCommand(new PlaceMonsterCommand(handId, OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var produced = Landings().Where(item => item.SkillName == "左能量体").ToArray();
@@ -323,7 +324,6 @@ namespace TheCall.Tests
             Assert.That(produced.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 24, 12, 12 }));
             Assert.That(produced.Sum(item => item.Energy), Is.EqualTo(48));
 
-            var handId = IdOf("增量小手");
             App.SendCommand(new ReturnMonsterCommand(bodies[0]));
             App.SendCommand(new ReturnMonsterCommand(handId));
             App.SendCommand(new PlaceMonsterCommand(handId, OperationArea.Extraction, 0));

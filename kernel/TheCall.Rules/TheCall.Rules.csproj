@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TheCall</RootNamespace>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>TheCall.Rules</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TheCall.QfSubset\TheCall.QfSubset.csproj" />
+    <Compile Include="..\..\Assets\Scripts\Core\Rules\**\*.cs" />
+  </ItemGroup>
+</Project>

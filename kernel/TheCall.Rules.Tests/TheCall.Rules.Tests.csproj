@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TheCall.Tests</RootNamespace>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>TheCall.Rules.Tests</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TheCall.Rules\TheCall.Rules.csproj" />
+    <ProjectReference Include="..\TheCall.QfSubset\TheCall.QfSubset.csproj" />
+    <Compile Include="..\..\Assets\Scripts\Core\Tests\**\*.cs" />
+    <Content Include="..\..\Assets\StreamingAssets\call-book.json" Link="call-book.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+</Project>

@@ -1,12 +1,10 @@
 using QFramework;
-using UnityEngine;
 
 namespace TheCall
 {
     public sealed class TheCallApp : Architecture<TheCallApp>
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetStatics() => Reset();
+        public static bool IsRunning => mArchitecture != null;
 
         public static void Reset()
         {
@@ -18,12 +16,16 @@ namespace TheCall
 
         protected override void Init()
         {
-            RegisterUtility(new SkillCatalog());
-            RegisterUtility(new SkillCopy());
+            var book = ContentGate.Current;
+            if (book == null)
+                throw new System.InvalidOperationException("先 ContentGate.Use，再访问 Interface。");
+
+            RegisterUtility(new SkillCatalog(book));
+            RegisterUtility(new SkillCopy(book));
             RegisterUtility<IDraw>(new SystemDraw());
-            RegisterUtility<ILevelCatalog>(new LevelCatalog());
-            RegisterUtility<IToolCatalog>(new ToolCatalog());
-            RegisterUtility(new TechCatalog());
+            RegisterUtility<ILevelCatalog>(new LevelCatalog(book));
+            RegisterUtility<IToolCatalog>(new ToolCatalog(book));
+            RegisterUtility(new TechCatalog(book));
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterSystem(new FlowSystem());

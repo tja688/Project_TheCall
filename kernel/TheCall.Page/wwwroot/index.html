@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>The Call 结算</title>
+  <link rel="stylesheet" href="./bench.css">
+</head>
+<body>
+  <main>
+    <h1>结算工作台</h1>
+    <p id="status">正在加载规则。</p>
+    <section>
+      <h2>技能</h2>
+      <ul id="skill-list"></ul>
+    </section>
+    <section>
+      <h2>怪物</h2>
+      <div id="monster-bin"></div>
+      <button id="add-monster" type="button">加一只怪物</button>
+    </section>
+    <section>
+      <h2>工具</h2>
+      <div id="tool-row"></div>
+    </section>
+    <section>
+      <h2>关卡</h2>
+      <select id="level"></select>
+    </section>
+    <section>
+      <h2>提取行</h2>
+      <div id="cells"></div>
+    </section>
+    <button id="settle" type="button">结算</button>
+    <section>
+      <h2>结果</h2>
+      <div id="report"></div>
+    </section>
+  </main>
+  <script type="module" src="./bench.js"></script>
+</body>
+</html>

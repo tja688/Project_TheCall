@@ -5,43 +5,51 @@ namespace TheCall
 {
     public sealed class TechCatalog : IUtility
     {
-        public const int Percent = 10;
+        readonly ContentBook _book;
 
-        public const int ModifierAmount = 2;
+        public TechCatalog(ContentBook book) => _book = book;
 
-        public static readonly string[] Names =
+        public bool Contains(string name) => Flag(name) != null;
+
+        public int SlotCount(IReadOnlyList<string> unlocked) =>
+            Has(unlocked, TechFlag.ExtraBreedingSlot) ? _book.Economy.ExpandedBreedingSlots : _book.Economy.BaseBreedingSlots;
+
+        public int ParentCapacity(IReadOnlyList<string> unlocked) =>
+            Has(unlocked, TechFlag.ExtraParent) ? _book.Economy.ExpandedParents : _book.Economy.BaseParents;
+
+        public bool AllowsBreedingSkill(IReadOnlyList<string> unlocked) => Has(unlocked, TechFlag.BreedingSkill);
+
+        public bool GrantsExtraSkill(IReadOnlyList<string> unlocked) => Has(unlocked, TechFlag.ExtraSkill);
+
+        public bool GrantsModifier(IReadOnlyList<string> unlocked) => Has(unlocked, TechFlag.Modifier);
+
+        bool Has(IReadOnlyList<string> unlocked, TechFlag flag)
         {
-            "基因实验",
-            "槽位扩容",
-            "变异学说",
-            "大乱炖",
-            "科学培育",
-        };
-
-        public bool Contains(string name) => Has(Names, name);
-
-        public int SlotCount(IReadOnlyList<string> unlocked) => Has(unlocked, "槽位扩容") ? 2 : 1;
-
-        public int ParentCapacity(IReadOnlyList<string> unlocked) => Has(unlocked, "大乱炖") ? 3 : 2;
-
-        public bool AllowsBreedingSkill(IReadOnlyList<string> unlocked) => Has(unlocked, "基因实验");
-
-        public bool GrantsExtraSkill(IReadOnlyList<string> unlocked) => Has(unlocked, "变异学说");
-
-        public bool GrantsModifier(IReadOnlyList<string> unlocked) => Has(unlocked, "科学培育");
-
-        static bool Has(IReadOnlyList<string> names, string name)
-        {
-            if (names == null || name == null)
+            if (unlocked == null)
                 return false;
 
-            for (var i = 0; i < names.Count; i++)
+            for (var i = 0; i < unlocked.Count; i++)
             {
-                if (names[i] == name)
+                var found = Flag(unlocked[i]);
+                if (found == flag)
                     return true;
             }
 
             return false;
+        }
+
+        TechFlag? Flag(string name)
+        {
+            if (name == null)
+                return null;
+
+            for (var i = 0; i < _book.Techs.Count; i++)
+            {
+                if (_book.Techs[i].Name == name)
+                    return _book.Techs[i].Flag;
+            }
+
+            return null;
         }
     }
 }

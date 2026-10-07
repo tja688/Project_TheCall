@@ -55,7 +55,7 @@ namespace TheCall
             if (excess)
                 run.AddTechPoint();
 
-            var wage = wasOvertime ? 20 : 40;
+            var wage = ContentGate.Current.Wage(wasOvertime);
             run.AddGold(wage);
             level.ClearDebt();
             _entries.Add(new SettlementPayment(due, 0, wasOvertime, false, excess, wage));
@@ -396,19 +396,52 @@ namespace TheCall
             var host = run.Find(monsterId);
             var modifier = host == null ? 0 : host.Modifier;
             _nextBonus.TryGetValue(monsterId, out var bonus);
-            var added = AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
+            var adds = new List<LandingAdd>();
+            var added = CollectAdds(catalog, run, cells, monsterId, modifier, bonus, adds);
+            var recordedQuote = quote;
+            var sideCount = 0;
+            var sideSkill = catalog.TrySideCount(skillName, out var countedSide, out var perMonster);
+            if (sideSkill)
+            {
+                recordedQuote = perMonster;
+                sideCount = CountSide(cells, cell, countedSide);
+            }
+
             var baseValue = BaseAfterAdds(catalog, cells, cell, skillName, quote, added);
+            var factors = new List<LandingFactor>();
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
+            {
                 multiplier *= 2;
-            multiplier *= AdjacentEnergyDouble(run, catalog, cells, cell);
+                factors.Add(new LandingFactor("孤独心", 2));
+            }
+
+            multiplier *= RecordAdjacent(run, catalog, cells, cell, factors);
             if (doubleFirstExecution)
+            {
                 multiplier *= 2;
+                factors.Add(new LandingFactor("急急装置", 2));
+            }
+
             if (_doubleSingleAffix && IsSingleAffix(run, catalog, monsterId))
+            {
                 multiplier *= 2;
+                factors.Add(new LandingFactor("独孤装置", 2));
+            }
 
             var energy = baseValue * multiplier;
-            _entries.Add(new SettlementLanding(monsterId, skillName, baseValue, multiplier, energy, writeback));
+            _entries.Add(new SettlementLanding(
+                monsterId,
+                skillName,
+                baseValue,
+                multiplier,
+                energy,
+                writeback,
+                recordedQuote,
+                sideCount,
+                sideSkill,
+                adds,
+                factors));
             level.AddEnergy(energy);
             RespondToLanding(level, run, catalog, monsterId, skillName);
         }
@@ -748,6 +781,61 @@ namespace TheCall
 
             quote = perMonster * CountSide(cells, cell, side);
             return true;
+        }
+
+        static int CollectAdds(
+            SkillCatalog catalog,
+            RunModel run,
+            IReadOnlyList<string> cells,
+            string monsterId,
+            int modifier,
+            int bonus,
+            List<LandingAdd> adds)
+        {
+            for (var cell = 0; cell < cells.Count; cell++)
+            {
+                var otherId = cells[cell];
+                if (otherId == null || otherId == monsterId)
+                    continue;
+
+                var skills = run.Find(otherId).Skills;
+                for (var index = 0; index < skills.Count; index++)
+                {
+                    var amount = catalog.AddedToOthers(skills[index].Name);
+                    if (amount == 0)
+                        continue;
+
+                    adds.Add(new LandingAdd(skills[index].Name, amount));
+                }
+            }
+
+            if (modifier != 0)
+                adds.Add(new LandingAdd("宿主修正", modifier));
+            if (bonus != 0)
+                adds.Add(new LandingAdd("下家", bonus));
+
+            var added = 0;
+            for (var i = 0; i < adds.Count; i++)
+                added += adds[i].Amount;
+
+            return added;
+        }
+
+        int RecordAdjacent(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell, List<LandingFactor> factors)
+        {
+            var multiplier = 1;
+            multiplier *= RecordNeighbor(run, catalog, cells, cell - 1, factors);
+            multiplier *= RecordNeighbor(run, catalog, cells, cell + 1, factors);
+            return multiplier;
+        }
+
+        static int RecordNeighbor(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell, List<LandingFactor> factors)
+        {
+            var value = NeighborEnergyDouble(run, catalog, cells, cell);
+            if (value != 1)
+                factors.Add(new LandingFactor("鼓励嘴", value));
+
+            return value;
         }
 
         static int AddedByOthers(SkillCatalog catalog, RunModel run, IReadOnlyList<string> cells, string monsterId)

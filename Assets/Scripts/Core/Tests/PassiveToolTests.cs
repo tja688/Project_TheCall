@@ -155,7 +155,7 @@ namespace TheCall.Tests
         public void 独孤装置把单词条怪物的产能量计分翻倍()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold)),
+                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量吐息",
                 "左能量体",
                 "右能量体",
@@ -186,7 +186,7 @@ namespace TheCall.Tests
         public void 同时带消灭和永久或者没有词条都不是单词条()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold)),
+                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 TwoBreaths);
             App.SendCommand(new BuyToolCommand("独孤装置"));
             App.SendCommand(new LeaveShopCommand());
@@ -209,7 +209,7 @@ namespace TheCall.Tests
         public void 身上合起来有两个词条的怪物不是单词条()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold)),
+                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量吐息",
                 "左能量体",
                 "右能量体",
@@ -242,8 +242,8 @@ namespace TheCall.Tests
         {
             OpenAndReachShop(
                 new FixedTools(
-                    new ToolDefinition("急急装置", 10, Rarity.White),
-                    new ToolDefinition("独孤装置", 10, Rarity.Gold)),
+                    new ToolDefinition("急急装置", 10, Rarity.White, ToolEffect.DoubleFirstEnergy, 0),
+                    new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量吐息",
                 "左能量体",
                 "右能量体",

@@ -1,7 +1,8 @@
 {
-    "name": "TheCall.Rules",
+    "name": "TheCall.UnityHost",
     "rootNamespace": "TheCall",
     "references": [
+        "TheCall.Rules",
         "QFramework"
     ],
     "includePlatforms": [],
@@ -12,5 +13,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

@@ -195,6 +195,27 @@ namespace TheCall
             FitExtraction(run);
         }
 
+        internal void Lay(BenchBoard board)
+        {
+            var run = this.GetModel<RunModel>();
+            run.EnterOperation(board.LevelNumber);
+            for (var i = 0; i < board.Tools.Count; i++)
+                run.AddTool(board.Tools[i]);
+
+            var levels = this.GetUtility<ILevelCatalog>();
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(board.LevelNumber), levels.ExcessEnergy(board.LevelNumber));
+            FitExtraction(run);
+            var level = this.GetModel<LevelModel>();
+            for (var cell = 0; cell < board.Row.Length; cell++)
+            {
+                if (board.Row[cell] == null)
+                    continue;
+
+                var monster = run.CreateMonster(board.Row[cell].Value.SkillNames);
+                level.Put(OperationArea.Extraction, cell, monster.Id);
+            }
+        }
+
         void FitBreeding(RunModel run)
         {
             var tech = this.GetUtility<TechCatalog>();

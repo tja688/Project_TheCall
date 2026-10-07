@@ -11,21 +11,21 @@ namespace TheCall
 
     internal sealed class LevelCatalog : ILevelCatalog
     {
-        static readonly int[] Due = { 50, 75, 100, 150, 200, 250, 300 };
+        readonly ContentBook _book;
 
-        static readonly int[] Excess = { 60, 90, 120, 175, 230, 285, 350 };
+        public LevelCatalog(ContentBook book) => _book = book;
 
-        public int EnergyDue(int levelNumber) => At(Due, levelNumber);
+        public int EnergyDue(int levelNumber) => At(levelNumber, true);
 
-        public int ExcessEnergy(int levelNumber) => At(Excess, levelNumber);
+        public int ExcessEnergy(int levelNumber) => At(levelNumber, false);
 
-        static int At(int[] values, int levelNumber)
+        int At(int levelNumber, bool due)
         {
             var index = levelNumber - 1;
-            if (index < 0 || index >= values.Length)
+            if (index < 0 || index >= _book.Levels.Count)
                 return 0;
 
-            return values[index];
+            return due ? _book.Levels[index].Due : _book.Levels[index].Excess;
         }
     }
 }

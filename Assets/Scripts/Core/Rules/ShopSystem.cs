@@ -251,25 +251,9 @@ namespace TheCall
             return Rarity.White;
         }
 
-        static int Weight(Rarity rarity)
-        {
-            if (rarity == Rarity.Blue)
-                return 2;
-            if (rarity == Rarity.Gold)
-                return 1;
+        static int Weight(Rarity rarity) => ContentGate.Current.Weight(rarity);
 
-            return 7;
-        }
-
-        static int PriceOf(Rarity rarity)
-        {
-            if (rarity == Rarity.Blue)
-                return 20;
-            if (rarity == Rarity.Gold)
-                return 30;
-
-            return 10;
-        }
+        static int PriceOf(Rarity rarity) => ContentGate.Current.Price(rarity);
 
         static int ProceedsOf(Rarity rarity) => PriceOf(rarity) / 2;
 

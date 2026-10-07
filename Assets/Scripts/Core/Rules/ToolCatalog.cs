@@ -3,13 +3,28 @@ using QFramework;
 
 namespace TheCall
 {
+    public enum ToolEffect
+    {
+        None = 0,
+        DoubleFirstEnergy = 1,
+        ExtractionCells = 2,
+        DoubleSingleAffix = 3,
+    }
+
     public sealed class ToolDefinition
     {
         public ToolDefinition(string name, int price, Rarity rarity)
+            : this(name, price, rarity, ToolEffect.None, 0)
+        {
+        }
+
+        public ToolDefinition(string name, int price, Rarity rarity, ToolEffect effect, int extractionCells)
         {
             Name = name;
             Price = price;
             Rarity = rarity;
+            Effect = effect;
+            ExtractionCells = extractionCells;
         }
 
         public string Name { get; }
@@ -17,6 +32,10 @@ namespace TheCall
         public int Price { get; }
 
         public Rarity Rarity { get; }
+
+        public ToolEffect Effect { get; }
+
+        public int ExtractionCells { get; }
     }
 
     public interface IToolCatalog : IUtility
@@ -24,36 +43,24 @@ namespace TheCall
         IReadOnlyList<ToolDefinition> Tools { get; }
 
         int ExtractionCells(IReadOnlyList<string> held) =>
-            Holds(held, "上级员工证") ? 6 : 5;
+            ToolRules.ExtractionCells(5, Tools, held);
 
         bool DoublesFirstEnergyExecution(IReadOnlyList<string> held) =>
-            Holds(held, "急急装置");
+            ToolRules.DoublesFirstEnergy(Tools, held);
 
         bool DoublesSingleAffixEnergy(IReadOnlyList<string> held) =>
-            Holds(held, "独孤装置");
-
-        private static bool Holds(IReadOnlyList<string> names, string name)
-        {
-            if (names == null || name == null)
-                return false;
-
-            for (var i = 0; i < names.Count; i++)
-            {
-                if (names[i] == name)
-                    return true;
-            }
-
-            return false;
-        }
+            ToolRules.DoublesSingleAffix(Tools, held);
     }
 
     internal sealed class ToolCatalog : IToolCatalog
     {
-        public IReadOnlyList<ToolDefinition> Tools { get; } = new[]
-        {
-            new ToolDefinition("急急装置", 30, Rarity.White),
-            new ToolDefinition("上级员工证", 40, Rarity.Blue),
-            new ToolDefinition("独孤装置", 50, Rarity.Gold),
-        };
+        readonly ContentBook _book;
+
+        public ToolCatalog(ContentBook book) => _book = book;
+
+        public IReadOnlyList<ToolDefinition> Tools => _book.Tools;
+
+        public int ExtractionCells(IReadOnlyList<string> held) =>
+            ToolRules.ExtractionCells(_book.Economy.BaseExtractionCells, Tools, held);
     }
 }

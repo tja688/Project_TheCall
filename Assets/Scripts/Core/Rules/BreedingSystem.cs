@@ -36,13 +36,13 @@ namespace TheCall
                 if (tech.GrantsExtraSkill(run.UnlockedTech))
                 {
                     var pool = Addable(this.GetUtility<SkillCatalog>(), names);
-                    if (pool.Count > 0 && draw.Chance(TechCatalog.Percent))
+                    if (pool.Count > 0 && draw.Chance(ContentGate.Current.Economy.TechPercent))
                         names.Add(draw.Choose(pool));
                 }
 
                 var modifier = 0;
-                if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(TechCatalog.Percent))
-                    modifier += TechCatalog.ModifierAmount;
+                if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(ContentGate.Current.Economy.TechPercent))
+                    modifier += ContentGate.Current.Economy.ModifierAmount;
 
                 run.AddToCage(run.CreateMonster(names, modifier, appearance));
             }

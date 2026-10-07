@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using QFramework;
@@ -12,6 +13,8 @@ namespace TheCall.Tests
         [SetUp]
         public void SetUp()
         {
+            TheCallApp.Reset();
+            ContentGate.Use(ContentBook.Parse(File.ReadAllText(BookFile())));
             TheCallApp.OnRegisterPatch = app =>
                 app.RegisterUtility<IDraw>(new ScriptedDraw(
                     "能量吐息",
@@ -26,12 +29,22 @@ namespace TheCall.Tests
             App = TheCallApp.Interface;
         }
 
+        static string BookFile()
+        {
+#if UNITY_5_3_OR_NEWER
+            return Path.Combine(UnityEngine.Application.streamingAssetsPath, "call-book.json");
+#else
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, "call-book.json");
+#endif
+        }
+
         [TearDown]
         public void TearDown() => TheCallApp.Reset();
 
         protected void UseDraw(params string[] names)
         {
             TheCallApp.Reset();
+            ContentGate.Use(ContentBook.Parse(File.ReadAllText(BookFile())));
             TheCallApp.OnRegisterPatch = app =>
                 app.RegisterUtility<IDraw>(new ScriptedDraw(names));
             App = TheCallApp.Interface;
@@ -49,6 +62,7 @@ namespace TheCall.Tests
             ClockIntents intents = null)
         {
             TheCallApp.Reset();
+            ContentGate.Use(ContentBook.Parse(File.ReadAllText(BookFile())));
             TheCallApp.OnRegisterPatch = app =>
             {
                 app.RegisterUtility(draw);
