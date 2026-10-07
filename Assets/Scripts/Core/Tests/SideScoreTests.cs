@@ -232,6 +232,111 @@ namespace TheCall.Tests
         }
 
         [Test]
+        public void 左右计数的加减先进入每只两点再乘只数且残留只按这一次发动插队()
+        {
+            Open(
+                "左能量体",
+                "能量吐息",
+                "能量吐息",
+                "增量小手",
+                "残留提取腺体",
+                "分享之手",
+                "右能量体",
+                "孤独心",
+                "吞噬大嘴");
+
+            var leftId = IdOf("左能量体");
+            var shareId = IdOf("分享之手");
+            var glandId = IdOf("残留提取腺体");
+            App.SendCommand(new PlaceMonsterCommand(shareId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(glandId, OperationArea.Extraction, 3));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var landings = Landings();
+            Assert.That(
+                landings.Select(item => item.SkillName).ToArray(),
+                Is.EqualTo(new[] { "分享之手", "残留提取腺体", "左能量体", "残留提取腺体" }));
+            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 3, 2, 12, 2 }));
+            Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1, 1 }));
+            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 3, 2, 12, 2 }));
+            Assert.That(landings[2].MonsterId, Is.EqualTo(leftId));
+        }
+
+        [Test]
+        public void 右能量体的加减也先进入每只两点再乘左侧只数()
+        {
+            Open(
+                "右能量体",
+                "能量吐息",
+                "能量吐息",
+                "增量小手",
+                "残留提取腺体",
+                "孤独心",
+                "吞噬大嘴",
+                "双重吐息",
+                "分享之手");
+
+            var rightId = IdOf("右能量体");
+            App.SendCommand(new PlaceMonsterCommand(IdOf("能量吐息"), OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var right = Landings().Single(item => item.SkillName == "右能量体");
+            Assert.That(right.MonsterId, Is.EqualTo(rightId));
+            Assert.That(right.Base, Is.EqualTo(6));
+            Assert.That(right.Multiplier, Is.EqualTo(1));
+            Assert.That(right.Energy, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void 增量翻倍和额外次数按每只两点结算为四十八且没有右侧时加成为零()
+        {
+            Open(
+                "左能量体",
+                "能量吐息",
+                "能量吐息",
+                "左能量体",
+                "鼓励嘴",
+                "时间操控器官",
+                "增量小手",
+                "残留提取腺体",
+                "孤独心");
+
+            var bodies = App.SendQuery(new MonsterCageQuery())
+                .Where(monster => monster.SkillNames.Single() == "左能量体")
+                .Select(monster => monster.Id)
+                .ToArray();
+            App.SendCommand(new PlaceMonsterCommand(bodies[0], OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("鼓励嘴"), OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(bodies[1], OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("时间操控器官"), OperationArea.Extraction, 3));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 4));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var produced = Landings().Where(item => item.SkillName == "左能量体").ToArray();
+            Assert.That(produced.Select(item => item.MonsterId).ToArray(), Is.EqualTo(new[] { bodies[0], bodies[1], bodies[1] }));
+            Assert.That(produced.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 12, 6, 6 }));
+            Assert.That(produced.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 2, 2, 2 }));
+            Assert.That(produced.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 24, 12, 12 }));
+            Assert.That(produced.Sum(item => item.Energy), Is.EqualTo(48));
+
+            var handId = IdOf("增量小手");
+            App.SendCommand(new ReturnMonsterCommand(bodies[0]));
+            App.SendCommand(new ReturnMonsterCommand(handId));
+            App.SendCommand(new PlaceMonsterCommand(handId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(bodies[0], OperationArea.Extraction, 4));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var alone = Landings().Single(item => item.MonsterId == bodies[0]);
+            Assert.That(alone.SkillName, Is.EqualTo("左能量体"));
+            Assert.That(alone.Base, Is.EqualTo(0));
+            Assert.That(alone.Energy, Is.EqualTo(0));
+        }
+
+        [Test]
         public void 培育槽上的增量光环不改提取计分()
         {
             Open(

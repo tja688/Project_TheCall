@@ -47,11 +47,11 @@ namespace TheCall
                 return PaymentResult.Short;
             }
 
-            var remaining = level.Energy - due;
+            var produced = level.Energy;
             level.Pay(due);
             level.ClearEnergy();
             var run = this.GetModel<RunModel>();
-            var excess = remaining >= level.ExcessEnergy;
+            var excess = produced >= level.ExcessEnergy;
             if (excess)
                 run.AddTechPoint();
 
@@ -396,7 +396,8 @@ namespace TheCall
             var host = run.Find(monsterId);
             var modifier = host == null ? 0 : host.Modifier;
             _nextBonus.TryGetValue(monsterId, out var bonus);
-            var baseValue = quote + AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
+            var added = AddedByOthers(catalog, run, cells, monsterId) + modifier + bonus;
+            var baseValue = BaseAfterAdds(catalog, cells, cell, skillName, quote, added);
             var multiplier = 1;
             if (catalog.DoublesWhenIsolated(skillName) && !HasNeighbor(cells, cell))
                 multiplier *= 2;
@@ -707,6 +708,33 @@ namespace TheCall
             public string MonsterId { get; }
         }
 
+        static int BaseAfterAdds(
+            SkillCatalog catalog,
+            IReadOnlyList<string> cells,
+            int cell,
+            string skillName,
+            int quote,
+            int added)
+        {
+            if (!catalog.TrySideCount(skillName, out var side, out var perMonster))
+                return quote + added;
+
+            return (perMonster + added) * CountSide(cells, cell, side);
+        }
+
+        static int CountSide(IReadOnlyList<string> cells, int cell, CountedSide side)
+        {
+            var count = 0;
+            var direction = (int)side;
+            for (var index = cell + direction; index >= 0 && index < cells.Count; index += direction)
+            {
+                if (cells[index] != null)
+                    count++;
+            }
+
+            return count;
+        }
+
         static bool TryQuote(SkillCatalog catalog, IReadOnlyList<string> cells, int cell, string skillName, out int quote)
         {
             if (catalog.TryEnergyQuote(skillName, out quote))
@@ -718,15 +746,7 @@ namespace TheCall
                 return false;
             }
 
-            var count = 0;
-            var direction = (int)side;
-            for (var index = cell + direction; index >= 0 && index < cells.Count; index += direction)
-            {
-                if (cells[index] != null)
-                    count++;
-            }
-
-            quote = perMonster * count;
+            quote = perMonster * CountSide(cells, cell, side);
             return true;
         }
 

@@ -140,7 +140,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 偿付成功且剩余能量达到超额能量时获得一点科技点()
+        public void 偿付成功且产出达到超额能量时获得一点科技点()
         {
             PayWithTwoBreaths(5, 5);
 
@@ -151,9 +151,19 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 偿付成功但剩余能量未达到超额能量时没有科技点()
+        public void 产出达到超额能量但扣款后剩余低于超额能量时获得一点科技点()
         {
-            PayWithTwoBreaths(5, 6);
+            PayWithTwoBreaths(5, 10);
+
+            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(Payment().Excess, Is.True);
+        }
+
+        [Test]
+        public void 偿付成功但产出能量未达到超额能量时没有科技点()
+        {
+            PayWithTwoBreaths(5, 11);
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
@@ -162,7 +172,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 加班后剩余能量达到超额能量时获得一点科技点并且工资是二十()
+        public void 加班后本次产出达到超额能量时获得一点科技点并且工资是二十()
         {
             UseLevel(
                 new ScriptedLevelCatalog(10, 5),
