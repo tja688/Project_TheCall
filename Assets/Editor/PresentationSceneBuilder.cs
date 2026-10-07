@@ -25,9 +25,23 @@ namespace TheCall.Editor
         static readonly Color Danger = new Color32(214, 92, 112, 255);
         static readonly Color ButtonFace = new Color32(36, 52, 66, 255);
 
+        const string ArtDir = "Assets/Art/Ui";
+
         static Sprite _ui;
         static TMP_FontAsset _font;
         static GameObject _portraitPrefab;
+        static Sprite _stage;
+        static Sprite _breed;
+        static Sprite _production;
+        static Sprite _panel;
+        static Sprite _frame;
+        static Sprite _soft;
+        static Sprite _btnMint;
+        static Sprite _btnDark;
+        static Sprite _btnDanger;
+        static Sprite _pipe;
+        static Sprite _doctor;
+        static readonly Dictionary<string, Sprite> Icons = new Dictionary<string, Sprite>();
 
         [MenuItem("The Call/重建表现层界面")]
         public static void RebuildFromMenu()
@@ -61,6 +75,8 @@ namespace TheCall.Editor
         static string BuildInternal()
         {
             ConfigureParts();
+            ConfigureUi();
+            LoadUi();
             EnsureFolder("Assets/Prefabs", "UI");
             _ui = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
             _font = Resources.Load<TMP_FontAsset>("SmileySans-Oblique-3 SDF");
@@ -123,6 +139,7 @@ namespace TheCall.Editor
         static OpeningScreenView BuildOpening(Transform parent)
         {
             var screen = Screen(parent, "OpeningScreen");
+            Ambience(screen.transform, 0.4f);
             var title = Label(screen.transform, "Title", "怪物育成公司", 42, Ink, TextAlignmentOptions.Center);
             At(title, 360, 70, 1200, 64);
             var subtitle = Label(screen.transform, "Subtitle", "留下第一只怪物", 22, Muted, TextAlignmentOptions.Center);
@@ -140,6 +157,7 @@ namespace TheCall.Editor
         static LevelStartScreenView BuildLevelStart(Transform parent)
         {
             var screen = Screen(parent, "LevelStartScreen");
+            Ambience(screen.transform, 0.28f);
             var card = Box(screen.transform, "PanelImage", Panel);
             At(card, 520, 220, 880, 620);
             var level = Label(card.transform, "Level", "第 1 关", 40, Ink, TextAlignmentOptions.Center);
@@ -196,15 +214,17 @@ namespace TheCall.Editor
 
             var breeding = Box(screen.transform, "培育室", Panel);
             At(breeding, 64, 108, 1360, 430);
+            PaintRoom(breeding, _breed);
+            CaptionShade(breeding.transform);
             var breedingTitle = Label(breeding.transform, "Caption", "培育室", 24, Ink, TextAlignmentOptions.Left);
             At(breedingTitle, 24, 16, 200, 36);
             var seats = new MonsterSlotView[6];
-            seats[0] = MonsterCard(breeding.transform, "BreedingSeat_0", 48, 70, 300, 280, 1.7f, null);
-            seats[1] = MonsterCard(breeding.transform, "BreedingSeat_1", 380, 70, 300, 280, 1.7f, null);
-            seats[2] = MonsterCard(breeding.transform, "BreedingSeat_2", 712, 70, 300, 280, 1.7f, null);
-            seats[3] = MonsterCard(breeding.transform, "BreedingSeat_3", 48, 358, 200, 64, 0.4f, null);
-            seats[4] = MonsterCard(breeding.transform, "BreedingSeat_4", 260, 358, 200, 64, 0.4f, null);
-            seats[5] = MonsterCard(breeding.transform, "BreedingSeat_5", 472, 358, 200, 64, 0.4f, null);
+            seats[0] = MonsterCard(breeding.transform, "BreedingSeat_0", 48, 70, 300, 280, 1.7f, null, true);
+            seats[1] = MonsterCard(breeding.transform, "BreedingSeat_1", 380, 70, 300, 280, 1.7f, null, true);
+            seats[2] = MonsterCard(breeding.transform, "BreedingSeat_2", 712, 70, 300, 280, 1.7f, null, true);
+            seats[3] = MonsterCard(breeding.transform, "BreedingSeat_3", 48, 358, 200, 64, 0.4f, null, true);
+            seats[4] = MonsterCard(breeding.transform, "BreedingSeat_4", 260, 358, 200, 64, 0.4f, null, true);
+            seats[5] = MonsterCard(breeding.transform, "BreedingSeat_5", 472, 358, 200, 64, 0.4f, null, true);
             var breedSkills = new SkillChipView[2];
             breedSkills[0] = Chip(breeding.transform, "BreedingSkill_0", 1048, 110, 270, 96);
             breedSkills[1] = Chip(breeding.transform, "BreedingSkill_1", 1048, 230, 270, 96);
@@ -213,13 +233,16 @@ namespace TheCall.Editor
 
             var production = Box(screen.transform, "生产区", Panel);
             At(production, 64, 554, 1360, 498);
+            PaintRoom(production, _production);
+            CaptionShade(production.transform);
             var productionTitle = Label(production.transform, "Caption", "生产区", 24, Ink, TextAlignmentOptions.Left);
             At(productionTitle, 24, 16, 200, 36);
             var belt = Box(production.transform, "BeltImage", PanelDeep);
             At(belt, 36, 400, 1288, 72);
+            belt.enabled = false;
             var extracts = new MonsterSlotView[6];
             for (var i = 0; i < extracts.Length; i++)
-                extracts[i] = MonsterCard(production.transform, "ExtractionSlot_" + i, 40 + i * 218, 168, 200, 230, 1.15f, null);
+                extracts[i] = MonsterCard(production.transform, "ExtractionSlot_" + i, 40 + i * 218, 168, 200, 230, 1.15f, null, true);
 
             var cagePanel = Box(screen.transform, "收容笼", Panel);
             At(cagePanel, 1440, 108, 456, 430);
@@ -236,15 +259,11 @@ namespace TheCall.Editor
                 cage[i] = MonsterCard(cageContent, "CageCard_" + i, 8 + column * 204, 4 + row * 118, 196, 112, 0.48f, null);
             }
 
-            var discard = Click(screen.transform, "废弃回收", "废弃回收", PanelDeep, Danger, 22, out var discardLabel);
+            var discard = Click(screen.transform, "废弃回收", "废弃回收", Danger, Danger, 22, out var discardLabel);
             At(discard, 1440, 554, 456, 148);
             At(discardLabel, 16, 12, 424, 36);
-            var recycle = Box(discard.transform, "RecycleIcon", Danger);
-            At(recycle, 70, 58, 64, 64);
-            recycle.raycastTarget = false;
-            var trash = Box(discard.transform, "TrashIcon", Danger);
-            At(trash, 310, 58, 64, 64);
-            trash.raycastTarget = false;
+            var recycle = Icon(discard.transform, "RecycleIcon", "recycle", 150, 52, 72, 72);
+            var trash = Icon(discard.transform, "TrashIcon", "trash", 250, 52, 72, 72);
 
             var skills = Box(screen.transform, "技能槽", Panel);
             At(skills, 1440, 718, 456, 230);
@@ -284,6 +303,7 @@ namespace TheCall.Editor
         static ResearchScreenView BuildResearch(Transform parent)
         {
             var screen = Screen(parent, "ResearchScreen");
+            Ambience(screen.transform, 0.22f);
             var title = Label(screen.transform, "Title", "怪物育成公司", 26, Ink, TextAlignmentOptions.Left);
             At(title, 36, 22, 240, 40);
             var section = Label(screen.transform, "Section", "科学研究", 26, Ink, TextAlignmentOptions.Left);
@@ -347,6 +367,7 @@ namespace TheCall.Editor
         static ShopScreenView BuildShop(Transform parent)
         {
             var screen = Screen(parent, "ShopScreen");
+            Ambience(screen.transform, 0.18f);
             var title = Label(screen.transform, "Title", "物资交易", 30, Ink, TextAlignmentOptions.Left);
             At(title, 36, 20, 280, 44);
             var shop = Click(screen.transform, "ShopButton", "商店", Mint, MintInk, 18, out _);
@@ -408,6 +429,13 @@ namespace TheCall.Editor
             var portrait = Box(doctor.transform, "PortraitImage", PanelDeep);
             At(portrait, 36, 70, 360, 560);
             portrait.raycastTarget = false;
+            if (_doctor != null)
+            {
+                portrait.sprite = _doctor;
+                portrait.type = Image.Type.Simple;
+                portrait.preserveAspect = true;
+                portrait.color = Color.white;
+            }
             var doctorName = Label(doctor.transform, "DoctorName", "疯狂博士", 26, Ink, TextAlignmentOptions.Center);
             At(doctorName, 36, 650, 360, 40);
             var flavor = Label(doctor.transform, "DoctorCaption", "古怪博士", 18, Muted, TextAlignmentOptions.Center);
@@ -419,9 +447,9 @@ namespace TheCall.Editor
             artRoot.transform.SetParent(screen.transform, false);
             var art = new[]
             {
-                ToolArt(artRoot.transform, "急急装置", "最先触发的产能技能再执行一次。"),
-                ToolArt(artRoot.transform, "上级员工证", "提取轨增加一格。"),
-                ToolArt(artRoot.transform, "独孤装置", "单词条怪物的能量数值加倍。"),
+                ToolArt(artRoot.transform, "急急装置", "最先触发的产能技能再执行一次。", Icons.GetValueOrDefault("急急装置")),
+                ToolArt(artRoot.transform, "上级员工证", "提取轨增加一格。", Icons.GetValueOrDefault("上级员工证")),
+                ToolArt(artRoot.transform, "独孤装置", "单词条怪物的能量数值加倍。", Icons.GetValueOrDefault("独孤装置")),
             };
             artRoot.SetActive(false);
 
@@ -447,6 +475,7 @@ namespace TheCall.Editor
         static ResultScreenView BuildResult(Transform parent)
         {
             var screen = Screen(parent, "ResultScreen");
+            Ambience(screen.transform, 0.28f);
             var card = Box(screen.transform, "PanelImage", Panel);
             At(card, 460, 160, 1000, 760);
             var title = Label(card.transform, "Title", "这一局结束", 40, Ink, TextAlignmentOptions.Center);
@@ -526,12 +555,21 @@ namespace TheCall.Editor
             return instance.GetComponent<MonsterPortrait>();
         }
 
-        static MonsterSlotView MonsterCard(Transform parent, string name, float x, float y, float w, float h, float scale, string action)
+        static MonsterSlotView MonsterCard(Transform parent, string name, float x, float y, float w, float h, float scale, string action, bool glassy = false)
         {
             var button = Click(parent, name, "", Panel, Ink, 18, out var unusedLabel);
             unusedLabel.gameObject.SetActive(false);
             At(button, x, y, w, h);
             var background = button.GetComponent<Image>();
+            var plate = glassy ? _soft : _panel;
+            if (plate != null)
+            {
+                background.sprite = plate;
+                background.type = Image.Type.Sliced;
+                background.color = Color.white;
+                background.pixelsPerUnitMultiplier = glassy ? 1f : 1.1f;
+            }
+
             background.raycastTarget = true;
             var selection = StretchChild(button.transform, "Selection", new Color(1f, 0.82f, 0.35f, 0.28f));
             selection.raycastTarget = false;
@@ -616,9 +654,11 @@ namespace TheCall.Editor
             var portraitRect = portrait.GetComponent<RectTransform>();
             At(portraitRect, 300, 70, 142, 102);
             portraitRect.localScale = new Vector3(1.15f, 1.15f, 1f);
-            var icon = Box(panel.transform, "IconImage", PanelDeep);
-            At(icon, 300, 78, 120, 120);
+            var icon = Box(panel.transform, "IconImage", Color.white);
+            At(icon, 300, 70, 128, 128);
             icon.raycastTarget = false;
+            icon.preserveAspect = true;
+            icon.type = Image.Type.Simple;
             icon.enabled = false;
             var buy = Click(panel.transform, "BuyButton", "购买", ButtonFace, Ink, 16, out var buyLabel);
             At(buy, 280, 214, 146, 48);
@@ -642,9 +682,18 @@ namespace TheCall.Editor
             At(title, 16, 96, 208, 36);
             var cost = Label(button.transform, "Cost", "消耗 1 科技点", 15, Muted, TextAlignmentOptions.Center);
             At(cost, 16, 138, 208, 28);
-            var icon = Box(button.transform, "IconImage", PanelDeep);
-            At(icon, 80, 18, 80, 70);
+            var icon = Box(button.transform, "IconImage", Color.white);
+            At(icon, 70, 8, 100, 82);
             icon.raycastTarget = false;
+            icon.enabled = false;
+            if (Icons.TryGetValue(techName, out var iconSprite))
+            {
+                icon.sprite = iconSprite;
+                icon.type = Image.Type.Simple;
+                icon.preserveAspect = true;
+                icon.color = Color.white;
+                icon.enabled = true;
+            }
             var selection = StretchChild(button.transform, "Selection", new Color(1f, 0.86f, 0.45f, 0.22f));
             selection.raycastTarget = false;
             selection.transform.SetAsFirstSibling();
@@ -659,13 +708,14 @@ namespace TheCall.Editor
             return view;
         }
 
-        static ToolArtView ToolArt(Transform parent, string toolName, string description)
+        static ToolArtView ToolArt(Transform parent, string toolName, string description, Sprite icon)
         {
             var go = new GameObject(toolName, typeof(RectTransform));
             go.transform.SetParent(parent, false);
             var view = go.AddComponent<ToolArtView>();
             view.toolName = toolName;
             view.description = description;
+            view.icon = icon;
             return view;
         }
 
@@ -679,6 +729,13 @@ namespace TheCall.Editor
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             var background = StretchChild(go.transform, "BackgroundImage", Stage);
+            if (_stage != null)
+            {
+                background.sprite = _stage;
+                background.type = Image.Type.Simple;
+                background.color = Color.white;
+            }
+
             background.raycastTarget = false;
             return go;
         }
@@ -717,6 +774,13 @@ namespace TheCall.Editor
             var image = Box(parent, name, new Color(0.93f, 0.72f, 0.86f, 0.9f));
             At(image, x, y, w, h);
             image.raycastTarget = false;
+            if (_pipe != null)
+            {
+                image.sprite = _pipe;
+                image.type = Image.Type.Sliced;
+                image.color = new Color(0.96f, 0.74f, 0.86f, 1f);
+                image.pixelsPerUnitMultiplier = 1f;
+            }
         }
 
         static Button Click(Transform parent, string name, string text, Color background, Color foreground, float fontSize, out TextMeshProUGUI label)
@@ -726,7 +790,15 @@ namespace TheCall.Editor
             var image = go.AddComponent<Image>();
             image.color = background;
             image.raycastTarget = true;
-            if (_ui != null)
+            var face = Face(background);
+            if (face != null)
+            {
+                image.sprite = face;
+                image.type = Image.Type.Sliced;
+                image.color = Color.white;
+                image.pixelsPerUnitMultiplier = 1f;
+            }
+            else if (_ui != null)
             {
                 image.sprite = _ui;
                 image.type = Image.Type.Sliced;
@@ -756,7 +828,21 @@ namespace TheCall.Editor
             var image = go.AddComponent<Image>();
             image.color = color;
             image.raycastTarget = false;
-            if (_ui != null)
+            if (_panel != null && Same(color, Panel))
+            {
+                image.sprite = _panel;
+                image.type = Image.Type.Sliced;
+                image.color = Color.white;
+                image.pixelsPerUnitMultiplier = 1.15f;
+            }
+            else if (_panel != null && Same(color, PanelDeep))
+            {
+                image.sprite = _panel;
+                image.type = Image.Type.Sliced;
+                image.color = new Color(0.78f, 0.86f, 0.9f, 1f);
+                image.pixelsPerUnitMultiplier = 1.15f;
+            }
+            else if (_ui != null)
             {
                 image.sprite = _ui;
                 image.type = Image.Type.Sliced;
@@ -808,6 +894,194 @@ namespace TheCall.Editor
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             rect.pivot = new Vector2(0.5f, 0.5f);
+        }
+
+        static void Ambience(Transform parent, float alpha)
+        {
+            if (_breed == null)
+                return;
+
+            var image = StretchChild(parent, "Ambience", Color.white);
+            image.sprite = _breed;
+            image.type = Image.Type.Simple;
+            image.color = new Color(1f, 1f, 1f, alpha);
+            image.raycastTarget = false;
+        }
+
+        static void PaintRoom(Image panel, Sprite art)
+        {
+            if (art == null)
+                return;
+
+            panel.sprite = art;
+            panel.type = Image.Type.Simple;
+            panel.color = Color.white;
+            panel.pixelsPerUnitMultiplier = 1f;
+            if (_frame == null)
+                return;
+
+            var frame = new GameObject("Frame", typeof(RectTransform)).AddComponent<Image>();
+            frame.transform.SetParent(panel.transform, false);
+            Stretch(frame.rectTransform);
+            frame.sprite = _frame;
+            frame.type = Image.Type.Sliced;
+            frame.color = Color.white;
+            frame.pixelsPerUnitMultiplier = 1.2f;
+            frame.raycastTarget = false;
+        }
+
+        static void CaptionShade(Transform parent)
+        {
+            var shade = Box(parent, "CaptionShade", new Color(0f, 0f, 0f, 0.45f));
+            At(shade, 16, 10, 168, 42);
+            shade.raycastTarget = false;
+        }
+
+        static Image Icon(Transform parent, string name, string key, float x, float y, float w, float h)
+        {
+            var image = new GameObject(name, typeof(RectTransform)).AddComponent<Image>();
+            image.transform.SetParent(parent, false);
+            At(image, x, y, w, h);
+            image.raycastTarget = false;
+            image.preserveAspect = true;
+            image.color = Color.white;
+            if (Icons.TryGetValue(key, out var sprite) && sprite != null)
+            {
+                image.sprite = sprite;
+                image.type = Image.Type.Simple;
+            }
+
+            return image;
+        }
+
+        static Sprite Face(Color background)
+        {
+            if (_btnMint != null && Same(background, Mint))
+                return _btnMint;
+            if (_btnDanger != null && Same(background, Danger))
+                return _btnDanger;
+            return _btnDark;
+        }
+
+        static bool Same(Color a, Color b)
+        {
+            return Mathf.Abs(a.r - b.r) < 0.03f
+                   && Mathf.Abs(a.g - b.g) < 0.03f
+                   && Mathf.Abs(a.b - b.b) < 0.03f;
+        }
+
+        static void ConfigureUi()
+        {
+            if (!AssetDatabase.IsValidFolder("Assets/Art"))
+                AssetDatabase.CreateFolder("Assets", "Art");
+            if (!AssetDatabase.IsValidFolder(ArtDir))
+                return;
+
+            AssetDatabase.Refresh();
+            var borders = new Dictionary<string, Vector4>
+            {
+                ["Panel.png"] = new Vector4(16, 16, 16, 16),
+                ["PanelSoft.png"] = new Vector4(16, 16, 16, 16),
+                ["ButtonMint.png"] = new Vector4(16, 16, 16, 16),
+                ["ButtonDark.png"] = new Vector4(16, 16, 16, 16),
+                ["ButtonDanger.png"] = new Vector4(16, 16, 16, 16),
+                ["Frame.png"] = new Vector4(18, 18, 18, 18),
+                ["Pipe.png"] = new Vector4(12, 6, 12, 6),
+            };
+            AssetDatabase.StartAssetEditing();
+            try
+            {
+                foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { ArtDir }))
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(guid);
+                    if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
+                        continue;
+
+                    var file = System.IO.Path.GetFileName(path);
+                    borders.TryGetValue(file, out var border);
+                    if (UiImportMatches(importer, border))
+                        continue;
+
+                    ApplyUiImport(importer, border);
+                    importer.SaveAndReimport();
+                }
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+        }
+
+        static bool UiImportMatches(TextureImporter importer, Vector4 border)
+        {
+            return importer.textureType == TextureImporterType.Sprite
+                   && importer.spriteImportMode == SpriteImportMode.Single
+                   && importer.alphaIsTransparency
+                   && !importer.mipmapEnabled
+                   && importer.filterMode == FilterMode.Bilinear
+                   && Mathf.Approximately(importer.spritePixelsPerUnit, 100f)
+                   && importer.spriteBorder == border;
+        }
+
+        static void ApplyUiImport(TextureImporter importer, Vector4 border)
+        {
+            var settings = new TextureImporterSettings();
+            importer.ReadTextureSettings(settings);
+            settings.textureType = TextureImporterType.Sprite;
+            settings.spriteMode = (int)SpriteImportMode.Single;
+            settings.alphaIsTransparency = true;
+            settings.mipmapEnabled = false;
+            settings.filterMode = FilterMode.Bilinear;
+            settings.spriteMeshType = SpriteMeshType.FullRect;
+            settings.spriteAlignment = (int)SpriteAlignment.Center;
+            settings.spritePixelsPerUnit = 100f;
+            settings.spriteBorder = border;
+            importer.SetTextureSettings(settings);
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.filterMode = FilterMode.Bilinear;
+            importer.spritePixelsPerUnit = 100f;
+            importer.spriteBorder = border;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+        }
+
+        static void LoadUi()
+        {
+            _stage = LoadSprite("BgStage.png");
+            _breed = LoadSprite("BgBreed.png");
+            _production = LoadSprite("BgProduction.png");
+            _panel = LoadSprite("Panel.png");
+            _frame = LoadSprite("Frame.png");
+            _soft = LoadSprite("PanelSoft.png");
+            _btnMint = LoadSprite("ButtonMint.png");
+            _btnDark = LoadSprite("ButtonDark.png");
+            _btnDanger = LoadSprite("ButtonDanger.png");
+            _pipe = LoadSprite("Pipe.png");
+            _doctor = LoadSprite("Doctor.png");
+            Icons.Clear();
+            Icons["急急装置"] = LoadSprite("IconRocket.png");
+            Icons["上级员工证"] = LoadSprite("IconBadge.png");
+            Icons["独孤装置"] = LoadSprite("IconBolt.png");
+            Icons["基因实验"] = LoadSprite("IconGene.png");
+            Icons["槽位扩容"] = LoadSprite("IconSlot.png");
+            Icons["变异学说"] = LoadSprite("IconMutant.png");
+            Icons["大乱炖"] = LoadSprite("IconStew.png");
+            Icons["科学培育"] = LoadSprite("IconFlask.png");
+            Icons["recycle"] = LoadSprite("IconRecycle.png");
+            Icons["trash"] = LoadSprite("IconTrash.png");
+        }
+
+        static Sprite LoadSprite(string file)
+        {
+            foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(ArtDir + "/" + file))
+            {
+                if (asset is Sprite sprite)
+                    return sprite;
+            }
+
+            return null;
         }
 
         static void ConfigureParts()

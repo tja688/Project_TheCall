@@ -39,12 +39,30 @@ namespace TheCall
 
         public IArchitecture GetArchitecture() => TheCallApp.Interface;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void BeginPlaySession()
+        {
+            var presentation = FindAnyObjectByType<TheCallPresentation>();
+            if (presentation != null)
+                presentation.StartSession();
+        }
+
         void Awake()
         {
+            Wire();
+            StartSession();
+        }
+
+        void StartSession()
+        {
+            _back = BackTarget.None;
+            _sellTab = false;
+            _selectedMonster = null;
+            _selectedSkill = -1;
+            _busy = false;
             if (_toast != null)
                 _toast.SetActive(false);
 
-            Wire();
             Refresh();
         }
 
@@ -409,6 +427,9 @@ namespace TheCall
             if (card.icon != null)
             {
                 card.icon.enabled = true;
+                card.icon.type = UnityEngine.UI.Image.Type.Simple;
+                card.icon.preserveAspect = true;
+                card.icon.color = Color.white;
                 var art = FindArt(item.Name);
                 if (art != null && art.icon != null)
                     card.icon.sprite = art.icon;
@@ -747,13 +768,9 @@ namespace TheCall
 
         void OnTitle()
         {
-            _back = BackTarget.None;
-            _sellTab = false;
-            _selectedMonster = null;
-            _selectedSkill = -1;
             TheCallApp.Reset();
+            StartSession();
             Notice("回到开局。");
-            Refresh();
         }
 
         void Run(Action send, Func<bool> succeeded, string success, string failure)

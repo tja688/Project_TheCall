@@ -1,9 +1,13 @@
 using QFramework;
+using UnityEngine;
 
 namespace TheCall
 {
     public sealed class TheCallApp : Architecture<TheCallApp>
     {
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatics() => Reset();
+
         public static void Reset()
         {
             if (mArchitecture != null)
