@@ -1,0 +1,20 @@
+{
+    "name": "TheCall.Hover",
+    "rootNamespace": "TheCall",
+    "references": [
+        "TheCall.Rules",
+        "QFramework",
+        "Unity.InputSystem",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

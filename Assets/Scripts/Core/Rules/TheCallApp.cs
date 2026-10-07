@@ -19,6 +19,7 @@ namespace TheCall
         protected override void Init()
         {
             RegisterUtility(new SkillCatalog());
+            RegisterUtility(new SkillCopy());
             RegisterUtility<IDraw>(new SystemDraw());
             RegisterUtility<ILevelCatalog>(new LevelCatalog());
             RegisterUtility<IToolCatalog>(new ToolCatalog());

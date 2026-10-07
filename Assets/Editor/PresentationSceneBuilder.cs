@@ -85,6 +85,141 @@ namespace TheCall.Editor
             }
         }
 
+        public static void BuildHoverWindow()
+        {
+            if (EditorApplication.isPlaying)
+                throw new InvalidOperationException("Exit play mode before building the hover window.");
+
+            _ui = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+            _font = Resources.Load<TMP_FontAsset>("SmileySans-Oblique-3 SDF");
+            _portraitPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PortraitPath);
+            if (_portraitPrefab == null)
+                throw new InvalidOperationException("Missing " + PortraitPath);
+
+            LoadUi();
+            var canvas = FindOpenCanvas();
+            for (var i = canvas.childCount - 1; i >= 0; i--)
+            {
+                var child = canvas.GetChild(i);
+                if (child.name == "MonsterHover")
+                    UnityEngine.Object.DestroyImmediate(child.gameObject);
+            }
+
+            var hoverObject = new GameObject("MonsterHover", typeof(RectTransform));
+            hoverObject.transform.SetParent(canvas, false);
+            Stretch(hoverObject.GetComponent<RectTransform>());
+            var hover = hoverObject.AddComponent<MonsterHover>();
+
+            var windowObject = new GameObject("Window", typeof(RectTransform));
+            windowObject.transform.SetParent(hoverObject.transform, false);
+            var window = windowObject.GetComponent<RectTransform>();
+            Center(window, new Vector2(320f, 400f));
+            var group = windowObject.AddComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            group.interactable = false;
+
+            var card = Box(window, "Card", Panel);
+            Center(card.rectTransform, new Vector2(320f, 400f));
+            var portrait = SpawnPortrait(card.transform, "Portrait");
+            At(portrait, 89f, 16f, 142f, 102f);
+            var title = Label(card.transform, "Title", "", 26f, Ink, TextAlignmentOptions.Center);
+            At(title, 16f, 132f, 288f, 40f);
+            var skillLine = Label(card.transform, "SkillLine", "", 18f, Ink, TextAlignmentOptions.Center);
+            At(skillLine, 16f, 176f, 288f, 64f);
+
+            var pills = new GameObject("Pills", typeof(RectTransform));
+            pills.transform.SetParent(card.transform, false);
+            At(pills, 28f, 340f, 264f, 40f);
+            var modifierPill = Box(pills.transform, "ModifierPill", Mint);
+            At(modifierPill, 0f, 0f, 124f, 40f);
+            var modifier = Label(modifierPill.transform, "Text", "修正 0", 16f, MintInk, TextAlignmentOptions.Center);
+            Stretch(modifier.rectTransform);
+            var capacityPill = Box(pills.transform, "CapacityPill", Mint);
+            At(capacityPill, 140f, 0f, 124f, 40f);
+            var capacity = Label(capacityPill.transform, "Text", "产能 0", 16f, MintInk, TextAlignmentOptions.Center);
+            Stretch(capacity.rectTransform);
+            var immovable = Label(card.transform, "ImmovableStamp", "不动", 16f, Gold, TextAlignmentOptions.Center);
+            At(immovable, 228f, 16f, 76f, 28f);
+            immovable.gameObject.SetActive(false);
+
+            var subRoots = new RectTransform[4];
+            var subNames = new TextMeshProUGUI[4];
+            var subMetas = new TextMeshProUGUI[4];
+            var subSentences = new TextMeshProUGUI[4];
+            for (var i = 0; i < 4; i++)
+                subRoots[i] = Subpanel(window, "Subpanel" + i, out subNames[i], out subMetas[i], out subSentences[i]);
+
+            var graphics = window.GetComponentsInChildren<Graphic>(true);
+            for (var i = 0; i < graphics.Length; i++)
+                graphics[i].raycastTarget = false;
+
+            windowObject.SetActive(false);
+            hoverObject.SetActive(true);
+            hoverObject.transform.SetAsLastSibling();
+
+            var serialized = new SerializedObject(hover);
+            serialized.FindProperty("_window").objectReferenceValue = window;
+            serialized.FindProperty("_title").objectReferenceValue = title;
+            serialized.FindProperty("_skillLine").objectReferenceValue = skillLine;
+            serialized.FindProperty("_modifier").objectReferenceValue = modifier;
+            serialized.FindProperty("_capacity").objectReferenceValue = capacity;
+            serialized.FindProperty("_immovable").objectReferenceValue = immovable.gameObject;
+            serialized.FindProperty("_portrait").objectReferenceValue = portrait;
+            Assign(serialized.FindProperty("_subpanels"), subRoots);
+            Assign(serialized.FindProperty("_subNames"), subNames);
+            Assign(serialized.FindProperty("_subMetas"), subMetas);
+            Assign(serialized.FindProperty("_subSentences"), subSentences);
+            serialized.FindProperty("_cardSize").vector2Value = new Vector2(320f, 400f);
+            serialized.FindProperty("_subpanelSize").vector2Value = new Vector2(300f, 156f);
+            serialized.FindProperty("_slotGap").floatValue = 12f;
+            serialized.FindProperty("_stackGap").floatValue = 12f;
+            serialized.FindProperty("_subpanelGap").floatValue = 8f;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+
+            var scene = canvas.gameObject.scene;
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
+
+        static Transform FindOpenCanvas()
+        {
+            var scene = EditorSceneManager.GetActiveScene();
+            var roots = scene.GetRootGameObjects();
+            for (var i = 0; i < roots.Length; i++)
+            {
+                if (roots[i].name == "UICanvas")
+                    return roots[i].transform;
+            }
+
+            throw new InvalidOperationException("The open scene has no UICanvas.");
+        }
+
+        static RectTransform Subpanel(
+            Transform parent,
+            string name,
+            out TextMeshProUGUI title,
+            out TextMeshProUGUI meta,
+            out TextMeshProUGUI sentence)
+        {
+            var image = Box(parent, name, Panel);
+            Center(image.rectTransform, new Vector2(300f, 156f));
+            title = Label(image.transform, "Name", "", 22f, Ink, TextAlignmentOptions.Center);
+            At(title, 12f, 10f, 276f, 36f);
+            meta = Label(image.transform, "Meta", "", 16f, Mint, TextAlignmentOptions.Center);
+            At(meta, 12f, 46f, 276f, 24f);
+            sentence = Label(image.transform, "Sentence", "", 16f, Ink, TextAlignmentOptions.Center);
+            At(sentence, 12f, 74f, 276f, 70f);
+            image.gameObject.SetActive(false);
+            return image.rectTransform;
+        }
+
+        static void Assign(SerializedProperty property, UnityEngine.Object[] values)
+        {
+            property.arraySize = values.Length;
+            for (var i = 0; i < values.Length; i++)
+                property.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
+        }
+
         static string BuildInternal()
         {
             ConfigureParts();
@@ -987,6 +1122,15 @@ namespace TheCall.Editor
             rect.pivot = new Vector2(0f, 1f);
             rect.anchoredPosition = new Vector2(x, -y);
             rect.sizeDelta = new Vector2(w, h);
+        }
+
+        static void Center(RectTransform rect, Vector2 size)
+        {
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = size;
         }
 
         static void Stretch(RectTransform rect)

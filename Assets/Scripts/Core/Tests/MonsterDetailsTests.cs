@@ -1,0 +1,53 @@
+using System.Linq;
+using NUnit.Framework;
+
+namespace TheCall.Tests
+{
+    public sealed class MonsterDetailsTests : RulesFixture
+    {
+        [Test]
+        public void 左能量体的详情是主动白字且句子来自效果说明()
+        {
+            var monster = App.SendQuery(new OpeningCandidatesQuery())
+                .Single(candidate => candidate.SkillNames.Single() == "左能量体");
+
+            var details = App.SendQuery(new MonsterDetailsQuery(monster.Id));
+
+            Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量"));
+            Assert.That(details.Skills[0].Kind, Is.EqualTo(SkillUse.Active));
+            Assert.That(details.Skills[0].Rarity, Is.EqualTo(Rarity.White));
+        }
+
+        [Test]
+        public void 未知怪物id的详情是空()
+        {
+            Assert.That(App.SendQuery(new MonsterDetailsQuery("missing")), Is.Null);
+        }
+
+        [Test]
+        public void 文案表的名字与技能目录相同且能量吐息有句子()
+        {
+            var catalog = App.GetUtility<SkillCatalog>();
+            var copy = App.GetUtility<SkillCopy>();
+
+            Assert.That(copy.Names, Is.EqualTo(catalog.Names));
+            Assert.That(copy.TryDescribe("能量吐息", out var kind, out var sentence), Is.True);
+            Assert.That(kind, Is.EqualTo(SkillUse.Active));
+            Assert.That(sentence, Is.EqualTo("产生5点能量"));
+        }
+
+        [Test]
+        public void 吞噬大嘴的句子没有星号()
+        {
+            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            var devourer = App.SendQuery(new MonsterCageQuery())
+                .Single(monster => monster.SkillNames.Single() == "吞噬大嘴");
+
+            var details = App.SendQuery(new MonsterDetailsQuery(devourer.Id));
+
+            Assert.That(
+                details.Skills[0].Sentence,
+                Is.EqualTo("产生4点能量，消灭随机一只相邻怪物，本技能产生的能量数值永久+2"));
+        }
+    }
+}

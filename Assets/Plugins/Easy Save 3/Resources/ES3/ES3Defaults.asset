@@ -44,6 +44,7 @@ MonoBehaviour:
     - QFramework.CoreKit
     - ResKit
     - SupportOldQF
+    - TheCall.Hover
     - TheCall.Rules
     - UIKit
     showAdvancedSettings: 0
