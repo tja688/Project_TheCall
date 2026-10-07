@@ -21,8 +21,13 @@ namespace TheCall
                 }
 
                 var firstAppearance = parents[slot % parents.Count].Appearance;
-                var secondAppearance = parents[(slot + 1) % parents.Count].Appearance;
-                var appearance = MonsterAppearance.Breed(firstAppearance, secondAppearance);
+                var firstParent = parents[slot % parents.Count];
+                var secondParent = parents[(slot + 1) % parents.Count];
+                var secondAppearance = secondParent.Appearance;
+                var appearance = MonsterAppearance.Breed(
+                    firstAppearance,
+                    secondAppearance,
+                    AppearanceSeed(firstParent.Id, secondParent.Id, slot));
                 var names = Inherit(parents, draw);
                 var tech = this.GetUtility<TechCatalog>();
                 if (!string.IsNullOrEmpty(skill))
@@ -49,6 +54,21 @@ namespace TheCall
                     parentIds[parent] = parents[parent].Id;
 
                 run.AddToCage(run.CreateMonster(names, modifier, appearance, parentIds));
+            }
+        }
+
+        static int AppearanceSeed(string firstParentId, string secondParentId, int slot)
+        {
+            unchecked
+            {
+                var seed = 17;
+                var first = firstParentId ?? string.Empty;
+                for (var i = 0; i < first.Length; i++)
+                    seed = seed * 31 + first[i];
+                var second = secondParentId ?? string.Empty;
+                for (var i = 0; i < second.Length; i++)
+                    seed = seed * 31 + second[i];
+                return seed * 397 + slot;
             }
         }
 

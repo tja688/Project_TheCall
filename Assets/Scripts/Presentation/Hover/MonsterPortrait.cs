@@ -179,9 +179,12 @@ namespace TheCall
                 return;
 
             var appearancePartId = appearance.PartId(kind);
-            var slot = catalog.ResolveSlot(template, kind, appearancePartId);
+            var slot = catalog.ResolveSlot(template, kind, appearancePartId, appearance.HasExplicitParts);
             var definition = catalog.GetPartOrNull(slot.partId);
-            var valid = slot.enabled && definition != null && definition.sprite != null;
+            var valid = slot.enabled
+                        && definition != null
+                        && definition.sprite != null
+                        && catalog.IsCompatible(slot, definition);
             var rect = image.rectTransform;
 
             if (parent != null && image.transform.parent != parent)

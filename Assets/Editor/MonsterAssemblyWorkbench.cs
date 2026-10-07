@@ -62,10 +62,12 @@ namespace TheCall.Editor
         PopupField<string> _palettePicker;
         int _templateIndex;
         int _palette;
+        int _previewSeed = 1;
         MonsterPartKind _selectedKind = MonsterPartKind.Body;
         bool _showGuides = true;
         bool _idlePreview = true;
         bool _dragPreview;
+        bool _randomPreview;
         bool _editSelected;
         bool _previewDragging;
         Vector2 _lastPointer;
@@ -258,6 +260,19 @@ namespace TheCall.Editor
                 _editSelected = value;
                 MarkPreviewDirty();
             }));
+            previewFoldout.Add(Toggle("随机组合实例预览", _randomPreview, value =>
+            {
+                _randomPreview = value;
+                MarkPreviewDirty();
+            }));
+            previewFoldout.Add(new Button(() =>
+            {
+                _previewSeed += 1;
+                MarkPreviewDirty();
+            })
+            {
+                text = "换一只随机实例",
+            });
             previewFoldout.Add(new Slider("拖动量", -1f, 1f)
             {
                 value = _dragAmount,
@@ -418,6 +433,15 @@ namespace TheCall.Editor
                 MarkPreviewDirty();
             });
             container.Add(anchor);
+            var requiredConnection = new TextField("挂点接口") { value = slot.requiredConnection };
+            requiredConnection.RegisterValueChangedCallback(e =>
+            {
+                var updated = _workingTemplate.GetSlot(_selectedKind);
+                updated.requiredConnection = e.newValue;
+                _workingTemplate.SetSlot(_selectedKind, updated);
+                BuildControls();
+            });
+            container.Add(requiredConnection);
             container.Add(Vector2Field("局部偏移", slot.offset, value =>
             {
                 var updated = _workingTemplate.GetSlot(_selectedKind);
@@ -434,6 +458,19 @@ namespace TheCall.Editor
             }));
             if (part != null)
             {
+                if (!_catalog.IsCompatible(slot, part))
+                    container.Add(new HelpBox(
+                        "接口不兼容：挂点要求 “" + slot.requiredConnection + "”，部件提供 “" + part.connectionType + "”。此组合不会进入运行时预览。",
+                        HelpBoxMessageType.Error));
+                var connection = new TextField("部件连接接口") { value = part.connectionType };
+                connection.RegisterValueChangedCallback(e =>
+                {
+                    part.connectionType = e.newValue;
+                    EditorUtility.SetDirty(_catalog);
+                    BuildControls();
+                    MarkPreviewDirty();
+                });
+                container.Add(connection);
                 container.Add(Vector2Field("部件连接点（归一化，左下为原点）", part.attachmentPoint, value =>
                 {
                     part.attachmentPoint = new Vector2(Mathf.Clamp01(value.x), Mathf.Clamp01(value.y));
@@ -611,7 +648,9 @@ namespace TheCall.Editor
             GUI.color = Color.white;
             GUI.Label(
                 new Rect(rect.x + 14f, rect.y + 12f, rect.width - 28f, 24f),
-                _workingTemplate.displayName + "  ·  " + PaletteNames[_palette] + "  ·  " + PartLabel(_selectedKind));
+                _workingTemplate.displayName + "  ·  " + PaletteNames[_palette] + "  ·  "
+                + (_randomPreview ? "随机实例 #" + _previewSeed : "模板编辑预览")
+                + "  ·  " + PartLabel(_selectedKind));
             GUI.Label(
                 new Rect(rect.x + 14f, rect.yMax - 48f, rect.width - 28f, 22f),
                 _editSelected
@@ -627,8 +666,11 @@ namespace TheCall.Editor
             if (evt == null)
                 return;
 
+            var controlId = GUIUtility.GetControlID(FocusType.Passive, canvas);
+            var ownsPointer = GUIUtility.hotControl == controlId;
             if (evt.type == EventType.MouseDown && evt.button == 0 && canvas.Contains(evt.mousePosition))
             {
+                GUIUtility.hotControl = controlId;
                 _previewDragging = true;
                 _lastPointer = evt.mousePosition;
                 _lastPointerTick = EditorApplication.timeSinceStartup;
@@ -636,7 +678,7 @@ namespace TheCall.Editor
                 return;
             }
 
-            if (evt.type == EventType.MouseDrag && _previewDragging)
+            if (evt.type == EventType.MouseDrag && _previewDragging && ownsPointer)
             {
                 var delta = evt.mousePosition - _lastPointer;
                 _lastPointer = evt.mousePosition;
@@ -654,6 +696,7 @@ namespace TheCall.Editor
                     _lastPointerTick = now;
                     _previewOffset += new Vector2(delta.x / scale, -delta.y / scale);
                     var velocity = Vector2.ClampMagnitude(delta / deltaTime, 1200f);
+                    _previewOffsetVelocity = new Vector2(velocity.x / scale, -velocity.y / scale);
                     var drive = Mathf.Clamp(velocity.x / 700f, -1f, 1f);
                     _targetHeadAngle = -drive * _profile.headDragDegrees;
                     _targetFootAngle = drive * _profile.feetDragDegrees;
@@ -665,9 +708,10 @@ namespace TheCall.Editor
                 return;
             }
 
-            if ((evt.type == EventType.MouseUp || evt.type == EventType.Ignore) && _previewDragging)
+            if ((evt.type == EventType.MouseUp || evt.type == EventType.Ignore) && _previewDragging && ownsPointer)
             {
                 _previewDragging = false;
+                GUIUtility.hotControl = 0;
                 _targetHeadAngle = 0f;
                 _targetFootAngle = 0f;
                 _targetTailAngle = 0f;
@@ -688,14 +732,18 @@ namespace TheCall.Editor
             Vector2 previewOffset)
         {
             var slot = _workingTemplate.GetSlot(kind);
+            var appearance = _randomPreview ? RandomPreviewAppearance() : default;
+            var appearancePartId = _randomPreview ? appearance.PartId(kind) : string.Empty;
+            slot = _catalog.ResolveSlot(_workingTemplate, kind, appearancePartId, _randomPreview);
             if (!slot.enabled)
                 return;
 
             var definition = _catalog.GetPartOrNull(slot.partId);
-            if (definition == null || definition.sprite == null)
+            if (definition == null || definition.sprite == null || !_catalog.IsCompatible(slot, definition))
                 return;
 
-            var headDefinition = _catalog.GetPartOrNull(_workingTemplate.head.partId);
+            var headDefinition = _catalog.GetPartOrNull(
+                _randomPreview ? appearance.HeadId : _workingTemplate.head.partId);
             var localPosition = _catalog.ResolveSpritePivotPosition(_workingTemplate, slot, definition, headDefinition);
             var groupAnchor = GroupAnchor(kind);
             var groupAngle = GroupAngle(kind, headAngle, footAngle, tailAngle, bodyAngle);
@@ -726,6 +774,23 @@ namespace TheCall.Editor
                 definition.sprite.textureRect.height / texture.height);
             GUI.DrawTextureWithTexCoords(drawRect, texture, uv, true);
             GUI.matrix = previousMatrix;
+        }
+
+        MonsterAppearance RandomPreviewAppearance()
+        {
+            var generated = MonsterAppearance.FromSeed(_previewSeed);
+            return new MonsterAppearance(
+                _workingTemplate.id,
+                _palette,
+                generated.BodyId,
+                generated.HeadId,
+                generated.EyeId,
+                generated.MouthId,
+                generated.HandId,
+                generated.FootId,
+                generated.TailId,
+                generated.HatId,
+                generated.AccessoryId);
         }
 
         void DrawGuides(Rect canvas, float scale)

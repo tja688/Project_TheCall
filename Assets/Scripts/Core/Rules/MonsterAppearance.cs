@@ -33,19 +33,21 @@ namespace TheCall
         };
 
         public MonsterAppearance(int recipe, int palette)
-            : this(
-                TemplateIdForRecipe(recipe),
-                PositiveModulo(palette, PaletteCount),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null)
         {
+            TemplateId = TemplateIdForRecipe(recipe);
+            Palette = PositiveModulo(palette, PaletteCount);
+            PaletteId = PaletteIds[Palette];
+            BodyId = string.Empty;
+            HeadId = string.Empty;
+            EyeId = string.Empty;
+            MouthId = string.Empty;
+            HandId = string.Empty;
+            FootId = string.Empty;
+            TailId = string.Empty;
+            HatId = string.Empty;
+            AccessoryId = string.Empty;
+            HasExplicitParts = false;
+            Recipe = PositiveModulo(recipe, RecipeCount);
         }
 
         public MonsterAppearance(
@@ -73,6 +75,7 @@ namespace TheCall
             TailId = tailId ?? string.Empty;
             HatId = hatId ?? string.Empty;
             AccessoryId = accessoryId ?? string.Empty;
+            HasExplicitParts = true;
             Recipe = RecipeForTemplate(TemplateId);
         }
 
@@ -101,6 +104,8 @@ namespace TheCall
         public string HatId { get; }
 
         public string AccessoryId { get; }
+
+        public bool HasExplicitParts { get; }
 
         public string PartId(MonsterPartKind kind)
         {
@@ -140,20 +145,39 @@ namespace TheCall
                 Choice(seed, 0x7D31, 3) == 0 ? "accessory_" + (accessoryIndex + 1).ToString("00") : string.Empty);
         }
 
-        public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second)
+        public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second) =>
+            Breed(first, second, 0);
+
+        public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second, int childSeed)
         {
+            var faceFromFirst = Choice(childSeed, 0x41A7, 2) == 0;
+            var faceSource = faceFromFirst ? first : second;
+            var otherSource = faceFromFirst ? second : first;
+            var bodyIndex = Choice(childSeed, 0x2D39, RecipeCount);
+            var tail = PreferPresent(
+                Choice(childSeed, 0x7813, 2) == 0 ? first.TailId : second.TailId,
+                Choice(childSeed, 0x7813, 2) == 0 ? second.TailId : first.TailId);
+            var hat = PreferPresent(faceSource.HatId, otherSource.HatId);
+            var accessory = PreferPresent(
+                Choice(childSeed, 0x5A21, 2) == 0 ? first.AccessoryId : second.AccessoryId,
+                string.Empty);
+
             return new MonsterAppearance(
-                first.TemplateId,
+                TemplateIdForRecipe(bodyIndex),
                 second.Palette,
-                first.BodyId,
-                first.HeadId,
-                first.EyeId,
-                first.MouthId,
-                first.HandId,
-                first.FootId,
-                first.TailId,
-                first.HatId,
-                first.AccessoryId);
+                "body_" + (bodyIndex + 1).ToString("00"),
+                PreferPresent(faceSource.HeadId, otherSource.HeadId),
+                PreferPresent(faceSource.EyeId, otherSource.EyeId),
+                PreferPresent(faceSource.MouthId, otherSource.MouthId),
+                PreferPresent(
+                    Choice(childSeed, 0x126B, 2) == 0 ? first.HandId : second.HandId,
+                    string.Empty),
+                PreferPresent(
+                    Choice(childSeed, 0x64D5, 2) == 0 ? first.FootId : second.FootId,
+                    string.Empty),
+                tail,
+                hat,
+                accessory);
         }
 
         public static string TemplateIdForRecipe(int recipe) =>
@@ -189,5 +213,8 @@ namespace TheCall
                 return PositiveModulo(value, count);
             }
         }
+
+        static string PreferPresent(string preferred, string fallback) =>
+            string.IsNullOrEmpty(preferred) ? fallback ?? string.Empty : preferred;
     }
 }

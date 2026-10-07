@@ -30,7 +30,7 @@ namespace TheCall.Editor
                 AssetDatabase.CreateAsset(catalog, CatalogPath);
             }
 
-            var needsMigration = catalog.schemaVersion < 3;
+            var needsMigration = catalog.schemaVersion < 4;
             var changed = EnsureParts(catalog);
             changed |= EnsureTemplates(catalog);
             if (needsMigration)
@@ -41,12 +41,13 @@ namespace TheCall.Editor
                     if (part != null)
                     {
                         part.attachmentPoint = MonsterAssemblyCatalog.DefaultAttachmentPoint(part.kind);
+                        part.connectionType = MonsterAssemblyCatalog.DefaultConnectionType(part.kind);
                         MonsterAssemblyCatalog.ConfigureDefaultHeadLayout(part);
                     }
                 }
 
                 MonsterAssemblyCatalog.ConfigureSeedGeometry(catalog);
-                catalog.schemaVersion = 3;
+                catalog.schemaVersion = 4;
                 changed = true;
             }
 
@@ -113,7 +114,7 @@ namespace TheCall.Editor
                 if (sprite == null)
                     continue;
 
-                var id = prefix + (index + 1).ToString("00");
+                var id = StablePartId(prefix, sprite.name, paths[index], index + 1);
                 var part = FindPart(catalog, id);
                 if (part == null)
                 {
@@ -123,6 +124,7 @@ namespace TheCall.Editor
                         kind = kind,
                         sprite = sprite,
                         colorRole = colorRole,
+                        connectionType = MonsterAssemblyCatalog.DefaultConnectionType(kind),
                         attachmentPoint = MonsterAssemblyCatalog.DefaultAttachmentPoint(kind),
                         optional = optional,
                         sortOrder = sortOrder,
@@ -141,6 +143,23 @@ namespace TheCall.Editor
             }
 
             return changed;
+        }
+
+        static string StablePartId(string prefix, string spriteName, string path, int fallbackIndex)
+        {
+            var end = spriteName == null ? 0 : spriteName.Length;
+            var start = end;
+            while (start > 0 && char.IsDigit(spriteName[start - 1]))
+                start--;
+
+            if (start < end && int.TryParse(spriteName.Substring(start), out var number) && number > 0)
+                return prefix + number.ToString("00");
+
+            var guid = AssetDatabase.AssetPathToGUID(path);
+            var suffix = string.IsNullOrEmpty(guid)
+                ? fallbackIndex.ToString("00")
+                : "x" + guid.Substring(0, Math.Min(8, guid.Length));
+            return prefix + suffix;
         }
 
         static bool EnsureTemplates(MonsterAssemblyCatalog catalog)
@@ -167,6 +186,7 @@ namespace TheCall.Editor
                     hat = MonsterPartSlot.Create(i == 0 || i == 3 ? "hat_" + (i + 1).ToString("00") : null, MonsterAnchorKind.Face, Vector2.zero),
                     accessory = MonsterPartSlot.Create(i == 1 || i == 4 ? "accessory_02" : null, MonsterAnchorKind.Body, Vector2.zero),
                 };
+                MonsterAssemblyCatalog.SetConnectionRequirements(template);
                 catalog.templates.Add(template);
                 changed = true;
             }

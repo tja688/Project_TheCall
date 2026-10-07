@@ -29,6 +29,7 @@ namespace TheCall
         public MonsterPartKind kind;
         public Sprite sprite;
         public MonsterColorRole colorRole = MonsterColorRole.None;
+        public string connectionType;
         [Tooltip("归一化连接点，原点在图片左下。此处与模板挂点对齐。")]
         public Vector2 attachmentPoint = new Vector2(0.5f, 0.5f);
         [Tooltip("部件运动时使用的动画支点，原点在图片左下。")]
@@ -54,6 +55,7 @@ namespace TheCall
         public Vector2 scale;
         public float rotation;
         public bool enabled;
+        public string requiredConnection;
 
         public static MonsterPartSlot Create(string partId, MonsterAnchorKind anchor, Vector2 offset)
         {
@@ -226,6 +228,12 @@ namespace TheCall
             return definition;
         }
 
+        public bool IsCompatible(MonsterPartSlot slot, MonsterPartDefinition definition) =>
+            definition != null
+            && (string.IsNullOrEmpty(slot.requiredConnection)
+                || string.IsNullOrEmpty(definition.connectionType)
+                || string.Equals(slot.requiredConnection, definition.connectionType, StringComparison.Ordinal));
+
         public MonsterAssemblyTemplate GetTemplateOrNull(string id)
         {
             if (templates == null)
@@ -262,11 +270,17 @@ namespace TheCall
         public MonsterPartSlot ResolveSlot(
             MonsterAssemblyTemplate template,
             MonsterPartKind kind,
-            string appearancePartId)
+            string appearancePartId,
+            bool hasExplicitParts = false)
         {
             var slot = template == null ? MonsterPartSlot.Create(null, MonsterAnchorKind.Canvas, Vector2.zero) : template.GetSlot(kind);
             var hasAppearanceSelection = !string.IsNullOrEmpty(appearancePartId);
-            if (hasAppearanceSelection)
+            if (hasExplicitParts)
+            {
+                slot.partId = hasAppearanceSelection ? appearancePartId : null;
+                slot.enabled = hasAppearanceSelection;
+            }
+            else if (hasAppearanceSelection)
             {
                 slot.partId = appearancePartId;
                 slot.enabled = true;
@@ -373,6 +387,7 @@ namespace TheCall
                     kind = kind,
                     sprite = sprites[i],
                     colorRole = colorRole,
+                    connectionType = DefaultConnectionType(kind),
                     attachmentPoint = DefaultAttachmentPoint(kind),
                     optional = optional,
                     sortOrder = sortOrder,
@@ -403,6 +418,7 @@ namespace TheCall
                     hat = MonsterPartSlot.Create(i == 0 || i == 3 ? "hat_" + (i + 1).ToString("00") : null, MonsterAnchorKind.Face, Vector2.zero),
                     accessory = MonsterPartSlot.Create(i == 1 || i == 4 ? "accessory_02" : null, MonsterAnchorKind.Body, Vector2.zero),
                 };
+                SetConnectionRequirements(template);
                 catalog.templates.Add(template);
             }
         }
@@ -417,6 +433,39 @@ namespace TheCall
                 case MonsterPartKind.Tail: return new Vector2(0.38f, 0.5f);
                 default: return new Vector2(0.5f, 0.5f);
             }
+        }
+
+        public static string DefaultConnectionType(MonsterPartKind kind)
+        {
+            switch (kind)
+            {
+                case MonsterPartKind.Body: return "body.core";
+                case MonsterPartKind.Head: return "neck.standard";
+                case MonsterPartKind.Eye:
+                case MonsterPartKind.Mouth: return "face.standard";
+                case MonsterPartKind.Hand: return "arm.standard";
+                case MonsterPartKind.Foot: return "leg.standard";
+                case MonsterPartKind.Tail: return "tail.standard";
+                case MonsterPartKind.Hat: return "crown.standard";
+                case MonsterPartKind.Accessory: return "body.attach";
+                default: return string.Empty;
+            }
+        }
+
+        public static void SetConnectionRequirements(MonsterAssemblyTemplate template)
+        {
+            if (template == null)
+                return;
+
+            template.body.requiredConnection = DefaultConnectionType(MonsterPartKind.Body);
+            template.head.requiredConnection = DefaultConnectionType(MonsterPartKind.Head);
+            template.eye.requiredConnection = DefaultConnectionType(MonsterPartKind.Eye);
+            template.mouth.requiredConnection = DefaultConnectionType(MonsterPartKind.Mouth);
+            template.hand.requiredConnection = DefaultConnectionType(MonsterPartKind.Hand);
+            template.foot.requiredConnection = DefaultConnectionType(MonsterPartKind.Foot);
+            template.tail.requiredConnection = DefaultConnectionType(MonsterPartKind.Tail);
+            template.hat.requiredConnection = DefaultConnectionType(MonsterPartKind.Hat);
+            template.accessory.requiredConnection = DefaultConnectionType(MonsterPartKind.Accessory);
         }
 
         public static void ConfigureDefaultHeadLayout(MonsterPartDefinition part)
@@ -472,6 +521,7 @@ namespace TheCall
 
                 template.anchors ??= new MonsterAnchorSet();
                 template.displayName = SeedTemplateName(i);
+                SetConnectionRequirements(template);
                 template.anchors.neck = necks[i];
                 template.anchors.face = Vector2.zero;
                 template.anchors.hand = new Vector2(i == 1 || i == 5 ? -38f : -31f, 0f);
