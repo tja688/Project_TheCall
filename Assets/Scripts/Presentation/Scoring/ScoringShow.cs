@@ -41,8 +41,8 @@ namespace TheCall.Scoring
     public sealed class ScoringShow : MonoBehaviour, ICueSink
     {
         const float PlayheadLift = 70f;
-        const float NameLift = 16f;
-        const float FigureLift = 0f;
+        const float NameLift = 64f;
+        const float FigureLift = 64f;
         const float WalkSeconds = 0.18f;
         const float FigureSeconds = 0.32f;
         const float FlightSeconds = 0.36f;
@@ -412,6 +412,10 @@ namespace TheCall.Scoring
             blockerObject.transform.SetParent(_stage.BoardRoot, false);
             _blocker = blockerObject.GetComponent<RectTransform>();
             Stretch(_blocker);
+            var overlay = blockerObject.AddComponent<Canvas>();
+            overlay.overrideSorting = true;
+            overlay.sortingOrder = 50;
+            blockerObject.AddComponent<GraphicRaycaster>();
             var blockerImage = blockerObject.GetComponent<Image>();
             blockerImage.sprite = Pixel();
             blockerImage.color = new Color(1f, 1f, 1f, 0f);
@@ -432,7 +436,8 @@ namespace TheCall.Scoring
 
             _total = Spawn("0", Vector2.zero);
             _total.fontSize = 64f;
-            _total.rectTransform.sizeDelta = new Vector2(220f, 90f);
+            _total.rectTransform.sizeDelta = new Vector2(240f, 140f);
+            _total.overflowMode = TextOverflowModes.Overflow;
             _total.color = new Color(1f, 0.96f, 0.82f, 1f);
 
             _playhead = CreateImage("ScoringPlayhead", _blocker);
@@ -729,7 +734,7 @@ namespace TheCall.Scoring
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = new Vector2(460f, 84f);
+            rect.sizeDelta = new Vector2(420f, 120f);
             rect.anchoredPosition = anchored;
             var label = figure.AddComponent<TextMeshProUGUI>();
             label.raycastTarget = false;
@@ -738,8 +743,7 @@ namespace TheCall.Scoring
             label.color = Color.white;
             label.textWrappingMode = TextWrappingModes.NoWrap;
             label.overflowMode = TextOverflowModes.Overflow;
-            label.outlineWidth = 0.16f;
-            label.outlineColor = new Color(0f, 0f, 0f, 0.9f);
+            label.maskable = false;
             var font = Font();
             if (font != null)
                 label.font = font;
