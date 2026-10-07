@@ -56,7 +56,8 @@ namespace TheCall.Scoring
                     landing.Energy,
                     landing.Multiplier,
                     landing.Writeback,
-                    FiguresOf(landing)));
+                    FiguresOf(landing),
+                    BitsOf(landing)));
                 produced += landing.Energy;
                 return;
             }
@@ -148,6 +149,31 @@ namespace TheCall.Scoring
                 figures.Add(new Figure("写回 +" + landing.Writeback, FigureRole.Writeback));
 
             return figures.ToArray();
+        }
+
+        static int[] BitsOf(SettlementLanding landing)
+        {
+            var added = 0;
+            for (var i = 0; i < landing.Adds.Count; i++)
+                added += landing.Adds[i].Amount;
+
+            var scale = landing.Side ? landing.SideCount : 1;
+            var bits = new List<int>(landing.Adds.Count + 2);
+            bits.Add(landing.Quote * scale);
+            for (var i = 0; i < landing.Adds.Count; i++)
+                bits.Add(landing.Adds[i].Amount * scale);
+
+            var extra = landing.Energy - (landing.Quote + added) * scale;
+            if (extra != 0)
+                bits.Add(extra);
+
+            var sum = 0;
+            for (var i = 0; i < bits.Count; i++)
+                sum += bits[i];
+            if (sum != landing.Energy)
+                throw new InvalidOperationException(landing.SkillName + " 的演出分数和能量不一致");
+
+            return bits.ToArray();
         }
 
         static PayKind KindOf(SettlementPayment payment)

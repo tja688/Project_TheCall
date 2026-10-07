@@ -207,6 +207,53 @@ namespace TheCall.Scoring
             return (PayCue)tape.Cues.Single();
         }
 
+        [Test]
+        public void 落地先加上自身底分再逐个加上别人的分数和倍率差额()
+        {
+            var plain = ScoringTape.Arrange(
+                new SettlementEntry[] { new SettlementLanding("breath", "能量吐息", 5, 1, 5, 0) },
+                new[] { "breath" });
+            Assert.That(plain.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5 }));
+
+            var added = ScoringTape.Arrange(
+                new SettlementEntry[]
+                {
+                    new SettlementLanding(
+                        "breath",
+                        "能量吐息",
+                        8,
+                        2,
+                        16,
+                        0,
+                        5,
+                        0,
+                        false,
+                        new[] { new LandingAdd("增量小手", 1), new LandingAdd("增量大手", 2) },
+                        new[] { new LandingFactor("鼓励嘴", 2) }),
+                },
+                new[] { "breath" });
+            Assert.That(added.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5, 1, 2, 8 }));
+
+            var sided = ScoringTape.Arrange(
+                new SettlementEntry[]
+                {
+                    new SettlementLanding(
+                        "sided",
+                        "侧向",
+                        10,
+                        3,
+                        30,
+                        4,
+                        3,
+                        2,
+                        true,
+                        new[] { new LandingAdd("标签", 2) },
+                        new[] { new LandingFactor("暴击", 3) }),
+                },
+                new[] { "sided" });
+            Assert.That(sided.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 6, 4, 20 }));
+        }
+
         static void AssertRolesOnce(ScoringTape tape)
         {
             foreach (var pop in tape.Cues.OfType<PopCue>())
@@ -214,6 +261,7 @@ namespace TheCall.Scoring
                 Assert.That(pop.Figures.Count(figure => figure.Role == FigureRole.Base), Is.EqualTo(1));
                 Assert.That(pop.Figures.Count(figure => figure.Role == FigureRole.Multiplier), Is.EqualTo(1));
                 Assert.That(pop.Figures.Count(figure => figure.Role == FigureRole.Energy), Is.EqualTo(1));
+                Assert.That(pop.Bits.Sum(), Is.EqualTo(pop.Energy));
             }
         }
     }

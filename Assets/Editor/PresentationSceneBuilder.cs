@@ -350,6 +350,8 @@ namespace TheCall.Editor
             At(energyWord, 250, 58, 60, 28);
             var energy = Label(screen.transform, "CurrentEnergy", "当前 0", 18, Mint, TextAlignmentOptions.Left);
             At(energy, 320, 58, 180, 28);
+            var currentNumber = Label(screen.transform, "CurrentNumber", "0", 51.5f, Ink, TextAlignmentOptions.Left);
+            At(currentNumber, 1265.6f, 538f, 240.4f, 113.35f);
             var goldCaption = Label(screen.transform, "GoldCaption", "金币", 18, Gold, TextAlignmentOptions.Right);
             At(goldCaption, 1120, 28, 70, 32);
             var gold = Label(screen.transform, "GoldNumber", "0", 24, Gold, TextAlignmentOptions.Left);
@@ -468,6 +470,7 @@ namespace TheCall.Editor
             var view = screen.AddComponent<OperationScreenView>();
             view.targetLabel = target;
             view.energyLabel = energy;
+            view.currentNumber = currentNumber;
             view.goldLabel = gold;
             view.nextDayLabel = nextLabel;
             view.shopButton = shop;

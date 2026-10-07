@@ -17,6 +17,7 @@ namespace TheCall.Scoring
             RectTransform boardRoot,
             RectTransform dragLayer,
             TMP_Text goldLabel,
+            TMP_Text currentNumber,
             Action<string> say,
             Action completed)
         {
@@ -25,6 +26,7 @@ namespace TheCall.Scoring
             BoardRoot = boardRoot;
             DragLayer = dragLayer;
             GoldLabel = goldLabel;
+            CurrentNumber = currentNumber;
             Say = say;
             Completed = completed;
         }
@@ -34,6 +36,7 @@ namespace TheCall.Scoring
         public RectTransform BoardRoot { get; }
         public RectTransform DragLayer { get; }
         public TMP_Text GoldLabel { get; }
+        public TMP_Text CurrentNumber { get; }
         public Action<string> Say { get; }
         public Action Completed { get; }
     }
@@ -41,18 +44,17 @@ namespace TheCall.Scoring
     public sealed class ScoringShow : MonoBehaviour, ICueSink
     {
         const float PlayheadLift = 70f;
-        const float NameLift = 64f;
         const float FigureLift = 64f;
         const float WalkSeconds = 0.18f;
-        const float FigureSeconds = 0.32f;
         const float FlightSeconds = 0.36f;
+        const float RiseSeconds = 0.12f;
+        const float HoldSeconds = 0.14f;
         const float SwapSeconds = 0.28f;
         const float RemoveSeconds = 0.22f;
         const float PaySeconds = 0.9f;
         const float ShakeSeconds = 0.28f;
-        const float AddPunch = 1.08f;
-        const float BasePunch = 1.24f;
-        const float MultiplierPunch = 1.42f;
+        const float EatSquashSeconds = 0.07f;
+        const float EatSettleSeconds = 0.14f;
 
         static readonly object TweenId = new object();
         static ScoringShow _active;
@@ -61,7 +63,9 @@ namespace TheCall.Scoring
         ScoringTape _tape;
         BoardSlot[] _slots;
         RectTransform _blocker;
-        TextMeshProUGUI _total;
+        TMP_Text _current;
+        Vector3 _currentRestScale;
+        Color _currentRestColor;
         Image _playhead;
         Image _flash;
         Material _flashMaterial;
@@ -119,6 +123,7 @@ namespace TheCall.Scoring
                 Capture(ids);
                 _restBoardPosition = _stage.BoardRoot.anchoredPosition;
                 _boardHeld = true;
+                BindCurrent();
                 BuildOverlay();
                 for (var i = 0; i < _tape.Cues.Count; i++)
                 {
@@ -154,6 +159,7 @@ namespace TheCall.Scoring
                 _active = null;
 
             DOTween.Kill(TweenId);
+            RestoreCurrent();
             RestoreSlots();
             if (_boardHeld && _stage.BoardRoot != null)
                 _stage.BoardRoot.anchoredPosition = _restBoardPosition;
@@ -232,38 +238,20 @@ namespace TheCall.Scoring
             if (portrait != null)
                 portrait.SetSpringMotion(-10f, 7f);
 
-            var origin = OriginOf(cue.SlotIndex);
-            if (!string.IsNullOrEmpty(cue.SkillName))
+            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
+            var bits = cue.Bits;
+            var thrown = false;
+            for (var i = 0; i < bits.Count; i++)
             {
-                var nameLabel = Spawn(cue.SkillName, origin + new Vector2(0f, NameLift));
-                yield return Wait(0.22f);
-                Destroy(nameLabel.gameObject);
-            }
-
-            for (var i = 0; i < cue.Figures.Count; i++)
-            {
-                var figure = cue.Figures[i];
-                if (figure.Role == FigureRole.Energy)
-                {
-                    yield return FlyEnergy(figure.Text, cue.Energy, origin);
+                if (bits[i] == 0)
                     continue;
-                }
 
-                var label = Spawn(figure.Text, StayPoint(figure.Role, origin));
-                var punch = PunchOf(figure.Role);
-                if (root != null && cue.SlotIndex >= 0 && punch > 1f)
-                    yield return Punch(root, rest, punch);
-                else
-                    yield return Wait(FigureSeconds);
-
-                if (figure.Role == FigureRole.Multiplier && cue.Multiplier > 1)
-                {
-                    Flash(new Color(1f, 0.95f, 0.7f, 0.45f));
-                    yield return ShakeBoard(16f);
-                }
-
-                Destroy(label.gameObject);
+                thrown = true;
+                yield return ThrowScore(bits[i], head, root, rest);
             }
+
+            if (!thrown)
+                yield return Wait(0.12f);
 
             if (root != null)
                 root.localScale = rest;
@@ -434,12 +422,6 @@ namespace TheCall.Scoring
                 _flash.material = _flashMaterial;
             }
 
-            _total = Spawn("0", Vector2.zero);
-            _total.fontSize = 64f;
-            _total.rectTransform.sizeDelta = new Vector2(240f, 140f);
-            _total.overflowMode = TextOverflowModes.Overflow;
-            _total.color = new Color(1f, 0.96f, 0.82f, 1f);
-
             _playhead = CreateImage("ScoringPlayhead", _blocker);
             _playhead.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             _playhead.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
@@ -449,8 +431,6 @@ namespace TheCall.Scoring
             _playhead.raycastTarget = false;
             _playhead.gameObject.SetActive(false);
             _flash.transform.SetAsFirstSibling();
-            PlaceTotal();
-            _total.transform.SetAsLastSibling();
         }
 
         void RestoreSlots()
@@ -529,40 +509,122 @@ namespace TheCall.Scoring
             _slots[targetIndex] = target;
         }
 
-        IEnumerator FlyEnergy(string text, int energy, Vector2 origin)
+        IEnumerator ThrowScore(int amount, Vector2 head, RectTransform monster, Vector3 monsterRest)
         {
-            var label = Spawn(text, origin);
-            var tween = Live(label.rectTransform.DOAnchorPos(BlockerPoint(_total.rectTransform), Span(FlightSeconds)));
-            yield return CountEnergy(energy, FlightSeconds);
-            tween.Kill(false);
-            Destroy(label.gameObject);
-        }
-
-        IEnumerator CountEnergy(int energy, float seconds)
-        {
-            var start = _shown;
-            var end = start + energy;
-            if (SkipWait() || seconds <= 0f)
+            if (SkipWait())
             {
-                _shown = end;
-                _total.text = _shown.ToString();
+                AddShown(amount);
                 yield break;
             }
 
-            var driver = 0f;
-            var tween = Live(DOTween.To(
-                () => driver,
-                value =>
-                {
-                    driver = value;
-                    _total.text = Mathf.RoundToInt(Mathf.Lerp(start, end, value)).ToString();
-                },
-                1f,
-                Span(seconds)));
-            yield return Wait(seconds);
-            tween.Kill(false);
-            _shown = end;
-            _total.text = _shown.ToString();
+            var label = Spawn(Signed(amount), head + new Vector2(0f, -36f));
+            label.fontSize = 56f;
+            label.color = new Color(1f, 0.93f, 0.55f, 1f);
+            label.rectTransform.localScale = Vector3.one * 0.4f;
+            var rise = Live(label.rectTransform.DOAnchorPos(head, Span(RiseSeconds)).SetEase(Ease.OutQuad));
+            var grow = Live(label.rectTransform.DOScale(1.12f, Span(RiseSeconds)).SetEase(Ease.OutBack));
+            Tween monsterUp = null;
+            if (monster != null)
+                monsterUp = Live(monster.DOScale(monsterRest * 1.1f, Span(RiseSeconds)).SetEase(Ease.OutQuad));
+
+            yield return Wait(RiseSeconds);
+            rise.Kill(false);
+            grow.Kill(false);
+            monsterUp?.Kill(false);
+            label.rectTransform.anchoredPosition = head;
+            label.rectTransform.localScale = Vector3.one;
+            if (monster != null)
+            {
+                var monsterDown = Live(monster.DOScale(monsterRest, Span(HoldSeconds)));
+                yield return Wait(HoldSeconds);
+                monsterDown.Kill(false);
+                monster.localScale = monsterRest;
+            }
+            else
+            {
+                yield return Wait(HoldSeconds);
+            }
+
+            if (SkipWait() || _current == null)
+            {
+                Destroy(label.gameObject);
+                AddShown(amount);
+                if (_current != null)
+                    yield return Eat();
+                yield break;
+            }
+
+            var target = CurrentPoint();
+            var fly = Live(label.rectTransform.DOAnchorPos(target, Span(FlightSeconds)).SetEase(Ease.InCubic));
+            var shrink = Live(label.rectTransform.DOScale(0.35f, Span(FlightSeconds)).SetEase(Ease.InQuad));
+            yield return Wait(FlightSeconds);
+            fly.Kill(false);
+            shrink.Kill(false);
+            Destroy(label.gameObject);
+            AddShown(amount);
+            yield return Eat();
+        }
+
+        void AddShown(int amount)
+        {
+            _shown += amount;
+            if (_current != null)
+                _current.text = _shown.ToString();
+        }
+
+        IEnumerator Eat()
+        {
+            if (_current == null)
+                yield break;
+
+            if (SkipWait())
+            {
+                RestoreCurrent();
+                yield break;
+            }
+
+            var rect = _current.rectTransform;
+            var rest = _currentRestScale;
+            _current.color = new Color(1f, 0.95f, 0.62f, _currentRestColor.a);
+            var squash = Live(rect.DOScale(new Vector3(rest.x * 1.28f, rest.y * 0.78f, rest.z), Span(EatSquashSeconds)).SetEase(Ease.OutQuad));
+            yield return Wait(EatSquashSeconds);
+            squash.Kill(false);
+            var settle = Live(rect.DOScale(rest, Span(EatSettleSeconds)).SetEase(Ease.OutBack));
+            var tint = Live(_current.DOColor(_currentRestColor, Span(EatSettleSeconds)));
+            yield return Wait(EatSettleSeconds);
+            settle.Kill(false);
+            tint.Kill(false);
+            RestoreCurrent();
+        }
+
+        void BindCurrent()
+        {
+            _current = _stage.CurrentNumber;
+            if (_current == null && _stage.BoardRoot != null)
+            {
+                var found = _stage.BoardRoot.Find("CurrentNumber");
+                if (found != null)
+                    _current = found.GetComponent<TMP_Text>();
+            }
+
+            if (_current == null)
+                return;
+
+            var rect = _current.rectTransform;
+            _currentRestScale = rect.localScale;
+            _currentRestColor = _current.color;
+            _shown = 0;
+            _current.text = "0";
+        }
+
+        void RestoreCurrent()
+        {
+            if (_current == null)
+                return;
+
+            var rect = _current.rectTransform;
+            rect.localScale = _currentRestScale;
+            _current.color = _currentRestColor;
         }
 
         IEnumerator RollGold(int wage)
@@ -591,18 +653,6 @@ namespace TheCall.Scoring
             yield return Wait(0.45f);
             tween.Kill(false);
             label.text = end.ToString();
-        }
-
-        IEnumerator Punch(RectTransform root, Vector3 rest, float factor)
-        {
-            root.localScale = rest;
-            var up = Live(root.DOScale(rest * factor, Span(0.08f)));
-            yield return Wait(0.08f);
-            up.Kill(false);
-            var down = Live(root.DOScale(rest, Span(0.1f)));
-            yield return Wait(0.1f);
-            down.Kill(false);
-            root.localScale = rest;
         }
 
         IEnumerator ShakeBoard(float strength)
@@ -658,16 +708,6 @@ namespace TheCall.Scoring
             _playhead.rectTransform.anchoredPosition = point.Value + new Vector2(0f, PlayheadLift);
         }
 
-        void PlaceTotal()
-        {
-            var index = _slots != null && _slots.Length > 4 ? 4 : (_slots != null && _slots.Length > 0 ? _slots.Length - 1 : -1);
-            var point = PointOf(index);
-            if (point == null)
-                return;
-
-            _total.rectTransform.anchoredPosition = point.Value;
-        }
-
         void OnBlocked()
         {
             if (_paying)
@@ -706,25 +746,28 @@ namespace TheCall.Scoring
             return BesideTotal();
         }
 
-        Vector2 BesideTotal() => BlockerPoint(_total.rectTransform) + new Vector2(0f, -90f);
+        Vector2 BesideTotal() => CurrentPoint() + new Vector2(0f, -90f);
 
-        static Vector2 StayPoint(FigureRole role, Vector2 origin)
+        Vector2 CurrentPoint()
         {
-            if (role == FigureRole.Writeback)
-                return origin + new Vector2(150f, 36f);
-            return origin + new Vector2(0f, FigureLift);
+            if (_current == null || _blocker == null)
+                return Vector2.zero;
+
+            return _blocker.InverseTransformPoint(GlyphWorld(_current));
         }
 
-        static float PunchOf(FigureRole role)
+        static Vector3 GlyphWorld(TMP_Text label)
         {
-            if (role == FigureRole.Add)
-                return AddPunch;
-            if (role == FigureRole.Base)
-                return BasePunch;
-            if (role == FigureRole.Multiplier)
-                return MultiplierPunch;
-            return 0f;
+            var rect = label.rectTransform;
+            label.ForceMeshUpdate();
+            var bounds = label.textBounds;
+            if (bounds.size.sqrMagnitude < 0.01f)
+                return rect.TransformPoint(rect.rect.center);
+
+            return rect.TransformPoint(bounds.center);
         }
+
+        static string Signed(int amount) => amount > 0 ? "+" + amount : amount.ToString();
 
         TextMeshProUGUI Spawn(string text, Vector2 anchored)
         {
@@ -753,6 +796,8 @@ namespace TheCall.Scoring
 
         TMP_FontAsset Font()
         {
+            if (_current != null && _current.font != null)
+                return _current.font;
             if (_stage.GoldLabel != null && _stage.GoldLabel.font != null)
                 return _stage.GoldLabel.font;
             return TMP_Settings.defaultFontAsset;
@@ -827,3 +872,4 @@ namespace TheCall.Scoring
         }
     }
 }
+

@@ -64,7 +64,8 @@ namespace TheCall.Scoring
             int energy,
             int multiplier,
             int writeback,
-            Figure[] figures)
+            Figure[] figures,
+            int[] bits)
         {
             SlotIndex = slotIndex;
             SkillName = skillName;
@@ -72,6 +73,7 @@ namespace TheCall.Scoring
             Multiplier = multiplier;
             Writeback = writeback;
             Figures = figures ?? Array.Empty<Figure>();
+            Bits = bits ?? Array.Empty<int>();
         }
 
         public int SlotIndex { get; }
@@ -80,6 +82,7 @@ namespace TheCall.Scoring
         public int Multiplier { get; }
         public int Writeback { get; }
         public IReadOnlyList<Figure> Figures { get; }
+        public IReadOnlyList<int> Bits { get; }
 
         internal override IEnumerator Accept(ICueSink sink) => sink.Pop(this);
     }

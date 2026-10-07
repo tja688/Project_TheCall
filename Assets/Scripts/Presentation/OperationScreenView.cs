@@ -8,6 +8,7 @@ namespace TheCall
     {
         public TMP_Text targetLabel;
         public TMP_Text energyLabel;
+        public TMP_Text currentNumber;
         public TMP_Text goldLabel;
         public TMP_Text nextDayLabel;
         public Button shopButton;

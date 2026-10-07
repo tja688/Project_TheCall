@@ -193,6 +193,19 @@ namespace TheCall
             var shortfall = this.SendQuery(new LevelShortfallQuery());
             _operation.targetLabel.text = target.EnergyDue.ToString();
             _operation.energyLabel.text = shortfall > 0 ? "欠额 " + shortfall : "当前 " + energy;
+            if (!_busy)
+            {
+                var current = _operation.currentNumber;
+                if (current == null)
+                {
+                    var found = _operation.transform.Find("CurrentNumber");
+                    if (found != null)
+                        current = found.GetComponent<TMP_Text>();
+                }
+
+                if (current != null)
+                    current.text = "0";
+            }
             _operation.goldLabel.text = run.Gold.ToString();
             _operation.nextDayLabel.text = shortfall > 0
                 ? "补上欠额"
@@ -521,6 +534,7 @@ namespace TheCall
                 _operation.transform as RectTransform,
                 _operation.dragLayer,
                 _operation.goldLabel,
+                _operation.currentNumber,
                 Notice,
                 FinishSettle));
         }
