@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using QFramework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TheCall
 {
@@ -67,7 +68,7 @@ namespace TheCall
             if (_toast != null && _toast.activeSelf && Time.unscaledTime >= _noticeUntil)
                 _toast.SetActive(false);
 
-            if (Input.GetKeyDown(KeyCode.Escape) && CanQuitFromOpening())
+            if (EscapePressedThisFrame() && CanQuitFromOpening())
                 QuitGame();
         }
 
@@ -645,6 +646,12 @@ namespace TheCall
             var exit = _opening.transform.Find("ExitButton");
             if (exit != null)
                 _opening.exitButton = exit.GetComponent<UnityEngine.UI.Button>();
+        }
+
+        static bool EscapePressedThisFrame()
+        {
+            var keyboard = Keyboard.current;
+            return keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
         }
 
         bool CanQuitFromOpening()
