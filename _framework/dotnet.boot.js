@@ -1,7 +1,7 @@
 export const config = /*json-start*/{
   "mainAssemblyName": "TheCall.Page.dll",
   "resources": {
-    "hash": "sha256-XmQEfu8jZwNRCXWopIk7aVnPrfp8G3a9uXXvmuBNIE0=",
+    "hash": "sha256-jkpqSQA+Y5STCW8xsQz38Vk6xnvZE6DUkEiFeNJoSlw=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.js"
@@ -15,7 +15,7 @@ export const config = /*json-start*/{
     "wasmNative": [
       {
         "name": "dotnet.native.wasm",
-        "hash": "sha256-dk1q3l7e0rWER+66MD4mpMeOEWyCFRHPgw74CnlRtYE="
+        "hash": "sha256-B/MSw/nXmWXO2BJds7yelR/i1e+c8dMw+X6Uajmwsuk="
       }
     ],
     "wasmSymbols": [
@@ -27,7 +27,7 @@ export const config = /*json-start*/{
       {
         "virtualPath": "System.Private.CoreLib.wasm",
         "name": "System.Private.CoreLib.wasm",
-        "hash": "sha256-ar3O7cGjH7IXFs4XbR0uudmxbP35PuXlNNfx0IX2/wY="
+        "hash": "sha256-MPT/gxXrcM9iDGRMLIEkW6iBeG94SxPnSTZ0LO15A0c="
       },
       {
         "virtualPath": "System.Runtime.InteropServices.JavaScript.wasm",
@@ -39,7 +39,7 @@ export const config = /*json-start*/{
       {
         "virtualPath": "System.Collections.wasm",
         "name": "System.Collections.wasm",
-        "hash": "sha256-TaFC0X+Bs0VzCgTdSdza71OobNYg5Ly3xP09P5MqEkM="
+        "hash": "sha256-FsiQtpLzpxH62CNjOkAgTFseEXgR840wnfYGFpqyh7Y="
       },
       {
         "virtualPath": "System.IO.Pipelines.wasm",
@@ -59,7 +59,7 @@ export const config = /*json-start*/{
       {
         "virtualPath": "System.Runtime.wasm",
         "name": "System.Runtime.wasm",
-        "hash": "sha256-YIPOAWNNDxZA5lWeWNeq27Z7mFsNHNJykc/2u2oyqro="
+        "hash": "sha256-8KEAdQpqkiORHOk8gmu0p/RXMpeEgTEHD9qDEaC4KF8="
       },
       {
         "virtualPath": "System.Security.Cryptography.wasm",
@@ -74,17 +74,17 @@ export const config = /*json-start*/{
       {
         "virtualPath": "TheCall.Page.wasm",
         "name": "TheCall.Page.wasm",
-        "hash": "sha256-i5TUz5u1lPUpSP77RhvVA6xx2yTtrEcTq4NR/arVyTM="
+        "hash": "sha256-Dkm1kXsIq1OQbDsskoh/+GNr9i+ExEfIImcp0ygeKxo="
       },
       {
         "virtualPath": "TheCall.QfSubset.wasm",
         "name": "TheCall.QfSubset.wasm",
-        "hash": "sha256-682guxO1Lda5ExfgbSo/NIQshlS6zflYX5X74Kc1XZk="
+        "hash": "sha256-qNE1c7c5QSvNKHPa9Hl4eC8MtDo6l7jvajad+99Gefo="
       },
       {
         "virtualPath": "TheCall.Rules.wasm",
         "name": "TheCall.Rules.wasm",
-        "hash": "sha256-Ril614guWwV9tLUrKVKKafoGwD81UDF8QYHYoDq5n8Q="
+        "hash": "sha256-VoQWodTJHoVoDchAZNcg4XwyUSWdwO5+Dh0NW+3SolY="
       }
     ]
   },

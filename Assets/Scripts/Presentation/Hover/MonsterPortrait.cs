@@ -1,10 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace TheCall
 {
     /// <summary>
-    /// Renders an authored compatible recipe. Every part shares the original 142x102 canvas.
+    /// Shared runtime renderer for the componentized monster assembly.
+    /// Rules supply stable part IDs; the catalog supplies sprites, anchors and layer data.
     /// </summary>
     public sealed class MonsterPortrait : MonoBehaviour
     {
@@ -22,14 +24,20 @@ namespace TheCall
         [SerializeField] Transform _bodyGroup;
         [SerializeField] Transform _tailGroup;
         [SerializeField] MonsterMotionProfile _motionProfile;
+        [SerializeField] MonsterAssemblyCatalog _assemblyCatalog;
 
         bool _dragMotionActive;
+        bool _layersBound;
         float _idlePhase;
         float _idleSeed;
 
         public MonsterMotionProfile MotionProfile => _motionProfile != null
             ? _motionProfile
             : MonsterMotionProfile.Fallback;
+
+        public MonsterAssemblyCatalog AssemblyCatalog => _assemblyCatalog != null
+            ? _assemblyCatalog
+            : MonsterAssemblyCatalog.Runtime;
 
         public static readonly Color[] Palette =
         {
@@ -51,25 +59,35 @@ namespace TheCall
         public void Show(MonsterAppearance appearance)
         {
             MonsterPartLibrary.Ensure();
-            _idleSeed = (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f;
-            var recipe = appearance.Recipe;
-            var palette = Palette[appearance.Palette];
+            BindLayerParents();
 
-            Apply(_tail, MonsterPartLibrary.Tail, recipe == 2 ? 2 : -1, Color.white);
-            Apply(_foot, MonsterPartLibrary.Foot, recipe % 3, palette);
-            Apply(_body, MonsterPartLibrary.Body, recipe, palette);
-            Apply(_hand, MonsterPartLibrary.Hand, recipe % 5, Color.white);
-            Apply(_head, MonsterPartLibrary.Head, recipe % 4, palette);
-            Apply(_eye, MonsterPartLibrary.Eye, recipe % 5, Color.white);
-            Apply(_mouth, MonsterPartLibrary.Mouth, recipe, Color.white);
-            Apply(_hat, MonsterPartLibrary.Hat, recipe == 0 || recipe == 3 ? recipe : -1, Color.white);
-            Apply(_accessory, MonsterPartLibrary.Accessory, recipe == 1 || recipe == 4 ? recipe % 3 : -1, Color.white);
+            var catalog = AssemblyCatalog;
+            var template = catalog.GetTemplateOrFallback(appearance.TemplateId, appearance.Recipe);
+            _idleSeed = (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f;
+            var selectedHeadId = string.IsNullOrEmpty(appearance.HeadId)
+                ? template == null ? null : template.head.partId
+                : appearance.HeadId;
+            var headDefinition = catalog.GetPartOrNull(selectedHeadId);
+
+            ApplyPart(MonsterPartKind.Tail, _tail, _tailGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Foot, _foot, _feetGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Body, _body, _bodyGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Hand, _hand, _bodyGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Head, _head, _headGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Eye, _eye, _headGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Mouth, _mouth, _headGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Hat, _hat, _headGroup, catalog, template, appearance, headDefinition);
+            ApplyPart(MonsterPartKind.Accessory, _accessory, _bodyGroup, catalog, template, appearance, headDefinition);
+            ApplyGroupPivot(_headGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Head));
+            ApplyGroupPivot(_feetGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Foot));
+            ApplyGroupPivot(_bodyGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Body));
+            ApplyGroupPivot(_tailGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Tail));
             RestoreMotion();
         }
 
         void Update()
         {
-            if (!Application.isPlaying || !_motionProfileOrFallback().idleEnabled || _dragMotionActive)
+            if (!Application.isPlaying || !MotionProfile.idleEnabled || _dragMotionActive)
                 return;
 
             _idlePhase += Time.unscaledDeltaTime;
@@ -78,7 +96,7 @@ namespace TheCall
 
         public void SetIdleMotion(float time, float phase = 0f)
         {
-            var profile = _motionProfileOrFallback();
+            var profile = MotionProfile;
             var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
             var slowWave = Mathf.Sin((time + phase * 0.7f) * Mathf.PI * profile.idleCyclesPerSecond);
             SetMotion(
@@ -92,15 +110,21 @@ namespace TheCall
         public void SetSpringMotion(float headAngle, float feetAngle)
         {
             _dragMotionActive = true;
-            var profile = _motionProfileOrFallback();
-            var tail = Mathf.Clamp(feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees), -profile.tailDragDegrees, profile.tailDragDegrees);
-            var body = Mathf.Clamp(feetAngle * profile.bodyDragDegrees / Mathf.Max(1f, profile.feetDragDegrees), -profile.bodyDragDegrees, profile.bodyDragDegrees);
+            var profile = MotionProfile;
+            var tail = Mathf.Clamp(
+                feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
+                -profile.tailDragDegrees,
+                profile.tailDragDegrees);
+            var body = Mathf.Clamp(
+                feetAngle * profile.bodyDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
+                -profile.bodyDragDegrees,
+                profile.bodyDragDegrees);
             SetMotion(headAngle, feetAngle, tail, body, 0f);
         }
 
         public void SetDragMotion(Vector2 velocity)
         {
-            var profile = _motionProfileOrFallback();
+            var profile = MotionProfile;
             var drive = Mathf.Clamp(velocity.x / 700f, -1f, 1f);
             SetSpringMotion(-drive * profile.headDragDegrees, drive * profile.feetDragDegrees);
         }
@@ -113,20 +137,107 @@ namespace TheCall
 
         public void Clear()
         {
-            Apply(_tail, null, -1, Color.white);
-            Apply(_foot, null, -1, Color.white);
-            Apply(_body, null, -1, Color.white);
-            Apply(_hand, null, -1, Color.white);
-            Apply(_head, null, -1, Color.white);
-            Apply(_eye, null, -1, Color.white);
-            Apply(_mouth, null, -1, Color.white);
-            Apply(_hat, null, -1, Color.white);
-            Apply(_accessory, null, -1, Color.white);
+            ClearImage(_tail);
+            ClearImage(_foot);
+            ClearImage(_body);
+            ClearImage(_hand);
+            ClearImage(_head);
+            ClearImage(_eye);
+            ClearImage(_mouth);
+            ClearImage(_hat);
+            ClearImage(_accessory);
             RestoreMotion();
         }
 
-        MonsterMotionProfile _motionProfileOrFallback() =>
-            _motionProfile != null ? _motionProfile : MonsterMotionProfile.Fallback;
+        void BindLayerParents()
+        {
+            if (_layersBound)
+                return;
+
+            Reparent(_tail, _tailGroup);
+            Reparent(_foot, _feetGroup);
+            Reparent(_body, _bodyGroup);
+            Reparent(_hand, _bodyGroup);
+            Reparent(_head, _headGroup);
+            Reparent(_eye, _headGroup);
+            Reparent(_mouth, _headGroup);
+            Reparent(_hat, _headGroup);
+            Reparent(_accessory, _bodyGroup);
+            _layersBound = true;
+        }
+
+        void ApplyPart(
+            MonsterPartKind kind,
+            Image image,
+            Transform parent,
+            MonsterAssemblyCatalog catalog,
+            MonsterAssemblyTemplate template,
+            MonsterAppearance appearance,
+            MonsterPartDefinition headDefinition)
+        {
+            if (image == null)
+                return;
+
+            var appearancePartId = appearance.PartId(kind);
+            var slot = catalog.ResolveSlot(template, kind, appearancePartId);
+            var definition = catalog.GetPartOrNull(slot.partId);
+            var valid = slot.enabled && definition != null && definition.sprite != null;
+            var rect = image.rectTransform;
+
+            if (parent != null && image.transform.parent != parent)
+                image.transform.SetParent(parent, false);
+
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.sizeDelta = MonsterAssemblyCatalog.CanvasSize;
+            var animationPivot = ClampPivot(slot.pivot, definition);
+            rect.pivot = animationPivot;
+            rect.anchoredPosition = catalog.ResolveSpritePivotPosition(template, slot, definition, headDefinition);
+            rect.localRotation = Quaternion.Euler(0f, 0f, slot.rotation);
+            rect.localScale = new Vector3(
+                Mathf.Approximately(slot.scale.x, 0f) ? 1f : slot.scale.x,
+                Mathf.Approximately(slot.scale.y, 0f) ? 1f : slot.scale.y,
+                1f);
+
+            image.sprite = valid ? definition.sprite : null;
+            image.color = valid ? Tint(definition.colorRole, appearance.Palette) : Color.white;
+            image.enabled = valid;
+            image.preserveAspect = false;
+
+        }
+
+        static Vector2 ClampPivot(Vector2 pivot, MonsterPartDefinition definition)
+        {
+            if (pivot == Vector2.zero && definition != null)
+                pivot = definition.defaultPivot;
+
+            return new Vector2(
+                Mathf.Clamp01(pivot.x),
+                Mathf.Clamp01(pivot.y));
+        }
+
+        static void ApplyGroupPivot(Transform group, Vector2 localPosition)
+        {
+            var rect = group as RectTransform;
+            if (rect == null)
+                return;
+
+            rect.pivot = new Vector2(
+                Mathf.Clamp01(0.5f + localPosition.x / MonsterAssemblyCatalog.CanvasSize.x),
+                Mathf.Clamp01(0.5f + localPosition.y / MonsterAssemblyCatalog.CanvasSize.y));
+        }
+
+        static Color Tint(MonsterColorRole role, int palette)
+        {
+            if (role == MonsterColorRole.None)
+                return Color.white;
+
+            var primary = Palette[Mathf.Clamp(palette, 0, Palette.Length - 1)];
+            if (role == MonsterColorRole.Primary)
+                return primary;
+
+            return Color.Lerp(primary, Color.white, 0.28f);
+        }
 
         void SetMotion(float headAngle, float feetAngle, float tailAngle, float bodyAngle, float bodyLift)
         {
@@ -143,16 +254,20 @@ namespace TheCall
             }
         }
 
-        static void Apply(Image image, Sprite[] options, int index, Color tint)
+        static void Reparent(Image image, Transform parent)
+        {
+            if (image != null && parent != null && image.transform.parent != parent)
+                image.transform.SetParent(parent, false);
+        }
+
+        static void ClearImage(Image image)
         {
             if (image == null)
                 return;
 
-            var valid = options != null && index >= 0 && index < options.Length;
-            image.sprite = valid ? options[index] : null;
-            image.color = tint;
-            image.enabled = valid;
-            image.preserveAspect = true;
+            image.sprite = null;
+            image.enabled = false;
+            image.color = Color.white;
         }
 
         static int Seed(string id)
@@ -198,7 +313,7 @@ namespace TheCall
         static Sprite[] Load(string path)
         {
             var sprites = Resources.LoadAll<Sprite>(path);
-            System.Array.Sort(sprites, (a, b) => string.CompareOrdinal(a.name, b.name));
+            Array.Sort(sprites, (a, b) => string.CompareOrdinal(a.name, b.name));
             return sprites;
         }
     }

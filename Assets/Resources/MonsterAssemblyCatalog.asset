@@ -1,0 +1,853 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: MonsterAssemblyCatalog
+  m_EditorClassIdentifier: TheCall.Hover:TheCall:MonsterAssemblyCatalog
+  parts:
+  - id: body_01
+    kind: 0
+    sprite: {fileID: 21300000, guid: 075250e1f1c1bb840b2c4b7189b13c6a, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: body_02
+    kind: 0
+    sprite: {fileID: 21300000, guid: dc80c0b7867319a4ab9dc85b7da36fd8, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: body_03
+    kind: 0
+    sprite: {fileID: 21300000, guid: 4d54585611a189744b367ba6339e6f1c, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: body_04
+    kind: 0
+    sprite: {fileID: 21300000, guid: 292ecff9133b1f349ac84594ae97236f, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: body_05
+    kind: 0
+    sprite: {fileID: 21300000, guid: b97fd58bf3945324f84105052b8c2ece, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: body_06
+    kind: 0
+    sprite: {fileID: 21300000, guid: 6ed5e02e55c8cc8449bba52ec4728642, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 10
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: head_01
+    kind: 1
+    sprite: {fileID: 21300000, guid: 3326961d1a74c234ea6db0834208db68, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 40
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: head_02
+    kind: 1
+    sprite: {fileID: 21300000, guid: 6f088ddfa247540439e8ff1331463c29, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 40
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: head_03
+    kind: 1
+    sprite: {fileID: 21300000, guid: 578c8a7cda3b7454e969ee9209f8dfd4, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 40
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: head_04
+    kind: 1
+    sprite: {fileID: 21300000, guid: f81e473848d35584986203dc9a75e843, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 40
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: eye_01
+    kind: 2
+    sprite: {fileID: 21300000, guid: 9699ed144f7084a41b9734cd5ae4d9ac, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 50
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: eye_02
+    kind: 2
+    sprite: {fileID: 21300000, guid: 7d2eabc86b6b58b4d860a523e37cde17, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 50
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: eye_03
+    kind: 2
+    sprite: {fileID: 21300000, guid: e46f1d7293694464fb2322ea676f0f46, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 50
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: eye_04
+    kind: 2
+    sprite: {fileID: 21300000, guid: 56015c045e0d2a34eb4e4b060c4a4ec7, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 50
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: eye_05
+    kind: 2
+    sprite: {fileID: 21300000, guid: 8e35db30fe6ce954b873fdcbb20d62c4, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 50
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_01
+    kind: 3
+    sprite: {fileID: 21300000, guid: 47a680c3d04a9e9438aa82f18be4c3be, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_02
+    kind: 3
+    sprite: {fileID: 21300000, guid: 233af73b66f4fec4da13f1093295dc19, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_03
+    kind: 3
+    sprite: {fileID: 21300000, guid: 46249cef48bd2df43bab6ff8e08f9a8c, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_04
+    kind: 3
+    sprite: {fileID: 21300000, guid: f253ee0a384056442a1f33bd02ec6285, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_05
+    kind: 3
+    sprite: {fileID: 21300000, guid: ec0e2acdecaa2324bad6f2128bb455d4, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: mouth_06
+    kind: 3
+    sprite: {fileID: 21300000, guid: 9fc8b79b44b4eae43a1edac77ae807cd, type: 3}
+    colorRole: 0
+    optional: 0
+    sortOrder: 60
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hand_01
+    kind: 4
+    sprite: {fileID: 21300000, guid: 1ab02c2a1eff7ef4eace83b1f18a2d39, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 20
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hand_02
+    kind: 4
+    sprite: {fileID: 21300000, guid: 49618d0778231344983d6e7cc9b181ae, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 20
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hand_03
+    kind: 4
+    sprite: {fileID: 21300000, guid: a2fd751049e048746a9cec129672aa15, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 20
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hand_04
+    kind: 4
+    sprite: {fileID: 21300000, guid: f14432274af1f0346b95aa6ec1e4b5e1, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 20
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hand_05
+    kind: 4
+    sprite: {fileID: 21300000, guid: e044890d8d2b2b44d98cdb8d3de93031, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 20
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: foot_01
+    kind: 5
+    sprite: {fileID: 21300000, guid: 28eecd7aae4d40540a42a6fa415b71c2, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 30
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: foot_02
+    kind: 5
+    sprite: {fileID: 21300000, guid: ed1e096e31167fe4898907da2500735b, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 30
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: foot_03
+    kind: 5
+    sprite: {fileID: 21300000, guid: fb44be1c922292b49a7d67d252096987, type: 3}
+    colorRole: 1
+    optional: 0
+    sortOrder: 30
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: tail_01
+    kind: 6
+    sprite: {fileID: 21300000, guid: 3249fbf9ed5952244b08774ee9a26ee5, type: 3}
+    colorRole: 1
+    optional: 1
+    sortOrder: 0
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: tail_02
+    kind: 6
+    sprite: {fileID: 21300000, guid: 99f7ecc4a4112c8428387b0767289d7d, type: 3}
+    colorRole: 1
+    optional: 1
+    sortOrder: 0
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: tail_03
+    kind: 6
+    sprite: {fileID: 21300000, guid: 19b5168e299b2de409927ad770963719, type: 3}
+    colorRole: 1
+    optional: 1
+    sortOrder: 0
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hat_01
+    kind: 7
+    sprite: {fileID: 21300000, guid: 0d864b6ed2807144b91385b627943997, type: 3}
+    colorRole: 0
+    optional: 1
+    sortOrder: 70
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hat_02
+    kind: 7
+    sprite: {fileID: 21300000, guid: 77ba5dbdbf89e2e469f2e7f43cea8aa0, type: 3}
+    colorRole: 0
+    optional: 1
+    sortOrder: 70
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hat_03
+    kind: 7
+    sprite: {fileID: 21300000, guid: 326d21d62a2d0544297ce2012bf41d68, type: 3}
+    colorRole: 0
+    optional: 1
+    sortOrder: 70
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: hat_04
+    kind: 7
+    sprite: {fileID: 21300000, guid: a47f2549215726f43ba25987b36c20f4, type: 3}
+    colorRole: 0
+    optional: 1
+    sortOrder: 70
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: accessory_01
+    kind: 8
+    sprite: {fileID: 21300000, guid: 2d2a2970b8e5e0549950fb2f39485cd7, type: 3}
+    colorRole: 2
+    optional: 1
+    sortOrder: 35
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: accessory_02
+    kind: 8
+    sprite: {fileID: 21300000, guid: a3c71d5fc861a5f43ba999cd5f2ef047, type: 3}
+    colorRole: 2
+    optional: 1
+    sortOrder: 35
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  - id: accessory_03
+    kind: 8
+    sprite: {fileID: 21300000, guid: 37422da053e0f594f97f0b97f72824a7, type: 3}
+    colorRole: 2
+    optional: 1
+    sortOrder: 35
+    defaultPivot: {x: 0.5, y: 0.5}
+    defaultScale: {x: 1, y: 1}
+    defaultRotation: 0
+  templates:
+  - id: template_01
+    displayName: "\u4F53\u578B 1"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_01
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_01
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_01
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_01
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_01
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_01
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: 
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    hat:
+      partId: hat_01
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    accessory:
+      partId: 
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+  - id: template_02
+    displayName: "\u4F53\u578B 2"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_02
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_02
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_02
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_02
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_02
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_02
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: 
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    hat:
+      partId: 
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    accessory:
+      partId: accessory_02
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+  - id: template_03
+    displayName: "\u4F53\u578B 3"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_03
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_03
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_03
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_03
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_03
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_03
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: tail_03
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hat:
+      partId: 
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    accessory:
+      partId: 
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+  - id: template_04
+    displayName: "\u4F53\u578B 4"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_04
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_04
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_04
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_04
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_04
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_01
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: 
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    hat:
+      partId: hat_04
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    accessory:
+      partId: 
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+  - id: template_05
+    displayName: "\u4F53\u578B 5"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_05
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_01
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_05
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_05
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_05
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_02
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: 
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    hat:
+      partId: 
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    accessory:
+      partId: accessory_02
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+  - id: template_06
+    displayName: "\u4F53\u578B 6"
+    anchors:
+      neck: {x: 0, y: 0}
+      face: {x: 0, y: 0}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
+      body: {x: 0, y: 0}
+    body:
+      partId: body_06
+      anchor: 0
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    head:
+      partId: head_02
+      anchor: 1
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    eye:
+      partId: eye_01
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    mouth:
+      partId: mouth_06
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    hand:
+      partId: hand_01
+      anchor: 3
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    foot:
+      partId: foot_03
+      anchor: 4
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 1
+    tail:
+      partId: 
+      anchor: 5
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    hat:
+      partId: 
+      anchor: 2
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0
+    accessory:
+      partId: 
+      anchor: 6
+      offset: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      scale: {x: 1, y: 1}
+      rotation: 0
+      enabled: 0

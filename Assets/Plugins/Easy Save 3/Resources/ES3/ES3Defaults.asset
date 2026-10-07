@@ -46,6 +46,7 @@ MonoBehaviour:
     - SupportOldQF
     - TheCall.Hover
     - TheCall.Rules
+    - TheCall.UnityHost
     - UIKit
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
