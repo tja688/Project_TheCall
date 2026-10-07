@@ -3,8 +3,8 @@
 html, body {
   margin: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow: auto;
   background: #10141c;
   color: #e8f4f0;
   font: 13px/1.3 "Segoe UI", "Microsoft YaHei", sans-serif;
@@ -17,12 +17,11 @@ button, select {
 }
 
 #app {
-  height: 100dvh;
+  min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto minmax(0, 0.92fr) minmax(0, 1.08fr);
+  grid-template-rows: auto minmax(200px, 30vh) minmax(240px, 38vh) auto;
   gap: 8px;
-  padding: 8px 10px;
-  overflow: hidden;
+  padding: 8px 10px 16px;
 }
 
 #bar {
@@ -309,3 +308,38 @@ h1, h2 {
 
 .hit { color: #48d6a8; }
 .miss { color: #d65c70; }
+
+#ledger {
+  min-width: 0;
+  background: #1b2634;
+  border-radius: 12px;
+  padding: 8px 10px 12px;
+  user-select: text;
+}
+
+#ledger-note, .ledger-empty, .ledger-extra {
+  margin: 0 0 8px;
+  color: #9ab0ba;
+}
+
+#ledger table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+#ledger th, #ledger td {
+  border-bottom: 1px solid rgba(154, 176, 186, 0.22);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+#ledger th {
+  color: #9ab0ba;
+  font-weight: 650;
+}
+
+#ledger td.formula {
+  white-space: nowrap;
+}

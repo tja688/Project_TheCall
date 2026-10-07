@@ -688,16 +688,117 @@ function settle() {
   })));
   if (result.error) {
     showReport(result.error, false);
+    renderLedger(null, result.error);
     return;
   }
 
-  showReport(
-    "产出 " + result.produced +
-      " · 应交 " + result.due +
-      " · " + (result.meetsDue ? "达到应交" : "未达应交") +
-      " · 超额 " + result.excessAt +
-      " · " + (result.meetsExcess ? "达到超额" : "未达超额"),
-    result.meetsDue);
+  showReport(summaryText(result), result.meetsDue);
+  renderLedger(result, null);
+}
+
+function summaryText(result) {
+  return "产出 " + result.produced +
+    " · 应交 " + result.due +
+    " · " + (result.meetsDue ? "达到应交" : "未达应交") +
+    " · 超额 " + result.excessAt +
+    " · " + (result.meetsExcess ? "达到超额" : "未达超额");
+}
+
+function renderLedger(result, error) {
+  const body = document.querySelector("#ledger-body");
+  body.replaceChildren();
+  if (error) {
+    body.append(el("p", "miss", error));
+    return;
+  }
+
+  const summary = el("p", result.meetsDue ? "hit" : "miss", summaryText(result));
+  body.append(summary);
+  const labels = engineLabels();
+  if (result.landings.length === 0) {
+    body.append(el("p", "ledger-empty", "这次没有落地。"));
+  } else {
+    body.append(landingTable(result.landings, labels));
+  }
+
+  if (result.swaps.length > 0) {
+    body.append(el("p", "ledger-extra", "换位　" + result.swaps.map((swap) =>
+      placedName(labels, swap.actorId) + " → " + placedName(labels, swap.targetId) + (swap.happened ? " 发生" : " 未发生")
+    ).join(" · ")));
+  }
+
+  if (result.removals.length > 0) {
+    body.append(el("p", "ledger-extra", "消灭　" + result.removals.map((removal) =>
+      placedName(labels, removal.monsterId) + (removal.happened ? " 已消灭" : " 未消灭")
+    ).join(" · ")));
+  }
+}
+
+function landingTable(landings, labels) {
+  const table = document.createElement("table");
+  const head = document.createElement("tr");
+  for (const title of ["次序", "怪物", "技能", "报价", "加项", "侧向", "倍率", "底数", "能量", "写回", "算式"])
+    head.append(el("th", "", title));
+
+  table.append(head);
+  landings.forEach((landing, index) => {
+    const added = landing.adds.reduce((sum, add) => sum + add.amount, 0);
+    const side = isSideSkill(landing.skillName);
+    const line = document.createElement("tr");
+    const values = [
+      String(index + 1),
+      placedName(labels, landing.monsterId),
+      landing.skillName,
+      String(landing.quote),
+      landing.adds.length ? landing.adds.map((add) => add.label + " +" + add.amount).join("，") : "无",
+      side ? String(landing.sideCount) : "—",
+      landing.factors.length ? landing.factors.map((factor) => factor.label + " ×" + factor.factor).join("，") : "×1",
+      String(landing.base),
+      String(landing.energy),
+      String(landing.writeback),
+    ];
+    for (const value of values)
+      line.append(el("td", "", value));
+
+    line.append(el("td", "formula", landingFormula(landing, added, side)));
+    table.append(line);
+  });
+  return table;
+}
+
+function landingFormula(landing, added, side) {
+  const quote = added === 0 ? String(landing.quote) : landing.quote + " + " + added;
+  const tail = " × " + landing.multiplier + " = " + landing.energy;
+  if (side)
+    return "(" + quote + ") × " + landing.sideCount + tail;
+
+  return "(" + quote + ")" + tail;
+}
+
+function isSideSkill(name) {
+  const skill = byName.get(name);
+  return Boolean(skill && skill.effects.some((effect) => effect.kind === "SideCount"));
+}
+
+function engineLabels() {
+  const labels = new Map();
+  let number = 1;
+  bench.forEach((id, index) => {
+    if (!id)
+      return;
+
+    const skills = monsters.get(id).skills;
+    labels.set("m" + number, "第 " + (index + 1) + " 格 · " + skills[0]);
+    number += 1;
+  });
+  return labels;
+}
+
+function placedName(labels, id) {
+  if (!id)
+    return "无目标";
+
+  return labels.get(id) || id;
 }
 
 function showReport(text, ok) {
