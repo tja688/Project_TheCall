@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\TheCall.Rules\TheCall.Rules.csproj" />
+    <WasmExtraFilesToDeploy Include="wwwroot\.nojekyll" TargetPath=".nojekyll" />
     <WasmExtraFilesToDeploy Include="wwwroot\index.html" TargetPath="index.html" />
     <WasmExtraFilesToDeploy Include="wwwroot\bench.js" TargetPath="bench.js" />
     <WasmExtraFilesToDeploy Include="wwwroot\bench.css" TargetPath="bench.css" />

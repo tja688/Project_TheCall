@@ -1,35 +1,16 @@
-name: pages
+name: rules
 
 on:
   push:
     branches: [dev, main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
-      - run: dotnet workload install wasm-tools
       - run: dotnet test kernel/TheCall.Rules.Tests/TheCall.Rules.Tests.csproj --configuration Release
-      - run: dotnet publish kernel/TheCall.Page/TheCall.Page.csproj --configuration Release
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: kernel/TheCall.Page/bin/Release/net10.0/browser-wasm/AppBundle
-      - id: deployment
-        uses: actions/deploy-pages@v4
