@@ -25,6 +25,31 @@ namespace TheCall
         GainCapacity,
         SwapWithLeft,
         DoubleAdjacentEnergy,
+        CapacityExtraForRightNeighbor,
+        OwnSkillMultiple,
+        PopulationQuote,
+        GrowOnClear,
+        SameNameExtra,
+        ChanceQuote,
+        SkillCountExtra,
+        LegacyOnDiscard,
+        GainGold,
+        FillSkills,
+        EdgeBonus,
+        CopyBreeding,
+        KinExtra,
+        SkillCountAdd,
+        RightRowOnLeftActive,
+    }
+
+    [Flags]
+    internal enum SkillRole
+    {
+        None = 0,
+        Produce = 1,
+        Support = 2,
+        Amplify = 4,
+        Economy = 8,
     }
 
     internal readonly struct Effect
@@ -45,13 +70,14 @@ namespace TheCall
 
     internal sealed class SkillDef
     {
-        public SkillDef(string name, Rarity rarity, int poolIndex, SkillUse use, SkillAffix affix, Effect[] effects)
+        public SkillDef(string name, Rarity rarity, int poolIndex, SkillUse use, SkillAffix affix, SkillRole role, Effect[] effects)
         {
             Name = name;
             Rarity = rarity;
             PoolIndex = poolIndex;
             Use = use;
             Affix = affix;
+            Role = role;
             Effects = effects;
         }
 
@@ -64,6 +90,8 @@ namespace TheCall
         public SkillUse Use { get; }
 
         public SkillAffix Affix { get; }
+
+        public SkillRole Role { get; }
 
         public IReadOnlyList<Effect> Effects { get; }
 
@@ -382,8 +410,9 @@ namespace TheCall
                     throw new ContentBookException(path + ".use 未知");
 
                 var affix = Affix(AsArray(Required(skill, "affix", path), path + ".affix"), path);
+                var role = Roles(AsArray(Required(skill, "roles", path), path + ".roles"), path);
                 var effects = Effects(AsArray(Required(skill, "effects", path), path + ".effects"), path);
-                var def = new SkillDef(name, rarity, poolIndex, use, affix, effects);
+                var def = new SkillDef(name, rarity, poolIndex, use, affix, role, effects);
                 CheckAffix(def, path);
                 SkillSentences.Format(def);
                 skills[i] = def;
@@ -456,12 +485,49 @@ namespace TheCall
                 return new Effect(kind, times, 0);
             }
 
-            if (kind == EffectKind.GainCapacity || kind == EffectKind.CapacityExtraForLeftNeighbor)
+            if (kind == EffectKind.GainCapacity || kind == EffectKind.CapacityExtraForLeftNeighbor || kind == EffectKind.CapacityExtraForRightNeighbor)
                 return new Effect(kind, Int(item, "layers", path), 0);
             if (kind == EffectKind.ExtraWalksForRightNeighbor)
                 return new Effect(kind, Int(item, "walks", path), 0);
+            if (kind == EffectKind.OwnSkillMultiple)
+                return new Effect(kind, Int(item, "factor", path), 0);
+            if (kind == EffectKind.GrowOnClear || kind == EffectKind.GainGold || kind == EffectKind.RightRowOnLeftActive)
+                return new Effect(kind, Int(item, "amount", path), 0);
+            if (kind == EffectKind.ChanceQuote)
+                return new Effect(kind, Int(item, "quote", path), Int(item, "percent", path));
+            if (kind == EffectKind.SkillCountExtra)
+                return new Effect(kind, Int(item, "when", path), Int(item, "walks", path));
+            if (kind == EffectKind.SkillCountAdd)
+                return new Effect(kind, Int(item, "when", path), Int(item, "amount", path));
+            if (kind == EffectKind.EdgeBonus)
+            {
+                CountedSide side;
+                if (!Enum.TryParse(Text(item, "side", path), out side))
+                    throw new ContentBookException(path + ".side 未知");
+
+                return new Effect(kind, Int(item, "amount", path), (int)side);
+            }
 
             return new Effect(kind, 0, 0);
+        }
+
+        static SkillRole Roles(JsonArray array, string path)
+        {
+            var role = SkillRole.None;
+            for (var i = 0; i < array.Items.Count; i++)
+            {
+                var name = (array.Items[i] as JsonString)?.Text;
+                SkillRole flag;
+                if (name == null || !Enum.TryParse(name, out flag) || flag == SkillRole.None)
+                    throw new ContentBookException(path + ".roles[" + i + "] 未知");
+
+                role |= flag;
+            }
+
+            if (role == SkillRole.None)
+                throw new ContentBookException(path + ".roles 为空");
+
+            return role;
         }
 
         static SkillAffix Affix(JsonArray array, string path)

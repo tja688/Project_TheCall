@@ -13,7 +13,7 @@ namespace TheCall.Tests
 
             var details = App.SendQuery(new MonsterDetailsQuery(monster.Id));
 
-            Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量"));
+            Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量，加减加在这次总产出上"));
             Assert.That(details.Skills[0].Kind, Is.EqualTo(SkillUse.Active));
             Assert.That(details.Skills[0].Rarity, Is.EqualTo(Rarity.White));
         }
@@ -25,13 +25,13 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 文案表的名字与技能目录相同且能量吐息有句子()
+        public void 文案表的名字与技能目录相同且能量体有句子()
         {
             var catalog = App.GetUtility<SkillCatalog>();
             var copy = App.GetUtility<SkillCopy>();
 
             Assert.That(copy.Names, Is.EqualTo(catalog.Names));
-            Assert.That(copy.TryDescribe("能量吐息", out var kind, out var sentence), Is.True);
+            Assert.That(copy.TryDescribe("能量体", out var kind, out var sentence), Is.True);
             Assert.That(kind, Is.EqualTo(SkillUse.Active));
             Assert.That(sentence, Is.EqualTo("产生5点能量"));
         }
@@ -46,13 +46,13 @@ namespace TheCall.Tests
                 Assert.That(joined, Is.EqualTo(SkillSentences.Format(skill)), skill.Name);
             }
 
-            var breath = SkillSentences.Pieces(ContentGate.Current.FindSkill("能量吐息"));
+            var breath = SkillSentences.Pieces(ContentGate.Current.FindSkill("能量体"));
             Assert.That(breath.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(5));
 
-            var small = SkillSentences.Pieces(ContentGate.Current.FindSkill("增量小手"));
+            var small = SkillSentences.Pieces(ContentGate.Current.FindSkill("奇异香"));
             Assert.That(small.Any(piece => piece.IsEnergy), Is.False);
 
-            var share = SkillSentences.Pieces(ContentGate.Current.FindSkill("分享之手"));
+            var share = SkillSentences.Pieces(ContentGate.Current.FindSkill("蜜能量体"));
             Assert.That(share.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(2));
         }
 
@@ -67,7 +67,7 @@ namespace TheCall.Tests
 
             Assert.That(
                 details.Skills[0].Sentence,
-                Is.EqualTo("产生4点能量，消灭随机一只相邻怪物，本技能产生的能量数值永久+2"));
+                Is.EqualTo("消灭随机一只相邻怪物，本怪物产能类型的技能数值永久+2"));
         }
     }
 }

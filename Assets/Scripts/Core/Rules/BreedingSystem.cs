@@ -44,7 +44,11 @@ namespace TheCall
                 if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(ContentGate.Current.Economy.TechPercent))
                     modifier += ContentGate.Current.Economy.ModifierAmount;
 
-                run.AddToCage(run.CreateMonster(names, modifier, appearance));
+                var parentIds = new string[parents.Count];
+                for (var parent = 0; parent < parents.Count; parent++)
+                    parentIds[parent] = parents[parent].Id;
+
+                run.AddToCage(run.CreateMonster(names, modifier, appearance, parentIds));
             }
         }
 

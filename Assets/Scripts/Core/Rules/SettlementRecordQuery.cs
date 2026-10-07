@@ -96,7 +96,7 @@ namespace TheCall
             for (var i = 0; i < Adds.Count; i++)
                 added += Adds[i].Amount;
 
-            var expectedBase = Side ? (Quote + added) * SideCount : Quote + added;
+            var expectedBase = Side ? Quote * SideCount + added : Quote + added;
             var expectedMultiplier = 1;
             for (var i = 0; i < Factors.Count; i++)
                 expectedMultiplier *= Factors[i].Factor;

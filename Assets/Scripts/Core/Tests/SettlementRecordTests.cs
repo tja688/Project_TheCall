@@ -12,12 +12,12 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
-                "双重吐息",
-                "分享之手");
+                "双头能量体",
+                "蜜能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var devourerId = IdOf("吞噬大嘴");
@@ -27,24 +27,16 @@ namespace TheCall.Tests
             var record = App.SendQuery(new SettlementRecordQuery());
             Assert.That(record.Select(entry => entry.GetType().Name).ToArray(), Is.EqualTo(new[]
             {
-                "SettlementLanding",
                 "SettlementRemoval",
                 "SettlementPayment",
             }));
-            var landing = (SettlementLanding)record[0];
-            Assert.That(landing.MonsterId, Is.EqualTo(devourerId));
-            Assert.That(landing.SkillName, Is.EqualTo("吞噬大嘴"));
-            Assert.That(landing.Base, Is.EqualTo(4));
-            Assert.That(landing.Multiplier, Is.EqualTo(1));
-            Assert.That(landing.Energy, Is.EqualTo(4));
-            Assert.That(landing.Writeback, Is.EqualTo(2));
-            var removal = (SettlementRemoval)record[1];
+            var removal = (SettlementRemoval)record[0];
             Assert.That(removal.MonsterId, Is.Null);
             Assert.That(removal.Happened, Is.False);
             Assert.That(removal.SourceId, Is.EqualTo(devourerId));
-            var payment = (SettlementPayment)record[2];
+            var payment = (SettlementPayment)record[1];
             Assert.That(payment.Deducted, Is.EqualTo(0));
-            Assert.That(payment.Shortfall, Is.EqualTo(46));
+            Assert.That(payment.Shortfall, Is.EqualTo(50));
             Assert.That(payment.Overtime, Is.True);
             Assert.That(payment.Failed, Is.False);
             Assert.That(payment.Excess, Is.False);
@@ -58,12 +50,12 @@ namespace TheCall.Tests
                 "换位手",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "增量大手",
+                "能量体",
+                "奇异香",
+                "怪异香",
                 "孤独心",
-                "双重吐息",
-                "分享之手");
+                "双头能量体",
+                "蜜能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var swapperId = IdOf("换位手");
@@ -81,18 +73,18 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(0),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
                 "换位手",
-                "增量小手",
-                "增量大手",
+                "奇异香",
+                "怪异香",
                 "孤独心",
-                "双重吐息",
-                "分享之手");
+                "双头能量体",
+                "蜜能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var breathId = IdOf("能量吐息");
+            var breathId = IdOf("能量体");
             var swapperId = IdOf("换位手");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(swapperId, OperationArea.Extraction, 1));
@@ -118,16 +110,16 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "增量大手",
+                "能量体",
+                "奇异香",
+                "怪异香",
                 "孤独心",
-                "双重吐息",
-                "分享之手");
+                "双头能量体",
+                "蜜能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var devourerId = IdOf("吞噬大嘴");
-            var victimId = IdOf("能量吐息");
+            var victimId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(victimId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -135,10 +127,8 @@ namespace TheCall.Tests
             var record = App.SendQuery(new SettlementRecordQuery());
             Assert.That(record[0], Is.InstanceOf<SettlementLanding>());
             Assert.That(((SettlementLanding)record[0]).MonsterId, Is.EqualTo(victimId));
-            Assert.That(record[1], Is.InstanceOf<SettlementLanding>());
-            Assert.That(((SettlementLanding)record[1]).Writeback, Is.EqualTo(2));
-            Assert.That(record[2], Is.InstanceOf<SettlementRemoval>());
-            var removal = (SettlementRemoval)record[2];
+            Assert.That(record[1], Is.InstanceOf<SettlementRemoval>());
+            var removal = (SettlementRemoval)record[1];
             Assert.That(removal.MonsterId, Is.EqualTo(victimId));
             Assert.That(removal.Happened, Is.True);
             Assert.That(removal.SourceId, Is.Null);
@@ -149,18 +139,18 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(10),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var breathId = IdOf("能量吐息");
+            var breathId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -191,18 +181,18 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(5, 5),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "增量大手",
+                "能量体",
+                "奇异香",
+                "怪异香",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var breaths = Ids("能量吐息");
+            var breaths = Ids("能量体");
             App.SendCommand(new PlaceMonsterCommand(breaths[0], OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1], OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());

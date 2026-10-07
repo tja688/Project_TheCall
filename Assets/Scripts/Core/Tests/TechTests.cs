@@ -120,17 +120,17 @@ namespace TheCall.Tests
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("基因实验"));
             App.SendCommand(new DiscardMonsterCommand(Parent("孤独心")));
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量小手")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
 
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
 
             Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.EqualTo("孤独心"));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
 
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
 
             Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.EqualTo("孤独心"));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
@@ -139,15 +139,15 @@ namespace TheCall.Tests
             Open();
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("基因实验"));
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量大手")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("怪异香")));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
 
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手", "增量大手" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "怪异香" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
         }
 
@@ -156,20 +156,20 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(0, 0),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("基因实验"));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             App.SendCommand(new DiscardMonsterCommand(breaths[1].Id));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
@@ -179,8 +179,8 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量吐息" }));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "能量吐息" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量体" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "能量体" }));
         }
 
         [Test]
@@ -206,16 +206,16 @@ namespace TheCall.Tests
             App.SendCommand(new UnlockTechCommand("基因实验"));
             App.SendCommand(new DiscardMonsterCommand(Parent("孤独心")));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量小手")));
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量大手")));
-            App.SendCommand(new DiscardMonsterCommand(Parent("残留提取腺体")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("怪异香")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("汲取鼻")));
 
             App.SendCommand(new ReturnBreedingSkillCommand(0));
 
             Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.EqualTo("孤独心"));
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
         }
 
         [Test]
@@ -231,8 +231,8 @@ namespace TheCall.Tests
             Assert.That(plans[1].ParentIds.Count, Is.EqualTo(2));
 
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量大手"), OperationArea.Breeding, 2));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("怪异香"), OperationArea.Breeding, 2));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
@@ -240,7 +240,7 @@ namespace TheCall.Tests
             Assert.That(offspring.Length, Is.EqualTo(2));
             Assert.That(
                 offspring.Select(monster => monster.SkillNames.Single()).ToArray(),
-                Is.EquivalentTo(new[] { "增量小手", "增量大手" }));
+                Is.EquivalentTo(new[] { "奇异香", "怪异香" }));
         }
 
         [Test]
@@ -255,15 +255,15 @@ namespace TheCall.Tests
             Assert.That(plans[0].ParentIds.Count, Is.EqualTo(3));
 
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量大手"), OperationArea.Breeding, 1));
-            App.SendCommand(new PlaceMonsterCommand(Parent("残留提取腺体"), OperationArea.Breeding, 2));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("怪异香"), OperationArea.Breeding, 1));
+            App.SendCommand(new PlaceMonsterCommand(Parent("汲取鼻"), OperationArea.Breeding, 2));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
             Assert.That(
                 Offspring(before).SkillNames,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
         }
 
         [Test]
@@ -281,8 +281,8 @@ namespace TheCall.Tests
             Assert.That(plans[1].ParentIds.Count, Is.EqualTo(3));
 
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 2));
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量大手"), OperationArea.Breeding, 3));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 2));
+            App.SendCommand(new PlaceMonsterCommand(Parent("怪异香"), OperationArea.Breeding, 3));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
@@ -290,7 +290,7 @@ namespace TheCall.Tests
             Assert.That(offspring.Length, Is.EqualTo(2));
             Assert.That(
                 offspring.Select(monster => monster.SkillNames.Single()).ToArray(),
-                Is.EquivalentTo(new[] { "增量小手", "增量大手" }));
+                Is.EquivalentTo(new[] { "奇异香", "怪异香" }));
         }
 
         [Test]
@@ -306,8 +306,8 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
             App.SendCommand(new PlaceBreedingSkillCommand(1, 0));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量大手"), OperationArea.Breeding, 2));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("怪异香"), OperationArea.Breeding, 2));
 
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
@@ -316,7 +316,7 @@ namespace TheCall.Tests
             Assert.That(offspring.Length, Is.EqualTo(2));
             Assert.That(
                 offspring.Select(monster => string.Join(",", monster.SkillNames)).ToArray(),
-                Is.EquivalentTo(new[] { "增量小手,孤独心", "增量大手,吞噬大嘴" }));
+                Is.EquivalentTo(new[] { "奇异香,孤独心", "怪异香,吞噬大嘴" }));
         }
 
         [Test]
@@ -325,12 +325,12 @@ namespace TheCall.Tests
             var draw = new TechDraw(OpeningNames, true);
             Open(draw);
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             draw.Pinned = "吞噬大嘴";
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香" }));
             Assert.That(draw.Percents, Is.Empty);
         }
 
@@ -342,12 +342,12 @@ namespace TheCall.Tests
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("变异学说"));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             draw.Pinned = "吞噬大嘴";
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手", "吞噬大嘴" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "吞噬大嘴" }));
             Assert.That(draw.Percents, Is.EqualTo(new[] { 10 }));
         }
 
@@ -359,12 +359,12 @@ namespace TheCall.Tests
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("变异学说"));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             draw.Pinned = "吞噬大嘴";
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香" }));
             Assert.That(draw.Percents, Is.EqualTo(new[] { 10 }));
         }
 
@@ -382,16 +382,16 @@ namespace TheCall.Tests
             App.SendCommand(new DiscardMonsterCommand(Parent("孤独心")));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量大手"), OperationArea.Breeding, 1));
-            App.SendCommand(new PlaceMonsterCommand(Parent("残留提取腺体"), OperationArea.Breeding, 2));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("怪异香"), OperationArea.Breeding, 1));
+            App.SendCommand(new PlaceMonsterCommand(Parent("汲取鼻"), OperationArea.Breeding, 2));
             App.SendCommand(new ConfirmSettlementCommand());
-            draw.Pinned = "时间操控器官";
+            draw.Pinned = "左复制腺体";
             App.SendCommand(new LeaveShopCommand());
 
             Assert.That(
                 Offspring(before).SkillNames,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体", "孤独心" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻", "孤独心" }));
         }
 
         [Test]
@@ -401,14 +401,14 @@ namespace TheCall.Tests
             Open(draw);
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("科学培育"));
-            var parent = Parent("能量吐息");
+            var parent = Parent("能量体");
             var before = CageIds();
             App.SendCommand(new PlaceMonsterCommand(parent, OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
             var child = Offspring(before);
-            Assert.That(child.SkillNames, Is.EqualTo(new[] { "能量吐息" }));
+            Assert.That(child.SkillNames, Is.EqualTo(new[] { "能量体" }));
             Assert.That(child.Modifier, Is.EqualTo(2));
             Assert.That(draw.Percents, Is.EqualTo(new[] { 10 }));
 
@@ -436,15 +436,15 @@ namespace TheCall.Tests
         {
             var names = new[]
             {
-                "太阳能头",
+                "镜眼",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息",
+                "双头能量体",
             };
             var draw = new TechDraw(names, true);
             UseRules(draw, new ScriptedLevelCatalog(new[] { 0, 0, 3 }, new[] { 0, 0, 60 }));
@@ -452,7 +452,7 @@ namespace TheCall.Tests
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("科学培育"));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("太阳能头"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("镜眼"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
@@ -461,16 +461,6 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(child.Id, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             Assert.That(Landings(), Is.Empty);
-            Assert.That(App.SendQuery(new MonsterQuery(child.Id)).Skills.Single().Quote, Is.EqualTo(0));
-
-            App.SendCommand(new ConfirmSettlementCommand());
-            var landing = Landings().Single();
-            Assert.That(landing.MonsterId, Is.EqualTo(child.Id));
-            Assert.That(landing.SkillName, Is.EqualTo("产能"));
-            Assert.That(landing.Base, Is.EqualTo(3));
-            Assert.That(landing.Multiplier, Is.EqualTo(1));
-            Assert.That(landing.Energy, Is.EqualTo(3));
-            Assert.That(landing.Writeback, Is.EqualTo(0));
             Assert.That(App.SendQuery(new MonsterQuery(child.Id)).Skills.Single().Quote, Is.EqualTo(0));
         }
 
@@ -482,7 +472,7 @@ namespace TheCall.Tests
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("科学培育"));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("能量吐息"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("能量体"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
@@ -506,28 +496,28 @@ namespace TheCall.Tests
             App.SendCommand(new UnlockTechCommand("变异学说"));
             App.SendCommand(new UnlockTechCommand("科学培育"));
             var before = CageIds();
-            App.SendCommand(new PlaceMonsterCommand(Parent("增量小手"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(Parent("奇异香"), OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             draw.Pinned = "吞噬大嘴";
             App.SendCommand(new LeaveShopCommand());
 
             var child = Offspring(before);
-            Assert.That(child.SkillNames, Is.EqualTo(new[] { "增量小手", "吞噬大嘴" }));
+            Assert.That(child.SkillNames, Is.EqualTo(new[] { "奇异香", "吞噬大嘴" }));
             Assert.That(child.Modifier, Is.EqualTo(2));
             Assert.That(draw.Percents, Is.EqualTo(new[] { 10, 10 }));
         }
 
         static readonly string[] OpeningNames =
         {
-            "能量吐息",
+            "能量体",
             "左能量体",
             "右能量体",
-            "增量小手",
-            "增量大手",
-            "残留提取腺体",
+            "奇异香",
+            "怪异香",
+            "汲取鼻",
             "孤独心",
             "吞噬大嘴",
-            "双重吐息",
+            "双头能量体",
         };
 
         void Open() => Open(new ScriptedDraw(OpeningNames));

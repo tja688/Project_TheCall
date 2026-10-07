@@ -14,7 +14,7 @@ namespace TheCall.Tests
             Assert.That(candidates.Select(monster => monster.Id).Distinct().Count(), Is.EqualTo(3));
             Assert.That(
                 candidates.Select(monster => monster.SkillNames.Single()).ToArray(),
-                Is.EqualTo(new[] { "能量吐息", "左能量体", "右能量体" }));
+                Is.EqualTo(new[] { "能量体", "左能量体", "右能量体" }));
             Assert.That(cage, Is.Empty);
         }
 
@@ -38,13 +38,13 @@ namespace TheCall.Tests
                 cage.Select(monster => monster.SkillNames.Single()),
                 Is.EquivalentTo(new[]
                 {
-                    "能量吐息",
-                    "增量小手",
-                    "增量大手",
-                    "残留提取腺体",
+                    "能量体",
+                    "奇异香",
+                    "怪异香",
+                    "汲取鼻",
                     "孤独心",
                     "吞噬大嘴",
-                    "双重吐息",
+                    "双头能量体",
                 }));
         }
 

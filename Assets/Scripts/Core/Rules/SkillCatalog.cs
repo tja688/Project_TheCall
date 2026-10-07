@@ -129,11 +129,31 @@ namespace TheCall
 
         public int StartingQuote(string skillName)
         {
-            int quote;
-            if (TryEnergyQuote(skillName, out quote))
-                return quote;
+            var skill = _book.FindSkill(skillName);
+            if (skill == null)
+                return 0;
+            if (skill.Has(EffectKind.EnergyQuote))
+                return skill.Get(EffectKind.EnergyQuote).A;
+            if (skill.Has(EffectKind.SideCount))
+                return skill.Get(EffectKind.SideCount).A;
+            if (skill.Has(EffectKind.LandingResponse))
+                return skill.Get(EffectKind.LandingResponse).A;
+            if (skill.Has(EffectKind.ChanceQuote))
+                return skill.Get(EffectKind.ChanceQuote).A;
 
             return 0;
+        }
+
+        public bool IsActive(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Use == SkillUse.Active;
+        }
+
+        public bool IsProduce(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && (skill.Role & SkillRole.Produce) != 0;
         }
 
         public bool SwapsWithLeft(string skillName)
@@ -166,9 +186,11 @@ namespace TheCall
 
             return skill.Has(EffectKind.EnergyQuote) ||
                    skill.Has(EffectKind.SideCount) ||
-                   skill.Has(EffectKind.Devour) ||
                    skill.Has(EffectKind.RepeatQuote) ||
-                   skill.Has(EffectKind.NextEnergyBonus);
+                   skill.Has(EffectKind.NextEnergyBonus) ||
+                   skill.Has(EffectKind.ChanceQuote) ||
+                   skill.Has(EffectKind.OwnSkillMultiple) ||
+                   skill.Has(EffectKind.PopulationQuote);
         }
 
         public SkillAffix Affixes(string skillName)
@@ -217,6 +239,116 @@ namespace TheCall
 
             times = 0;
             return false;
+        }
+
+        public int CapacityExtraForRightNeighbor(string skillName) =>
+            Amount(skillName, EffectKind.CapacityExtraForRightNeighbor);
+
+        public int RightRowBonus(string skillName) => Amount(skillName, EffectKind.RightRowOnLeftActive);
+
+        public int GrowAmount(string skillName) => Amount(skillName, EffectKind.GrowOnClear);
+
+        public int GoldOf(string skillName) => Amount(skillName, EffectKind.GainGold);
+
+        public bool GrantsSameNameExtra(string skillName) => Has(skillName, EffectKind.SameNameExtra);
+
+        public bool FillsSkills(string skillName) => Has(skillName, EffectKind.FillSkills);
+
+        public bool CopiesBreeding(string skillName) => Has(skillName, EffectKind.CopyBreeding);
+
+        public bool HasKin(string skillName) => Has(skillName, EffectKind.KinExtra);
+
+        public bool HasLegacy(string skillName) => Has(skillName, EffectKind.LegacyOnDiscard);
+
+        public bool IsPopulation(string skillName) => Has(skillName, EffectKind.PopulationQuote);
+
+        public bool TryOwnMultiple(string skillName, out int factor)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.OwnSkillMultiple))
+            {
+                factor = skill.Get(EffectKind.OwnSkillMultiple).A;
+                return true;
+            }
+
+            factor = 0;
+            return false;
+        }
+
+        public bool TryChance(string skillName, out int percent, out int quote)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.ChanceQuote))
+            {
+                var effect = skill.Get(EffectKind.ChanceQuote);
+                quote = effect.A;
+                percent = effect.B;
+                return true;
+            }
+
+            percent = 0;
+            quote = 0;
+            return false;
+        }
+
+        public bool TrySkillCountExtra(string skillName, out int when, out int walks)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.SkillCountExtra))
+            {
+                var effect = skill.Get(EffectKind.SkillCountExtra);
+                when = effect.A;
+                walks = effect.B;
+                return true;
+            }
+
+            when = 0;
+            walks = 0;
+            return false;
+        }
+
+        public bool TrySkillCountAdd(string skillName, out int when, out int amount)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.SkillCountAdd))
+            {
+                var effect = skill.Get(EffectKind.SkillCountAdd);
+                when = effect.A;
+                amount = effect.B;
+                return true;
+            }
+
+            when = 0;
+            amount = 0;
+            return false;
+        }
+
+        public bool TryEdge(string skillName, out CountedSide side, out int amount)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.EdgeBonus))
+            {
+                var effect = skill.Get(EffectKind.EdgeBonus);
+                amount = effect.A;
+                side = (CountedSide)effect.B;
+                return true;
+            }
+
+            side = CountedSide.Left;
+            amount = 0;
+            return false;
+        }
+
+        bool Has(string skillName, EffectKind kind)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(kind);
+        }
+
+        int Amount(string skillName, EffectKind kind)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill != null && skill.Has(kind) ? skill.Get(kind).A : 0;
         }
     }
 }

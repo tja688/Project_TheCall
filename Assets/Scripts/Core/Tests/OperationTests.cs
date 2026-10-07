@@ -141,7 +141,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new ExtractionSlotsQuery())[2].MonsterId, Is.Null);
             Assert.That(CageIds(), Does.Not.Contain(victim));
             Assert.That(App.SendQuery(new MonsterQuery(victim)), Is.Null);
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new MonsterQuery(cage[4])).SkillNames, Is.EqualTo(new[] { "孤独心" }));
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
         }
 
         [Test]
@@ -182,7 +182,7 @@ namespace TheCall.Tests
             Assert.That(applied, Is.True);
             Assert.That(
                 App.SendQuery(new MonsterQuery(host)).SkillNames,
-                Is.EqualTo(new[] { "能量吐息", "增量小手" }));
+                Is.EqualTo(new[] { "能量体", "奇异香" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
             Assert.That(App.SendQuery(new ExtractionSlotsQuery())[3].MonsterId, Is.EqualTo(host));
         }
@@ -192,15 +192,15 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(0, 0),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
@@ -222,9 +222,9 @@ namespace TheCall.Tests
 
             App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
-            App.SendCommand(new DiscardMonsterCommand(IdOf("增量小手")));
-            App.SendCommand(new DiscardMonsterCommand(IdOf("增量大手")));
-            App.SendCommand(new DiscardMonsterCommand(IdOf("残留提取腺体")));
+            App.SendCommand(new DiscardMonsterCommand(IdOf("奇异香")));
+            App.SendCommand(new DiscardMonsterCommand(IdOf("怪异香")));
+            App.SendCommand(new DiscardMonsterCommand(IdOf("汲取鼻")));
 
             var applied = App.SendCommand(new CommitOperationDropCommand(new OperationDrop(
                 DropPayload.BreedingSkill(0),
@@ -234,7 +234,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.EqualTo("孤独心"));
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
         }
 
         [Test]

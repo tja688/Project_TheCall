@@ -83,18 +83,43 @@ namespace TheCall
         public void Discard(string monsterId)
         {
             var run = this.GetModel<RunModel>();
-            if (!EnterOperation(run) || run.SkillSlots.Count >= 3)
+            if (!EnterOperation(run))
                 return;
 
             var monster = run.Find(monsterId);
             if (monster == null)
                 return;
 
-            var names = new string[monster.Skills.Count];
-            for (var i = 0; i < names.Length; i++)
-                names[i] = monster.Skills[i].Name;
+            var catalog = this.GetUtility<SkillCatalog>();
+            var legacy = false;
+            for (var index = 0; index < monster.Skills.Count; index++)
+            {
+                if (catalog.HasLegacy(monster.Skills[index].Name))
+                    legacy = true;
+            }
 
-            var skillName = this.GetUtility<IDraw>().Choose(names);
+            if (!legacy && run.SkillSlots.Count >= 3)
+                return;
+
+            if (legacy)
+            {
+                this.GetModel<LevelModel>().TryRemove(monsterId);
+                if (!run.TryDestroy(monsterId))
+                    return;
+
+                var names = catalog.Names;
+                if (names.Count == 0)
+                    return;
+
+                run.AddToCage(run.CreateMonster(new[] { this.GetUtility<IDraw>().Choose(names) }));
+                return;
+            }
+
+            var owned = new string[monster.Skills.Count];
+            for (var i = 0; i < owned.Length; i++)
+                owned[i] = monster.Skills[i].Name;
+
+            var skillName = this.GetUtility<IDraw>().Choose(owned);
             this.GetModel<LevelModel>().TryRemove(monsterId);
             if (!run.TryDestroy(monsterId))
                 return;
@@ -176,6 +201,7 @@ namespace TheCall
                 return;
 
             ReturnBoard(run);
+            run.GrowAfterClear(this.GetUtility<SkillCatalog>());
             run.ClearTemporaryQuotes();
             run.ClearTemporaryImmovable();
             run.ClearCapacity();

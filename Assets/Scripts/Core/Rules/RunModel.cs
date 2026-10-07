@@ -35,13 +35,16 @@ namespace TheCall
         {
         }
 
-        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null)
+        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
         {
             Id = id;
             Skills = new List<SkillInstance>(skills);
             Modifier = modifier;
             Appearance = appearance ?? MonsterAppearance.FromSeed(StableSeed(id));
+            ParentIds = parentIds == null ? System.Array.Empty<string>() : CopyParents(parentIds);
         }
+
+        public IReadOnlyList<string> ParentIds { get; }
 
         public string Id { get; }
 
@@ -74,6 +77,15 @@ namespace TheCall
 
             Immovable = false;
         }
+        static string[] CopyParents(IReadOnlyList<string> parentIds)
+        {
+            var copy = new string[parentIds.Count];
+            for (var index = 0; index < copy.Length; index++)
+                copy[index] = parentIds[index];
+
+            return copy;
+        }
+
         static int StableSeed(string id)
         {
             var hash = 17;
@@ -376,8 +388,37 @@ namespace TheCall
             return true;
         }
 
-        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0, MonsterAppearance? appearance = null) =>
-            Create(skillNames, modifier, appearance);
+        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null) =>
+            Create(skillNames, modifier, appearance, parentIds);
+
+        public bool TryGainSkill(string monsterId, string skillName)
+        {
+            var monster = Find(monsterId);
+            if (monster == null || monster.Skills.Count >= 4)
+                return false;
+
+            for (var index = 0; index < monster.Skills.Count; index++)
+            {
+                if (monster.Skills[index].Name == skillName)
+                    return false;
+            }
+
+            monster.Skills.Add(MakeSkill(skillName));
+            return true;
+        }
+
+        public void GrowAfterClear(SkillCatalog catalog)
+        {
+            foreach (var monster in _byId.Values)
+            {
+                for (var index = 0; index < monster.Skills.Count; index++)
+                {
+                    var amount = catalog.GrowAmount(monster.Skills[index].Name);
+                    if (amount > 0)
+                        monster.Skills[index].Add(amount, true);
+                }
+            }
+        }
 
         public void ClearTemporaryQuotes()
         {
@@ -426,14 +467,14 @@ namespace TheCall
 
         Monster Create(string skillName) => Create(new[] { skillName }, 0, null);
 
-        Monster Create(IReadOnlyList<string> skillNames, int modifier, MonsterAppearance? appearance = null)
+        Monster Create(IReadOnlyList<string> skillNames, int modifier, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
                 skills[i] = MakeSkill(skillNames[i]);
 
             var id = "m" + _nextId++;
-            var monster = new Monster(id, skills, modifier, appearance);
+            var monster = new Monster(id, skills, modifier, appearance, parentIds);
             _byId.Add(monster.Id, monster);
             return monster;
         }

@@ -161,9 +161,9 @@ namespace TheCall.Scoring
             var bits = new List<int>(landing.Adds.Count + 2);
             bits.Add(landing.Quote * scale);
             for (var i = 0; i < landing.Adds.Count; i++)
-                bits.Add(landing.Adds[i].Amount * scale);
+                bits.Add(landing.Adds[i].Amount);
 
-            var extra = landing.Energy - (landing.Quote + added) * scale;
+            var extra = landing.Energy - (landing.Quote * scale + added);
             if (extra != 0)
                 bits.Add(extra);
 

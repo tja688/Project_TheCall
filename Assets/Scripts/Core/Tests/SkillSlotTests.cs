@@ -7,37 +7,37 @@ namespace TheCall.Tests
     {
         static readonly string[] Opening =
         {
-            "能量吐息",
+            "能量体",
             "左能量体",
             "右能量体",
-            "增量小手",
-            "增量大手",
-            "残留提取腺体",
+            "奇异香",
+            "怪异香",
+            "汲取鼻",
             "孤独心",
             "吞噬大嘴",
-            "双重吐息",
+            "双头能量体",
         };
 
         [Test]
         public void 废弃立刻消灭怪物并把抽到的技能放入技能槽()
         {
-            Begin("增量小手");
+            Begin("奇异香");
 
             var victim = App.SendQuery(new MonsterCageQuery())[1];
-            Assert.That(victim.SkillNames, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(victim.SkillNames, Is.EqualTo(new[] { "奇异香" }));
 
             App.SendCommand(new DiscardMonsterCommand(victim.Id));
 
             var cage = App.SendQuery(new MonsterCageQuery());
             Assert.That(cage.Select(monster => monster.Id), Does.Not.Contain(victim.Id));
             Assert.That(cage.Count(), Is.EqualTo(6));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
         public void 废弃已经摆上提取槽的怪物后格子空出并且怪物消失()
         {
-            Begin("增量小手");
+            Begin("奇异香");
 
             var victimId = App.SendQuery(new MonsterCageQuery())[1].Id;
             App.SendCommand(new PlaceMonsterCommand(victimId, OperationArea.Extraction, 2));
@@ -47,25 +47,25 @@ namespace TheCall.Tests
             Assert.That(
                 App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id),
                 Does.Not.Contain(victimId));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
         public void 技能槽能放下三份并且同名可以并存()
         {
             UseDraw(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量大手",
-                "残留提取腺体",
+                "能量体",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息",
-                "能量吐息",
-                "能量吐息",
-                "增量大手");
+                "双头能量体",
+                "能量体",
+                "能量体",
+                "怪异香");
             KeepFirst();
 
             var cage = App.SendQuery(new MonsterCageQuery());
@@ -75,13 +75,13 @@ namespace TheCall.Tests
 
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "能量吐息", "能量吐息", "增量大手" }));
+                Is.EqualTo(new[] { "能量体", "能量体", "怪异香" }));
         }
 
         [Test]
         public void 技能槽已满时废弃不发生怪物还在()
         {
-            Begin("增量小手", "增量大手", "残留提取腺体", "孤独心", "吞噬大嘴");
+            Begin("奇异香", "怪异香", "汲取鼻", "孤独心", "吞噬大嘴");
 
             var cage = App.SendQuery(new MonsterCageQuery());
             var stayingInCage = cage[4].Id;
@@ -100,13 +100,13 @@ namespace TheCall.Tests
                 Does.Contain(stayingInCage));
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
         }
 
         [Test]
         public void 开局阶段废弃候选不会消灭它也不会得到技能()
         {
-            UseDraw("能量吐息", "左能量体", "右能量体");
+            UseDraw("能量体", "左能量体", "右能量体");
 
             var candidateId = App.SendQuery(new OpeningCandidatesQuery())[0].Id;
             App.SendCommand(new DiscardMonsterCommand(candidateId));
@@ -121,13 +121,13 @@ namespace TheCall.Tests
         [Test]
         public void 装上怪物后技能排在技能次序末尾()
         {
-            var keptId = Begin("增量小手");
+            var keptId = Begin("奇异香");
             var donorId = App.SendQuery(new MonsterCageQuery())[1].Id;
             App.SendCommand(new DiscardMonsterCommand(donorId));
             App.SendCommand(new EquipSkillCommand(keptId, 0));
 
             var host = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == keptId);
-            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量吐息", "增量小手" }));
+            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量体", "奇异香" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
         }
 
@@ -135,17 +135,17 @@ namespace TheCall.Tests
         public void 身上已有同名技能时这一份留在技能槽()
         {
             UseDraw(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量小手",
-                "残留提取腺体",
+                "奇异香",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息",
-                "增量小手",
-                "增量小手");
+                "双头能量体",
+                "奇异香",
+                "奇异香");
             var keptId = KeepFirst();
 
             var donors = App.SendQuery(new MonsterCageQuery());
@@ -155,14 +155,14 @@ namespace TheCall.Tests
             App.SendCommand(new EquipSkillCommand(keptId, 0));
 
             var host = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == keptId);
-            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量吐息", "增量小手" }));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量体", "奇异香" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
         public void 身上已有四个技能时不能再装()
         {
-            var keptId = Begin("增量小手", "增量大手", "残留提取腺体", "孤独心");
+            var keptId = Begin("奇异香", "怪异香", "汲取鼻", "孤独心");
             var cage = App.SendQuery(new MonsterCageQuery());
             App.SendCommand(new DiscardMonsterCommand(cage[1].Id));
             App.SendCommand(new DiscardMonsterCommand(cage[2].Id));
@@ -176,14 +176,14 @@ namespace TheCall.Tests
             var host = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == keptId);
             Assert.That(
                 host.SkillNames,
-                Is.EqualTo(new[] { "能量吐息", "增量小手", "增量大手", "残留提取腺体" }));
+                Is.EqualTo(new[] { "能量体", "奇异香", "怪异香", "汲取鼻" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "孤独心" }));
         }
 
         [Test]
         public void 废弃多技能怪物时放进技能槽的是抽到的那一个()
         {
-            var keptId = Begin("增量小手", "增量小手");
+            var keptId = Begin("奇异香", "奇异香");
             var donorId = App.SendQuery(new MonsterCageQuery())[1].Id;
             App.SendCommand(new DiscardMonsterCommand(donorId));
             App.SendCommand(new EquipSkillCommand(keptId, 0));
@@ -192,13 +192,13 @@ namespace TheCall.Tests
             Assert.That(
                 App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id),
                 Does.Not.Contain(keptId));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
         public void 连续装上的技能按获得顺序留在末尾()
         {
-            var keptId = Begin("增量小手", "增量大手");
+            var keptId = Begin("奇异香", "怪异香");
             var cage = App.SendQuery(new MonsterCageQuery());
             App.SendCommand(new DiscardMonsterCommand(cage[1].Id));
             App.SendCommand(new DiscardMonsterCommand(cage[2].Id));
@@ -206,7 +206,7 @@ namespace TheCall.Tests
             App.SendCommand(new EquipSkillCommand(keptId, 0));
 
             var host = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == keptId);
-            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量吐息", "增量大手", "增量小手" }));
+            Assert.That(host.SkillNames, Is.EqualTo(new[] { "能量体", "怪异香", "奇异香" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
         }
 

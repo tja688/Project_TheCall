@@ -12,7 +12,7 @@ namespace TheCall.Scoring
                 new SettlementEntry[]
                 {
                     new SettlementLanding("devourer", "吞噬大嘴", 4, 1, 4, 2),
-                    new SettlementLanding("residue", "残留提取腺体", 1, 1, 1, 0),
+                    new SettlementLanding("residue", "汲取鼻", 1, 1, 1, 0),
                     new SettlementRemoval(null, false, "devourer"),
                     new SettlementPayment(0, 45, true, false, false, 0),
                 },
@@ -44,7 +44,7 @@ namespace TheCall.Scoring
             var tape = ScoringTape.Arrange(
                 new SettlementEntry[]
                 {
-                    new SettlementLanding("breath", "能量吐息", 5, 1, 5, 0),
+                    new SettlementLanding("breath", "能量体", 5, 1, 5, 0),
                     new SettlementLanding("swapper", "产能", 1, 1, 1, 0),
                     new SettlementSwap("swapper", "breath", true),
                     new SettlementRemoval("breath", true),
@@ -174,7 +174,7 @@ namespace TheCall.Scoring
             var tape = ScoringTape.Arrange(
                 new SettlementEntry[]
                 {
-                    new SettlementLanding("breath", "能量吐息", 5, 1, 5, 0),
+                    new SettlementLanding("breath", "能量体", 5, 1, 5, 0),
                     new SettlementLanding("breath", "毒跳伤", 2, 1, 2, 0),
                 },
                 new[] { "breath" });
@@ -195,7 +195,7 @@ namespace TheCall.Scoring
             Assert.That(missingEntries.Produced, Is.EqualTo(0));
 
             var missingSlots = ScoringTape.Arrange(
-                new SettlementEntry[] { new SettlementLanding("breath", "能量吐息", 5, 1, 5, 0) },
+                new SettlementEntry[] { new SettlementLanding("breath", "能量体", 5, 1, 5, 0) },
                 null);
             Assert.That(missingSlots.Cues.Count, Is.EqualTo(0));
             Assert.That(missingSlots.Produced, Is.EqualTo(0));
@@ -211,7 +211,7 @@ namespace TheCall.Scoring
         public void 落地先加上自身底分再逐个加上别人的分数和倍率差额()
         {
             var plain = ScoringTape.Arrange(
-                new SettlementEntry[] { new SettlementLanding("breath", "能量吐息", 5, 1, 5, 0) },
+                new SettlementEntry[] { new SettlementLanding("breath", "能量体", 5, 1, 5, 0) },
                 new[] { "breath" });
             Assert.That(plain.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5 }));
 
@@ -220,7 +220,7 @@ namespace TheCall.Scoring
                 {
                     new SettlementLanding(
                         "breath",
-                        "能量吐息",
+                        "能量体",
                         8,
                         2,
                         16,
@@ -228,8 +228,8 @@ namespace TheCall.Scoring
                         5,
                         0,
                         false,
-                        new[] { new LandingAdd("增量小手", 1), new LandingAdd("增量大手", 2) },
-                        new[] { new LandingFactor("鼓励嘴", 2) }),
+                        new[] { new LandingAdd("奇异香", 1), new LandingAdd("怪异香", 2) },
+                        new[] { new LandingFactor("镜眼", 2) }),
                 },
                 new[] { "breath" });
             Assert.That(added.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5, 1, 2, 8 }));
@@ -240,9 +240,9 @@ namespace TheCall.Scoring
                     new SettlementLanding(
                         "sided",
                         "侧向",
-                        10,
+                        8,
                         3,
-                        30,
+                        24,
                         4,
                         3,
                         2,
@@ -251,7 +251,7 @@ namespace TheCall.Scoring
                         new[] { new LandingFactor("暴击", 3) }),
                 },
                 new[] { "sided" });
-            Assert.That(sided.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 6, 4, 20 }));
+            Assert.That(sided.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 6, 2, 16 }));
         }
 
         static void AssertRolesOnce(ScoringTape tape)

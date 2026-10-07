@@ -25,15 +25,15 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(new[] { 0, 75 }, new[] { 100, 90 }),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var cage = App.SendQuery(new MonsterCageQuery());
@@ -72,21 +72,21 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(0, 100),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息",
-                "增量小手");
+                "双头能量体",
+                "奇异香");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var spareId = App.SendQuery(new MonsterCageQuery())[1].Id;
             App.SendCommand(new DiscardMonsterCommand(spareId));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
 
             for (var level = 1; level <= 6; level++)
             {

@@ -86,8 +86,8 @@ namespace TheCall.Tests
         public void 目标带有不动时换位不发生也不获得不动()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息", "换位手", "换位手");
-            var anchored = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "换位手", "换位手");
+            var anchored = IdOf("能量体");
             var blocked = Ids("换位手")[0];
             var follower = Ids("换位手")[1];
             intents.MakePermanentlyImmovable(anchored);
@@ -102,9 +102,9 @@ namespace TheCall.Tests
         [Test]
         public void 执行时目标已被立刻消灭则换位不发生也不获得不动()
         {
-            Begin(null, new ScriptedLevelCatalog(50), "换位手", "吞噬大嘴", "能量吐息", "换位手");
+            Begin(null, new ScriptedLevelCatalog(50), "换位手", "吞噬大嘴", "能量体", "换位手");
             var host = Ids("换位手")[0];
-            var victim = IdOf("能量吐息");
+            var victim = IdOf("能量体");
             var right = Ids("换位手")[1];
             App.SendCommand(new DiscardMonsterCommand(IdOf("吞噬大嘴")));
             App.SendCommand(new EquipSkillCommand(host, 0));
@@ -118,15 +118,15 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
             Assert.That(
                 Landings().Select(landing => landing.Energy).ToArray(),
-                Is.EqualTo(new[] { 5, 4 }));
+                Is.EqualTo(new[] { 5 }));
         }
 
         [Test]
         public void 换位成功后获得的不动让后面的换位失败()
         {
-            Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量吐息", "换位手", "换位手");
+            Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量体", "换位手", "换位手");
             var first = Ids("换位手")[0];
-            var left = IdOf("能量吐息");
+            var left = IdOf("能量体");
             var second = Ids("换位手")[1];
             var third = Ids("换位手")[2];
             App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
@@ -141,9 +141,9 @@ namespace TheCall.Tests
         [Test]
         public void 获得不动后操作阶段仍可把怪物改放到别的格子()
         {
-            Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量吐息");
+            Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量体");
             var swapper = IdOf("换位手");
-            var left = IdOf("能量吐息");
+            var left = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(swapper, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -158,9 +158,9 @@ namespace TheCall.Tests
         [Test]
         public void 没有永久的不动在离开关卡后不再挡住换位()
         {
-            Begin(null, new ScriptedLevelCatalog(0), "换位手", "能量吐息", "换位手");
+            Begin(null, new ScriptedLevelCatalog(0), "换位手", "能量体", "换位手");
             var first = Ids("换位手")[0];
-            var left = IdOf("能量吐息");
+            var left = IdOf("能量体");
             var second = Ids("换位手")[1];
             App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(first, OperationArea.Extraction, 1));
@@ -180,8 +180,8 @@ namespace TheCall.Tests
         public void 永久不动离开关卡后仍然挡住换位()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(0), "能量吐息", "换位手");
-            var anchored = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(0), "能量体", "换位手");
+            var anchored = IdOf("能量体");
             var swapper = IdOf("换位手");
             intents.MakePermanentlyImmovable(anchored);
             App.SendCommand(new PlaceMonsterCommand(anchored, OperationArea.Extraction, 0));
@@ -201,9 +201,9 @@ namespace TheCall.Tests
         public void 结束消灭在换位之后拿走且扣除仍计入它落地的能量()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(5), "换位手", "能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(5), "换位手", "能量体");
             var swapper = IdOf("换位手");
-            var victim = IdOf("能量吐息");
+            var victim = IdOf("能量体");
             intents.DestroyAtEnd(victim, 0);
             App.SendCommand(new PlaceMonsterCommand(victim, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(swapper, OperationArea.Extraction, 1));
@@ -221,9 +221,9 @@ namespace TheCall.Tests
         public void 同一时刻登记的结束消灭按从左到右拿走()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息", "能量吐息");
-            var left = Ids("能量吐息")[0];
-            var right = Ids("能量吐息")[1];
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "能量体");
+            var left = Ids("能量体")[0];
+            var right = Ids("能量体")[1];
             intents.DestroyAtEnd(right, 0);
             intents.DestroyAtEnd(left, 0);
             App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
@@ -237,9 +237,9 @@ namespace TheCall.Tests
         public void 更早登记的结束消灭先于左边的怪物拿走()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息", "能量吐息");
-            var left = Ids("能量吐息")[0];
-            var right = Ids("能量吐息")[1];
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "能量体");
+            var left = Ids("能量体")[0];
+            var right = Ids("能量体")[1];
             intents.DestroyAtEnd(right, 0);
             intents.DestroyAtEnd(left, 1);
             App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
@@ -253,14 +253,14 @@ namespace TheCall.Tests
         public void 重触发让每个秒点的毒跳伤再结算一遍且不重走技能()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息");
-            var host = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体");
+            var host = IdOf("能量体");
             intents.Poison(host, 3);
             intents.Retrigger(host);
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertLanding("能量吐息", "毒跳伤", "毒跳伤");
+            AssertLanding("能量体", "毒跳伤", "毒跳伤");
             Assert.That(Bases(), Is.EqualTo(new[] { 5, 3, 3 }));
             Assert.That(Energies(), Is.EqualTo(new[] { 5, 3, 3 }));
         }
@@ -269,8 +269,8 @@ namespace TheCall.Tests
         public void 多个重触发来源也只把毒跳伤再结算一遍()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息");
-            var host = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体");
+            var host = IdOf("能量体");
             intents.Poison(host, 3);
             intents.Retrigger(host);
             intents.Retrigger(host);
@@ -278,7 +278,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertLanding("能量吐息", "毒跳伤", "毒跳伤");
+            AssertLanding("能量体", "毒跳伤", "毒跳伤");
             Assert.That(Bases(), Is.EqualTo(new[] { 5, 3, 3 }));
         }
 
@@ -286,15 +286,15 @@ namespace TheCall.Tests
         public void 两个秒点各自把毒跳伤再结算一遍()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息");
-            var host = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体");
+            var host = IdOf("能量体");
             intents.SecondPoints(host, 2);
             intents.Poison(host, 3);
             intents.Retrigger(host);
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertLanding("能量吐息", "毒跳伤", "毒跳伤", "能量吐息", "毒跳伤", "毒跳伤");
+            AssertLanding("能量体", "毒跳伤", "毒跳伤", "能量体", "毒跳伤", "毒跳伤");
             Assert.That(Bases(), Is.EqualTo(new[] { 5, 3, 3, 5, 3, 3 }));
             Assert.That(Energies(), Is.EqualTo(new[] { 5, 3, 3, 5, 3, 3 }));
         }
@@ -303,15 +303,15 @@ namespace TheCall.Tests
         public void 同一只怪物要等零点一逻辑秒才能再次被强制触发()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息");
-            var host = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体");
+            var host = IdOf("能量体");
             intents.ForceTrigger(host, 0);
             intents.ForceTrigger(host, 0.05);
             intents.ForceTrigger(host, 0.1);
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertLanding("能量吐息", "能量吐息", "能量吐息");
+            AssertLanding("能量体", "能量体", "能量体");
             Assert.That(Bases(), Is.EqualTo(new[] { 5, 5, 5 }));
             Assert.That(Energies(), Is.EqualTo(new[] { 5, 5, 5 }));
         }
@@ -320,27 +320,27 @@ namespace TheCall.Tests
         public void 稍后逻辑时刻才落下的写回在落下前的计分里读不到()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "双重吐息");
-            var host = IdOf("双重吐息");
-            intents.WriteLater(host, "双重吐息", 4, 1);
+            Begin(intents, new ScriptedLevelCatalog(50), "双头能量体");
+            var host = IdOf("双头能量体");
+            intents.WriteLater(host, "双头能量体", 4, 1);
             intents.ForceTrigger(host, 0.5);
             intents.ForceTrigger(host, 2);
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertLanding("双重吐息", "双重吐息", "双重吐息", "双重吐息", "双重吐息", "双重吐息");
+            AssertLanding("双头能量体", "双头能量体", "双头能量体", "双头能量体", "双头能量体", "双头能量体");
             Assert.That(Bases(), Is.EqualTo(new[] { 2, 2, 2, 2, 6, 6 }));
             Assert.That(Energies(), Is.EqualTo(new[] { 2, 2, 2, 2, 6, 6 }));
         }
 
         [Test]
-        public void 能量吐息和孤独心的下一次计分读技能实例上的报价()
+        public void 能量体和孤独心的下一次计分读技能实例上的报价()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量吐息", "孤独心");
-            var breathId = IdOf("能量吐息");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "孤独心");
+            var breathId = IdOf("能量体");
             var lonelyId = Ids("孤独心")[0];
-            intents.WriteLater(breathId, "能量吐息", 4, 1);
+            intents.WriteLater(breathId, "能量体", 4, 1);
             intents.WriteLater(lonelyId, "孤独心", 3, 1);
             intents.ForceTrigger(breathId, 0.5);
             intents.ForceTrigger(lonelyId, 0.5);
@@ -353,7 +353,7 @@ namespace TheCall.Tests
             var breath = Landings().Where(landing => landing.MonsterId == breathId).Select(landing => landing.Base).ToArray();
             var lonely = Landings().Where(landing => landing.MonsterId == lonelyId).Select(landing => landing.Base).ToArray();
             Assert.That(breath, Is.EqualTo(new[] { 5, 5, 9 }));
-            Assert.That(lonely, Is.EqualTo(new[] { 4, 4, 7 }));
+            Assert.That(lonely, Is.Empty);
         }
 
         string PlacePair(ClockIntents intents, string leftSkill, string rightSkill)
@@ -370,8 +370,8 @@ namespace TheCall.Tests
         {
             var names = new string[9];
             names[0] = kept;
-            names[1] = "增量小手";
-            names[2] = "增量大手";
+            names[1] = "奇异香";
+            names[2] = "怪异香";
             for (var i = 0; i < 6; i++)
                 names[3 + i] = i < alsoInCage.Length ? alsoInCage[i] : "孤独心";
 

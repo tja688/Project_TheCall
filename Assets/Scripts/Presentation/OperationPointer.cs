@@ -194,15 +194,32 @@ namespace TheCall
                 return;
 
             var drive = Mathf.Clamp(_pointerVelocity.x / 700f, -1f, 1f);
-            StepSpring(ref _headAngle, ref _headVelocity, -drive * 7f, deltaTime);
-            StepSpring(ref _footAngle, ref _footVelocity, drive * 5f, deltaTime);
+            var profile = _ghostPortrait.MotionProfile;
+            StepSpring(
+                ref _headAngle,
+                ref _headVelocity,
+                -drive * profile.headDragDegrees,
+                deltaTime,
+                profile.springStiffness,
+                profile.springDamping);
+            StepSpring(
+                ref _footAngle,
+                ref _footVelocity,
+                drive * profile.feetDragDegrees,
+                deltaTime,
+                profile.springStiffness,
+                profile.springDamping);
             _ghostPortrait.SetSpringMotion(_headAngle, _footAngle);
         }
 
-        static void StepSpring(ref float angle, ref float velocity, float target, float deltaTime)
+        static void StepSpring(
+            ref float angle,
+            ref float velocity,
+            float target,
+            float deltaTime,
+            float stiffness,
+            float damping)
         {
-            const float stiffness = 90f;
-            const float damping = 18f;
             var acceleration = (target - angle) * stiffness - velocity * damping;
             velocity += acceleration * deltaTime;
             angle += velocity * deltaTime;

@@ -12,20 +12,20 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(0),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var before = App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
             var parent = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "增量小手");
+                .Single(monster => monster.SkillNames.Single() == "奇异香");
 
             App.SendCommand(new PlaceMonsterCommand(parent.Id, OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -37,15 +37,15 @@ namespace TheCall.Tests
             Assert.That(cage.Select(monster => monster.Id), Does.Contain(parent.Id));
             var offspring = cage.Where(monster => !before.Contains(monster.Id)).ToArray();
             Assert.That(offspring.Length, Is.EqualTo(1));
-            Assert.That(offspring[0].SkillNames, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(offspring[0].SkillNames, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
         public void 两只单技能亲本技能不同时后代按亲本顺序得到这两个技能()
         {
             OpenLevel();
-            var first = Parent("增量小手");
-            var second = Parent("增量大手");
+            var first = Parent("奇异香");
+            var second = Parent("怪异香");
             var before = CageIds();
 
             App.SendCommand(new PlaceMonsterCommand(first, OperationArea.Breeding, 0));
@@ -54,24 +54,24 @@ namespace TheCall.Tests
             App.SendCommand(new LeaveShopCommand());
 
             var offspring = Offspring(before);
-            Assert.That(offspring.SkillNames, Is.EqualTo(new[] { "增量小手", "增量大手" }));
+            Assert.That(offspring.SkillNames, Is.EqualTo(new[] { "奇异香", "怪异香" }));
         }
 
         [Test]
         public void 两只单技能亲本技能相同时后代只有这一个技能()
         {
             OpenLevel(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
             var parents = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             var before = CageIds();
 
@@ -80,7 +80,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量吐息" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量体" }));
         }
 
         [Test]
@@ -88,11 +88,11 @@ namespace TheCall.Tests
         {
             var draw = new BreedingDraw(
                 OpeningNames,
-                "增量小手");
+                "奇异香");
             UseRules(draw, new ScriptedLevelCatalog(0));
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var host = Parent("能量吐息");
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量小手")));
+            var host = Parent("能量体");
+            App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
             App.SendCommand(new EquipSkillCommand(host, 0));
             var before = CageIds();
 
@@ -100,7 +100,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香" }));
         }
 
         [Test]
@@ -109,23 +109,23 @@ namespace TheCall.Tests
             var draw = new BreedingDraw(
                 new[]
                 {
-                    "能量吐息",
+                    "能量体",
                     "左能量体",
                     "右能量体",
-                    "能量吐息",
-                    "增量小手",
-                    "残留提取腺体",
+                    "能量体",
+                    "奇异香",
+                    "汲取鼻",
                     "孤独心",
                     "吞噬大嘴",
-                    "双重吐息",
+                    "双头能量体",
                 },
-                "能量吐息");
+                "能量体");
             UseRules(draw, new ScriptedLevelCatalog(0));
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
-            App.SendCommand(new DiscardMonsterCommand(Parent("增量小手")));
+            App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
             App.SendCommand(new EquipSkillCommand(breaths[0].Id, 0));
             var before = CageIds();
 
@@ -134,7 +134,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手", "能量吐息" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "能量体" }));
         }
 
         [Test]
@@ -143,24 +143,24 @@ namespace TheCall.Tests
             var draw = new BreedingDraw(
                 new[]
                 {
-                    "能量吐息",
+                    "能量体",
                     "左能量体",
                     "右能量体",
-                    "能量吐息",
-                    "增量小手",
+                    "能量体",
+                    "奇异香",
                     "孤独心",
-                    "残留提取腺体",
+                    "汲取鼻",
                     "吞噬大嘴",
-                    "双重吐息",
+                    "双头能量体",
                 },
-                "能量吐息",
-                "能量吐息");
+                "能量体",
+                "能量体");
             UseRules(draw, new ScriptedLevelCatalog(0));
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
-            var hand = Parent("增量小手");
+            var hand = Parent("奇异香");
             var heart = Parent("孤独心");
             App.SendCommand(new DiscardMonsterCommand(hand));
             App.SendCommand(new EquipSkillCommand(breaths[0].Id, 0));
@@ -173,7 +173,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量吐息", "孤独心" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量体", "孤独心" }));
         }
 
         [Test]
@@ -193,9 +193,9 @@ namespace TheCall.Tests
         public void 培育槽只有两个亲本位放不进第三只也不吃技能槽()
         {
             OpenLevel();
-            var first = Parent("增量小手");
-            var second = Parent("增量大手");
-            var third = Parent("残留提取腺体");
+            var first = Parent("奇异香");
+            var second = Parent("怪异香");
+            var third = Parent("汲取鼻");
             var donor = Parent("孤独心");
             App.SendCommand(new DiscardMonsterCommand(donor));
             var before = CageIds();
@@ -214,7 +214,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "增量小手", "增量大手" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "怪异香" }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "孤独心" }));
         }
 
@@ -223,19 +223,19 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(10),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var breath = Parent("能量吐息");
-            var dropped = Parent("增量小手");
-            var kept = Parent("增量大手");
+            var breath = Parent("能量体");
+            var dropped = Parent("奇异香");
+            var kept = Parent("怪异香");
             App.SendCommand(new PlaceMonsterCommand(breath, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(dropped, OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -260,22 +260,22 @@ namespace TheCall.Tests
 
             var known = CageIds().Concat(new[] { kept, breath }).ToArray();
             App.SendCommand(new LeaveShopCommand());
-            Assert.That(Offspring(known).SkillNames, Is.EqualTo(new[] { "增量大手" }));
+            Assert.That(Offspring(known).SkillNames, Is.EqualTo(new[] { "怪异香" }));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Contain(kept));
             Assert.That(App.SendQuery(new BreedingSlotsQuery()).All(slot => slot.MonsterId == null), Is.True);
         }
 
         static readonly string[] OpeningNames =
         {
-            "能量吐息",
+            "能量体",
             "左能量体",
             "右能量体",
-            "增量小手",
-            "增量大手",
-            "残留提取腺体",
+            "奇异香",
+            "怪异香",
+            "汲取鼻",
             "孤独心",
             "吞噬大嘴",
-            "双重吐息",
+            "双头能量体",
         };
 
         void OpenLevel(params string[] names)

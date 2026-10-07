@@ -6,19 +6,19 @@ namespace TheCall.Tests
     public sealed class SettlementTests : RulesFixture
     {
         [Test]
-        public void 能量吐息落地五点且不足时清掉本关能量()
+        public void 能量体落地五点且不足时清掉本关能量()
         {
             var keptId = App.SendQuery(new OpeningCandidatesQuery())[0].Id;
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
 
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "能量吐息").Id;
+                .Single(monster => monster.SkillNames.Single() == "能量体").Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息" }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5 }));
@@ -32,15 +32,15 @@ namespace TheCall.Tests
         public void 播放头按这一刻的格子从左到右走且每只怪物只落地一次()
         {
             UseDraw(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "能量吐息",
+                "能量体",
+                "奇异香",
+                "能量体",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
 
@@ -57,7 +57,7 @@ namespace TheCall.Tests
 
             var landings = Landings();
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { atZero, atThree }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "能量吐息" }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 6, 6 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 6, 6 }));
@@ -90,20 +90,20 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(energyDue),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
 
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));

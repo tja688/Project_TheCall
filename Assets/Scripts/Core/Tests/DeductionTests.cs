@@ -12,7 +12,7 @@ namespace TheCall.Tests
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
 
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "能量吐息").Id;
+                .Single(monster => monster.SkillNames.Single() == "能量体").Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -28,19 +28,19 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(10),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量吐息").Id;
+                .First(monster => monster.SkillNames.Single() == "能量体").Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -60,19 +60,19 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(10),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量吐息").Id;
+                .First(monster => monster.SkillNames.Single() == "能量体").Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new ConfirmSettlementCommand());
@@ -88,27 +88,27 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(20),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息",
-                "增量小手");
+                "双头能量体",
+                "奇异香");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var cage = App.SendQuery(new MonsterCageQuery());
-            var breathId = cage.First(monster => monster.SkillNames.Single() == "能量吐息").Id;
-            var spareId = cage.First(monster => monster.SkillNames.Single() == "增量小手").Id;
+            var breathId = cage.First(monster => monster.SkillNames.Single() == "能量体").Id;
+            var spareId = cage.First(monster => monster.SkillNames.Single() == "奇异香").Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new DiscardMonsterCommand(spareId));
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(15));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "增量小手" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Count(), Is.EqualTo(5));
 
             App.SendCommand(new ConfirmSettlementCommand());
@@ -176,19 +176,19 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(10, 5),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -208,19 +208,19 @@ namespace TheCall.Tests
         {
             UseLevel(
                 new ScriptedLevelCatalog(energyDue, excessEnergy),
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));

@@ -701,10 +701,12 @@ namespace TheCall.Editor
             var rect = root.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(142f, 102f);
             var portrait = root.AddComponent<MonsterPortrait>();
-            var tail = Layer(root.transform, "Tail", "Tail");
+            var tailGroup = PivotGroup(root.transform, "TailMotion", new Vector2(0.5f, 0.5f));
+            var tail = Layer(tailGroup, "Tail", "Tail");
             var feet = PivotGroup(root.transform, "FeetMotion", new Vector2(0.5f, 0.22f));
             var foot = Layer(feet, "Foot", "Foot");
-            var body = Layer(root.transform, "Body", "Body");
+            var bodyGroup = PivotGroup(root.transform, "BodyMotion", new Vector2(0.5f, 0.46f));
+            var body = Layer(bodyGroup, "Body", "Body");
             var hand = Layer(root.transform, "Hand", "Hand");
             var headGroup = PivotGroup(root.transform, "HeadMotion", new Vector2(0.5f, 0.67f));
             var head = Layer(headGroup, "Head", "Head");
@@ -724,10 +726,31 @@ namespace TheCall.Editor
             serialized.FindProperty("_accessory").objectReferenceValue = accessory;
             serialized.FindProperty("_headGroup").objectReferenceValue = headGroup;
             serialized.FindProperty("_feetGroup").objectReferenceValue = feet;
+            serialized.FindProperty("_bodyGroup").objectReferenceValue = bodyGroup;
+            serialized.FindProperty("_tailGroup").objectReferenceValue = tailGroup;
+            serialized.FindProperty("_motionProfile").objectReferenceValue = EnsureMotionProfile();
             serialized.ApplyModifiedPropertiesWithoutUndo();
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, PortraitPath);
             UnityEngine.Object.DestroyImmediate(root);
             return prefab;
+        }
+
+        static MonsterMotionProfile EnsureMotionProfile()
+        {
+            const string path = "Assets/Resources/MonsterMotionProfile.asset";
+            var profile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>(path);
+            if (profile != null)
+            {
+                profile.SetDefaultsIfUninitialized();
+                EditorUtility.SetDirty(profile);
+                return profile;
+            }
+
+            profile = ScriptableObject.CreateInstance<MonsterMotionProfile>();
+            profile.SetDefaultsIfUninitialized();
+            AssetDatabase.CreateAsset(profile, path);
+            AssetDatabase.SaveAssets();
+            return profile;
         }
 
         static Transform PivotGroup(Transform parent, string name, Vector2 pivot)

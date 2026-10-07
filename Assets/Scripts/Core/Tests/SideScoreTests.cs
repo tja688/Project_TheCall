@@ -10,19 +10,19 @@ namespace TheCall.Tests
         {
             Open(
                 "左能量体",
-                "能量吐息",
-                "能量吐息",
+                "能量体",
+                "能量体",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体",
                 "换位手",
-                "分享之手");
+                "蜜能量体");
 
             var leftId = IdOf("左能量体");
             App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(IdOf("吞噬大嘴"), OperationArea.Extraction, 1));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("双重吐息"), OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("双头能量体"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landing = Landings().Single(item => item.SkillName == "左能量体");
@@ -36,19 +36,19 @@ namespace TheCall.Tests
         public void 右能量体按左侧现在还有的每只怪物落地两点()
         {
             Open(
-                "能量吐息",
+                "能量体",
                 "左能量体",
-                "能量吐息",
+                "能量体",
                 "右能量体",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体",
                 "换位手");
 
             var rightId = IdOf("右能量体");
-            App.SendCommand(new PlaceMonsterCommand(IdOf("残留提取腺体"), OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("双重吐息"), OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("汲取鼻"), OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("双头能量体"), OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -64,19 +64,19 @@ namespace TheCall.Tests
         {
             Open(
                 "左能量体",
-                "能量吐息",
-                "能量吐息",
+                "能量体",
+                "能量体",
                 "吞噬大嘴",
                 "右能量体",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体",
                 "换位手");
 
             var leftId = IdOf("左能量体");
             var rightId = IdOf("右能量体");
             App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("残留提取腺体"), OperationArea.Extraction, 3));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("汲取鼻"), OperationArea.Extraction, 3));
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -94,115 +94,123 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 有相邻怪物时孤独心落地四点()
+        public void 有相邻怪物时孤独心不翻倍()
         {
             Open(
-                "孤独心",
-                "能量吐息",
-                "能量吐息",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "蜜能量体",
+                "能量体",
+                "孤独心",
                 "换位手",
-                "分享之手");
+                "汲取鼻",
+                "左复制腺体",
+                "能量体");
 
-            var lonelyId = IdOf("孤独心");
-            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 1));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("吞噬大嘴"), OperationArea.Extraction, 2));
+            var hostId = FirstId("能量体");
+            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
+            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("换位手"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = Landings().Single(item => item.SkillName == "孤独心");
-            Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
-            Assert.That(landing.Base, Is.EqualTo(4));
+            var landing = Landings().Single(item => item.MonsterId == hostId);
+            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
+            Assert.That(landing.Base, Is.EqualTo(5));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
-            Assert.That(landing.Energy, Is.EqualTo(4));
+            Assert.That(landing.Energy, Is.EqualTo(5));
         }
 
         [Test]
         public void 没有相邻怪物时孤独心这次能量翻倍()
         {
             Open(
-                "孤独心",
-                "能量吐息",
-                "能量吐息",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "蜜能量体",
+                "能量体",
+                "孤独心",
                 "换位手",
-                "分享之手");
+                "汲取鼻",
+                "左复制腺体",
+                "能量体");
 
-            var lonelyId = IdOf("孤独心");
-            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 2));
+            var hostId = FirstId("能量体");
+            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
+            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = Landings().Single(item => item.SkillName == "孤独心");
-            Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
-            Assert.That(landing.Base, Is.EqualTo(4));
+            var landing = Landings().Single(item => item.MonsterId == hostId);
+            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
+            Assert.That(landing.Base, Is.EqualTo(5));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
-            Assert.That(landing.Energy, Is.EqualTo(8));
+            Assert.That(landing.Energy, Is.EqualTo(10));
         }
 
         [Test]
         public void 相邻只算格子挨着的怪物()
         {
             Open(
-                "孤独心",
-                "能量吐息",
-                "能量吐息",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "蜜能量体",
+                "能量体",
+                "孤独心",
                 "换位手",
-                "分享之手");
+                "汲取鼻",
+                "左复制腺体",
+                "能量体");
 
-            var lonelyId = IdOf("孤独心");
-            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("吞噬大嘴"), OperationArea.Extraction, 2));
+            var hostId = FirstId("能量体");
+            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
+            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("换位手"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = Landings().Single(item => item.SkillName == "孤独心");
-            Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
-            Assert.That(landing.Base, Is.EqualTo(4));
+            var landing = Landings().Single(item => item.MonsterId == hostId);
+            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
+            Assert.That(landing.Base, Is.EqualTo(5));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
-            Assert.That(landing.Energy, Is.EqualTo(8));
+            Assert.That(landing.Energy, Is.EqualTo(10));
         }
 
         [Test]
-        public void 增量小手给其他怪物的产能量计分加一且不加给自己() =>
-            AssertAuraLeavesItsHostAtFive("增量小手", 6);
+        public void 奇异香给其他怪物的产能量计分加一且不加给自己() =>
+            AssertAuraLeavesItsHostAtFive("奇异香", 6);
 
         [Test]
-        public void 增量大手给其他怪物的产能量计分加二且不加给自己() =>
-            AssertAuraLeavesItsHostAtFive("增量大手", 7);
+        public void 怪异香给其他怪物的产能量计分加二且不加给自己() =>
+            AssertAuraLeavesItsHostAtFive("怪异香", 7);
 
         [Test]
         public void 外部加法进入底数外部乘法进入倍率()
         {
             Open(
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体",
+                "能量体",
                 "孤独心",
-                "能量吐息",
-                "能量吐息",
-                "增量小手",
-                "增量大手",
+                "奇异香",
+                "怪异香",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官");
+                "蜜能量体");
 
-            var lonelyId = IdOf("孤独心");
-            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 2));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量大手"), OperationArea.Extraction, 4));
+            var hostId = FirstId("能量体");
+            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
+            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("怪异香"), OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = Landings().Single(item => item.SkillName == "孤独心");
-            Assert.That(landing.MonsterId, Is.EqualTo(lonelyId));
-            Assert.That(landing.Base, Is.EqualTo(7));
+            var landing = Landings().Single(item => item.MonsterId == hostId);
+            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
+            Assert.That(landing.Base, Is.EqualTo(8));
             Assert.That(landing.Multiplier, Is.EqualTo(2));
-            Assert.That(landing.Energy, Is.EqualTo(14));
+            Assert.That(landing.Energy, Is.EqualTo(16));
         }
 
         [Test]
@@ -210,18 +218,18 @@ namespace TheCall.Tests
         {
             Open(
                 "左能量体",
-                "能量吐息",
-                "能量吐息",
-                "增量小手",
+                "能量体",
+                "能量体",
+                "奇异香",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官",
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体",
                 "换位手");
 
             var leftId = IdOf("左能量体");
             App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landing = Landings().Single(item => item.SkillName == "左能量体");
@@ -232,97 +240,97 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 左右计数的加减先进入每只两点再乘只数且残留只按这一次发动插队()
+        public void 左右计数的加减加在总产出上且残留只按这一次发动插队()
         {
             Open(
                 "左能量体",
-                "能量吐息",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
-                "分享之手",
+                "能量体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
+                "蜜能量体",
                 "右能量体",
                 "孤独心",
                 "吞噬大嘴");
 
             var leftId = IdOf("左能量体");
-            var shareId = IdOf("分享之手");
-            var glandId = IdOf("残留提取腺体");
+            var shareId = IdOf("蜜能量体");
+            var glandId = IdOf("汲取鼻");
             App.SendCommand(new PlaceMonsterCommand(shareId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 1));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 2));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Extraction, 2));
             App.SendCommand(new PlaceMonsterCommand(glandId, OperationArea.Extraction, 3));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
             Assert.That(
                 landings.Select(item => item.SkillName).ToArray(),
-                Is.EqualTo(new[] { "分享之手", "残留提取腺体", "左能量体", "残留提取腺体" }));
-            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 3, 2, 12, 2 }));
+                Is.EqualTo(new[] { "蜜能量体", "汲取鼻", "左能量体", "汲取鼻" }));
+            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 3, 2, 8, 2 }));
             Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1, 1 }));
-            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 3, 2, 12, 2 }));
+            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 3, 2, 8, 2 }));
             Assert.That(landings[2].MonsterId, Is.EqualTo(leftId));
         }
 
         [Test]
-        public void 右能量体的加减也先进入每只两点再乘左侧只数()
+        public void 右能量体的加减加在左侧人数乘完后的总产出上()
         {
             Open(
                 "右能量体",
                 "孤独心",
                 "吞噬大嘴",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
-                "双重吐息",
-                "分享之手",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
+                "双头能量体",
+                "蜜能量体",
                 "左能量体");
 
             var rightId = IdOf("右能量体");
-            App.SendCommand(new PlaceMonsterCommand(IdOf("能量吐息"), OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("能量体"), OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var right = Landings().Single(item => item.SkillName == "右能量体");
             Assert.That(right.MonsterId, Is.EqualTo(rightId));
-            Assert.That(right.Base, Is.EqualTo(6));
+            Assert.That(right.Base, Is.EqualTo(5));
             Assert.That(right.Multiplier, Is.EqualTo(1));
-            Assert.That(right.Energy, Is.EqualTo(6));
+            Assert.That(right.Energy, Is.EqualTo(5));
         }
 
         [Test]
-        public void 增量翻倍和额外次数按每只两点结算为四十八且没有右侧时加成为零()
+        public void 增量翻倍和额外次数结算为三十八且没有右侧时只剩外部加一()
         {
             Open(
                 "左能量体",
-                "能量吐息",
-                "能量吐息",
+                "能量体",
+                "能量体",
                 "左能量体",
-                "鼓励嘴",
-                "时间操控器官",
-                "增量小手",
-                "残留提取腺体",
+                "镜眼",
+                "左复制腺体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心");
 
             var bodies = App.SendQuery(new MonsterCageQuery())
                 .Where(monster => monster.SkillNames.Single() == "左能量体")
                 .Select(monster => monster.Id)
                 .ToArray();
-            var handId = IdOf("增量小手");
+            var handId = IdOf("奇异香");
             App.SendCommand(new PlaceMonsterCommand(bodies[0], OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("鼓励嘴"), OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("镜眼"), OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(bodies[1], OperationArea.Extraction, 2));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("时间操控器官"), OperationArea.Extraction, 3));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("左复制腺体"), OperationArea.Extraction, 3));
             App.SendCommand(new PlaceMonsterCommand(handId, OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var produced = Landings().Where(item => item.SkillName == "左能量体").ToArray();
             Assert.That(produced.Select(item => item.MonsterId).ToArray(), Is.EqualTo(new[] { bodies[0], bodies[1], bodies[1] }));
-            Assert.That(produced.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 12, 6, 6 }));
+            Assert.That(produced.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 9, 5, 5 }));
             Assert.That(produced.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 2, 2, 2 }));
-            Assert.That(produced.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 24, 12, 12 }));
-            Assert.That(produced.Sum(item => item.Energy), Is.EqualTo(48));
+            Assert.That(produced.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 18, 10, 10 }));
+            Assert.That(produced.Sum(item => item.Energy), Is.EqualTo(38));
 
             App.SendCommand(new ReturnMonsterCommand(bodies[0]));
             App.SendCommand(new ReturnMonsterCommand(handId));
@@ -332,33 +340,33 @@ namespace TheCall.Tests
 
             var alone = Landings().Single(item => item.MonsterId == bodies[0]);
             Assert.That(alone.SkillName, Is.EqualTo("左能量体"));
-            Assert.That(alone.Base, Is.EqualTo(0));
-            Assert.That(alone.Energy, Is.EqualTo(0));
+            Assert.That(alone.Base, Is.EqualTo(1));
+            Assert.That(alone.Energy, Is.EqualTo(1));
         }
 
         [Test]
         public void 培育槽上的增量光环不改提取计分()
         {
             Open(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
-                "增量小手",
-                "增量大手",
-                "残留提取腺体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴",
-                "双重吐息");
+                "双头能量体");
 
-            var breathId = IdOf("能量吐息");
+            var breathId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量小手"), OperationArea.Breeding, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("增量大手"), OperationArea.Breeding, 1));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("怪异香"), OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landing = Landings().Single();
             Assert.That(landing.MonsterId, Is.EqualTo(breathId));
-            Assert.That(landing.SkillName, Is.EqualTo("能量吐息"));
+            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
             Assert.That(landing.Base, Is.EqualTo(5));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
             Assert.That(landing.Energy, Is.EqualTo(5));
@@ -368,15 +376,15 @@ namespace TheCall.Tests
         public void 孤独心翻倍只作用于这次计分()
         {
             Open(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
                 "孤独心",
-                "增量小手",
+                "奇异香",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
-                "时间操控器官");
+                "双头能量体",
+                "汲取鼻",
+                "左复制腺体");
 
             var cage = App.SendQuery(new MonsterCageQuery());
             var hostId = cage[0].Id;
@@ -386,23 +394,23 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
-            Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "孤独心" }));
-            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5, 4 }));
-            Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 2 }));
-            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 5, 8 }));
+            Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
+            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5 }));
+            Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 2 }));
+            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 10 }));
         }
 
         void AssertAuraLeavesItsHostAtFive(string aura, int otherBase)
         {
             Open(
-                "能量吐息",
+                "能量体",
                 "左能量体",
                 "右能量体",
                 aura,
-                "能量吐息",
+                "能量体",
                 "吞噬大嘴",
-                "双重吐息",
-                "残留提取腺体",
+                "双头能量体",
+                "汲取鼻",
                 "孤独心");
 
             var cage = App.SendQuery(new MonsterCageQuery());
@@ -417,29 +425,29 @@ namespace TheCall.Tests
 
             var landings = Landings();
             Assert.That(landings.Select(item => item.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, otherId }));
-            Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量吐息", "能量吐息" }));
+            Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
             Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5, otherBase }));
             Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
             Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 5, otherBase }));
         }
 
         [Test]
-        public void 鼓励嘴让这一刻相邻怪物的产能量计分翻倍且不翻自己和隔格()
+        public void 镜眼让这一刻相邻怪物的产能量计分翻倍且不翻自己和隔格()
         {
             Open(
-                "鼓励嘴",
+                "镜眼",
                 "左能量体",
                 "右能量体",
-                "能量吐息",
-                "能量吐息",
-                "增量小手",
-                "残留提取腺体",
+                "能量体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
                 "孤独心",
                 "吞噬大嘴");
 
-            var mouthId = IdOf("鼓励嘴");
+            var mouthId = IdOf("镜眼");
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .Select(monster => monster.Id)
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(mouthId, OperationArea.Extraction, 1));
@@ -466,5 +474,8 @@ namespace TheCall.Tests
 
         string IdOf(string skillName) =>
             App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+
+        string FirstId(string skillName) =>
+            App.SendQuery(new MonsterCageQuery()).First(monster => monster.SkillNames.Single() == skillName).Id;
     }
 }

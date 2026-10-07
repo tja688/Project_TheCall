@@ -9,22 +9,22 @@ namespace TheCall.Tests
     {
         static readonly string[] OpeningDraws =
         {
-            "能量吐息",
+            "能量体",
             "左能量体",
             "右能量体",
-            "能量吐息",
-            "增量小手",
-            "残留提取腺体",
+            "能量体",
+            "奇异香",
+            "汲取鼻",
             "孤独心",
             "吞噬大嘴",
-            "双重吐息",
+            "双头能量体",
         };
 
         static readonly string[] FourSingles =
         {
-            "1", "白", "能量吐息",
-            "1", "蓝", "增量大手",
-            "1", "金", "再回首头",
+            "1", "白", "能量体",
+            "1", "蓝", "怪异香",
+            "1", "金", "回响嗓",
             "1", "白", "左能量体",
         };
 
@@ -37,7 +37,7 @@ namespace TheCall.Tests
 
             Assert.That(
                 shelf.Monsters.Select(monster => monster.SkillNames.Single()).ToArray(),
-                Is.EqualTo(new[] { "能量吐息", "增量大手", "再回首头", "左能量体" }));
+                Is.EqualTo(new[] { "能量体", "怪异香", "回响嗓", "左能量体" }));
             Assert.That(shelf.Monsters.Select(monster => monster.Price).ToArray(), Is.EqualTo(new[] { 10, 20, 30, 10 }));
             var cageIds = App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
             Assert.That(cageIds, Does.Not.Contain(shelf.Monsters[0].Id));
@@ -50,15 +50,15 @@ namespace TheCall.Tests
         public void 双技能商品的售价是两个稀有度相加()
         {
             ReachShop(
-                "2", "白", "能量吐息", "蓝", "增量大手",
-                "1", "金", "再回首头",
+                "2", "白", "能量体", "蓝", "怪异香",
+                "1", "金", "回响嗓",
                 "1", "白", "左能量体",
                 "1", "白", "右能量体",
                 "急急装置",
                 "上级员工证");
 
             var shelf = App.SendQuery(new ShelfQuery());
-            Assert.That(shelf.Monsters[0].SkillNames, Is.EqualTo(new[] { "能量吐息", "增量大手" }));
+            Assert.That(shelf.Monsters[0].SkillNames, Is.EqualTo(new[] { "能量体", "怪异香" }));
             Assert.That(shelf.Monsters[0].Price, Is.EqualTo(30));
             Assert.That(shelf.Monsters[1].Price, Is.EqualTo(30));
         }
@@ -67,15 +67,15 @@ namespace TheCall.Tests
         public void 同一只商品怪物不会抽到两个同名技能()
         {
             ReachShop(
-                "2", "金", "再回首头", "金", "鼓励嘴",
-                "1", "白", "能量吐息",
+                "2", "金", "回响嗓", "金", "镜眼",
+                "1", "白", "能量体",
                 "1", "白", "左能量体",
                 "1", "白", "右能量体",
                 "急急装置",
                 "上级员工证");
 
             var skills = App.SendQuery(new ShelfQuery()).Monsters[0].SkillNames;
-            Assert.That(skills, Is.EqualTo(new[] { "再回首头", "鼓励嘴" }));
+            Assert.That(skills, Is.EqualTo(new[] { "回响嗓", "镜眼" }));
             Assert.That(skills.Distinct().Count(), Is.EqualTo(2));
         }
 
@@ -83,10 +83,10 @@ namespace TheCall.Tests
         public void 商店按九成一只一成两只以及七成白两成蓝一成金抽取()
         {
             var draw = new RecordingDraw(Draws(
-                "1", "白", "能量吐息",
+                "1", "白", "能量体",
                 "1", "白", "左能量体",
                 "1", "白", "右能量体",
-                "1", "白", "增量小手",
+                "1", "白", "奇异香",
                 "急急装置",
                 "上级员工证"));
             UseRules(draw, new ScriptedLevelCatalog(5));
@@ -147,8 +147,8 @@ namespace TheCall.Tests
         public void 金币不足时购买不发生货物仍留在货架()
         {
             ReachShop(
-                "2", "蓝", "增量大手", "金", "再回首头",
-                "1", "白", "能量吐息",
+                "2", "蓝", "怪异香", "金", "回响嗓",
+                "1", "白", "能量体",
                 "1", "白", "左能量体",
                 "1", "白", "右能量体",
                 "独孤装置",
@@ -182,7 +182,7 @@ namespace TheCall.Tests
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(before - 10));
             var cage = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == bought.Id);
-            Assert.That(cage.SkillNames, Is.EqualTo(new[] { "能量吐息" }));
+            Assert.That(cage.SkillNames, Is.EqualTo(new[] { "能量体" }));
             var again = App.SendQuery(new ShelfQuery());
             Assert.That(again.Monsters.Select(monster => monster.Id).ToArray(), Is.EqualTo(kept));
             Assert.That(again.Monsters.Select(monster => monster.Id), Does.Not.Contain(bought.Id));
@@ -239,8 +239,8 @@ namespace TheCall.Tests
         public void 出售怪物笼里的怪物按稀有度一半得金币()
         {
             ReachShop(And(FourSingles, "急急装置", "上级员工证"));
-            var gland = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "残留提取腺体");
-            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "增量小手");
+            var gland = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "汲取鼻");
+            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "奇异香");
             var before = App.SendQuery(new RunLedgerQuery()).Gold;
 
             App.SendCommand(new SellMonsterCommand(gland.Id));
@@ -276,7 +276,7 @@ namespace TheCall.Tests
         {
             UseLevel(new ScriptedLevelCatalog(5), Draws(And(FourSingles, "急急装置", "上级员工证")));
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "增量小手");
+            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "奇异香");
 
             App.SendCommand(new SellMonsterCommand(hand.Id));
             App.SendCommand(new BuyToolCommand("急急装置"));
@@ -319,7 +319,7 @@ namespace TheCall.Tests
         {
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量吐息")
+                .Where(monster => monster.SkillNames.Single() == "能量体")
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));

@@ -884,7 +884,7 @@ function baseText(step) {
   const added = addedOf(step);
   const core = joined(step.quote, added);
   if (landingIsSide(step))
-    return "（" + core + "）× " + sideWord(step.skillName) + " " + step.sideCount + " 只 = " + step.base;
+    return step.quote + " × " + sideWord(step.skillName) + " " + step.sideCount + " 只 + " + added + " = " + step.base;
 
   if (added === 0)
     return step.base + "，就是报价本身";

@@ -17,15 +17,15 @@ namespace TheCall.Tests
             ContentGate.Use(ContentBook.Parse(File.ReadAllText(BookFile())));
             TheCallApp.OnRegisterPatch = app =>
                 app.RegisterUtility<IDraw>(new ScriptedDraw(
-                    "能量吐息",
+                    "能量体",
                     "左能量体",
                     "右能量体",
-                    "增量小手",
-                    "增量大手",
-                    "残留提取腺体",
+                    "奇异香",
+                    "怪异香",
+                    "汲取鼻",
                     "孤独心",
                     "吞噬大嘴",
-                    "双重吐息"));
+                    "双头能量体"));
             App = TheCallApp.Interface;
         }
 
