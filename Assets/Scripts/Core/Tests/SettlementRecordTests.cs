@@ -41,6 +41,7 @@ namespace TheCall.Tests
             var removal = (SettlementRemoval)record[1];
             Assert.That(removal.MonsterId, Is.Null);
             Assert.That(removal.Happened, Is.False);
+            Assert.That(removal.SourceId, Is.EqualTo(devourerId));
             var payment = (SettlementPayment)record[2];
             Assert.That(payment.Deducted, Is.EqualTo(0));
             Assert.That(payment.Shortfall, Is.EqualTo(46));
@@ -140,6 +141,7 @@ namespace TheCall.Tests
             var removal = (SettlementRemoval)record[2];
             Assert.That(removal.MonsterId, Is.EqualTo(victimId));
             Assert.That(removal.Happened, Is.True);
+            Assert.That(removal.SourceId, Is.Null);
         }
 
         [Test]

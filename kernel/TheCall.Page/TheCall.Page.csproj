@@ -19,6 +19,8 @@
     <WasmExtraFilesToDeploy Include="wwwroot\.nojekyll" TargetPath=".nojekyll" />
     <WasmExtraFilesToDeploy Include="wwwroot\index.html" TargetPath="index.html" />
     <WasmExtraFilesToDeploy Include="wwwroot\bench.js" TargetPath="bench.js" />
+    <WasmExtraFilesToDeploy Include="wwwroot\board.js" TargetPath="board.js" />
+    <WasmExtraFilesToDeploy Include="wwwroot\glyphs.js" TargetPath="glyphs.js" />
     <WasmExtraFilesToDeploy Include="wwwroot\bench.css" TargetPath="bench.css" />
     <WasmExtraFilesToDeploy Include="..\..\Assets\StreamingAssets\call-book.json" TargetPath="call-book.json" />
   </ItemGroup>

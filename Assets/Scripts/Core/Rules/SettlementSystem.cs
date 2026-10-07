@@ -505,7 +505,7 @@ namespace TheCall
                 options.Add(cells[cell + 1]);
             if (options.Count == 0)
             {
-                _entries.Add(new SettlementRemoval(null, false));
+                _entries.Add(new SettlementRemoval(null, false, cells[cell]));
                 return;
             }
 

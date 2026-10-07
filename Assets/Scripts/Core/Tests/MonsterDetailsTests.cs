@@ -37,6 +37,26 @@ namespace TheCall.Tests
         }
 
         [Test]
+        public void 句子片段拼回原文且只有产出能量的数单独成段()
+        {
+            foreach (var skill in ContentGate.Current.Skills)
+            {
+                var joined = string.Concat(SkillSentences.Pieces(skill).Select(piece =>
+                    piece.IsEnergy ? piece.Energy.ToString() : piece.Text));
+                Assert.That(joined, Is.EqualTo(SkillSentences.Format(skill)), skill.Name);
+            }
+
+            var breath = SkillSentences.Pieces(ContentGate.Current.FindSkill("能量吐息"));
+            Assert.That(breath.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(5));
+
+            var small = SkillSentences.Pieces(ContentGate.Current.FindSkill("增量小手"));
+            Assert.That(small.Any(piece => piece.IsEnergy), Is.False);
+
+            var share = SkillSentences.Pieces(ContentGate.Current.FindSkill("分享之手"));
+            Assert.That(share.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(2));
+        }
+
+        [Test]
         public void 吞噬大嘴的句子没有星号()
         {
             App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));

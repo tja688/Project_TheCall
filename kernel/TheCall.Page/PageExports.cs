@@ -39,12 +39,7 @@ namespace TheCall
                     if (i > 0)
                         buffer.Append(',');
 
-                    var skill = book.Skills[i];
-                    buffer.Append("{\"name\":").Append(Quote(skill.Name));
-                    buffer.Append(",\"rarity\":").Append(Quote(skill.Rarity.ToString()));
-                    buffer.Append(",\"use\":").Append(Quote(skill.Use.ToString()));
-                    buffer.Append(",\"sentence\":").Append(Quote(SkillSentences.Format(skill)));
-                    buffer.Append('}');
+                    AppendSkill(buffer, book.Skills[i]);
                 }
 
                 buffer.Append("],\"tools\":[");
@@ -251,6 +246,71 @@ namespace TheCall
             }
 
             return "";
+        }
+
+        static void AppendSkill(StringBuilder buffer, SkillDef skill)
+        {
+            buffer.Append("{\"name\":").Append(Quote(skill.Name));
+            buffer.Append(",\"rarity\":").Append(Quote(skill.Rarity.ToString()));
+            buffer.Append(",\"use\":").Append(Quote(skill.Use.ToString()));
+            buffer.Append(",\"affix\":");
+            AppendFlags(buffer, skill.Affix);
+            buffer.Append(",\"spans\":");
+            AppendSpans(buffer, skill);
+            buffer.Append(",\"effects\":[");
+            for (var i = 0; i < skill.Effects.Count; i++)
+            {
+                if (i > 0)
+                    buffer.Append(',');
+
+                var effect = skill.Effects[i];
+                buffer.Append("{\"kind\":").Append(Quote(effect.Kind.ToString()));
+                buffer.Append(",\"a\":").Append(effect.A);
+                buffer.Append(",\"b\":").Append(effect.B).Append('}');
+            }
+
+            buffer.Append("]}");
+        }
+
+        static void AppendFlags(StringBuilder buffer, SkillAffix affix)
+        {
+            buffer.Append('[');
+            var first = true;
+            WriteFlag(buffer, ref first, affix, SkillAffix.Destroy, "Destroy");
+            WriteFlag(buffer, ref first, affix, SkillAffix.Permanent, "Permanent");
+            WriteFlag(buffer, ref first, affix, SkillAffix.Capacity, "Capacity");
+            WriteFlag(buffer, ref first, affix, SkillAffix.Immovable, "Immovable");
+            buffer.Append(']');
+        }
+
+        static void WriteFlag(StringBuilder buffer, ref bool first, SkillAffix affix, SkillAffix flag, string name)
+        {
+            if ((affix & flag) == 0)
+                return;
+
+            if (!first)
+                buffer.Append(',');
+
+            first = false;
+            buffer.Append(Quote(name));
+        }
+
+        static void AppendSpans(StringBuilder buffer, SkillDef skill)
+        {
+            buffer.Append('[');
+            var pieces = SkillSentences.Pieces(skill);
+            for (var i = 0; i < pieces.Length; i++)
+            {
+                if (i > 0)
+                    buffer.Append(',');
+
+                if (pieces[i].IsEnergy)
+                    buffer.Append("{\"energy\":").Append(pieces[i].Energy).Append('}');
+                else
+                    buffer.Append("{\"text\":").Append(Quote(pieces[i].Text)).Append('}');
+            }
+
+            buffer.Append(']');
         }
 
         static string Error(string message) => "{\"error\":" + Quote(message) + "}";

@@ -64,7 +64,7 @@ namespace TheCall
             SideCount = sideCount;
             Adds = adds ?? System.Array.Empty<LandingAdd>();
             Factors = factors ?? System.Array.Empty<LandingFactor>();
-            _side = side;
+            Side = side;
             Check();
         }
 
@@ -84,11 +84,11 @@ namespace TheCall
 
         public int SideCount { get; }
 
+        public bool Side { get; }
+
         public System.Collections.Generic.IReadOnlyList<LandingAdd> Adds { get; }
 
         public System.Collections.Generic.IReadOnlyList<LandingFactor> Factors { get; }
-
-        readonly bool _side;
 
         void Check()
         {
@@ -96,7 +96,7 @@ namespace TheCall
             for (var i = 0; i < Adds.Count; i++)
                 added += Adds[i].Amount;
 
-            var expectedBase = _side ? (Quote + added) * SideCount : Quote + added;
+            var expectedBase = Side ? (Quote + added) * SideCount : Quote + added;
             var expectedMultiplier = 1;
             for (var i = 0; i < Factors.Count; i++)
                 expectedMultiplier *= Factors[i].Factor;
@@ -128,14 +128,22 @@ namespace TheCall
     public sealed class SettlementRemoval : SettlementEntry
     {
         public SettlementRemoval(string monsterId, bool happened)
+            : this(monsterId, happened, null)
+        {
+        }
+
+        public SettlementRemoval(string monsterId, bool happened, string sourceId)
         {
             MonsterId = monsterId;
             Happened = happened;
+            SourceId = sourceId;
         }
 
         public string MonsterId { get; }
 
         public bool Happened { get; }
+
+        public string SourceId { get; }
     }
 
     public sealed class SettlementPayment : SettlementEntry

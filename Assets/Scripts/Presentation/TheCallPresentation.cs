@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using QFramework;
+using TheCall.Scoring;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -514,30 +515,20 @@ namespace TheCall
 
             _busy = true;
             this.SendCommand(new ConfirmSettlementCommand());
-            _busy = false;
-            var phase = this.SendQuery(new RunPhaseQuery());
-            if (phase == RunPhase.Shop)
-                Notice(GainedTechPoint() ? "结算完成，获得 1 科技点。商店开了。" : "结算完成，商店开了。");
-            else if (phase == RunPhase.Operation)
-                Notice("能量不足，欠额 " + this.SendQuery(new LevelShortfallQuery()) + "。这是加班，不是重开。");
-            else if (phase == RunPhase.Victory)
-                Notice("第七关完成。");
-            else
-                Notice("加班后仍未补足。");
-
-            Refresh();
+            ScoringShow.Play(new ScoringStage(
+                this.GetArchitecture(),
+                _operation.extractionSlots,
+                _operation.transform as RectTransform,
+                _operation.dragLayer,
+                _operation.goldLabel,
+                Notice,
+                FinishSettle));
         }
 
-        bool GainedTechPoint()
+        void FinishSettle()
         {
-            var record = this.SendQuery(new SettlementRecordQuery());
-            for (var i = 0; i < record.Count; i++)
-            {
-                if (record[i] is SettlementPayment payment)
-                    return payment.Excess;
-            }
-
-            return false;
+            _busy = false;
+            Refresh();
         }
 
         void OnShopLocked() => Notice("结算并发工资之后才进入商店。");
