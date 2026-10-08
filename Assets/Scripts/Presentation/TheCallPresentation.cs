@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using QFramework;
 using TheCall.Scoring;
@@ -311,10 +312,18 @@ namespace TheCall
 
             for (var i = 0; i < slots.Length; i++)
             {
+                var slot = slots[i];
+                if (slot == null)
+                    continue;
+
+                var slotObject = slot.gameObject;
+                if (!slotObject)
+                    continue;
+
                 var monster = monsters != null && i < monsters.Count ? monsters[i] : null;
-                slots[i].gameObject.SetActive(monster != null);
+                slotObject.SetActive(monster != null);
                 if (monster != null)
-                    FillMonster(slots[i], monster, monster.Id == selectedId);
+                    FillMonster(slot, monster, monster.Id == selectedId);
             }
         }
 
@@ -322,13 +331,21 @@ namespace TheCall
         {
             for (var i = 0; i < slots.Length; i++)
             {
+                var slot = slots[i];
+                if (slot == null)
+                    continue;
+
+                var slotObject = slot.gameObject;
+                if (!slotObject)
+                    continue;
+
                 var active = cells != null && i < cells.Count;
-                slots[i].gameObject.SetActive(active);
+                slotObject.SetActive(active);
                 if (!active)
                     continue;
 
-                slots[i].index = cells[i].Index;
-                FillSeat(slots[i], cells[i].MonsterId);
+                slot.index = cells[i].Index;
+                FillSeat(slot, cells[i].MonsterId);
             }
         }
 
@@ -547,7 +564,14 @@ namespace TheCall
         void FinishSettle()
         {
             _busy = false;
-            Refresh();
+            StartCoroutine(RefreshAfterSettle());
+        }
+
+        IEnumerator RefreshAfterSettle()
+        {
+            yield return null;
+            if (this != null)
+                Refresh();
         }
 
         void OnShopLocked() => Notice("结算并发工资之后才进入商店。");
@@ -733,8 +757,14 @@ namespace TheCall
 
         static void Activate(MonoBehaviour view, bool active)
         {
-            if (view != null)
-                view.gameObject.SetActive(active);
+            if (view == null)
+                return;
+
+            var screen = view.gameObject;
+            if (!screen)
+                return;
+
+            screen.SetActive(active);
         }
 
         bool CageContains(string monsterId)

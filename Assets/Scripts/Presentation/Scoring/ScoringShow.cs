@@ -158,6 +158,29 @@ namespace TheCall.Scoring
             if (_active == this)
                 _active = null;
 
+            TeardownPresentation();
+            NotifyCompleted();
+            if (this != null)
+                Destroy(gameObject);
+        }
+
+        void OnDestroy()
+        {
+            if (!_finished)
+            {
+                _finished = true;
+                if (_active == this)
+                    _active = null;
+                TeardownPresentation();
+                NotifyCompleted();
+            }
+
+            if (_active == this)
+                _active = null;
+        }
+
+        void TeardownPresentation()
+        {
             DOTween.Kill(TweenId);
             RestoreCurrent();
             RestoreSlots();
@@ -165,25 +188,34 @@ namespace TheCall.Scoring
                 _stage.BoardRoot.anchoredPosition = _restBoardPosition;
 
             if (_flashMaterial != null)
+            {
                 Destroy(_flashMaterial);
-            if (_pixel != null)
-                Destroy(_pixel);
-            if (_pixelTexture != null)
-                Destroy(_pixelTexture);
-            if (_blocker != null)
-                Destroy(_blocker.gameObject);
+                _flashMaterial = null;
+            }
 
-            var completed = _stage.Completed;
-            Destroy(gameObject);
-            completed?.Invoke();
+            if (_pixel != null)
+            {
+                Destroy(_pixel);
+                _pixel = null;
+            }
+
+            if (_pixelTexture != null)
+            {
+                Destroy(_pixelTexture);
+                _pixelTexture = null;
+            }
+
+            if (_blocker != null)
+            {
+                Destroy(_blocker.gameObject);
+                _blocker = null;
+            }
         }
 
-        void OnDestroy()
+        void NotifyCompleted()
         {
-            if (!_finished)
-                Finish();
-            if (_active == this)
-                _active = null;
+            var completed = _stage.Completed;
+            completed?.Invoke();
         }
 
         static string[] ReadIds(MonsterSlotView[] slots)
@@ -450,12 +482,14 @@ namespace TheCall.Scoring
                     root.SetParent(slot.View.transform, false);
                     root.anchoredPosition = slot.RestAnchoredPosition;
                     root.localScale = slot.RestScale;
+                    root.gameObject.SetActive(true);
                 }
                 else if (root != null)
                 {
                     root.localScale = slot.RestScale;
                     if (slot.View != null && root.parent == slot.View.transform)
                         root.anchoredPosition = slot.RestAnchoredPosition;
+                    root.gameObject.SetActive(true);
                 }
 
                 slot.Portrait.RestoreMotion();

@@ -1,10 +1,76 @@
 ﻿#Requires -Version 5.1
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ProjectRoot
+    [string]$ProjectRoot,
+
+    [int]$TimeoutSeconds = 300
 )
 
 $ErrorActionPreference = 'Stop'
+
+# Pipeline 0.8+ expects a recent Unity CLI (loopback on 127.0.0.1, native JSON status, etc.).
+$MinimumCliVersionLabel = '1.0.0-beta.13'
+
+function Test-UnityCliVersionAtLeast {
+    param(
+        [string]$Actual,
+        [string]$Minimum
+    )
+
+    $pattern = '^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:-(?<prerelease>.+))?$'
+    if ($Actual -notmatch $pattern -or $Minimum -notmatch $pattern) {
+        return $null
+    }
+
+    $actualParts = [ordered]@{
+        Major = [int]$Matches.major
+        Minor = [int]$Matches.minor
+        Patch = [int]$Matches.patch
+        Prerelease = $Matches.prerelease
+    }
+
+    $null = $Minimum -match $pattern
+    $minimumParts = [ordered]@{
+        Major = [int]$Matches.major
+        Minor = [int]$Matches.minor
+        Patch = [int]$Matches.patch
+        Prerelease = $Matches.prerelease
+    }
+
+    foreach ($key in @('Major', 'Minor', 'Patch')) {
+        if ($actualParts[$key] -ne $minimumParts[$key]) {
+            return ($actualParts[$key] -gt $minimumParts[$key])
+        }
+    }
+
+    if (-not $actualParts.Prerelease -and -not $minimumParts.Prerelease) {
+        return $true
+    }
+
+    if ($actualParts.Prerelease -and -not $minimumParts.Prerelease) {
+        return $false
+    }
+
+    if (-not $actualParts.Prerelease -and $minimumParts.Prerelease) {
+        return $true
+    }
+
+    $actualBeta = $null
+    $minimumBeta = $null
+    if ($actualParts.Prerelease -match '^beta\.(\d+)$') {
+        $actualBeta = [int]$Matches[1]
+    }
+
+    if ($minimumParts.Prerelease -match '^beta\.(\d+)$') {
+        $minimumBeta = [int]$Matches[1]
+    }
+
+    if ($null -ne $actualBeta -and $null -ne $minimumBeta) {
+        return ($actualBeta -ge $minimumBeta)
+    }
+
+    return $null
+}
 
 function Get-UnityJsonOutput {
     param([string[]]$UnityArgs)
@@ -26,6 +92,39 @@ function Get-UnityJsonOutput {
 function Get-NormalizedPath {
     param([string]$Path)
     return [System.IO.Path]::GetFullPath($Path.TrimEnd('\', '/'))
+}
+
+function Assert-UnityCliVersion {
+    $versionLine = (& unity --version 2>&1 | Select-Object -First 1).ToString().Trim()
+    if (-not $versionLine) {
+        throw '未找到 unity CLI。请安装 Unity CLI 并确保其在 PATH 中。'
+    }
+
+    $ok = Test-UnityCliVersionAtLeast -Actual $versionLine -Minimum $MinimumCliVersionLabel
+    if ($null -eq $ok) {
+        Write-Warning "无法比较 CLI 版本 ($versionLine)，请确认已 >= $MinimumCliVersionLabel。"
+        return
+    }
+
+    if (-not $ok) {
+        Write-Host "[错误] Unity CLI 版本过旧 ($versionLine)，Pipeline 0.8 需要至少 $MinimumCliVersionLabel。请运行: unity upgrade -y" -ForegroundColor Red
+        exit 2
+    }
+}
+
+function Remove-StaleUnityCliRollback {
+    $bin = Join-Path $env:LOCALAPPDATA 'Unity\bin'
+    if (-not (Test-Path -LiteralPath $bin)) {
+        return
+    }
+
+    foreach ($name in @('unity.exe.previous', 'unity.exe.previous.sha256')) {
+        $path = Join-Path $bin $name
+        if (Test-Path -LiteralPath $path) {
+            Remove-Item -LiteralPath $path -Force
+            Write-Host "已删除旧 CLI 回滚文件: $path"
+        }
+    }
 }
 
 function Get-ProjectStatusInstance {
@@ -53,22 +152,29 @@ function Get-ProjectStatusInstance {
 }
 
 function Invoke-UnityStatus {
-    param([string]$ProjectPath)
+    param(
+        [string]$ProjectPath,
+        [switch]$UntilReady
+    )
 
-    return Get-UnityJsonOutput @(
+    $args = @(
         '--no-banner',
         '--non-interactive',
         'status',
         '--format', 'json',
-        '--project', $ProjectPath
+        '--project-path', $ProjectPath
     )
+
+    if ($UntilReady) {
+        $args += @('--until-ready', '--timeout', "$TimeoutSeconds")
+    }
+
+    return Get-UnityJsonOutput $args
 }
 
 function Test-EditorProcessRunning {
     param([string]$NormalizedProject)
 
-    # CLI 1.0.0-beta.1 的 pipeline list 会把当前目录下的 Unity 项目
-    # 当成正在运行的编辑器，即使没有 Unity.exe。以进程命令行为准。
     $needle = $NormalizedProject.TrimEnd('\')
     $processes = @(Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" -ErrorAction SilentlyContinue)
     foreach ($proc in $processes) {
@@ -89,6 +195,7 @@ function Test-EditorProcessRunning {
 function Get-PipelineInstance {
     param([string]$NormalizedProject)
 
+    # pipeline list 会受当前工作目录影响；在无 Editor 进程时可能误报 isRunning。
     $previous = Get-Location
     try {
         Set-Location -LiteralPath $env:SystemRoot
@@ -122,43 +229,38 @@ function Get-PipelineInstance {
     return $null
 }
 
+function Write-UnityConnectionHints {
+    Write-Host ''
+    Write-Host '连接失败时可按顺序排查:' -ForegroundColor Yellow
+    Write-Host '  1. unity --version  → 过旧则 unity upgrade -y'
+    Write-Host '  2. unity pipeline list --format json  → isReachable 与 apiUrl 应为 127.0.0.1'
+    Write-Host '  3. unity status --format json --project-path <项目>  → 查看 state / blockedBy'
+    Write-Host '  4. Safe Mode → 修复编译错误后重启 Editor'
+    Write-Host '  5. 仅当缺少包时再运行 unity pipeline install'
+}
+
 function Wait-ForReadyInstance {
     param(
         [string]$ProjectPath,
-        [string]$NormalizedProject,
-        [int]$TimeoutSeconds = 300,
-        [int]$PollIntervalSeconds = 2
+        [string]$NormalizedProject
     )
 
-    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-    $lastState = 'unknown'
+    $statusJson = Invoke-UnityStatus -ProjectPath $ProjectPath -UntilReady
+    $instance = Get-ProjectStatusInstance -StatusJson $statusJson -NormalizedProject $NormalizedProject
 
-    while ((Get-Date) -lt $deadline) {
-        $statusJson = Invoke-UnityStatus -ProjectPath $ProjectPath
-        $instance = Get-ProjectStatusInstance -StatusJson $statusJson -NormalizedProject $NormalizedProject
-
-        if ($instance) {
-            $lastState = [string]$instance.state
-            if ($lastState -eq 'ready') {
-                Write-Host "Unity 编辑器已就绪 (PID $($instance.pid), 端口 $($instance.port), 版本 $($instance.version))."
-                return 0
-            }
-
-            Write-Host "等待 Unity 就绪... 当前状态: $lastState"
-        }
-        else {
-            Write-Host '等待 Unity Pipeline 连接...'
-        }
-
-        Start-Sleep -Seconds $PollIntervalSeconds
+    if ($instance -and [string]$instance.state -eq 'ready') {
+        Write-Host "Unity 编辑器已就绪 (PID $($instance.pid), 端口 $($instance.port), 版本 $($instance.version))."
+        return 0
     }
 
+    $lastState = if ($instance) { [string]$instance.state } else { 'unknown' }
     Write-Host "[错误] 等待 Unity 就绪超时 (${TimeoutSeconds}s)，最后状态: $lastState。" -ForegroundColor Red
-    if ($lastState -ne 'ready') {
-        Write-Host '若编辑器已打开但 CLI 无法连接，请运行: unity pipeline install' -ForegroundColor Yellow
-    }
+    Write-UnityConnectionHints
     return 6
 }
+
+Assert-UnityCliVersion
+Remove-StaleUnityCliRollback
 
 $normalizedProject = Get-NormalizedPath $ProjectRoot
 Write-Host "项目路径: $normalizedProject"

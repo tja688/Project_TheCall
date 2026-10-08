@@ -4,21 +4,38 @@
 
 - This is a Unity project. Required engine version: **6000.6.0f1**.
 - Drive the project through the **Unity CLI**. Do not use Unity MCP or other MCP tools to control Unity, Unity Hub GUI, or `-batchmode`.
-- First inspect editor instances:
+- The project uses **`com.unity.pipeline` 0.8+**. Keep the CLI current (`unity --version`, then `unity upgrade -y` when behind). Pipeline 0.8 listens on **`127.0.0.1` only**; an outdated CLI that probes `localhost` looks like a dead Pipeline even when the Editor is open.
+- First inspect editor instances (pin the project when the shell cwd might not be the repo root):
   ```bash
-  unity --no-banner --non-interactive status --format json
+  unity --no-banner --non-interactive status --format json --project-path "<项目路径>"
   ```
 - If this project already has a `ready` instance, reuse it and execute commands directly; do not launch another editor.
 - If this project has no instance, open it using its absolute project path:
   ```bash
   unity --no-banner --non-interactive open "<项目路径>" --args "-automated"
   ```
-- If an instance exists but is not ready, check its status until ready or report the blocker; do not open a duplicate editor.
+- After `open`, wait for Pipeline in one step (do not hand-roll sleep loops):
+  ```bash
+  unity --no-banner --non-interactive status --until-ready --project-path "<项目路径>" --timeout 300 --format json
+  ```
+- If an instance exists but is not `ready`, use the same `--until-ready` command or report the blocker; do not open a duplicate editor.
+- Discover Editor tools with `unity list` (not `unity command list` — that tries to run a Pipeline command named `list`).
 - Control the ready instance with:
   ```bash
-  unity --no-banner --non-interactive command <命令> --format json
+  unity --no-banner --non-interactive command <命令> --project-path "<项目路径>" --caller plugin --skill <技能名> --format json
   ```
+  Use the skill name that produced the call (e.g. `unity-cli` when following that skill).
 - Make scene changes through Unity editor operations driven by the CLI. Never manually edit scene YAML.
+
+### When CLI cannot connect
+
+Work through this order before reinstalling packages or opening another Editor:
+
+1. **`unity --version`** — upgrade with `unity upgrade -y` if the CLI predates Pipeline 0.8 compatibility (e.g. stuck on `1.0.0-beta.1`). Remove stale rollback files under `%LOCALAPPDATA%\Unity\bin\` (`unity.exe.previous*`) only after a successful upgrade.
+2. **`unity pipeline list --format json`** — for this project, confirm `pipelineServer.isReachable` and `apiUrl` uses `http://127.0.0.1:…` (not `localhost`).
+3. **`unity status --format json --project-path "<项目路径>"`** — read `state`, and `blockedBy` if a modal dialog is holding the Editor (`STATUS_BLOCKED_BY_DIALOG`).
+4. **Safe Mode** — if `pipeline list` reports Safe Mode, fix compile errors and restart the Editor; Pipeline does not load in Safe Mode.
+5. **`unity pipeline install`** — only when the project lacks `com.unity.pipeline` or Hub/registry install is actually missing.
 
 ## Git
 
