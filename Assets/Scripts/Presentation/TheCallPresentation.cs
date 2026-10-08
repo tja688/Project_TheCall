@@ -149,7 +149,13 @@ namespace TheCall
             if (_log.IsOpen)
                 _log.Hide();
             else
-                _log.Show(ProductionLogText.Format(this.SendQuery(new ProductionLogQuery())));
+                _log.Show(ProductionLogText.Format(
+                    this.SendQuery(new ProductionLogQuery()),
+                    id =>
+                    {
+                        var monster = this.SendQuery(new MonsterQuery(id));
+                        return monster?.DisplayName;
+                    }));
         }
 
         internal void Refresh()

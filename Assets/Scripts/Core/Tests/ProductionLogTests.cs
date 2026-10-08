@@ -30,14 +30,18 @@ namespace TheCall.Tests
             var incense = App.SendQuery(new MonsterQuery(incenseId)).DisplayName;
             var breath = App.SendQuery(new MonsterQuery(breathId)).DisplayName;
             var eye = App.SendQuery(new MonsterQuery(eyeId)).DisplayName;
-            var text = ProductionLogText.Format(App.SendQuery(new ProductionLogQuery()));
+            var text = Format();
 
-            Assert.That(text, Does.Contain("—— 第1关 · 结算 ——"));
-            Assert.That(text, Does.Contain("产出 12    应交 50    还差 38    进入加班"));
-            Assert.That(text, Does.Contain(breath + " · 能量体 · 左起第 2 格"));
-            Assert.That(text, Does.Contain("报价 5，" + incense + " 的奇异香 +1 = 底数 6"));
-            Assert.That(text, Does.Contain(eye + " 的镜眼 ×2"));
-            Assert.That(text, Does.Contain("落地 12（底数 6 × 倍率 2）"));
+            Assert.That(text, Does.Contain("—— 第 1 关 · 结算 ——"));
+            Assert.That(text, Does.Contain("产出 12 点能量"));
+            Assert.That(text, Does.Contain("进入加班"));
+            Assert.That(text, Does.Contain(breath + " 的「能量体」触发"));
+            Assert.That(text, Does.Contain("左起第 2 格"));
+            Assert.That(text, Does.Contain(incense + " 的「奇异香」为它加了 1 点"));
+            Assert.That(text, Does.Contain(eye + " 的「镜眼」让这次产出 ×2"));
+            Assert.That(text, Does.Contain("计入本关总能量 12 点"));
+            Assert.That(text, Does.Contain("<align=\"right\">+12</align>"));
+            Assert.That(text, Does.Contain("<b>合计  12</b>"));
             Assert.That(text, Does.Not.Contain("宿主修正"));
             Assert.That(text, Does.Not.Contain("下家"));
         }
@@ -60,9 +64,9 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var text = ProductionLogText.Format(App.SendQuery(new ProductionLogQuery()));
-            var first = text.IndexOf("—— 第1关 · 结算 ——");
-            var second = text.IndexOf("—— 第1关 · 加班 ——");
+            var text = Format();
+            var first = text.IndexOf("—— 第 1 关 · 结算 ——");
+            var second = text.IndexOf("—— 第 1 关 · 加班 ——");
             Assert.That(first, Is.GreaterThanOrEqualTo(0));
             Assert.That(second, Is.GreaterThan(first));
             Assert.That(text, Does.Contain("进入加班"));
@@ -90,10 +94,11 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             var left = App.SendQuery(new MonsterQuery(leftId)).DisplayName;
-            var text = ProductionLogText.Format(App.SendQuery(new ProductionLogQuery()));
-            Assert.That(text, Does.Contain(left + " · 左能量体 · 左起第 1 格"));
-            Assert.That(text, Does.Contain("右侧 1 只 × 报价 2 = 底数 2"));
-            Assert.That(text, Does.Contain("落地 2"));
+            var text = Format();
+            Assert.That(text, Does.Contain(left + " 的「左能量体」触发"));
+            Assert.That(text, Does.Contain("右侧还有 1 只怪物"));
+            Assert.That(text, Does.Contain("计入本关总能量 2 点"));
+            Assert.That(text, Does.Contain("<b>合计  2</b>"));
         }
 
         [Test]
@@ -124,9 +129,9 @@ namespace TheCall.Tests
                 new ProductionSubmission(3, false, 10, 50, payment, new SettlementEntry[] { landing }),
             });
 
-            Assert.That(text, Does.Contain("怪物修正 +2"));
-            Assert.That(text, Does.Contain("下一个怪物的能量数值 +3"));
-            Assert.That(text, Does.Contain("写回 +2"));
+            Assert.That(text, Does.Contain("「怪物修正」加成 +2 点"));
+            Assert.That(text, Does.Contain("「下一个怪物的能量数值」加成 +3 点"));
+            Assert.That(text, Does.Contain("报价写回 +2"));
             Assert.That(text, Does.Not.Contain("宿主修正"));
             Assert.That(text, Does.Not.Contain("下家"));
         }
@@ -150,11 +155,52 @@ namespace TheCall.Tests
             Assert.That(text, Does.Contain("每一次提交"));
         }
 
+        [Test]
+        public void 再触发写在对应落地之前且能量可逐项加总()
+        {
+            Open(
+                "能量体",
+                "左能量体",
+                "右能量体",
+                "回响嗓",
+                "能量体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
+                "孤独心");
+
+            var breaths = App.SendQuery(new MonsterCageQuery())
+                .Where(monster => Holds(monster, "能量体"))
+                .ToArray();
+            var leftId = breaths[0].Id;
+            var rightId = breaths[1].Id;
+            var echoId = IdOf("回响嗓");
+            App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(echoId, OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
+            App.SendCommand(new ConfirmSettlementCommand());
+
+            var echo = App.SendQuery(new MonsterQuery(echoId)).DisplayName;
+            var text = Format();
+            var firstLanding = text.IndexOf("「能量体」触发");
+            var again = text.IndexOf(echo + " 的「回响嗓」生效");
+            var thirdLanding = text.LastIndexOf("计入本关总能量 5 点");
+            Assert.That(firstLanding, Is.GreaterThanOrEqualTo(0));
+            Assert.That(again, Is.GreaterThan(firstLanding));
+            Assert.That(thirdLanding, Is.GreaterThan(again));
+            Assert.That(text, Does.Contain("<b>合计  15</b>"));
+        }
+
         void Open(params string[] names)
         {
             UseDraw(names);
             KeepOpened();
         }
+
+        string Format() =>
+            ProductionLogText.Format(
+                App.SendQuery(new ProductionLogQuery()),
+                id => App.SendQuery(new MonsterQuery(id))?.DisplayName);
 
         string IdOf(string skillName) =>
             App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;

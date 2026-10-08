@@ -29,7 +29,11 @@ namespace TheCall
         {
             gameObject.SetActive(true);
             if (body != null)
+            {
+                body.richText = true;
+                body.alignment = TextAlignmentOptions.TopLeft;
                 body.text = text ?? "";
+            }
 
             StopAllCoroutines();
             StartCoroutine(PinToLatest());
