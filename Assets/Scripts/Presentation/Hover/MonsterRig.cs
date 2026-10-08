@@ -31,6 +31,22 @@ namespace TheCall
         Mouth,
     }
 
+    public enum MonsterLayerBand
+    {
+        Default = 0,
+        AlwaysBack = 1,
+        Tail = 2,
+        Accessory = 3,
+        Foot = 4,
+        Hand = 5,
+        Body = 6,
+        Hat = 7,
+        Head = 8,
+        Mouth = 9,
+        Eye = 10,
+        AlwaysFront = 11,
+    }
+
     [Serializable]
     public sealed class MonsterRigSocket
     {
@@ -52,6 +68,7 @@ namespace TheCall
         public bool headTurn;
         public string mountSocketId;
         public int nextSocket = 1;
+        public MonsterLayerBand layerBand;
         public List<string> excluded = new List<string>();
         public List<MonsterRigSocket> sockets = new List<MonsterRigSocket>();
     }
@@ -113,6 +130,7 @@ namespace TheCall
         public float WorldRotation;
         public bool WorldMirror;
         public int Order;
+        public MonsterPartKind Kind;
         public MonsterColorRole Color;
     }
 
@@ -236,6 +254,35 @@ namespace TheCall
             folder = id.Substring(0, slash);
             leaf = id.Substring(slash + 1);
             return leaf.IndexOf('/') < 0;
+        }
+
+        public static List<MonsterRigPiece> PiecesFrom(MonsterRigFile file)
+        {
+            var list = new List<MonsterRigPiece>();
+            if (file == null || file.parts == null)
+                return list;
+
+            for (var i = 0; i < file.parts.Count; i++)
+            {
+                var part = file.parts[i];
+                if (part == null || !TrySplitId(part.id, out var folder, out _))
+                    continue;
+                if (!TryFolder(folder, out var spec))
+                    continue;
+
+                list.Add(new MonsterRigPiece
+                {
+                    Data = part,
+                    Folder = folder,
+                    Width = 142,
+                    Height = 102,
+                    Role = spec.Role,
+                    Kind = spec.Kind,
+                    Color = spec.Color,
+                });
+            }
+
+            return list;
         }
 
         static MonsterFolderSpec Spec(
@@ -405,6 +452,18 @@ namespace TheCall
 
             piece.Data.attachX = x;
             piece.Data.attachY = y;
+            return null;
+        }
+
+        public static string SetLayer(MonsterRigPiece piece, MonsterLayerBand band)
+        {
+            if (piece == null || piece.Data == null)
+                return "没有选中的部件";
+
+            if (band != MonsterLayerBand.Default && !MonsterLayerBands.Contains(band))
+                return "没有这个图层";
+
+            piece.Data.layerBand = band;
             return null;
         }
 
@@ -625,7 +684,7 @@ namespace TheCall
                 0,
                 false,
                 true,
-                DrawOrder(root.Kind));
+                0);
             pose.Nodes.Sort((a, b) => a.Order.CompareTo(b.Order));
             return pose;
         }
@@ -707,7 +766,8 @@ namespace TheCall
                 WorldAttachY = (float)worldY,
                 WorldRotation = (float)worldRotation,
                 WorldMirror = worldMirror,
-                Order = order,
+                Order = MonsterLayerBands.Order(piece, order),
+                Kind = piece.Kind,
                 Color = piece.Color,
             });
 
@@ -756,7 +816,7 @@ namespace TheCall
                     worldRotation,
                     worldMirror,
                     false,
-                    DrawOrder(child.Kind) + i);
+                    i);
             }
         }
 
@@ -822,27 +882,298 @@ namespace TheCall
             return null;
         }
 
-        static int DrawOrder(MonsterPartKind kind)
+    }
+
+    public static class MonsterLayerBands
+    {
+        public static readonly MonsterLayerBand[] Editable =
+        {
+            MonsterLayerBand.AlwaysFront,
+            MonsterLayerBand.Eye,
+            MonsterLayerBand.Mouth,
+            MonsterLayerBand.Head,
+            MonsterLayerBand.Hat,
+            MonsterLayerBand.Body,
+            MonsterLayerBand.Hand,
+            MonsterLayerBand.Foot,
+            MonsterLayerBand.Accessory,
+            MonsterLayerBand.Tail,
+            MonsterLayerBand.AlwaysBack,
+        };
+
+        public static bool Contains(MonsterLayerBand band)
+        {
+            for (var i = 0; i < Editable.Length; i++)
+            {
+                if (Editable[i] == band)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static MonsterLayerBand ForKind(MonsterPartKind kind)
         {
             switch (kind)
             {
-                case MonsterPartKind.Tail: return 0;
-                case MonsterPartKind.Foot: return 100;
-                case MonsterPartKind.Body: return 200;
-                case MonsterPartKind.Hand: return 300;
-                case MonsterPartKind.Accessory: return 350;
-                case MonsterPartKind.Head: return 400;
-                case MonsterPartKind.Eye: return 500;
-                case MonsterPartKind.Mouth: return 600;
-                case MonsterPartKind.Hat: return 800;
-                default: return 900;
+                case MonsterPartKind.Eye: return MonsterLayerBand.Eye;
+                case MonsterPartKind.Mouth: return MonsterLayerBand.Mouth;
+                case MonsterPartKind.Head: return MonsterLayerBand.Head;
+                case MonsterPartKind.Hat: return MonsterLayerBand.Hat;
+                case MonsterPartKind.Body: return MonsterLayerBand.Body;
+                case MonsterPartKind.Hand: return MonsterLayerBand.Hand;
+                case MonsterPartKind.Foot: return MonsterLayerBand.Foot;
+                case MonsterPartKind.Accessory: return MonsterLayerBand.Accessory;
+                case MonsterPartKind.Tail: return MonsterLayerBand.Tail;
+                default: return MonsterLayerBand.Body;
             }
+        }
+
+        public static MonsterLayerBand Resolve(MonsterRigPart part, MonsterPartKind kind)
+        {
+            if (part == null || part.layerBand == MonsterLayerBand.Default || !Contains(part.layerBand))
+                return ForKind(kind);
+
+            return part.layerBand;
+        }
+
+        public static int Order(MonsterRigPiece piece, int socketIndex)
+        {
+            var kind = piece == null ? MonsterPartKind.Body : piece.Kind;
+            var band = Resolve(piece == null ? null : piece.Data, kind);
+            if (socketIndex < 0)
+                socketIndex = 0;
+            if (socketIndex > 99)
+                socketIndex = 99;
+            return (int)band * 100 + socketIndex;
+        }
+
+        public static string Label(MonsterLayerBand band)
+        {
+            switch (band)
+            {
+                case MonsterLayerBand.AlwaysFront: return "一定在前";
+                case MonsterLayerBand.Eye: return "眼";
+                case MonsterLayerBand.Mouth: return "嘴";
+                case MonsterLayerBand.Head: return "头";
+                case MonsterLayerBand.Hat: return "头饰";
+                case MonsterLayerBand.Body: return "身体";
+                case MonsterLayerBand.Hand: return "手";
+                case MonsterLayerBand.Foot: return "脚";
+                case MonsterLayerBand.Accessory: return "身体配饰";
+                case MonsterLayerBand.Tail: return "尾巴";
+                case MonsterLayerBand.AlwaysBack: return "一定在后";
+                default: return "按部件";
+            }
+        }
+    }
+
+    public static class MonsterRigPreview
+    {
+        public static void EnterWhole(List<MonsterRigAssignment> editAssignments, ISet<MonsterSocketGroup> visibleGroups)
+        {
+            if (editAssignments != null)
+                editAssignments.Clear();
+            if (visibleGroups != null)
+                visibleGroups.Clear();
+        }
+
+        public static string WholeRoot(string monsterRootId, string selectedId, Func<string, bool> isBody)
+        {
+            if (isBody != null && isBody(monsterRootId))
+                return monsterRootId;
+            if (isBody != null && isBody(selectedId))
+                return selectedId;
+            return null;
+        }
+    }
+
+    public readonly struct MonsterMotionSample
+    {
+        public readonly float Head;
+        public readonly float Feet;
+        public readonly float Tail;
+        public readonly float Body;
+        public readonly float Lift;
+
+        public MonsterMotionSample(float head, float feet, float tail, float body, float lift)
+        {
+            Head = head;
+            Feet = feet;
+            Tail = tail;
+            Body = body;
+            Lift = lift;
+        }
+
+        public static MonsterMotionSample Idle(MonsterMotionProfile profile, float time, float phase)
+        {
+            profile = profile == null ? MonsterMotionProfile.Fallback : profile;
+            var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
+            var slowWave = Mathf.Sin((time + phase * 0.7f) * Mathf.PI * profile.idleCyclesPerSecond);
+            return new MonsterMotionSample(
+                wave * profile.idleHeadDegrees,
+                wave * profile.idleFeetDegrees,
+                slowWave * profile.idleTailDegrees,
+                slowWave * profile.idleBodyDegrees,
+                wave * profile.idleBodyLift);
+        }
+
+        public static MonsterMotionSample Drag(MonsterMotionProfile profile, float headAngle, float feetAngle)
+        {
+            profile = profile == null ? MonsterMotionProfile.Fallback : profile;
+            var tail = Mathf.Clamp(
+                feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
+                -profile.tailDragDegrees,
+                profile.tailDragDegrees);
+            var body = Mathf.Clamp(
+                feetAngle * profile.bodyDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
+                -profile.bodyDragDegrees,
+                profile.bodyDragDegrees);
+            return new MonsterMotionSample(headAngle, feetAngle, tail, body, 0f);
+        }
+    }
+
+    public static class MonsterMotion
+    {
+        public static void StepSpring(
+            ref float angle,
+            ref float velocity,
+            float target,
+            float deltaTime,
+            float stiffness,
+            float damping)
+        {
+            var acceleration = (target - angle) * stiffness - velocity * damping;
+            velocity += acceleration * deltaTime;
+            angle += velocity * deltaTime;
+        }
+    }
+
+    public static class MonsterRigMotion
+    {
+        public static MonsterRigPose Present(MonsterRigPose rest, MonsterMotionSample sample)
+        {
+            var posed = new MonsterRigPose();
+            if (rest == null)
+                return posed;
+
+            for (var i = 0; i < rest.Nodes.Count; i++)
+                posed.Nodes.Add(Copy(rest.Nodes[i]));
+            posed.Pins.AddRange(rest.Pins);
+            posed.Warnings.AddRange(rest.Warnings);
+            Apply(posed.Nodes, sample);
+            return posed;
+        }
+
+        public static void Apply(List<MonsterRigNode> nodes, MonsterMotionSample sample)
+        {
+            if (nodes == null || nodes.Count == 0)
+                return;
+
+            MonsterRigNode body = null;
+            MonsterRigNode head = null;
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                if (node.Kind == MonsterPartKind.Body && string.IsNullOrEmpty(node.SocketId))
+                    body = node;
+                if (node.Kind == MonsterPartKind.Head)
+                    head = node;
+            }
+
+            if (body != null)
+                Orbit(nodes, body.WorldAttachX, body.WorldAttachY, sample.Body, sample.Lift, BodyGroup);
+            if (head != null)
+                Orbit(nodes, head.WorldAttachX, head.WorldAttachY, sample.Head, 0f, HeadGroup);
+            AddSpin(nodes, MonsterPartKind.Foot, sample.Feet);
+            AddSpin(nodes, MonsterPartKind.Tail, sample.Tail);
+        }
+
+        static bool BodyGroup(MonsterPartKind kind)
+        {
+            return kind == MonsterPartKind.Body || kind == MonsterPartKind.Hand || kind == MonsterPartKind.Accessory;
+        }
+
+        static bool HeadGroup(MonsterPartKind kind)
+        {
+            return kind == MonsterPartKind.Head
+                || kind == MonsterPartKind.Eye
+                || kind == MonsterPartKind.Mouth
+                || kind == MonsterPartKind.Hat;
+        }
+
+        static void Orbit(
+            List<MonsterRigNode> nodes,
+            float pivotX,
+            float pivotY,
+            float angle,
+            float lift,
+            Func<MonsterPartKind, bool> include)
+        {
+            if (angle == 0f && lift == 0f)
+                return;
+
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                if (!include(node.Kind))
+                    continue;
+
+                var x = (double)(node.WorldAttachX - pivotX);
+                var y = (double)(node.WorldAttachY - pivotY);
+                MonsterRigLayout.Rotate(ref x, ref y, angle);
+                node.WorldAttachX = pivotX + (float)x;
+                node.WorldAttachY = pivotY + (float)y + lift;
+                node.WorldRotation += angle;
+            }
+        }
+
+        static void AddSpin(List<MonsterRigNode> nodes, MonsterPartKind kind, float angle)
+        {
+            if (angle == 0f)
+                return;
+
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].Kind == kind)
+                    nodes[i].WorldRotation += angle;
+            }
+        }
+
+        static MonsterRigNode Copy(MonsterRigNode source)
+        {
+            return new MonsterRigNode
+            {
+                PartId = source.PartId,
+                SocketId = source.SocketId,
+                Width = source.Width,
+                Height = source.Height,
+                AttachX = source.AttachX,
+                AttachY = source.AttachY,
+                WorldAttachX = source.WorldAttachX,
+                WorldAttachY = source.WorldAttachY,
+                WorldRotation = source.WorldRotation,
+                WorldMirror = source.WorldMirror,
+                Order = source.Order,
+                Kind = source.Kind,
+                Color = source.Color,
+            };
         }
     }
 
     public static class MonsterRigRandom
     {
         public const int RecentLimit = 12;
+
+        public static Func<double> Units(int salt)
+        {
+            var state = unchecked((uint)salt) | 1u;
+            return () =>
+            {
+                state = state * 1664525u + 1013904223u;
+                return (state & 0xFFFFFF) / 16777216.0;
+            };
+        }
 
         public static string Pick(IReadOnlyList<string> pool, List<string> recent, Func<double> nextUnit)
         {

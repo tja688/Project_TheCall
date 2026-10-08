@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,8 +29,15 @@ namespace TheCall
 
         bool _dragMotionActive;
         bool _layersBound;
+        bool _useRig;
         float _idlePhase;
         float _idleSeed;
+        float _restOriginX;
+        float _restOriginY;
+        int _paletteIndex;
+        MonsterRigPose _restPose;
+        RectTransform _rigRoot;
+        readonly List<Image> _rigImages = new List<Image>();
 
         public MonsterMotionProfile MotionProfile => _motionProfile != null
             ? _motionProfile
@@ -59,11 +67,35 @@ namespace TheCall
         public void Show(MonsterAppearance appearance)
         {
             MonsterPartLibrary.Ensure();
+            _paletteIndex = appearance.Palette;
+            _idleSeed = (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f;
+            if (MonsterRigRuntime.TryCompose(appearance.Recipe, AppearanceSalt(appearance), out var pose))
+            {
+                _useRig = true;
+                _restPose = pose;
+                _restOriginX = 0f;
+                _restOriginY = 0f;
+                for (var i = 0; i < pose.Nodes.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(pose.Nodes[i].SocketId))
+                        continue;
+
+                    _restOriginX = pose.Nodes[i].WorldAttachX;
+                    _restOriginY = pose.Nodes[i].WorldAttachY;
+                    break;
+                }
+
+                HideLegacy();
+                RestoreMotion();
+                return;
+            }
+
+            _useRig = false;
+            HideRig();
             BindLayerParents();
 
             var catalog = AssemblyCatalog;
             var template = catalog.GetTemplateOrFallback(appearance.TemplateId, appearance.Recipe);
-            _idleSeed = (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f;
             var selectedHeadId = string.IsNullOrEmpty(appearance.HeadId)
                 ? template == null ? null : template.head.partId
                 : appearance.HeadId;
@@ -96,6 +128,12 @@ namespace TheCall
 
         public void SetIdleMotion(float time, float phase = 0f)
         {
+            if (_useRig)
+            {
+                ApplyRig(MonsterMotionSample.Idle(MotionProfile, time, phase));
+                return;
+            }
+
             var profile = MotionProfile;
             var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
             var slowWave = Mathf.Sin((time + phase * 0.7f) * Mathf.PI * profile.idleCyclesPerSecond);
@@ -110,6 +148,12 @@ namespace TheCall
         public void SetSpringMotion(float headAngle, float feetAngle)
         {
             _dragMotionActive = true;
+            if (_useRig)
+            {
+                ApplyRig(MonsterMotionSample.Drag(MotionProfile, headAngle, feetAngle));
+                return;
+            }
+
             var profile = MotionProfile;
             var tail = Mathf.Clamp(
                 feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
@@ -132,11 +176,19 @@ namespace TheCall
         public void RestoreMotion()
         {
             _dragMotionActive = false;
+            if (_useRig)
+            {
+                ApplyRig(new MonsterMotionSample(0f, 0f, 0f, 0f, 0f));
+                return;
+            }
+
             SetMotion(0f, 0f, 0f, 0f, 0f);
         }
 
         public void Clear()
         {
+            _useRig = false;
+            HideRig();
             ClearImage(_tail);
             ClearImage(_foot);
             ClearImage(_body);
@@ -273,6 +325,123 @@ namespace TheCall
             image.sprite = null;
             image.enabled = false;
             image.color = Color.white;
+        }
+
+        void ApplyRig(MonsterMotionSample sample)
+        {
+            if (_restPose == null)
+                return;
+
+            var posed = MonsterRigMotion.Present(_restPose, sample);
+            EnsureRigRoot();
+            while (_rigImages.Count < posed.Nodes.Count)
+                _rigImages.Add(CreateRigImage());
+
+            for (var i = 0; i < _rigImages.Count; i++)
+            {
+                var image = _rigImages[i];
+                if (i >= posed.Nodes.Count)
+                {
+                    image.enabled = false;
+                    continue;
+                }
+
+                var node = posed.Nodes[i];
+                var sprite = MonsterRigRuntime.SpriteFor(node.PartId);
+                var rect = image.rectTransform;
+                rect.anchorMin = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = new Vector2(0.5f, 0.5f);
+                rect.pivot = new Vector2(
+                    node.Width <= 0 ? 0.5f : node.AttachX / node.Width,
+                    node.Height <= 0 ? 0.5f : node.AttachY / node.Height);
+                rect.sizeDelta = sprite != null ? sprite.rect.size : new Vector2(node.Width, node.Height);
+                rect.anchoredPosition = new Vector2(node.WorldAttachX - _restOriginX, node.WorldAttachY - _restOriginY);
+                rect.localRotation = Quaternion.Euler(0f, 0f, node.WorldRotation);
+                rect.localScale = new Vector3(node.WorldMirror ? -1f : 1f, 1f, 1f);
+                image.sprite = sprite;
+                image.color = sprite == null ? Color.white : Tint(node.Color, _paletteIndex);
+                image.enabled = sprite != null;
+                image.preserveAspect = false;
+                image.raycastTarget = false;
+                image.transform.SetSiblingIndex(i);
+            }
+        }
+
+        void EnsureRigRoot()
+        {
+            if (_rigRoot != null)
+                return;
+
+            var go = new GameObject("Rig", typeof(RectTransform));
+            go.transform.SetParent(transform, false);
+            _rigRoot = go.GetComponent<RectTransform>();
+            _rigRoot.anchorMin = new Vector2(0.5f, 0.5f);
+            _rigRoot.anchorMax = new Vector2(0.5f, 0.5f);
+            _rigRoot.pivot = new Vector2(0.5f, 0.5f);
+            _rigRoot.anchoredPosition = Vector2.zero;
+            _rigRoot.sizeDelta = Vector2.zero;
+        }
+
+        Image CreateRigImage()
+        {
+            var go = new GameObject("Part", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(_rigRoot, false);
+            var image = go.GetComponent<Image>();
+            image.raycastTarget = false;
+            return image;
+        }
+
+        void HideLegacy()
+        {
+            ClearImage(_tail);
+            ClearImage(_foot);
+            ClearImage(_body);
+            ClearImage(_hand);
+            ClearImage(_head);
+            ClearImage(_eye);
+            ClearImage(_mouth);
+            ClearImage(_hat);
+            ClearImage(_accessory);
+        }
+
+        void HideRig()
+        {
+            for (var i = 0; i < _rigImages.Count; i++)
+            {
+                if (_rigImages[i] != null)
+                    _rigImages[i].enabled = false;
+            }
+        }
+
+        static int AppearanceSalt(MonsterAppearance appearance)
+        {
+            unchecked
+            {
+                var salt = appearance.Palette * 131 + appearance.Recipe * 17 + 1;
+                salt = Mix(salt, appearance.BodyId);
+                salt = Mix(salt, appearance.HeadId);
+                salt = Mix(salt, appearance.EyeId);
+                salt = Mix(salt, appearance.MouthId);
+                salt = Mix(salt, appearance.HandId);
+                salt = Mix(salt, appearance.FootId);
+                salt = Mix(salt, appearance.TailId);
+                salt = Mix(salt, appearance.HatId);
+                salt = Mix(salt, appearance.AccessoryId);
+                return salt == 0 ? 1 : salt;
+            }
+        }
+
+        static int Mix(int salt, string value)
+        {
+            unchecked
+            {
+                if (string.IsNullOrEmpty(value))
+                    return salt * 31 + 1;
+
+                for (var i = 0; i < value.Length; i++)
+                    salt = salt * 31 + value[i];
+                return salt;
+            }
         }
 
         static int Seed(string id)

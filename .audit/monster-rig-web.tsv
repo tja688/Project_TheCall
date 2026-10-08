@@ -9,3 +9,13 @@ ts	phase	decision	why	evidence	result
 2026-10-08T02:50:00Z	page	还原掉试挂点，打开时默认选中身体1	不想把试出来的点留给下次	页面标题 身体 / 身体1，检查器里没有 68,43	reverted trial socket
 2026-10-08T02:51:00Z	open	游戏内画像仍走旧的叠层配方	现在把 Show 换成空挂点会把现有怪物拆空	MonsterPortrait.Show	open
 2026-10-08T02:56:00Z	draw	配饰改到头的后面绘制	游戏里配饰挂在身体组，头组盖在上面	MonsterRigTests.配饰画在头后面 passed	tests green
+2026-10-08T03:32:00Z	start	接上一次装配台记录，前面的行从 2026-10-08T02:20:00Z 到 2026-10-08T02:56:00Z，不是这一轮写的	这一轮要分开组件编辑和整只预览，补次主体和副体的单个挂点、图层顺序，并接到游戏里	agent e9ec3fa5-2212-4012-b2b3-0a97456a87cf	open
+2026-10-08T04:10:00Z	frame	完成标准是组件编辑只留点和分组，整只预览单独随机并带待机和拖动，次主体和副体各有一个挂入点，图层按眼到尾巴，游戏按身体自己的槽位生成	用户要预览不污染编辑，并接到对局里	user request	open
+2026-10-08T04:22:00Z	preview	组件预览和整只预览分成两份搭配，进入整只预览时清掉勾选和组件搭配	整只随机原先写进同一份搭配，回到编辑后勾选组还画着那些部件	MonsterRigPreview.EnterWhole MonsterRigTests 进入整只预览会清掉组件上的临时搭配	tests green
+2026-10-08T04:28:00Z	layers	绘制顺序改成一定在前、眼、嘴、头、头饰、身体、手、脚、身体配饰、尾巴、一定在后，每个部件可以改分组	用户给的前后顺序和原来的头饰在最前不一样	MonsterRigTests 默认图层从前往后是眼嘴头头饰身体手脚配饰尾巴	tests green
+2026-10-08T04:34:00Z	hitch	次主体和副体继续用已有的 attachX attachY，编辑器把十字和数字露出来	挂入点早就在数据里，默认落在画布中心，页面上很难看见	手1 挂点 77,25，配饰1 挂点 71,51	seen in browser
+2026-10-08T04:40:00Z	motion	整只预览用游戏里的待机正弦和拖动弹簧，不新做布娃娃	上一轮把待机和拖动做在旧画像上，网页只拖挂点	拖动时头从 -0.91 度到 -5.35 度，尾巴到 6.88 度	seen in browser
+2026-10-08T04:48:00Z	game	对局画像按身体槽位生成，没有脚槽就不画脚，配饰数量等于配饰槽	旧外观每个种类只存一个编号，会给没腿的身体也写上脚	MonsterRigTests 已有身体按自己的槽位生成脚和配饰，eval recipe 3 shown 11 feet 0 trim 3	tests green
+2026-10-08T04:55:00Z	verify	从整只预览回到身体4的编辑，画面只剩身体和挂点，五组临时预览都是关的	这是用户指出的污染	页面快照 mode edit nodes 只有 身体/身体4 visible 空 checks 全 false	seen in browser
+2026-10-08T05:05:00Z	game	第三套配方的生成补进测试，没手没脚，三件配饰	浏览器里的 eval 离开仓库就对不上，测试可以重跑	MonsterRigTests.第三套配方生成没脚且有三件配饰的画像 passed	tests green
+2026-10-08T05:12:00Z	preview	整只预览再打开时停在上次随机的身体，不再因为当前选中的是手而换成第一具身体	点开部件会离开预览，旧逻辑在选中项不是身体时改用排序后的第一具身体	MonsterRigTests.整只预览回到上次随机的身体而不是当前点开的手 passed	tests green

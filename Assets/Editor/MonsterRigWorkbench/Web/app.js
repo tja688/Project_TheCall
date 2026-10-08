@@ -205,7 +205,13 @@
     const title = document.createElement("h3");
     title.textContent = part.folder + " / " + part.leaf;
     inspector.appendChild(title);
+    if (state.mode === "monster") {
+      inspector.append(paragraph("整只预览不改挂点。按住画面拖动，松手后回到待机。左边点一个部件，就回到它自己的点和分组。"));
+      inspector.scrollTop = scroll;
+      return;
+    }
     inspector.append(paragraph(roleLabel[part.role] + " · 原图 " + part.width + "×" + part.height));
+    layerControl(part);
     swingControl(part);
     if (part.kind === "Head") headTurnControl(part);
     if (part.role === "SubPrimary") facingControl(part);
@@ -213,7 +219,8 @@
       (part.groups || []).forEach((groupId) => inspector.appendChild(groupBlock(part, groupId)));
       exclusionBlock(part);
     } else {
-      inspector.append(paragraph("拖画布上的十字，对准它和父挂点相接的那一个像素。"));
+      inspector.append(paragraph("十字是它挂到父部件上的那一个点。次主体和副体都只有这一个。"));
+      attachmentControl(part);
     }
     if (state.recover) {
       const recover = document.createElement("button");
@@ -230,6 +237,45 @@
       inspector.appendChild(row);
     }
     inspector.scrollTop = scroll;
+  }
+
+  function layerControl(part) {
+    const label = document.createElement("label");
+    label.className = "muted";
+    label.textContent = "图层";
+    const select = document.createElement("select");
+    (state.layerBands || []).forEach((band) => {
+      const option = document.createElement("option");
+      option.value = band.id;
+      option.textContent = band.label;
+      if (band.id === part.layerBand) option.selected = true;
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      command("setLayer", { partId: part.id, band: select.value }).catch(showError);
+    });
+    inspector.append(label, select);
+  }
+
+  function attachmentControl(part) {
+    const point = { x: part.attachX, y: part.attachY };
+    const send = () => command("moveAttachment", { partId: part.id, x: point.x, y: point.y }).catch(showError);
+    inspector.append(
+      numberField("挂点 X", point.x, (value) => { point.x = value; send(); }),
+      numberField("挂点 Y", point.y, (value) => { point.y = value; send(); }),
+    );
+  }
+
+  function numberField(labelText, value, onCommit) {
+    const label = document.createElement("label");
+    label.className = "muted";
+    const input = document.createElement("input");
+    input.type = "number";
+    input.step = "1";
+    input.value = String(value);
+    input.addEventListener("change", () => onCommit(Math.round(Number(input.value))));
+    label.append(document.createTextNode(labelText + " "), input);
+    return label;
   }
 
   function swingControl(part) {
@@ -292,7 +338,7 @@
       input.type = "checkbox";
       input.checked = (state.visibleGroups || []).includes(groupId);
       input.addEventListener("change", () => command("setGroupVisible", { group: groupId, visible: input.checked }).catch(showError));
-      check.append(input, document.createTextNode("参与随机"));
+      check.append(input, document.createTextNode("临时预览"));
       header.appendChild(check);
     }
     box.appendChild(header);
@@ -409,10 +455,12 @@
 
   function renderStage() {
     const part = selectedPart();
-    stageTitle.textContent = part ? (part.folder + " / " + part.leaf) : "没有部件";
+    const monster = state.mode === "monster";
+    stageTitle.textContent = monster ? "整只预览" : (part ? (part.folder + " / " + part.leaf) : "没有部件");
     const pose = state.pose || { nodes: [], pins: [] };
     const nodes = pose.nodes || [];
     const pins = pose.pins || [];
+    const focus = focusNode(part, nodes);
     const bounds = boundsOf(nodes, part);
     view = { minX: bounds.minX, maxY: bounds.maxY, scale: zoom };
     canvas.width = Math.max(1, Math.ceil(bounds.width * zoom));
@@ -421,12 +469,21 @@
     ctx.imageSmoothingEnabled = false;
     drawChecker(bounds);
     nodes.forEach((node) => drawNode(node, 0, false));
-    if (state.mode === "edit" && part && part.role === "SubPrimary" && nodes[0])
-      drawNode(nodes[0], part.width + 16, true);
-    pins.forEach((pin) => drawPin(pin));
-    if (part && part.role !== "Primary" && nodes[0]) drawPeg(nodes[0]);
+    if (!monster && part && part.role === "SubPrimary" && focus)
+      drawNode(focus, part.width + 16, true);
+    if (!monster) pins.forEach((pin) => drawPin(pin));
+    if (!monster && part && part.role !== "Primary" && focus) drawPeg(focus);
+    document.getElementById("roll").hidden = monster;
+    document.getElementById("viewport").style.cursor = monster ? "grab" : "crosshair";
     hint.textContent = hintText(part, nodes);
     nodes.forEach((node) => ensureArt(node.partId));
+  }
+
+  function focusNode(part, nodes) {
+    if (!part) return nodes[0] || null;
+    return nodes.find((node) => node.partId === part.id && !node.socketId)
+      || nodes.find((node) => node.partId === part.id)
+      || null;
   }
 
   function boundsOf(nodes, part) {
@@ -539,12 +596,17 @@
     const x = screenX(node.worldAttachX);
     const y = screenY(node.worldAttachY);
     ctx.strokeStyle = "#e4c36a";
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(x - 7, y);
-    ctx.lineTo(x + 7, y);
-    ctx.moveTo(x, y - 7);
-    ctx.lineTo(x, y + 7);
+    ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.moveTo(x - 12, y);
+    ctx.lineTo(x + 12, y);
+    ctx.moveTo(x, y - 12);
+    ctx.lineTo(x, y + 12);
     ctx.stroke();
+    ctx.fillStyle = "#e4c36a";
+    ctx.font = "12px Segoe UI";
+    ctx.fillText("挂点", x + 14, y - 10);
   }
 
   function screenX(worldX) { return (worldX - view.minX) * view.scale; }
@@ -552,11 +614,11 @@
 
   function hintText(part) {
     if (!part) return "";
-    if (state.mode === "monster") return "整只预览会避开这个身体排除掉的部件。左右镜像算同一个部件。";
+    if (state.mode === "monster") return "按住画面拖动，看头、脚、尾巴和身体跟着摆。松手后回到待机。这次随机不会写回组件挂点。";
     if (part.role === "Primary" && state.armedGroup) return "在画布上点一下，给当前挂点组放一个点。拖动可以改位置。";
-    if (part.role === "Primary") return "先选一组挂点，再在画布上点出来。勾选的组才会进入随机。";
-    if (part.role === "SubPrimary") return "左边是素材，右边是自动镜像。十字是唯一的安装点。";
-    return "副体只有一个安装点，不能再往下挂东西。";
+    if (part.role === "Primary") return "先选一组挂点，再在画布上点出来。勾选临时预览后，随机只在这次查看里出现。";
+    if (part.role === "SubPrimary") return "左边是素材，右边是自动镜像。拖十字或改数字，对准它挂上父部件的那一个像素。";
+    return "拖十字或改数字，对准它挂上父部件的那一个像素。副体不再往下挂东西。";
   }
 
   function ensureArt(id) {
@@ -611,8 +673,14 @@
   }
 
   canvas.addEventListener("pointerdown", (ev) => {
-    if (!state || state.mode === "monster") return;
+    if (!state) return;
     const point = eventPoint(ev);
+    if (state.mode === "monster") {
+      drag = { kind: "motion", x: point.sx, y: point.sy, t: performance.now() };
+      canvas.setPointerCapture(ev.pointerId);
+      command("setDrag", { active: true, velocityX: 0, time: (drag.t - playStarted) / 1000 }).catch(showError);
+      return;
+    }
     const pin = hitPin(point);
     const part = selectedPart();
     const node = ((state.pose && state.pose.nodes) || []).find((item) => part && item.partId === part.id);
@@ -625,7 +693,7 @@
     if (part && part.role !== "Primary" && node) {
       const dx = screenX(node.worldAttachX) - point.sx;
       const dy = screenY(node.worldAttachY) - point.sy;
-      if (dx * dx + dy * dy < 14 * 14) {
+      if (dx * dx + dy * dy < 18 * 18) {
         drag = { kind: "peg" };
         canvas.setPointerCapture(ev.pointerId);
         return;
@@ -640,6 +708,15 @@
   canvas.addEventListener("pointermove", (ev) => {
     if (!drag || !state) return;
     const point = eventPoint(ev);
+    if (drag.kind === "motion") {
+      const now = performance.now();
+      const dt = Math.max(16, now - drag.t);
+      drag.velocityX = (point.sx - drag.x) / dt * 1000;
+      drag.x = point.sx;
+      drag.t = now;
+      scheduleMove("setDrag", { active: true, velocityX: drag.velocityX, time: (now - playStarted) / 1000 });
+      return;
+    }
     const part = selectedPart();
     const node = ((state.pose && state.pose.nodes) || []).find((item) => part && item.partId === (drag.partId || part.id));
     if (!node) return;
@@ -648,7 +725,12 @@
     if (drag.kind === "peg") scheduleMove("moveAttachment", { x: local.x, y: local.y });
   });
 
-  canvas.addEventListener("pointerup", () => { drag = null; });
+  canvas.addEventListener("pointerup", () => {
+    if (drag && drag.kind === "motion") {
+      command("setDrag", { active: false, velocityX: 0, time: (performance.now() - playStarted) / 1000 }).catch(showError);
+    }
+    drag = null;
+  });
 
   document.getElementById("modes").addEventListener("click", (ev) => {
     const button = ev.target.closest("button");
@@ -729,9 +811,15 @@
   let lastPreviewSent = 0;
   function tick() {
     const now = performance.now();
-    if (playing && state && hasSwing(state) && now - lastPreviewSent > 140 && !drag) {
+    const monster = state && state.mode === "monster";
+    const posing = drag && drag.kind === "motion";
+    if (playing && state && (monster || hasSwing(state)) && now - lastPreviewSent > 140 && !(drag && !posing)) {
       lastPreviewSent = now;
-      command("setPreviewTime", { time: (now - playStarted) / 1000 }).catch(() => {});
+      const time = (now - playStarted) / 1000;
+      const sent = posing
+        ? command("setDrag", { active: true, velocityX: drag.velocityX || 0, time })
+        : command("setPreviewTime", { time });
+      sent.catch(() => {});
     }
     requestAnimationFrame(tick);
   }

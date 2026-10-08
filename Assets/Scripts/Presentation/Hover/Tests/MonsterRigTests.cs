@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -64,7 +65,7 @@ namespace TheCall.Hover.Tests
             };
 
             var pose = MonsterRigLayout.Build(body, new[] { body, hand }, assignments, null, false, 0f, 0.42f);
-            var child = pose.Nodes[1];
+            var child = Node(pose, hand.Data.id);
 
             Assert.That(child.WorldAttachX, Is.EqualTo(8f).Within(0.001f));
             Assert.That(child.WorldAttachY, Is.EqualTo(2f).Within(0.001f));
@@ -166,6 +167,167 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
+        public void 默认图层从前往后是眼嘴头头饰身体手脚配饰尾巴()
+        {
+            var pose = SampleCreature();
+            Assert.That(OrderOf(pose, "眼/眼1"), Is.GreaterThan(OrderOf(pose, "嘴/嘴1")));
+            Assert.That(OrderOf(pose, "嘴/嘴1"), Is.GreaterThan(OrderOf(pose, "头/头1")));
+            Assert.That(OrderOf(pose, "头/头1"), Is.GreaterThan(OrderOf(pose, "头饰/头饰1")));
+            Assert.That(OrderOf(pose, "头饰/头饰1"), Is.GreaterThan(OrderOf(pose, "身体/身体1")));
+            Assert.That(OrderOf(pose, "身体/身体1"), Is.GreaterThan(OrderOf(pose, "手/手1")));
+            Assert.That(OrderOf(pose, "手/手1"), Is.GreaterThan(OrderOf(pose, "脚/脚1")));
+            Assert.That(OrderOf(pose, "脚/脚1"), Is.GreaterThan(OrderOf(pose, "配饰/配饰1")));
+            Assert.That(OrderOf(pose, "配饰/配饰1"), Is.GreaterThan(OrderOf(pose, "尾巴/尾巴1")));
+        }
+
+        [Test]
+        public void 单个部件可以改到一定在前或一定在后()
+        {
+            var body = Piece("身体", "身体1", 10, 10);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Tail, 2, 2, MonsterFacing.None);
+            var tail = Piece("尾巴", "尾巴1", 4, 4);
+            Assert.That(MonsterRigEdits.SetLayer(tail, MonsterLayerBand.AlwaysFront), Is.Null);
+            var pose = MonsterRigLayout.Build(
+                body,
+                new[] { body, tail },
+                new List<MonsterRigAssignment>
+                {
+                    new MonsterRigAssignment { socketId = body.Data.sockets[0].id, partId = tail.Data.id },
+                },
+                null,
+                false,
+                0f,
+                0f);
+
+            Assert.That(OrderOf(pose, tail.Data.id), Is.GreaterThan(OrderOf(pose, body.Data.id)));
+
+            Assert.That(MonsterRigEdits.SetLayer(tail, MonsterLayerBand.AlwaysBack), Is.Null);
+            pose = MonsterRigLayout.Build(
+                body,
+                new[] { body, tail },
+                new List<MonsterRigAssignment>
+                {
+                    new MonsterRigAssignment { socketId = body.Data.sockets[0].id, partId = tail.Data.id },
+                },
+                null,
+                false,
+                0f,
+                0f);
+            Assert.That(OrderOf(pose, tail.Data.id), Is.LessThan(OrderOf(pose, body.Data.id)));
+        }
+
+        [Test]
+        public void 进入整只预览会清掉组件上的临时搭配()
+        {
+            var body = Piece("身体", "身体1", 10, 10);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Hand, 8, 2, MonsterFacing.Left);
+            var hand = Piece("手", "手1", 4, 4);
+            var edit = new List<MonsterRigAssignment>
+            {
+                new MonsterRigAssignment { socketId = body.Data.sockets[0].id, partId = hand.Data.id },
+            };
+            var visible = new HashSet<MonsterSocketGroup> { MonsterSocketGroup.Hand };
+            var monster = new List<MonsterRigAssignment>
+            {
+                new MonsterRigAssignment { socketId = body.Data.sockets[0].id, partId = hand.Data.id },
+            };
+
+            MonsterRigPreview.EnterWhole(edit, visible);
+            var pose = MonsterRigLayout.Build(body, new[] { body, hand }, edit, visible, false, 0f, 0f);
+
+            Assert.That(edit, Is.Empty);
+            Assert.That(visible, Is.Empty);
+            Assert.That(pose.Nodes, Has.Count.EqualTo(1));
+            Assert.That(pose.Nodes[0].PartId, Is.EqualTo(body.Data.id));
+            Assert.That(pose.Pins, Has.Count.EqualTo(1));
+            Assert.That(monster, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void 整只预览回到上次随机的身体而不是当前点开的手()
+        {
+            System.Func<string, bool> isBody = id => id != null && id.StartsWith("身体");
+            Assert.That(MonsterRigPreview.WholeRoot("身体/身体4", "手/手1", isBody), Is.EqualTo("身体/身体4"));
+            Assert.That(MonsterRigPreview.WholeRoot(null, "身体/身体2", isBody), Is.EqualTo("身体/身体2"));
+            Assert.That(MonsterRigPreview.WholeRoot("手/手1", "眼/眼1", isBody), Is.Null);
+        }
+
+        [Test]
+        public void 身体转动九十度时手绕身体挂点转出()
+        {
+            var nodes = new List<MonsterRigNode>
+            {
+                new MonsterRigNode
+                {
+                    PartId = "身体/身体1",
+                    Kind = MonsterPartKind.Body,
+                    WorldAttachX = 71f,
+                    WorldAttachY = 51f,
+                },
+                new MonsterRigNode
+                {
+                    PartId = "手/手1",
+                    SocketId = "身体/身体1#1",
+                    Kind = MonsterPartKind.Hand,
+                    WorldAttachX = 80f,
+                    WorldAttachY = 51f,
+                },
+            };
+
+            MonsterRigMotion.Apply(nodes, new MonsterMotionSample(0f, 0f, 0f, 90f, 0f));
+
+            Assert.That(nodes[1].WorldAttachX, Is.EqualTo(71f).Within(0.001f));
+            Assert.That(nodes[1].WorldAttachY, Is.EqualTo(60f).Within(0.001f));
+            Assert.That(nodes[1].WorldRotation, Is.EqualTo(90f).Within(0.001f));
+        }
+
+        [Test]
+        public void 待机在四分之一周期时头和身体抬起用的是动作配置()
+        {
+            var profile = ScriptableObject.CreateInstance<MonsterMotionProfile>();
+            var time = 1f / (4f * profile.idleCyclesPerSecond);
+            var sample = MonsterMotionSample.Idle(profile, time, 0f);
+
+            Assert.That(sample.Head, Is.EqualTo(profile.idleHeadDegrees).Within(0.001f));
+            Assert.That(sample.Feet, Is.EqualTo(profile.idleFeetDegrees).Within(0.001f));
+            Assert.That(sample.Lift, Is.EqualTo(profile.idleBodyLift).Within(0.001f));
+            Assert.That(sample.Tail, Is.EqualTo(profile.idleTailDegrees * Mathf.Sin(Mathf.PI / 4f)).Within(0.001f));
+            Object.DestroyImmediate(profile);
+        }
+
+        [Test]
+        public void 已有身体按自己的槽位生成脚和配饰()
+        {
+            var path = Path.Combine(Application.dataPath, "Resources/MonsterRig.json");
+            var file = JsonUtility.FromJson<MonsterRigFile>(File.ReadAllText(path));
+            var catalog = MonsterRigCatalog.PiecesFrom(file);
+            var bare = FindPiece(catalog, "身体/身体4");
+            var twoTrim = FindPiece(catalog, "身体/身体2");
+            var oneTrim = FindPiece(catalog, "身体/身体5");
+
+            var barePose = Filled(bare, catalog, 4);
+            var twoPose = Filled(twoTrim, catalog, 2);
+            var onePose = Filled(oneTrim, catalog, 5);
+
+            Assert.That(CountKind(barePose, MonsterPartKind.Foot), Is.EqualTo(0));
+            Assert.That(CountKind(barePose, MonsterPartKind.Hand), Is.EqualTo(0));
+            Assert.That(CountKind(barePose, MonsterPartKind.Accessory), Is.EqualTo(3));
+            Assert.That(CountKind(twoPose, MonsterPartKind.Foot), Is.EqualTo(2));
+            Assert.That(CountKind(twoPose, MonsterPartKind.Accessory), Is.EqualTo(2));
+            Assert.That(CountKind(onePose, MonsterPartKind.Foot), Is.EqualTo(0));
+            Assert.That(CountKind(onePose, MonsterPartKind.Accessory), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void 第三套配方生成没脚且有三件配饰的画像()
+        {
+            Assert.That(MonsterRigRuntime.TryCompose(3, 3, out var pose), Is.True);
+            Assert.That(CountKind(pose, MonsterPartKind.Foot), Is.EqualTo(0));
+            Assert.That(CountKind(pose, MonsterPartKind.Hand), Is.EqualTo(0));
+            Assert.That(CountKind(pose, MonsterPartKind.Accessory), Is.EqualTo(3));
+        }
+
+        [Test]
         public void 未看过的部件更常被抽到但扰动可以抽到看过的()
         {
             var pool = new List<string> { "a", "b" };
@@ -207,6 +369,105 @@ namespace TheCall.Hover.Tests
             Assert.That(Assigned(assignments, body.Data.sockets[1].id), Is.EqualTo(handKept.Data.id));
             Assert.That(Assigned(assignments, body.Data.sockets[2].id), Is.EqualTo(head.Data.id));
             Assert.That(Assigned(assignments, head.Data.sockets[0].id), Is.EqualTo(hatKept.Data.id));
+        }
+
+        static MonsterRigPose SampleCreature()
+        {
+            var body = Piece("身体", "身体1", 10, 10);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Head, 5, 8, MonsterFacing.None);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Hand, 2, 4, MonsterFacing.Right);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Foot, 3, 1, MonsterFacing.Right);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.BodyTrim, 6, 4, MonsterFacing.None);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Tail, 8, 2, MonsterFacing.None);
+            var head = Piece("头", "头1", 8, 8);
+            MonsterRigEdits.AddSocket(head, MonsterSocketGroup.Eye, 6, 6, MonsterFacing.Right);
+            MonsterRigEdits.AddSocket(head, MonsterSocketGroup.Mouth, 5, 3, MonsterFacing.None);
+            MonsterRigEdits.AddSocket(head, MonsterSocketGroup.HeadTrim, 4, 7, MonsterFacing.None);
+            var eye = Piece("眼", "眼1", 2, 2);
+            var mouth = Piece("嘴", "嘴1", 2, 2);
+            var hat = Piece("头饰", "头饰1", 2, 2);
+            var hand = Piece("手", "手1", 2, 2);
+            var foot = Piece("脚", "脚1", 2, 2);
+            var trim = Piece("配饰", "配饰1", 2, 2);
+            var tail = Piece("尾巴", "尾巴1", 2, 2);
+            var catalog = new List<MonsterRigPiece> { body, head, eye, mouth, hat, hand, foot, trim, tail };
+            var assignments = new List<MonsterRigAssignment>
+            {
+                Assign(body, 0, head),
+                Assign(body, 1, hand),
+                Assign(body, 2, foot),
+                Assign(body, 3, trim),
+                Assign(body, 4, tail),
+                Assign(head, 0, eye),
+                Assign(head, 1, mouth),
+                Assign(head, 2, hat),
+            };
+            return MonsterRigLayout.Build(body, catalog, assignments, null, false, 0f, 0f);
+        }
+
+        static MonsterRigAssignment Assign(MonsterRigPiece host, int socket, MonsterRigPiece child)
+        {
+            return new MonsterRigAssignment
+            {
+                socketId = host.Data.sockets[socket].id,
+                partId = child.Data.id,
+            };
+        }
+
+        static MonsterRigPose Filled(MonsterRigPiece body, List<MonsterRigPiece> catalog, int salt)
+        {
+            var assignments = new List<MonsterRigAssignment>();
+            MonsterRigRandom.Fill(
+                body,
+                catalog,
+                assignments,
+                null,
+                new Dictionary<MonsterSocketGroup, List<string>>(),
+                MonsterRigRandom.Units(salt),
+                true,
+                null);
+            return MonsterRigLayout.Build(body, catalog, assignments, null, false, 0f, 0f);
+        }
+
+        static MonsterRigPiece FindPiece(List<MonsterRigPiece> catalog, string id)
+        {
+            for (var i = 0; i < catalog.Count; i++)
+            {
+                if (catalog[i].Data.id == id)
+                    return catalog[i];
+            }
+
+            Assert.Fail(id);
+            return null;
+        }
+
+        static int CountKind(MonsterRigPose pose, MonsterPartKind kind)
+        {
+            var count = 0;
+            for (var i = 0; i < pose.Nodes.Count; i++)
+            {
+                if (pose.Nodes[i].Kind == kind)
+                    count += 1;
+            }
+
+            return count;
+        }
+
+        static int OrderOf(MonsterRigPose pose, string partId)
+        {
+            return Node(pose, partId).Order;
+        }
+
+        static MonsterRigNode Node(MonsterRigPose pose, string partId)
+        {
+            for (var i = 0; i < pose.Nodes.Count; i++)
+            {
+                if (pose.Nodes[i].PartId == partId)
+                    return pose.Nodes[i];
+            }
+
+            Assert.Fail(partId);
+            return null;
         }
 
         static MonsterPartRole Role(string folder)

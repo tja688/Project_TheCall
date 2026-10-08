@@ -18,7 +18,8 @@ namespace TheCall.Editor
 
         static readonly Dictionary<MonsterSocketGroup, List<string>> Recent = new Dictionary<MonsterSocketGroup, List<string>>();
         static readonly HashSet<MonsterSocketGroup> Visible = new HashSet<MonsterSocketGroup>();
-        static readonly List<MonsterRigAssignment> Assignments = new List<MonsterRigAssignment>();
+        static readonly List<MonsterRigAssignment> EditAssignments = new List<MonsterRigAssignment>();
+        static readonly List<MonsterRigAssignment> MonsterAssignments = new List<MonsterRigAssignment>();
         static readonly Dictionary<string, ArtFile> Art = new Dictionary<string, ArtFile>(StringComparer.Ordinal);
 
         static MonsterRigFile file = new MonsterRigFile();
@@ -32,11 +33,24 @@ namespace TheCall.Editor
         static string selectedSocketId;
         static string armedGroup;
         static string mode = "edit";
+        static string monsterRootId;
         static int palette;
         static bool headTurnPreview;
         static float previewTime;
         static float cycles = 0.42f;
+        static MonsterMotionProfile motionProfile;
+        static bool pointerDown;
+        static bool dragActive;
+        static float lastVelocityX;
+        static float dragHead;
+        static float dragHeadVelocity;
+        static float dragFeet;
+        static float dragFeetVelocity;
+        static float lastMotionTime = -1f;
         static System.Random random = new System.Random(1);
+
+        static List<MonsterRigAssignment> ActiveAssignments =>
+            mode == "monster" ? MonsterAssignments : EditAssignments;
 
         public static long Revision => revision;
 
@@ -45,9 +59,9 @@ namespace TheCall.Editor
             if (loaded)
                 return;
 
-            var profile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>("Assets/Resources/MonsterMotionProfile.asset");
-            if (profile != null)
-                cycles = profile.idleCyclesPerSecond;
+            motionProfile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>("Assets/Resources/MonsterMotionProfile.asset");
+            if (motionProfile != null)
+                cycles = motionProfile.idleCyclesPerSecond;
 
             ScanArt();
             var disk = ReadDisk();
@@ -67,8 +81,6 @@ namespace TheCall.Editor
                 file = ParseOrEmpty(disk);
 
             MergeScan();
-            foreach (MonsterSocketGroup group in Enum.GetValues(typeof(MonsterSocketGroup)))
-                Visible.Add(group);
             var body = FirstBody();
             if (body != null)
                 selectedPartId = body.Data.id;
@@ -110,7 +122,7 @@ namespace TheCall.Editor
             if (error == null)
             {
                 revision += 1;
-                if (command != "setPreviewTime" && command != "selectPart" && command != "selectSocket" && command != "armGroup" && command != "setMode")
+                if (command != "setPreviewTime" && command != "setDrag" && command != "selectPart" && command != "selectSocket" && command != "armGroup" && command != "setMode")
                     PersistTransient();
             }
 
@@ -199,12 +211,17 @@ namespace TheCall.Editor
                 case "setHeadTurnPreview":
                     headTurnPreview = Bool(payload, "shown");
                     return null;
+                case "setLayer":
+                    return WithPiece(SelectedId(payload), piece => SetLayer(piece, Str(payload, "band")));
                 case "setPreviewTime":
                     previewTime = Float(payload, "time");
+                    if (dragActive)
+                        StepDrag(pointerDown ? lastVelocityX : 0f, previewTime);
                     return null;
+                case "setDrag":
+                    return SetDrag(payload);
                 case "setMode":
-                    mode = Str(payload, "mode") == "monster" ? "monster" : "edit";
-                    return null;
+                    return SetMode(Str(payload, "mode"));
                 case "save":
                     return Save();
                 case "revert":
@@ -264,7 +281,8 @@ namespace TheCall.Editor
             if (piece == null)
                 return "找不到挂点";
 
-            var error = MonsterRigEdits.RemoveSocket(piece, socketId, Assignments);
+            var error = MonsterRigEdits.RemoveSocket(piece, socketId, EditAssignments);
+            Strip(MonsterAssignments, socketId);
             if (error == null && selectedSocketId == socketId)
                 selectedSocketId = null;
             return error;
@@ -334,46 +352,150 @@ namespace TheCall.Editor
                     return "这个主体排除了该部件";
             }
 
-            for (var i = Assignments.Count - 1; i >= 0; i--)
+            var assignments = ActiveAssignments;
+            for (var i = assignments.Count - 1; i >= 0; i--)
             {
-                if (Assignments[i].socketId != socketId)
+                if (assignments[i].socketId != socketId)
                     continue;
 
                 if (string.IsNullOrEmpty(partId))
-                    Assignments.RemoveAt(i);
+                    assignments.RemoveAt(i);
                 else
-                    Assignments[i].partId = partId;
+                    assignments[i].partId = partId;
                 return null;
             }
 
             if (!string.IsNullOrEmpty(partId))
-                Assignments.Add(new MonsterRigAssignment { socketId = socketId, partId = partId });
+                assignments.Add(new MonsterRigAssignment { socketId = socketId, partId = partId });
             return null;
+        }
+
+        static string SetLayer(MonsterRigPiece piece, string bandName)
+        {
+            if (!Enum.TryParse(bandName, out MonsterLayerBand band))
+                return "没有这个图层";
+
+            return MonsterRigEdits.SetLayer(piece, band);
+        }
+
+        static string SetMode(string next)
+        {
+            if (next == "monster")
+            {
+                MonsterRigPreview.EnterWhole(EditAssignments, Visible);
+                armedGroup = null;
+                mode = "monster";
+                if (MonsterAssignments.Count == 0 || Find(monsterRootId) == null)
+                    return FillMonster();
+                selectedPartId = monsterRootId;
+                return null;
+            }
+
+            mode = "edit";
+            return null;
+        }
+
+        static string SetDrag(JObject payload)
+        {
+            pointerDown = Bool(payload, "active");
+            lastVelocityX = pointerDown ? Float(payload, "velocityX") : 0f;
+            if (pointerDown)
+                dragActive = true;
+            StepDrag(lastVelocityX, Float(payload, "time"));
+            return null;
+        }
+
+        static void StepDrag(float velocityX, float time)
+        {
+            if (!dragActive)
+                return;
+
+            var dt = lastMotionTime < 0f ? 0f : Mathf.Clamp(time - lastMotionTime, 0f, 0.05f);
+            lastMotionTime = time;
+            var profile = Profile();
+            var drive = pointerDown ? Mathf.Clamp(velocityX / 700f, -1f, 1f) : 0f;
+            MonsterMotion.StepSpring(
+                ref dragHead,
+                ref dragHeadVelocity,
+                -drive * profile.headDragDegrees,
+                dt,
+                profile.springStiffness,
+                profile.springDamping);
+            MonsterMotion.StepSpring(
+                ref dragFeet,
+                ref dragFeetVelocity,
+                drive * profile.feetDragDegrees,
+                dt,
+                profile.springStiffness,
+                profile.springDamping);
+            if (!pointerDown
+                && Mathf.Abs(dragHead) < 0.04f
+                && Mathf.Abs(dragFeet) < 0.04f
+                && Mathf.Abs(dragHeadVelocity) < 0.04f
+                && Mathf.Abs(dragFeetVelocity) < 0.04f)
+            {
+                dragActive = false;
+                dragHead = dragHeadVelocity = dragFeet = dragFeetVelocity = 0f;
+            }
         }
 
         static string Randomize(bool wholeMonster)
         {
             EnsurePieces();
-            if (wholeMonster || mode == "monster")
-            {
-                var bodies = MonsterRigRandom.Pool(pieces, MonsterPartKind.Body, null, null);
-                var bodyId = MonsterRigRandom.Pick(bodies, null, NextUnit);
-                var body = Find(bodyId);
-                if (body == null)
-                    return "没有身体可以预览";
+            if (wholeMonster)
+                return FillMonster();
 
-                selectedPartId = body.Data.id;
-                mode = "monster";
-                MonsterRigRandom.Fill(body, pieces, Assignments, null, Recent, NextUnit, true, null);
-                return null;
-            }
+            if (mode == "monster")
+                return "组件预览只在编辑挂点里使用";
 
             var host = Find(selectedPartId);
             if (host == null || host.Role != MonsterPartRole.Primary)
-                return "先选一个身体或头，再随机勾选的挂点组";
+                return "先选一个身体或头，再勾选要临时预览的组";
 
-            MonsterRigRandom.Fill(host, pieces, Assignments, Visible, Recent, NextUnit, true, null);
+            if (Visible.Count == 0)
+                return "先勾选要临时预览的组";
+
+            MonsterRigRandom.Fill(host, pieces, EditAssignments, Visible, Recent, NextUnit, true, null);
             return null;
+        }
+
+        static string FillMonster()
+        {
+            EnsurePieces();
+            var bodies = MonsterRigRandom.Pool(pieces, MonsterPartKind.Body, null, null);
+            var bodyId = MonsterRigRandom.Pick(bodies, null, NextUnit);
+            var body = Find(bodyId);
+            if (body == null)
+                return "没有身体可以预览";
+
+            MonsterRigPreview.EnterWhole(EditAssignments, Visible);
+            armedGroup = null;
+            monsterRootId = body.Data.id;
+            selectedPartId = monsterRootId;
+            mode = "monster";
+            MonsterAssignments.Clear();
+            MonsterRigRandom.Fill(body, pieces, MonsterAssignments, null, Recent, NextUnit, true, null);
+            return null;
+        }
+
+        static void Strip(List<MonsterRigAssignment> assignments, string socketId)
+        {
+            for (var i = assignments.Count - 1; i >= 0; i--)
+            {
+                if (assignments[i].socketId == socketId)
+                    assignments.RemoveAt(i);
+            }
+        }
+
+        static MonsterMotionProfile Profile()
+        {
+            if (motionProfile != null)
+                return motionProfile;
+
+            motionProfile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>("Assets/Resources/MonsterMotionProfile.asset");
+            if (motionProfile == null)
+                motionProfile = MonsterMotionProfile.Fallback;
+            return motionProfile;
         }
 
         static string Save()
@@ -401,7 +523,8 @@ namespace TheCall.Editor
 
             file = ParseOrEmpty(baselineJson);
             MergeScan();
-            Assignments.Clear();
+            EditAssignments.Clear();
+            MonsterAssignments.Clear();
             return null;
         }
 
@@ -423,7 +546,8 @@ namespace TheCall.Editor
             blocked = false;
             file = ParseOrEmpty(baselineJson);
             MergeScan();
-            Assignments.Clear();
+            EditAssignments.Clear();
+            MonsterAssignments.Clear();
             return null;
         }
 
@@ -524,18 +648,34 @@ namespace TheCall.Editor
             }
         }
 
+        static bool IsBody(string id)
+        {
+            var piece = Find(id);
+            return piece != null && piece.Kind == MonsterPartKind.Body;
+        }
+
         static object Payload()
         {
             EnsurePieces();
-            var root = mode == "monster" ? Find(selectedPartId) : Find(selectedPartId);
+            var rootId = mode == "monster"
+                ? MonsterRigPreview.WholeRoot(monsterRootId, selectedPartId, IsBody)
+                : selectedPartId;
+            var root = Find(rootId);
             if (mode == "monster" && (root == null || root.Kind != MonsterPartKind.Body))
                 root = FirstBody();
 
             var visible = mode == "monster" ? null : Visible;
-            var pose = MonsterRigLayout.Build(root, pieces, Assignments, visible, headTurnPreview, previewTime, cycles);
+            var pose = MonsterRigLayout.Build(root, pieces, ActiveAssignments, visible, headTurnPreview, previewTime, cycles);
+            if (mode == "monster")
+            {
+                var sample = dragActive
+                    ? MonsterMotionSample.Drag(Profile(), dragHead, dragFeet)
+                    : MonsterMotionSample.Idle(Profile(), previewTime, 0f);
+                pose = MonsterRigMotion.Present(pose, sample);
+            }
             return new
             {
-                dirty = Hash(JsonUtility.ToJson(file, true)) != Hash(baselineJson),
+                dirty = Hash(JsonUtility.ToJson(file, true)) != Hash(JsonUtility.ToJson(ParseOrEmpty(baselineJson), true)),
                 blocked,
                 recover = !string.IsNullOrEmpty(recoverJson),
                 mode,
@@ -547,6 +687,7 @@ namespace TheCall.Editor
                 cyclesPerSecond = cycles,
                 palettes = PalettePayload(),
                 groups = GroupPayload(),
+                layerBands = LayerPayload(),
                 parts = PartPayload(),
                 visibleGroups = VisibleNames(),
                 assignments = AssignmentPayload(),
@@ -587,6 +728,22 @@ namespace TheCall.Editor
             return list;
         }
 
+        static object[] LayerPayload()
+        {
+            var bands = MonsterLayerBands.Editable;
+            var list = new object[bands.Length];
+            for (var i = 0; i < bands.Length; i++)
+            {
+                list[i] = new
+                {
+                    id = bands[i].ToString(),
+                    label = MonsterLayerBands.Label(bands[i]),
+                };
+            }
+
+            return list;
+        }
+
         static object[] PartPayload()
         {
             var list = new object[pieces.Count];
@@ -611,6 +768,7 @@ namespace TheCall.Editor
                     nativeFacing = data.nativeFacing.ToString(),
                     swingDegrees = data.swingDegrees,
                     headTurn = data.headTurn,
+                    layerBand = MonsterLayerBands.Resolve(data, piece.Kind).ToString(),
                     mountSocketId = data.mountSocketId,
                     excluded = data.excluded ?? new List<string>(),
                     sockets = SocketPayload(data),
@@ -661,9 +819,10 @@ namespace TheCall.Editor
 
         static object[] AssignmentPayload()
         {
-            var list = new object[Assignments.Count];
-            for (var i = 0; i < Assignments.Count; i++)
-                list[i] = new { socketId = Assignments[i].socketId, partId = Assignments[i].partId };
+            var source = ActiveAssignments;
+            var list = new object[source.Count];
+            for (var i = 0; i < source.Count; i++)
+                list[i] = new { socketId = source[i].socketId, partId = source[i].partId };
             return list;
         }
 
