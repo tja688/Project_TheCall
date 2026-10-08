@@ -3,6 +3,7 @@
     "rootNamespace": "TheCall.Hover.Tests",
     "references": [
         "TheCall.Hover",
+        "TheCall.Rules",
         "UnityEngine.UI",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

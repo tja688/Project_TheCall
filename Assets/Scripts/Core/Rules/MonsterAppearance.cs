@@ -128,21 +128,18 @@ namespace TheCall
         {
             var mixed = seed * 397 + 173;
             var recipe = PositiveModulo(seed, RecipeCount);
-            var tailIndex = Choice(seed, 0x24F1, 3);
-            var hatIndex = Choice(seed, 0x72A9, 4);
-            var accessoryIndex = Choice(seed, 0x391D, 3);
             return new MonsterAppearance(
                 TemplateIdForRecipe(recipe),
                 PositiveModulo(mixed, PaletteCount),
                 "body_" + (recipe + 1).ToString("00"),
-                "head_" + (Choice(seed, 0x17A3, 4) + 1).ToString("00"),
-                "eye_" + (Choice(seed, 0x58CD, 5) + 1).ToString("00"),
-                "mouth_" + (Choice(seed, 0x0D67, 6) + 1).ToString("00"),
-                "hand_" + (Choice(seed, 0x6B21, 5) + 1).ToString("00"),
-                "foot_" + (Choice(seed, 0x43B9, 3) + 1).ToString("00"),
-                Choice(seed, 0x2E15, 4) == 0 ? "tail_" + (tailIndex + 1).ToString("00") : string.Empty,
-                Choice(seed, 0x1C87, 4) == 0 ? "hat_" + (hatIndex + 1).ToString("00") : string.Empty,
-                Choice(seed, 0x7D31, 3) == 0 ? "accessory_" + (accessoryIndex + 1).ToString("00") : string.Empty);
+                "head_" + (recipe % 4 + 1).ToString("00"),
+                "eye_" + (recipe % 5 + 1).ToString("00"),
+                "mouth_" + (recipe + 1).ToString("00"),
+                "hand_" + (recipe % 5 + 1).ToString("00"),
+                "foot_" + (recipe % 3 + 1).ToString("00"),
+                recipe == 2 ? "tail_03" : string.Empty,
+                recipe == 0 || recipe == 3 ? "hat_" + (recipe + 1).ToString("00") : string.Empty,
+                recipe == 1 || recipe == 4 ? "accessory_02" : string.Empty);
         }
 
         public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second) =>

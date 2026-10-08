@@ -425,14 +425,7 @@ namespace TheCall
 
         public static Vector2 DefaultAttachmentPoint(MonsterPartKind kind)
         {
-            switch (kind)
-            {
-                case MonsterPartKind.Head: return new Vector2(0.5f, 0.16f);
-                case MonsterPartKind.Hand:
-                case MonsterPartKind.Foot: return new Vector2(0.5f, 0.8f);
-                case MonsterPartKind.Tail: return new Vector2(0.38f, 0.5f);
-                default: return new Vector2(0.5f, 0.5f);
-            }
+            return new Vector2(0.5f, 0.5f);
         }
 
         public static string DefaultConnectionType(MonsterPartKind kind)
@@ -475,27 +468,27 @@ namespace TheCall
 
             if (part.id == "head_01")
             {
-                part.faceAnchor = new Vector2(18f, 33f);
-                part.eyeOffset = new Vector2(0f, 6f);
-                part.mouthOffset = new Vector2(0f, -7f);
+                part.faceAnchor = Vector2.zero;
+                part.eyeOffset = Vector2.zero;
+                part.mouthOffset = Vector2.zero;
             }
             else if (part.id == "head_02")
             {
-                part.faceAnchor = new Vector2(0f, 36f);
-                part.eyeOffset = new Vector2(0f, 5f);
-                part.mouthOffset = new Vector2(0f, -9f);
+                part.faceAnchor = Vector2.zero;
+                part.eyeOffset = Vector2.zero;
+                part.mouthOffset = Vector2.zero;
             }
             else if (part.id == "head_03")
             {
-                part.faceAnchor = new Vector2(0f, 35f);
-                part.eyeOffset = new Vector2(0f, 5f);
-                part.mouthOffset = new Vector2(0f, -9f);
+                part.faceAnchor = Vector2.zero;
+                part.eyeOffset = Vector2.zero;
+                part.mouthOffset = Vector2.zero;
             }
             else if (part.id == "head_04")
             {
-                part.faceAnchor = new Vector2(0f, 35f);
-                part.eyeOffset = new Vector2(0f, 4f);
-                part.mouthOffset = new Vector2(0f, -9f);
+                part.faceAnchor = Vector2.zero;
+                part.eyeOffset = Vector2.zero;
+                part.mouthOffset = Vector2.zero;
             }
         }
 
@@ -504,15 +497,6 @@ namespace TheCall
             if (catalog == null || catalog.templates == null)
                 return;
 
-            var necks = new[]
-            {
-                new Vector2(0f, 12f),
-                new Vector2(0f, 24f),
-                new Vector2(0f, 21f),
-                new Vector2(0f, 16f),
-                new Vector2(0f, 18f),
-                new Vector2(0f, 29f),
-            };
             for (var i = 0; i < RecipeCount; i++)
             {
                 var template = catalog.GetTemplateOrNull(MonsterAppearance.TemplateIdForRecipe(i));
@@ -522,11 +506,11 @@ namespace TheCall
                 template.anchors ??= new MonsterAnchorSet();
                 template.displayName = SeedTemplateName(i);
                 SetConnectionRequirements(template);
-                template.anchors.neck = necks[i];
+                template.anchors.neck = Vector2.zero;
                 template.anchors.face = Vector2.zero;
-                template.anchors.hand = new Vector2(i == 1 || i == 5 ? -38f : -31f, 0f);
-                template.anchors.foot = new Vector2(0f, -31f);
-                template.anchors.tail = new Vector2(35f, -4f);
+                template.anchors.hand = Vector2.zero;
+                template.anchors.foot = Vector2.zero;
+                template.anchors.tail = Vector2.zero;
                 template.anchors.body = new Vector2(0f, 0f);
 
                 var eye = template.eye;
@@ -539,7 +523,7 @@ namespace TheCall
                 template.mouth = mouth;
                 var hat = template.hat;
                 hat.anchor = MonsterAnchorKind.Face;
-                hat.offset = new Vector2(0f, 29f);
+                hat.offset = Vector2.zero;
                 template.hat = hat;
             }
         }

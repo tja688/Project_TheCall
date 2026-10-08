@@ -30,7 +30,7 @@ namespace TheCall.Editor
                 AssetDatabase.CreateAsset(catalog, CatalogPath);
             }
 
-            var needsMigration = catalog.schemaVersion < 4;
+            var needsMigration = catalog.schemaVersion < 5;
             var changed = EnsureParts(catalog);
             changed |= EnsureTemplates(catalog);
             if (needsMigration)
@@ -47,7 +47,7 @@ namespace TheCall.Editor
                 }
 
                 MonsterAssemblyCatalog.ConfigureSeedGeometry(catalog);
-                catalog.schemaVersion = 4;
+                catalog.schemaVersion = 5;
                 changed = true;
             }
 

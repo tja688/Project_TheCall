@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: MonsterAssemblyCatalog
   m_EditorClassIdentifier: TheCall.Hover:TheCall:MonsterAssemblyCatalog
-  schemaVersion: 4
+  schemaVersion: 5
   parts:
   - id: body_01
     kind: 0
@@ -103,11 +103,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3326961d1a74c234ea6db0834208db68, type: 3}
     colorRole: 1
     connectionType: neck.standard
-    attachmentPoint: {x: 0.5, y: 0.16}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
-    faceAnchor: {x: 18, y: 33}
-    eyeOffset: {x: 0, y: 6}
-    mouthOffset: {x: 0, y: -7}
+    faceAnchor: {x: 0, y: 0}
+    eyeOffset: {x: 0, y: 0}
+    mouthOffset: {x: 0, y: 0}
     optional: 0
     sortOrder: 40
     defaultScale: {x: 1, y: 1}
@@ -117,11 +117,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6f088ddfa247540439e8ff1331463c29, type: 3}
     colorRole: 1
     connectionType: neck.standard
-    attachmentPoint: {x: 0.5, y: 0.16}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
-    faceAnchor: {x: 0, y: 36}
-    eyeOffset: {x: 0, y: 5}
-    mouthOffset: {x: 0, y: -9}
+    faceAnchor: {x: 0, y: 0}
+    eyeOffset: {x: 0, y: 0}
+    mouthOffset: {x: 0, y: 0}
     optional: 0
     sortOrder: 40
     defaultScale: {x: 1, y: 1}
@@ -131,11 +131,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 578c8a7cda3b7454e969ee9209f8dfd4, type: 3}
     colorRole: 1
     connectionType: neck.standard
-    attachmentPoint: {x: 0.5, y: 0.16}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
-    faceAnchor: {x: 0, y: 35}
-    eyeOffset: {x: 0, y: 5}
-    mouthOffset: {x: 0, y: -9}
+    faceAnchor: {x: 0, y: 0}
+    eyeOffset: {x: 0, y: 0}
+    mouthOffset: {x: 0, y: 0}
     optional: 0
     sortOrder: 40
     defaultScale: {x: 1, y: 1}
@@ -145,11 +145,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f81e473848d35584986203dc9a75e843, type: 3}
     colorRole: 1
     connectionType: neck.standard
-    attachmentPoint: {x: 0.5, y: 0.16}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
-    faceAnchor: {x: 0, y: 35}
-    eyeOffset: {x: 0, y: 4}
-    mouthOffset: {x: 0, y: -9}
+    faceAnchor: {x: 0, y: 0}
+    eyeOffset: {x: 0, y: 0}
+    mouthOffset: {x: 0, y: 0}
     optional: 0
     sortOrder: 40
     defaultScale: {x: 1, y: 1}
@@ -313,7 +313,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1ab02c2a1eff7ef4eace83b1f18a2d39, type: 3}
     colorRole: 1
     connectionType: arm.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -327,7 +327,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 49618d0778231344983d6e7cc9b181ae, type: 3}
     colorRole: 1
     connectionType: arm.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -341,7 +341,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: a2fd751049e048746a9cec129672aa15, type: 3}
     colorRole: 1
     connectionType: arm.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -355,7 +355,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f14432274af1f0346b95aa6ec1e4b5e1, type: 3}
     colorRole: 1
     connectionType: arm.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -369,7 +369,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e044890d8d2b2b44d98cdb8d3de93031, type: 3}
     colorRole: 1
     connectionType: arm.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -383,7 +383,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 28eecd7aae4d40540a42a6fa415b71c2, type: 3}
     colorRole: 1
     connectionType: leg.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -397,7 +397,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ed1e096e31167fe4898907da2500735b, type: 3}
     colorRole: 1
     connectionType: leg.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -411,7 +411,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: fb44be1c922292b49a7d67d252096987, type: 3}
     colorRole: 1
     connectionType: leg.standard
-    attachmentPoint: {x: 0.5, y: 0.8}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -425,7 +425,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3249fbf9ed5952244b08774ee9a26ee5, type: 3}
     colorRole: 1
     connectionType: tail.standard
-    attachmentPoint: {x: 0.38, y: 0.5}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -439,7 +439,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 99f7ecc4a4112c8428387b0767289d7d, type: 3}
     colorRole: 1
     connectionType: tail.standard
-    attachmentPoint: {x: 0.38, y: 0.5}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -453,7 +453,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 19b5168e299b2de409927ad770963719, type: 3}
     colorRole: 1
     connectionType: tail.standard
-    attachmentPoint: {x: 0.38, y: 0.5}
+    attachmentPoint: {x: 0.5, y: 0.5}
     defaultPivot: {x: 0.5, y: 0.5}
     faceAnchor: {x: 0, y: 0}
     eyeOffset: {x: 0, y: 0}
@@ -564,11 +564,11 @@ MonoBehaviour:
   - id: template_01
     displayName: "\u76F4\u7ACB\xB7\u8111\u888B"
     anchors:
-      neck: {x: 0, y: 12}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -31, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_01
@@ -636,7 +636,7 @@ MonoBehaviour:
     hat:
       partId: hat_01
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
@@ -654,11 +654,11 @@ MonoBehaviour:
   - id: template_02
     displayName: "\u66F2\u8EAB\xB7\u7EF7\u5E26"
     anchors:
-      neck: {x: 0, y: 24}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -38, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_02
@@ -726,7 +726,7 @@ MonoBehaviour:
     hat:
       partId: 
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
@@ -744,11 +744,11 @@ MonoBehaviour:
   - id: template_03
     displayName: "\u523A\u56E2\xB7\u5BBD\u8138"
     anchors:
-      neck: {x: 0, y: 21}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -31, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_03
@@ -816,7 +816,7 @@ MonoBehaviour:
     hat:
       partId: 
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
@@ -834,11 +834,11 @@ MonoBehaviour:
   - id: template_04
     displayName: "\u53CC\u56E2\xB7\u8865\u4E01"
     anchors:
-      neck: {x: 0, y: 16}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -31, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_04
@@ -906,7 +906,7 @@ MonoBehaviour:
     hat:
       partId: hat_04
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
@@ -924,11 +924,11 @@ MonoBehaviour:
   - id: template_05
     displayName: "\u77ED\u8EAB\xB7\u8111\u888B"
     anchors:
-      neck: {x: 0, y: 18}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -31, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_05
@@ -996,7 +996,7 @@ MonoBehaviour:
     hat:
       partId: 
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
@@ -1014,11 +1014,11 @@ MonoBehaviour:
   - id: template_06
     displayName: "\u9AD8\u8EAB\xB7\u7EF7\u5E26"
     anchors:
-      neck: {x: 0, y: 29}
+      neck: {x: 0, y: 0}
       face: {x: 0, y: 0}
-      hand: {x: -38, y: 0}
-      foot: {x: 0, y: -31}
-      tail: {x: 35, y: -4}
+      hand: {x: 0, y: 0}
+      foot: {x: 0, y: 0}
+      tail: {x: 0, y: 0}
       body: {x: 0, y: 0}
     body:
       partId: body_06
@@ -1086,7 +1086,7 @@ MonoBehaviour:
     hat:
       partId: 
       anchor: 2
-      offset: {x: 0, y: 29}
+      offset: {x: 0, y: 0}
       pivot: {x: 0.5, y: 0.5}
       scale: {x: 1, y: 1}
       rotation: 0
