@@ -118,6 +118,8 @@
     document.querySelectorAll("#zoom button").forEach((button) => {
       button.classList.toggle("on", Number(button.dataset.zoom) === zoom);
     });
+    const paletteLabel = document.querySelector(".palette");
+    if (paletteLabel) paletteLabel.hidden = state.mode === "monster";
     fillPalette();
     const next = JSON.stringify({
       parts: state.parts,
@@ -551,9 +553,16 @@
 
   function tintFor(node) {
     const part = partById(node.partId);
-    const palette = (state.palettes || [])[state.palette] || null;
-    if (!part || !palette || part.color === "None") return "";
-    return part.color === "Secondary" ? palette.secondary : palette.primary;
+    if (!part || part.color === "None") return "";
+    const palettes = state.palettes || [];
+    if (state.mode === "monster") {
+      const index = node.paletteIndex;
+      if (typeof index !== "number" || index < 0) return "";
+      const own = palettes[index];
+      return own ? own.primary : "";
+    }
+    const palette = palettes[state.palette] || null;
+    return palette ? palette.primary : "";
   }
 
   function tintedBitmap(id, bitmap, tint) {

@@ -39,6 +39,8 @@ namespace TheCall
                 true,
                 null);
             pose = MonsterRigLayout.Build(bodies[index], catalog, assignments, null, false, 0f, 0f);
+            var paintSalt = salt;
+            MonsterRigColor.Paint(pose, key => MonsterRigColor.IndexFor(paintSalt, key, MonsterPortrait.Palette.Length));
             return pose.Nodes.Count > 0;
         }
 

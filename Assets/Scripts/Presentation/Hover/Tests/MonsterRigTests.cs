@@ -253,6 +253,81 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
+        public void 左右手和左右脚各抽同一种再镜像()
+        {
+            var body = Piece("身体", "身体1", 10, 10);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Hand, 1, 1, MonsterFacing.Left);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Hand, 2, 2, MonsterFacing.Right);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Foot, 3, 1, MonsterFacing.Left);
+            MonsterRigEdits.AddSocket(body, MonsterSocketGroup.Foot, 4, 1, MonsterFacing.Right);
+            var hands = new[] { Piece("手", "手A", 4, 4), Piece("手", "手B", 4, 4) };
+            var feet = new[] { Piece("脚", "脚A", 4, 4), Piece("脚", "脚B", 4, 4) };
+            var catalog = new List<MonsterRigPiece> { body, hands[0], hands[1], feet[0], feet[1] };
+            var calls = 0;
+            var assignments = new List<MonsterRigAssignment>();
+            MonsterRigRandom.Fill(
+                body,
+                catalog,
+                assignments,
+                null,
+                new Dictionary<MonsterSocketGroup, List<string>>(),
+                () =>
+                {
+                    calls += 1;
+                    return calls % 2 == 0 ? 0.0 : 1.0;
+                },
+                false,
+                null);
+
+            Assert.That(Assigned(assignments, body.Data.sockets[0].id), Is.EqualTo(Assigned(assignments, body.Data.sockets[1].id)));
+            Assert.That(Assigned(assignments, body.Data.sockets[2].id), Is.EqualTo(Assigned(assignments, body.Data.sockets[3].id)));
+            Assert.That(Assigned(assignments, body.Data.sockets[0].id), Is.Not.EqualTo(Assigned(assignments, body.Data.sockets[2].id)));
+            Assert.That(calls, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void 手脚继承身体颜色头和尾巴各自随机眼不上色()
+        {
+            var body = Node("身体/身体1", null, MonsterPartKind.Body, MonsterColorRole.Primary);
+            var head = Node("头/头1", "身体/身体1#头", MonsterPartKind.Head, MonsterColorRole.Primary);
+            var handL = Node("手/手1", "身体/身体1#左手", MonsterPartKind.Hand, MonsterColorRole.Primary);
+            var handR = Node("手/手1", "身体/身体1#右手", MonsterPartKind.Hand, MonsterColorRole.Primary);
+            var foot = Node("脚/脚1", "身体/身体1#脚", MonsterPartKind.Foot, MonsterColorRole.Primary);
+            var tail = Node("尾巴/尾巴1", "身体/身体1#尾", MonsterPartKind.Tail, MonsterColorRole.Primary);
+            var eye = Node("眼/眼1", "头/头1#眼", MonsterPartKind.Eye, MonsterColorRole.None);
+            var pose = new MonsterRigPose();
+            pose.Nodes.Add(body);
+            pose.Nodes.Add(head);
+            pose.Nodes.Add(handL);
+            pose.Nodes.Add(handR);
+            pose.Nodes.Add(foot);
+            pose.Nodes.Add(tail);
+            pose.Nodes.Add(eye);
+            pose.Pins.Add(Pin("身体/身体1", "身体/身体1#头"));
+            pose.Pins.Add(Pin("身体/身体1", "身体/身体1#左手"));
+            pose.Pins.Add(Pin("身体/身体1", "身体/身体1#右手"));
+            pose.Pins.Add(Pin("身体/身体1", "身体/身体1#脚"));
+            pose.Pins.Add(Pin("身体/身体1", "身体/身体1#尾"));
+            pose.Pins.Add(Pin("头/头1", "头/头1#眼"));
+
+            MonsterRigColor.Paint(pose, key =>
+            {
+                if (key == "身体/身体1") return 1;
+                if (key == "身体/身体1#头") return 4;
+                if (key == "身体/身体1#尾") return 2;
+                return 0;
+            });
+
+            Assert.That(body.PaletteIndex, Is.EqualTo(1));
+            Assert.That(handL.PaletteIndex, Is.EqualTo(1));
+            Assert.That(handR.PaletteIndex, Is.EqualTo(1));
+            Assert.That(foot.PaletteIndex, Is.EqualTo(1));
+            Assert.That(head.PaletteIndex, Is.EqualTo(4));
+            Assert.That(tail.PaletteIndex, Is.EqualTo(2));
+            Assert.That(eye.PaletteIndex, Is.EqualTo(-1));
+        }
+
+        [Test]
         public void 身体转动九十度时手绕身体挂点转出()
         {
             var nodes = new List<MonsterRigNode>
@@ -468,6 +543,26 @@ namespace TheCall.Hover.Tests
 
             Assert.Fail(partId);
             return null;
+        }
+
+        static MonsterRigNode Node(string partId, string socketId, MonsterPartKind kind, MonsterColorRole color)
+        {
+            return new MonsterRigNode
+            {
+                PartId = partId,
+                SocketId = socketId,
+                Kind = kind,
+                Color = color,
+            };
+        }
+
+        static MonsterRigPin Pin(string partId, string socketId)
+        {
+            return new MonsterRigPin
+            {
+                PartId = partId,
+                SocketId = socketId,
+            };
         }
 
         static MonsterPartRole Role(string folder)

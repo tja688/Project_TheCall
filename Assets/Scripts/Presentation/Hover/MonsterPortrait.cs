@@ -286,14 +286,10 @@ namespace TheCall
 
         static Color Tint(MonsterColorRole role, int palette)
         {
-            if (role == MonsterColorRole.None)
+            if (role == MonsterColorRole.None || palette < 0)
                 return Color.white;
 
-            var primary = Palette[Mathf.Clamp(palette, 0, Palette.Length - 1)];
-            if (role == MonsterColorRole.Primary)
-                return primary;
-
-            return Color.Lerp(primary, Color.white, 0.28f);
+            return Palette[Mathf.Clamp(palette, 0, Palette.Length - 1)];
         }
 
         void SetMotion(float headAngle, float feetAngle, float tailAngle, float bodyAngle, float bodyLift)
@@ -359,7 +355,7 @@ namespace TheCall
                 rect.localRotation = Quaternion.Euler(0f, 0f, node.WorldRotation);
                 rect.localScale = new Vector3(node.WorldMirror ? -1f : 1f, 1f, 1f);
                 image.sprite = sprite;
-                image.color = sprite == null ? Color.white : Tint(node.Color, _paletteIndex);
+                image.color = sprite == null ? Color.white : Tint(node.Color, node.PaletteIndex);
                 image.enabled = sprite != null;
                 image.preserveAspect = false;
                 image.raycastTarget = false;

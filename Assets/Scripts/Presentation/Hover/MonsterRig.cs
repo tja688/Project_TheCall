@@ -132,6 +132,7 @@ namespace TheCall
         public int Order;
         public MonsterPartKind Kind;
         public MonsterColorRole Color;
+        public int PaletteIndex = -1;
     }
 
     public sealed class MonsterRigPin
@@ -988,6 +989,113 @@ namespace TheCall
         }
     }
 
+    public static class MonsterRigColor
+    {
+        public static int IndexFor(int salt, string key, int count)
+        {
+            if (count <= 0)
+                return 0;
+
+            unchecked
+            {
+                var hash = salt == 0 ? 1 : salt;
+                if (!string.IsNullOrEmpty(key))
+                {
+                    for (var i = 0; i < key.Length; i++)
+                        hash = hash * 31 + key[i];
+                }
+
+                var index = hash % count;
+                return index < 0 ? index + count : index;
+            }
+        }
+
+        public static void Paint(MonsterRigPose pose, Func<string, int> roll)
+        {
+            if (pose == null || roll == null)
+                return;
+
+            var ownerByPart = new Dictionary<string, MonsterRigNode>(StringComparer.Ordinal);
+            for (var i = 0; i < pose.Pins.Count; i++)
+            {
+                var pin = pose.Pins[i];
+                if (pin == null || string.IsNullOrEmpty(pin.PartId) || ownerByPart.ContainsKey(pin.PartId))
+                    continue;
+
+                for (var n = 0; n < pose.Nodes.Count; n++)
+                {
+                    var node = pose.Nodes[n];
+                    if (node != null && string.Equals(node.PartId, pin.PartId, StringComparison.Ordinal))
+                    {
+                        ownerByPart[pin.PartId] = node;
+                        break;
+                    }
+                }
+            }
+
+            var parentBySocket = new Dictionary<string, MonsterRigNode>(StringComparer.Ordinal);
+            for (var i = 0; i < pose.Pins.Count; i++)
+            {
+                var pin = pose.Pins[i];
+                if (pin == null || string.IsNullOrEmpty(pin.SocketId))
+                    continue;
+                if (ownerByPart.TryGetValue(pin.PartId ?? "", out var owner))
+                    parentBySocket[pin.SocketId] = owner;
+            }
+
+            var remaining = new List<MonsterRigNode>();
+            for (var i = 0; i < pose.Nodes.Count; i++)
+            {
+                if (pose.Nodes[i] != null)
+                    remaining.Add(pose.Nodes[i]);
+            }
+
+            var painted = new HashSet<MonsterRigNode>();
+            var guard = remaining.Count + 1;
+            while (remaining.Count > 0 && guard-- > 0)
+            {
+                var progressed = false;
+                for (var i = remaining.Count - 1; i >= 0; i--)
+                {
+                    var node = remaining[i];
+                    MonsterRigNode parent = null;
+                    var waiting = !string.IsNullOrEmpty(node.SocketId)
+                        && parentBySocket.TryGetValue(node.SocketId, out parent)
+                        && !painted.Contains(parent);
+                    if (waiting)
+                        continue;
+
+                    node.PaletteIndex = Choose(node, parent, roll);
+                    painted.Add(node);
+                    remaining.RemoveAt(i);
+                    progressed = true;
+                }
+
+                if (!progressed)
+                    break;
+            }
+        }
+
+        static int Choose(MonsterRigNode node, MonsterRigNode parent, Func<string, int> roll)
+        {
+            if (node.Color == MonsterColorRole.None)
+                return -1;
+            if (InheritsParent(node) && parent != null && parent.PaletteIndex >= 0)
+                return parent.PaletteIndex;
+
+            var key = string.IsNullOrEmpty(node.SocketId) ? node.PartId : node.SocketId;
+            var index = roll(key ?? "");
+            return index < 0 ? 0 : index;
+        }
+
+        static bool InheritsParent(MonsterRigNode node)
+        {
+            return node.Kind == MonsterPartKind.Hand
+                || node.Kind == MonsterPartKind.Foot
+                || node.Kind == MonsterPartKind.Eye;
+        }
+    }
+
     public readonly struct MonsterMotionSample
     {
         public readonly float Head;
@@ -1157,6 +1265,7 @@ namespace TheCall
                 Order = source.Order,
                 Kind = source.Kind,
                 Color = source.Color,
+                PaletteIndex = source.PaletteIndex,
             };
         }
     }
@@ -1252,6 +1361,7 @@ namespace TheCall
                     ban.Add(host.Data.excluded[i]);
             }
 
+            var sharedLimb = new Dictionary<MonsterSocketGroup, string>();
             for (var i = 0; i < host.Data.sockets.Count; i++)
             {
                 var socket = host.Data.sockets[i];
@@ -1263,6 +1373,12 @@ namespace TheCall
                     continue;
 
                 var pool = Pool(catalog, spec.Accepts, ban, host.Data.id);
+                if (SameLimb(spec.Accepts) && sharedLimb.TryGetValue(socket.group, out var shared))
+                {
+                    SetAssignment(assignments, socket.id, shared);
+                    continue;
+                }
+
                 List<string> memory = null;
                 if (recent != null && !recent.TryGetValue(socket.group, out memory))
                 {
@@ -1271,6 +1387,8 @@ namespace TheCall
                 }
 
                 var picked = Pick(pool, memory, nextUnit);
+                if (SameLimb(spec.Accepts))
+                    sharedLimb[socket.group] = picked;
                 SetAssignment(assignments, socket.id, picked);
                 Remember(memory, picked);
                 if (!fillMountedHeads || string.IsNullOrEmpty(picked))
@@ -1282,6 +1400,11 @@ namespace TheCall
 
                 Fill(child, catalog, assignments, null, recent, nextUnit, true, new HashSet<string>(ban, StringComparer.Ordinal));
             }
+        }
+
+        static bool SameLimb(MonsterPartKind kind)
+        {
+            return kind == MonsterPartKind.Hand || kind == MonsterPartKind.Foot;
         }
 
         public static List<string> Pool(

@@ -20,6 +20,7 @@ namespace TheCall.Editor
         static readonly HashSet<MonsterSocketGroup> Visible = new HashSet<MonsterSocketGroup>();
         static readonly List<MonsterRigAssignment> EditAssignments = new List<MonsterRigAssignment>();
         static readonly List<MonsterRigAssignment> MonsterAssignments = new List<MonsterRigAssignment>();
+        static readonly Dictionary<string, int> ColorChoices = new Dictionary<string, int>(StringComparer.Ordinal);
         static readonly Dictionary<string, ArtFile> Art = new Dictionary<string, ArtFile>(StringComparer.Ordinal);
 
         static MonsterRigFile file = new MonsterRigFile();
@@ -474,6 +475,7 @@ namespace TheCall.Editor
             selectedPartId = monsterRootId;
             mode = "monster";
             MonsterAssignments.Clear();
+            ColorChoices.Clear();
             MonsterRigRandom.Fill(body, pieces, MonsterAssignments, null, Recent, NextUnit, true, null);
             return null;
         }
@@ -648,6 +650,17 @@ namespace TheCall.Editor
             }
         }
 
+        static int RollColor(string key)
+        {
+            if (ColorChoices.TryGetValue(key ?? "", out var found))
+                return found;
+
+            var count = MonsterPortrait.Palette.Length;
+            var index = count <= 0 ? 0 : random.Next(count);
+            ColorChoices[key ?? ""] = index;
+            return index;
+        }
+
         static bool IsBody(string id)
         {
             var piece = Find(id);
@@ -666,6 +679,8 @@ namespace TheCall.Editor
 
             var visible = mode == "monster" ? null : Visible;
             var pose = MonsterRigLayout.Build(root, pieces, ActiveAssignments, visible, headTurnPreview, previewTime, cycles);
+            if (mode == "monster")
+                MonsterRigColor.Paint(pose, RollColor);
             if (mode == "monster")
             {
                 var sample = dragActive
@@ -847,6 +862,7 @@ namespace TheCall.Editor
                     worldMirror = node.WorldMirror,
                     order = node.Order,
                     color = node.Color.ToString(),
+                    paletteIndex = node.PaletteIndex,
                     sizeX = placement.Size.x,
                     sizeY = placement.Size.y,
                     pivotX = placement.Pivot.x,
