@@ -16,34 +16,23 @@ namespace TheCall
                 throw new ArgumentOutOfRangeException(nameof(skillCount));
 
             var stackOnRight = pointerScreenX < screenWidth * 0.5f;
-            var card = metrics.CardSize;
             var sub = metrics.SubpanelSize;
             var slotGap = metrics.SlotGap;
-            var stackGap = metrics.StackGap;
             var subpanelGap = metrics.SubpanelGap;
             var centerX = stackOnRight
-                ? anchorInCanvas.xMax + slotGap + card.x * 0.5f
-                : anchorInCanvas.xMin - slotGap - card.x * 0.5f;
+                ? anchorInCanvas.xMax + slotGap + sub.x * 0.5f
+                : anchorInCanvas.xMin - slotGap - sub.x * 0.5f;
             var centerY = anchorInCanvas.center.y;
             var total = skillCount * sub.y + (skillCount - 1) * subpanelGap;
-            var subX = (stackOnRight ? 1f : -1f) * (card.x * 0.5f + stackGap + sub.x * 0.5f);
             var sub0 = Local(0);
             var sub1 = skillCount > 1 ? Local(1) : default;
             var sub2 = skillCount > 2 ? Local(2) : default;
             var sub3 = skillCount > 3 ? Local(3) : default;
 
-            var minX = -card.x * 0.5f;
-            var maxX = card.x * 0.5f;
-            var minY = -card.y * 0.5f;
-            var maxY = card.y * 0.5f;
-            for (var i = 0; i < skillCount; i++)
-            {
-                var local = i == 0 ? sub0 : i == 1 ? sub1 : i == 2 ? sub2 : sub3;
-                minX = Mathf.Min(minX, local.x - sub.x * 0.5f);
-                maxX = Mathf.Max(maxX, local.x + sub.x * 0.5f);
-                minY = Mathf.Min(minY, local.y - sub.y * 0.5f);
-                maxY = Mathf.Max(maxY, local.y + sub.y * 0.5f);
-            }
+            var minX = -sub.x * 0.5f;
+            var maxX = sub.x * 0.5f;
+            var minY = -total * 0.5f;
+            var maxY = total * 0.5f;
 
             var canvas = metrics.CanvasLocal;
             centerX += Shift(centerX + minX, centerX + maxX, canvas.xMin, canvas.xMax);
@@ -60,7 +49,7 @@ namespace TheCall
             Vector2 Local(int index)
             {
                 var y = total * 0.5f - sub.y * 0.5f - index * (sub.y + subpanelGap);
-                return new Vector2(subX, y);
+                return new Vector2(0f, y);
             }
         }
 

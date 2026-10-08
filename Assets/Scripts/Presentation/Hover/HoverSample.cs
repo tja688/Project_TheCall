@@ -52,25 +52,15 @@ namespace TheCall
 
     internal readonly struct HoverMetrics
     {
-        public readonly Vector2 CardSize;
         public readonly Vector2 SubpanelSize;
         public readonly float SlotGap;
-        public readonly float StackGap;
         public readonly float SubpanelGap;
         public readonly Rect CanvasLocal;
 
-        public HoverMetrics(
-            Vector2 cardSize,
-            Vector2 subpanelSize,
-            float slotGap,
-            float stackGap,
-            float subpanelGap,
-            Rect canvasLocal)
+        public HoverMetrics(Vector2 subpanelSize, float slotGap, float subpanelGap, Rect canvasLocal)
         {
-            CardSize = cardSize;
             SubpanelSize = subpanelSize;
             SlotGap = slotGap;
-            StackGap = stackGap;
             SubpanelGap = subpanelGap;
             CanvasLocal = canvasLocal;
         }

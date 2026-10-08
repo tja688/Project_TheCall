@@ -11,13 +11,13 @@ namespace TheCall.Hover.Tests
         static readonly Rect RightSlot = new Rect(1200f, 400f, 100f, 80f);
 
         [Test]
-        public void 左半屏一张技能时栈在右侧且子面板贴着卡的中线()
+        public void 左半屏一张技能时栈在槽的右侧且子面板在窗口中线()
         {
             var placement = HoverLayout.Place(Slot, 10f, 1920f, 1, Metrics(Board));
 
             Assert.That(placement.StackOnRight, Is.True);
-            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(362f, 0f)));
-            Assert.That(placement.WindowAnchoredPosition, Is.EqualTo(new Vector2(372f, 220f)));
+            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(0f, 0f)));
+            Assert.That(placement.WindowAnchoredPosition, Is.EqualTo(new Vector2(362f, 220f)));
         }
 
         [Test]
@@ -52,24 +52,24 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
-        public void 指针在屏幕中线时栈在卡的左侧()
+        public void 指针在屏幕中线时栈在槽的左侧()
         {
             var placement = HoverLayout.Place(Slot, 960f, 1920f, 1, Metrics(Wide));
 
             Assert.That(placement.StackOnRight, Is.False);
-            Assert.That(placement.WindowAnchoredPosition, Is.EqualTo(new Vector2(-92f, 220f)));
-            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(-362f, 0f)));
+            Assert.That(placement.WindowAnchoredPosition, Is.EqualTo(new Vector2(-82f, 220f)));
+            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(0f, 0f)));
         }
 
         [Test]
-        public void 卡超出画布右缘时只把中心往回挪且子面板本地坐标不变()
+        public void 栈超出画布右缘时只把窗口中心往回挪且子面板本地坐标不变()
         {
             var placement = HoverLayout.Place(RightSlot, 10f, 1920f, 1, Metrics(Board));
 
             Assert.That(placement.StackOnRight, Is.True);
-            Assert.That(placement.WindowAnchoredPosition.x, Is.EqualTo(968f));
+            Assert.That(placement.WindowAnchoredPosition.x, Is.EqualTo(1330f));
             Assert.That(placement.WindowAnchoredPosition.y, Is.EqualTo(440f));
-            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(362f, 0f)));
+            Assert.That(placement.Sub0, Is.EqualTo(new Vector2(0f, 0f)));
         }
 
         [Test]
@@ -80,6 +80,6 @@ namespace TheCall.Hover.Tests
         }
 
         static HoverMetrics Metrics(Rect canvas) =>
-            new HoverMetrics(new Vector2(360f, 148f), new Vector2(340f, 96f), 12f, 12f, 8f, canvas);
+            new HoverMetrics(new Vector2(340f, 96f), 12f, 8f, canvas);
     }
 }

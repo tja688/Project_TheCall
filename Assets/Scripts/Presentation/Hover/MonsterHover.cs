@@ -10,21 +10,19 @@ namespace TheCall
 {
     public sealed class MonsterHover : MonoBehaviour, IController
     {
+        static readonly Color WhiteInk = new Color32(242, 242, 242, 255);
+        static readonly Color BlueInk = new Color32(126, 196, 255, 255);
+        static readonly Color GoldInk = new Color32(240, 196, 96, 255);
+
         [SerializeField] RectTransform _window;
-        [SerializeField] TMP_Text _title;
-        [SerializeField] TMP_Text _skillLine;
-        [SerializeField] TMP_Text _modifier;
-        [SerializeField] TMP_Text _capacity;
-        [SerializeField] GameObject _immovable;
-        [SerializeField] MonsterPortrait _portrait;
         [SerializeField] RectTransform[] _subpanels;
         [SerializeField] TMP_Text[] _subNames;
-        [SerializeField] TMP_Text[] _subMetas;
+        [SerializeField] TMP_Text[] _subUses;
+        [SerializeField] TMP_Text[] _subRarities;
+        [SerializeField] TMP_Text[] _subFunctions;
         [SerializeField] TMP_Text[] _subSentences;
-        [SerializeField] Vector2 _cardSize = new Vector2(320f, 400f);
         [SerializeField] Vector2 _subpanelSize = new Vector2(300f, 156f);
         [SerializeField] float _slotGap = 12f;
-        [SerializeField] float _stackGap = 12f;
         [SerializeField] float _subpanelGap = 8f;
 
         PressLatch _latch;
@@ -73,13 +71,6 @@ namespace TheCall
         void Show(MonsterDetails details, in HoverPlacement placement)
         {
             _window.gameObject.SetActive(true);
-            _title.text = details.DisplayName;
-            _skillLine.text = SkillNames(details);
-            _modifier.text = ModifierText(details.Modifier);
-            _capacity.text = "产能 " + details.Capacity;
-            _immovable.SetActive(details.Immovable);
-            _immovable.GetComponent<TMP_Text>().text = "不动";
-            _portrait.Show(details.Appearance);
             _window.anchoredPosition = placement.WindowAnchoredPosition;
 
             for (var i = 0; i < _subpanels.Length; i++)
@@ -92,7 +83,10 @@ namespace TheCall
                 _subpanels[i].anchoredPosition = SubpanelLocal(placement, i);
                 var skill = details.Skills[i];
                 _subNames[i].text = skill.Name;
-                _subMetas[i].text = MetaLine(skill);
+                _subUses[i].text = UseText(skill.Kind);
+                _subRarities[i].text = RarityText(skill.Rarity);
+                _subRarities[i].color = RarityInk(skill.Rarity);
+                _subFunctions[i].text = skill.Function;
                 _subSentences[i].text = skill.Sentence;
             }
 
@@ -104,7 +98,7 @@ namespace TheCall
         RectTransform Canvas => (RectTransform)transform.parent;
 
         HoverMetrics ReadMetrics() =>
-            new HoverMetrics(_cardSize, _subpanelSize, _slotGap, _stackGap, _subpanelGap, Canvas.rect);
+            new HoverMetrics(_subpanelSize, _slotGap, _subpanelGap, Canvas.rect);
 
         static Vector2 SubpanelLocal(in HoverPlacement placement, int index)
         {
@@ -117,42 +111,36 @@ namespace TheCall
             }
         }
 
-        static string SkillNames(MonsterDetails details)
+        static string UseText(SkillUse kind)
         {
-            if (details.Skills.Count == 0)
-                return "";
-
-            var text = details.Skills[0].Name;
-            for (var i = 1; i < details.Skills.Count; i++)
-                text += " · " + details.Skills[i].Name;
-
-            return text;
+            switch (kind)
+            {
+                case SkillUse.Active: return "主动";
+                case SkillUse.Passive: return "被动";
+                default: throw new ArgumentOutOfRangeException(nameof(kind));
+            }
         }
 
-        static string ModifierText(int modifier)
+        static string RarityText(Rarity rarity)
         {
-            if (modifier > 0)
-                return "修正 +" + modifier;
-
-            return "修正 " + modifier;
+            switch (rarity)
+            {
+                case Rarity.White: return "白";
+                case Rarity.Blue: return "蓝";
+                case Rarity.Gold: return "金";
+                default: throw new ArgumentOutOfRangeException(nameof(rarity));
+            }
         }
 
-        static string MetaLine(MonsterSkillDetail skill)
+        static Color RarityInk(Rarity rarity)
         {
-            var use = skill.Kind switch
+            switch (rarity)
             {
-                SkillUse.Active => "主动",
-                SkillUse.Passive => "被动",
-                _ => throw new ArgumentOutOfRangeException(nameof(skill)),
-            };
-            var rarity = skill.Rarity switch
-            {
-                Rarity.White => "白",
-                Rarity.Blue => "蓝",
-                Rarity.Gold => "金",
-                _ => throw new ArgumentOutOfRangeException(nameof(skill)),
-            };
-            return use + " " + rarity;
+                case Rarity.White: return WhiteInk;
+                case Rarity.Blue: return BlueInk;
+                case Rarity.Gold: return GoldInk;
+                default: throw new ArgumentOutOfRangeException(nameof(rarity));
+            }
         }
     }
 }

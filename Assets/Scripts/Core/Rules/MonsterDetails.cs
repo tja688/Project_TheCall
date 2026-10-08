@@ -11,12 +11,16 @@ namespace TheCall
 
     public sealed class MonsterSkillDetail
     {
-        public MonsterSkillDetail(string name, string sentence, SkillUse kind, Rarity rarity)
+        public MonsterSkillDetail(string name, string sentence, SkillUse kind, Rarity rarity, string function)
         {
+            if (string.IsNullOrEmpty(function))
+                throw new ArgumentException("A skill needs a function.", nameof(function));
+
             Name = name;
             Sentence = sentence;
             Kind = kind;
             Rarity = rarity;
+            Function = function;
         }
 
         public string Name { get; }
@@ -26,6 +30,8 @@ namespace TheCall
         public SkillUse Kind { get; }
 
         public Rarity Rarity { get; }
+
+        public string Function { get; }
     }
 
     public sealed class MonsterDetails

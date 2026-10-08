@@ -61,7 +61,9 @@ namespace TheCall
             System.Collections.Generic.IReadOnlyList<LandingFactor> factors,
             string monsterName = null,
             int cell = -1,
-            string countedSideName = null)
+            string countedSideName = null,
+            string assistName = null,
+            string assistCaption = null)
         {
             MonsterId = monsterId;
             SkillName = skillName;
@@ -77,6 +79,8 @@ namespace TheCall
             MonsterName = monsterName;
             Cell = cell;
             CountedSideName = countedSideName;
+            AssistName = assistName;
+            AssistCaption = assistCaption;
             Check();
         }
 
@@ -103,6 +107,10 @@ namespace TheCall
         public int Cell { get; }
 
         public string CountedSideName { get; }
+
+        public string AssistName { get; }
+
+        public string AssistCaption { get; }
 
         public System.Collections.Generic.IReadOnlyList<LandingAdd> Adds { get; }
 

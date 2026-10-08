@@ -42,6 +42,33 @@ namespace TheCall.Scoring
         public FigureRole Role { get; }
     }
 
+    public enum BeatRole
+    {
+        Again,
+        Quote,
+        Add,
+        Side,
+        Factor,
+        Energy,
+        Writeback,
+    }
+
+    public readonly struct ScoreBeat
+    {
+        public ScoreBeat(string text, BeatRole role, string sourceName, string caption)
+        {
+            Text = text;
+            Role = role;
+            SourceName = sourceName ?? "";
+            Caption = caption ?? "";
+        }
+
+        public string Text { get; }
+        public BeatRole Role { get; }
+        public string SourceName { get; }
+        public string Caption { get; }
+    }
+
     public sealed class WalkCue : ScoringCue
     {
         internal WalkCue(int fromIndex, int toIndex)
@@ -65,7 +92,8 @@ namespace TheCall.Scoring
             int multiplier,
             int writeback,
             Figure[] figures,
-            int[] bits)
+            int[] bits,
+            ScoreBeat[] beats)
         {
             SlotIndex = slotIndex;
             SkillName = skillName;
@@ -74,6 +102,7 @@ namespace TheCall.Scoring
             Writeback = writeback;
             Figures = figures ?? Array.Empty<Figure>();
             Bits = bits ?? Array.Empty<int>();
+            Beats = beats ?? Array.Empty<ScoreBeat>();
         }
 
         public int SlotIndex { get; }
@@ -83,6 +112,7 @@ namespace TheCall.Scoring
         public int Writeback { get; }
         public IReadOnlyList<Figure> Figures { get; }
         public IReadOnlyList<int> Bits { get; }
+        public IReadOnlyList<ScoreBeat> Beats { get; }
 
         internal override IEnumerator Accept(ICueSink sink) => sink.Pop(this);
     }

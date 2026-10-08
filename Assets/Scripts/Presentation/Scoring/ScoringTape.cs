@@ -57,7 +57,8 @@ namespace TheCall.Scoring
                     landing.Multiplier,
                     landing.Writeback,
                     FiguresOf(landing),
-                    BitsOf(landing)));
+                    BitsOf(landing),
+                    BeatsOf(landing)));
                 produced += landing.Energy;
                 return;
             }
@@ -150,6 +151,57 @@ namespace TheCall.Scoring
 
             return figures.ToArray();
         }
+
+        static ScoreBeat[] BeatsOf(SettlementLanding landing)
+        {
+            var beats = new List<ScoreBeat>();
+            if (!string.IsNullOrEmpty(landing.AssistName) || !string.IsNullOrEmpty(landing.AssistCaption))
+            {
+                beats.Add(new ScoreBeat(
+                    "+1次",
+                    BeatRole.Again,
+                    Other(landing.AssistName, landing.MonsterName),
+                    landing.AssistCaption));
+            }
+
+            var formula = landing.Side || landing.Adds.Count > 0 || landing.Factors.Count > 0;
+            if (formula)
+            {
+                if (landing.Quote != 0 || landing.Side)
+                    beats.Add(new ScoreBeat(landing.Quote.ToString(), BeatRole.Quote, "", ""));
+
+                if (landing.Side)
+                    beats.Add(new ScoreBeat("×" + landing.SideCount, BeatRole.Side, "", landing.CountedSideName));
+
+                for (var i = 0; i < landing.Adds.Count; i++)
+                {
+                    var add = landing.Adds[i];
+                    beats.Add(new ScoreBeat(Signed(add.Amount), BeatRole.Add, Other(add.SourceName, landing.MonsterName), add.Label));
+                }
+
+                for (var i = 0; i < landing.Factors.Count; i++)
+                {
+                    var factor = landing.Factors[i];
+                    beats.Add(new ScoreBeat("×" + factor.Factor, BeatRole.Factor, Other(factor.SourceName, landing.MonsterName), factor.Label));
+                }
+            }
+
+            beats.Add(new ScoreBeat(Signed(landing.Energy), BeatRole.Energy, "", ""));
+            if (landing.Writeback != 0)
+                beats.Add(new ScoreBeat("写回 " + Signed(landing.Writeback), BeatRole.Writeback, "", ""));
+
+            return beats.ToArray();
+        }
+
+        static string Other(string sourceName, string selfName)
+        {
+            if (string.IsNullOrEmpty(sourceName) || sourceName == selfName)
+                return "";
+
+            return sourceName;
+        }
+
+        static string Signed(int amount) => amount > 0 ? "+" + amount : amount.ToString();
 
         static int[] BitsOf(SettlementLanding landing)
         {

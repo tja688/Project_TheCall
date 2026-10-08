@@ -21,6 +21,7 @@ namespace TheCall.Tests
             Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量"));
             Assert.That(details.Skills[0].Kind, Is.EqualTo(SkillUse.Active));
             Assert.That(details.Skills[0].Rarity, Is.EqualTo(Rarity.White));
+            Assert.That(details.Skills[0].Function, Is.EqualTo("产能"));
         }
 
         [Test]
@@ -36,9 +37,16 @@ namespace TheCall.Tests
             var copy = App.GetUtility<SkillCopy>();
 
             Assert.That(copy.Names, Is.EqualTo(catalog.Names()));
-            Assert.That(copy.TryDescribe("能量体", out var kind, out var sentence), Is.True);
+            Assert.That(copy.TryDescribe("能量体", out var kind, out var sentence, out var function), Is.True);
             Assert.That(kind, Is.EqualTo(SkillUse.Active));
             Assert.That(sentence, Is.EqualTo("产生5点能量"));
+            Assert.That(function, Is.EqualTo("产能"));
+            Assert.That(copy.TryDescribe("蜜能量体", out _, out _, out var both), Is.True);
+            Assert.That(both, Is.EqualTo("产能，辅助"));
+            Assert.That(copy.TryDescribe("吞噬大嘴", out _, out _, out var amplify), Is.True);
+            Assert.That(amplify, Is.EqualTo("增幅"));
+            Assert.That(copy.TryDescribe("外接胚胎", out _, out _, out var economy), Is.True);
+            Assert.That(economy, Is.EqualTo("经济"));
         }
 
         [Test]

@@ -20,8 +20,11 @@ namespace TheCall
         readonly Dictionary<string, List<LandingAdd>> _nextAdds = new Dictionary<string, List<LandingAdd>>();
         readonly Dictionary<string, int> _fullDoubles = new Dictionary<string, int>();
         readonly Dictionary<string, List<LandingAdd>> _rowAdds = new Dictionary<string, List<LandingAdd>>();
-        readonly Dictionary<string, int> _skillExtra = new Dictionary<string, int>();
+        readonly Dictionary<string, List<string>> _skillExtra = new Dictionary<string, List<string>>();
         int _removalSequence;
+        string _assistName;
+        string _assistCaption;
+        bool _assistSpent;
         string _hasteToolName;
         string _hasteMonsterId;
         string _hasteSkillName;
@@ -93,6 +96,9 @@ namespace TheCall
             _fullDoubles.Clear();
             _rowAdds.Clear();
             _skillExtra.Clear();
+            _assistName = null;
+            _assistCaption = null;
+            _assistSpent = false;
             _removalSequence = 0;
             var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
@@ -210,6 +216,12 @@ namespace TheCall
             var stayingId = cells[cell];
             var extraTrigger = ExtraWalksAtStayStart(run, catalog, cells, cell);
             var capacityExtra = CapacityExtraAtStayStart(run, catalog, cells, cell);
+            var echoAssists = NeighborAssists(run, cells, cell - 1, catalog.ExtraWalksForRightNeighbor);
+            var capacityAssists = new List<AssistMark>();
+            if (cell + 1 < cells.Count)
+                capacityAssists.AddRange(NeighborAssists(run, cells, cell + 1, catalog.CapacityExtraForLeftNeighbor));
+            if (cell > 0)
+                capacityAssists.AddRange(NeighborAssists(run, cells, cell - 1, catalog.CapacityExtraForRightNeighbor));
             var affixEnergy = AffixEnergySnapshot(run, catalog, stayingId);
             var points = SecondPointCount(stayingId);
             for (var point = 0; point < points; point++)
@@ -237,12 +249,33 @@ namespace TheCall
                 extra += CountExtra(run, catalog, stayingId, skill.Name);
                 extra += PendingExtra(stayingId, skill.Name);
                 extra += AffixExtra(affixEnergy, skill.Name);
+                var assists = new List<AssistMark>(echoAssists.Count + capacityAssists.Count + 4);
+                assists.AddRange(echoAssists);
+                if (catalog.ProducesEnergy(skill.Name))
+                    assists.AddRange(capacityAssists);
+                AppendSelfAssists(run, catalog, stayingId, skill.Name, assists);
+                AppendPendingAssists(stayingId, skill.Name, assists);
+                if (AffixExtra(affixEnergy, skill.Name) == 1)
+                    assists.Add(new AssistMark(_singleAffixToolName, _singleAffixToolName));
+                if (assists.Count != extra)
+                    assists.Clear();
+
                 for (var time = 0; time < extra; time++)
                 {
                     if (cell >= cells.Count || cells[cell] != stayingId)
                         return;
 
+                    if (time < assists.Count)
+                    {
+                        _assistName = assists[time].SourceName;
+                        _assistCaption = assists[time].Caption;
+                        _assistSpent = false;
+                    }
+
                     ScoreSkill(level, run, catalog, cells, cell, stayingId, skill);
+                    _assistName = null;
+                    _assistCaption = null;
+                    _assistSpent = false;
                 }
             }
         }
@@ -474,6 +507,15 @@ namespace TheCall
             int quote,
             int writeback = 0)
         {
+            string assistName = null;
+            string assistCaption = null;
+            if (!_assistSpent && (_assistName != null || _assistCaption != null))
+            {
+                assistName = _assistName;
+                assistCaption = _assistCaption;
+                _assistSpent = true;
+            }
+
             var host = run.Find(monsterId);
             var modifier = host == null ? 0 : host.Modifier;
             var adds = new List<LandingAdd>();
@@ -535,7 +577,9 @@ namespace TheCall
                 factors,
                 host == null ? null : host.DisplayName,
                 cell,
-                countedSideName));
+                countedSideName,
+                assistName,
+                assistCaption));
             level.AddEnergy(energy);
             RespondToLanding(level, run, catalog, monsterId, skillName);
         }
@@ -969,7 +1013,9 @@ namespace TheCall
                     factors,
                     landing.MonsterName,
                     landing.Cell,
-                    landing.CountedSideName);
+                    landing.CountedSideName,
+                    landing.AssistName,
+                    landing.AssistCaption);
                 level.AddEnergy(landing.Energy);
             }
 
@@ -1008,6 +1054,8 @@ namespace TheCall
 
         void GrantSameName(RunModel run, IReadOnlyList<string> cells, string skillName, string selfId)
         {
+            var granter = run.Find(selfId);
+            var sourceName = granter == null ? null : granter.DisplayName;
             for (var index = 0; index < cells.Count; index++)
             {
                 var id = cells[index];
@@ -1021,7 +1069,7 @@ namespace TheCall
                 for (var skill = 0; skill < monster.Skills.Count; skill++)
                 {
                     if (monster.Skills[skill].Name == skillName)
-                        AddExtra(id, skillName, 1);
+                        AddExtra(id, skillName, 1, sourceName);
                 }
             }
         }
@@ -1037,6 +1085,7 @@ namespace TheCall
             }
 
             var names = new HashSet<string>();
+            var nameOwners = new Dictionary<string, string>();
             foreach (var id in present)
             {
                 var monster = run.Find(id);
@@ -1054,7 +1103,12 @@ namespace TheCall
                         continue;
 
                     for (var skill = 0; skill < parent.Skills.Count; skill++)
-                        names.Add(parent.Skills[skill].Name);
+                    {
+                        var skillName = parent.Skills[skill].Name;
+                        names.Add(skillName);
+                        if (!nameOwners.ContainsKey(skillName))
+                            nameOwners[skillName] = monster.DisplayName;
+                    }
                 }
             }
 
@@ -1070,7 +1124,11 @@ namespace TheCall
                 for (var skill = 0; skill < monster.Skills.Count; skill++)
                 {
                     if (names.Contains(monster.Skills[skill].Name))
-                        AddExtra(id, monster.Skills[skill].Name, 1);
+                    {
+                        string owner;
+                        nameOwners.TryGetValue(monster.Skills[skill].Name, out owner);
+                        AddExtra(id, monster.Skills[skill].Name, 1, owner);
+                    }
                 }
             }
         }
@@ -1277,17 +1335,91 @@ namespace TheCall
 
         int PendingExtra(string monsterId, string skillName)
         {
-            int extra;
-            _skillExtra.TryGetValue(monsterId + "|" + skillName, out extra);
-            return extra;
+            List<string> list;
+            if (!_skillExtra.TryGetValue(monsterId + "|" + skillName, out list) || list == null)
+                return 0;
+
+            return list.Count;
         }
 
-        void AddExtra(string monsterId, string skillName, int amount)
+        void AddExtra(string monsterId, string skillName, int amount, string sourceName)
         {
             var key = monsterId + "|" + skillName;
-            int current;
-            _skillExtra.TryGetValue(key, out current);
-            _skillExtra[key] = current + amount;
+            List<string> list;
+            if (!_skillExtra.TryGetValue(key, out list))
+            {
+                list = new List<string>();
+                _skillExtra[key] = list;
+            }
+
+            for (var i = 0; i < amount; i++)
+                list.Add(sourceName);
+        }
+
+        static List<AssistMark> NeighborAssists(RunModel run, IReadOnlyList<string> cells, int cell, System.Func<string, int> amount)
+        {
+            var marks = new List<AssistMark>();
+            if (cell < 0 || cell >= cells.Count || cells[cell] == null)
+                return marks;
+
+            var neighbor = run.Find(cells[cell]);
+            if (neighbor == null)
+                return marks;
+
+            var skills = neighbor.Skills;
+            for (var index = 0; index < skills.Count; index++)
+            {
+                var times = amount(skills[index].Name);
+                for (var n = 0; n < times; n++)
+                    marks.Add(new AssistMark(neighbor.DisplayName, skills[index].Name));
+            }
+
+            return marks;
+        }
+
+        static void AppendSelfAssists(RunModel run, SkillCatalog catalog, string monsterId, string skillName, List<AssistMark> into)
+        {
+            var monster = run.Find(monsterId);
+            if (monster == null)
+                return;
+
+            var skills = monster.Skills;
+            for (var index = 0; index < skills.Count; index++)
+            {
+                int when;
+                int walks;
+                if (!catalog.TrySkillCountExtra(skills[index].Name, out when, out walks))
+                    continue;
+                if (skills[index].Name == skillName)
+                    continue;
+                if (skills.Count != when)
+                    continue;
+
+                for (var n = 0; n < walks; n++)
+                    into.Add(new AssistMark(monster.DisplayName, skills[index].Name));
+            }
+        }
+
+        void AppendPendingAssists(string monsterId, string skillName, List<AssistMark> into)
+        {
+            List<string> list;
+            if (!_skillExtra.TryGetValue(monsterId + "|" + skillName, out list) || list == null)
+                return;
+
+            for (var i = 0; i < list.Count; i++)
+                into.Add(new AssistMark(list[i], skillName));
+        }
+
+        readonly struct AssistMark
+        {
+            public AssistMark(string sourceName, string caption)
+            {
+                SourceName = sourceName;
+                Caption = caption;
+            }
+
+            public string SourceName { get; }
+            public string Caption { get; }
         }
 
         int CollectAdds(

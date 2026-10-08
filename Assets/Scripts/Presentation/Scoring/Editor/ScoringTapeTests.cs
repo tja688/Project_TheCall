@@ -86,9 +86,9 @@ namespace TheCall.Scoring
                     new SettlementLanding(
                         "sided",
                         "侧向",
-                        10,
+                        8,
                         3,
-                        30,
+                        24,
                         4,
                         3,
                         2,
@@ -100,13 +100,13 @@ namespace TheCall.Scoring
 
             var pop = tape.Cues.OfType<PopCue>().Single();
             Assert.That(pop.SlotIndex, Is.EqualTo(0));
-            Assert.That(pop.Energy, Is.EqualTo(30));
+            Assert.That(pop.Energy, Is.EqualTo(24));
             Assert.That(pop.Multiplier, Is.EqualTo(3));
             Assert.That(pop.Writeback, Is.EqualTo(4));
-            Assert.That(tape.Produced, Is.EqualTo(30));
+            Assert.That(tape.Produced, Is.EqualTo(24));
             Assert.That(
                 pop.Figures.Select(figure => figure.Text).ToArray(),
-                Is.EqualTo(new[] { "3", "+2 标签", "×2", "底 10", "×3 暴击", "倍 3", "+30", "写回 +4" }));
+                Is.EqualTo(new[] { "3", "+2 标签", "×2", "底 8", "×3 暴击", "倍 3", "+24", "写回 +4" }));
             Assert.That(
                 pop.Figures.Select(figure => figure.Role).ToArray(),
                 Is.EqualTo(new[]
@@ -213,7 +213,10 @@ namespace TheCall.Scoring
             var plain = ScoringTape.Arrange(
                 new SettlementEntry[] { new SettlementLanding("breath", "能量体", 5, 1, 5, 0) },
                 new[] { "breath" });
-            Assert.That(plain.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5 }));
+            var plainPop = plain.Cues.OfType<PopCue>().Single();
+            Assert.That(plainPop.Bits, Is.EqualTo(new[] { 5 }));
+            Assert.That(plainPop.Beats.Select(beat => beat.Text).ToArray(), Is.EqualTo(new[] { "+5" }));
+            Assert.That(plainPop.Beats.Single().Role, Is.EqualTo(BeatRole.Energy));
 
             var added = ScoringTape.Arrange(
                 new SettlementEntry[]
@@ -232,7 +235,11 @@ namespace TheCall.Scoring
                         new[] { new LandingFactor("镜眼", 2) }),
                 },
                 new[] { "breath" });
-            Assert.That(added.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 5, 1, 2, 8 }));
+            var addedPop = added.Cues.OfType<PopCue>().Single();
+            Assert.That(addedPop.Bits, Is.EqualTo(new[] { 5, 1, 2, 8 }));
+            Assert.That(
+                addedPop.Beats.Select(beat => beat.Text).ToArray(),
+                Is.EqualTo(new[] { "5", "+1", "+2", "×2", "+16" }));
 
             var sided = ScoringTape.Arrange(
                 new SettlementEntry[]
@@ -251,7 +258,67 @@ namespace TheCall.Scoring
                         new[] { new LandingFactor("暴击", 3) }),
                 },
                 new[] { "sided" });
-            Assert.That(sided.Cues.OfType<PopCue>().Single().Bits, Is.EqualTo(new[] { 6, 2, 16 }));
+            var sidedPop = sided.Cues.OfType<PopCue>().Single();
+            Assert.That(sidedPop.Bits, Is.EqualTo(new[] { 6, 2, 16 }));
+            Assert.That(
+                sidedPop.Beats.Select(beat => beat.Text).ToArray(),
+                Is.EqualTo(new[] { "3", "×2", "+2", "×3", "+24", "写回 +4" }));
+        }
+
+        [Test]
+        public void 外来加项和倍率从那只怪物抛向正在计分的怪物最后才落地()
+        {
+            var tape = ScoringTape.Arrange(
+                new SettlementEntry[]
+                {
+                    new SettlementLanding(
+                        "breath",
+                        "能量体",
+                        8,
+                        2,
+                        16,
+                        0,
+                        5,
+                        0,
+                        false,
+                        new[]
+                        {
+                            new LandingAdd("奇异香", 1, "SCP-096"),
+                            new LandingAdd("良好肉体", 2, "SCP-173"),
+                        },
+                        new[] { new LandingFactor("镜眼", 2, "SCP-682") },
+                        "SCP-173",
+                        1,
+                        null,
+                        "SCP-049",
+                        "回响嗓"),
+                },
+                new[] { "incense", "breath", "eye" });
+
+            var pop = tape.Cues.OfType<PopCue>().Single();
+            Assert.That(
+                pop.Beats.Select(beat => beat.Role).ToArray(),
+                Is.EqualTo(new[]
+                {
+                    BeatRole.Again,
+                    BeatRole.Quote,
+                    BeatRole.Add,
+                    BeatRole.Add,
+                    BeatRole.Factor,
+                    BeatRole.Energy,
+                }));
+            Assert.That(
+                pop.Beats.Select(beat => beat.Text).ToArray(),
+                Is.EqualTo(new[] { "+1次", "5", "+1", "+2", "×2", "+16" }));
+            Assert.That(
+                pop.Beats.Select(beat => beat.SourceName).ToArray(),
+                Is.EqualTo(new[] { "SCP-049", "", "SCP-096", "", "SCP-682", "" }));
+            Assert.That(pop.Beats[0].Caption, Is.EqualTo("回响嗓"));
+            Assert.That(pop.Beats[2].Caption, Is.EqualTo("奇异香"));
+            Assert.That(pop.Beats[3].Caption, Is.EqualTo("良好肉体"));
+            Assert.That(pop.Beats[4].Caption, Is.EqualTo("镜眼"));
+            Assert.That(pop.Bits.Sum(), Is.EqualTo(16));
+            Assert.That(tape.Produced, Is.EqualTo(16));
         }
 
         static void AssertRolesOnce(ScoringTape tape)
@@ -262,6 +329,14 @@ namespace TheCall.Scoring
                 Assert.That(pop.Figures.Count(figure => figure.Role == FigureRole.Multiplier), Is.EqualTo(1));
                 Assert.That(pop.Figures.Count(figure => figure.Role == FigureRole.Energy), Is.EqualTo(1));
                 Assert.That(pop.Bits.Sum(), Is.EqualTo(pop.Energy));
+                Assert.That(pop.Beats.Count(beat => beat.Role == BeatRole.Energy), Is.EqualTo(1));
+                var energy = pop.Beats.Single(beat => beat.Role == BeatRole.Energy);
+                Assert.That(energy.Text, Is.EqualTo(pop.Energy > 0 ? "+" + pop.Energy : pop.Energy.ToString()));
+                Assert.That(
+                    pop.Beats.Count(beat => beat.Role == BeatRole.Writeback),
+                    Is.EqualTo(pop.Writeback == 0 ? 0 : 1));
+                var last = pop.Beats[pop.Beats.Count - 1].Role;
+                Assert.That(last, Is.EqualTo(pop.Writeback == 0 ? BeatRole.Energy : BeatRole.Writeback));
             }
         }
     }

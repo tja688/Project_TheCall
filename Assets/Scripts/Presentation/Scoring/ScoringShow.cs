@@ -264,31 +264,274 @@ namespace TheCall.Scoring
 
         IEnumerator Pop(PopCue cue)
         {
-            var portrait = PortraitAt(cue.SlotIndex);
-            var root = RootAt(cue.SlotIndex);
-            var rest = root != null ? _slots[cue.SlotIndex].RestScale : Vector3.one;
-            if (portrait != null)
-                portrait.SetSpringMotion(-10f, 7f);
-
-            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
-            var bits = cue.Bits;
-            var thrown = false;
-            for (var i = 0; i < bits.Count; i++)
+            if (SkipWait())
             {
-                if (bits[i] == 0)
-                    continue;
-
-                thrown = true;
-                yield return ThrowScore(bits[i], head, root, rest);
+                AddShown(cue.Energy);
+                yield break;
             }
 
-            if (!thrown)
-                yield return Wait(0.12f);
+            var banked = false;
+            var beats = cue.Beats;
+            for (var i = 0; i < beats.Count; i++)
+            {
+                if (SkipWait())
+                    break;
 
+                var beat = beats[i];
+                if (beat.Role == BeatRole.Energy)
+                {
+                    yield return Bank(cue, beat);
+                    banked = true;
+                    continue;
+                }
+
+                yield return PlayBeat(cue.SlotIndex, beat);
+            }
+
+            if (!banked)
+                AddShown(cue.Energy);
+
+            RestoreSlot(cue.SlotIndex);
+        }
+
+        IEnumerator Bank(PopCue cue, ScoreBeat beat)
+        {
+            if (cue.Energy == 0)
+            {
+                yield return Bloom(cue.SlotIndex, beat);
+                AddShown(0);
+                yield break;
+            }
+
+            var portrait = PortraitAt(cue.SlotIndex);
+            var root = RootAt(cue.SlotIndex);
+            var rest = root != null && InRange(cue.SlotIndex) ? _slots[cue.SlotIndex].RestScale : Vector3.one;
+            if (portrait != null)
+                portrait.SetSpringMotion(-18f, 12f);
+
+            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
+            yield return ThrowScore(cue.Energy, head, root, rest, 78f);
+            if (portrait != null)
+                portrait.RestoreMotion();
+            if (root != null)
+                root.localScale = rest;
+        }
+
+        IEnumerator PlayBeat(int subject, ScoreBeat beat)
+        {
+            var actor = ActorOf(subject, beat.SourceName);
+            if (actor == subject)
+            {
+                yield return Bloom(subject, beat);
+                yield break;
+            }
+
+            if (actor >= 0)
+                yield return ShakeFree(actor);
+
+            if (SkipWait())
+                yield break;
+
+            var origin = actor >= 0
+                ? OriginOf(actor) + new Vector2(0f, FigureLift)
+                : OriginOf(subject) + new Vector2(0f, FigureLift + 110f);
+            var label = SpawnMark(beat, origin);
+            label.rectTransform.localScale = Vector3.one * 0.35f;
+            var grow = Live(label.rectTransform.DOScale(1.05f, Span(0.1f)).SetEase(Ease.OutBack));
+            yield return Wait(0.1f);
+            grow.Kill(false);
+            label.rectTransform.localScale = Vector3.one;
+            if (SkipWait())
+            {
+                Destroy(label.gameObject);
+                yield break;
+            }
+
+            var target = OriginOf(subject) + new Vector2(0f, 36f);
+            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, 70f, 1, Span(0.26f)));
+            yield return Wait(0.26f);
+            fly.Kill(false);
+            label.rectTransform.anchoredPosition = target;
+            if (SkipWait())
+            {
+                Destroy(label.gameObject);
+                yield break;
+            }
+
+            yield return Absorb(subject, label);
+        }
+
+        IEnumerator Bloom(int subject, ScoreBeat beat)
+        {
+            var portrait = PortraitAt(subject);
+            if (portrait != null)
+                portrait.SetSpringMotion(-14f, 9f);
+
+            var head = OriginOf(subject) + new Vector2(0f, FigureLift);
+            var label = SpawnMark(beat, head + new Vector2(0f, -22f));
+            label.rectTransform.localScale = Vector3.one * 0.4f;
+            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(0.12f)).SetEase(Ease.OutBack));
+            var grow = Live(label.rectTransform.DOScale(1f, Span(0.12f)).SetEase(Ease.OutBack));
+            yield return Wait(0.12f);
+            rise.Kill(false);
+            grow.Kill(false);
+            if (SkipWait())
+            {
+                Release(label, subject);
+                yield break;
+            }
+
+            yield return Wait(0.1f);
+            var fade = Live(label.DOFade(0f, Span(0.1f)));
+            yield return Wait(0.1f);
+            fade.Kill(false);
+            Release(label, subject);
+        }
+
+        IEnumerator Absorb(int subject, TextMeshProUGUI label)
+        {
+            var root = RootAt(subject);
+            var rest = InRange(subject) ? _slots[subject].RestScale : Vector3.one;
+            var portrait = PortraitAt(subject);
+            if (portrait != null)
+                portrait.SetSpringMotion(12f, -8f);
+
+            Tween punch = null;
+            if (root != null)
+                punch = Live(root.DOScale(rest * 1.12f, Span(0.08f)).SetEase(Ease.OutQuad));
+            var pop = Live(label.rectTransform.DOScale(1.22f, Span(0.08f)).SetEase(Ease.OutQuad));
+            yield return Wait(0.08f);
+            punch?.Kill(false);
+            pop.Kill(false);
+            Tween back = null;
+            if (root != null)
+                back = Live(root.DOScale(rest, Span(0.1f)).SetEase(Ease.OutQuad));
+            var fade = Live(label.DOFade(0f, Span(0.1f)));
+            yield return Wait(0.1f);
+            back?.Kill(false);
+            fade.Kill(false);
             if (root != null)
                 root.localScale = rest;
             if (portrait != null)
                 portrait.RestoreMotion();
+            if (label != null)
+                Destroy(label.gameObject);
+        }
+
+        IEnumerator ShakeFree(int index)
+        {
+            var root = RootAt(index);
+            var portrait = PortraitAt(index);
+            if (portrait != null)
+                portrait.SetSpringMotion(-16f, 11f);
+
+            var rest = InRange(index) ? _slots[index].RestAnchoredPosition : Vector2.zero;
+            Tween shake = null;
+            if (root != null)
+                shake = Live(root.DOShakeAnchorPos(Span(0.16f), 13f, 16, 90f, false, true));
+            yield return Wait(0.16f);
+            shake?.Kill(false);
+            if (root != null)
+                root.anchoredPosition = rest;
+            if (portrait != null)
+                portrait.RestoreMotion();
+        }
+
+        int ActorOf(int subject, string sourceName)
+        {
+            if (string.IsNullOrEmpty(sourceName) || _slots == null)
+                return subject;
+
+            for (var i = 0; i < _slots.Length; i++)
+            {
+                var title = _slots[i].View != null ? _slots[i].View.title : null;
+                if (title == null || title.text != sourceName)
+                    continue;
+
+                if (i == subject)
+                    return subject;
+
+                var root = Root(_slots[i]);
+                if (root != null && root.gameObject.activeInHierarchy)
+                    return i;
+
+                return -1;
+            }
+
+            return -1;
+        }
+
+        TextMeshProUGUI SpawnMark(ScoreBeat beat, Vector2 anchored)
+        {
+            var label = Spawn(MarkText(beat), anchored);
+            label.fontSize = SizeOf(beat.Role);
+            label.color = ColorOf(beat.Role);
+            label.richText = true;
+            return label;
+        }
+
+        static string MarkText(ScoreBeat beat)
+        {
+            if (string.IsNullOrEmpty(beat.Caption))
+                return beat.Text;
+
+            return beat.Text + "\n<size=46%>" + beat.Caption + "</size>";
+        }
+
+        static float SizeOf(BeatRole role)
+        {
+            switch (role)
+            {
+                case BeatRole.Energy:
+                    return 78f;
+                case BeatRole.Factor:
+                case BeatRole.Side:
+                    return 58f;
+                case BeatRole.Add:
+                case BeatRole.Again:
+                    return 52f;
+                case BeatRole.Writeback:
+                    return 32f;
+                default:
+                    return 44f;
+            }
+        }
+
+        static Color ColorOf(BeatRole role)
+        {
+            switch (role)
+            {
+                case BeatRole.Add:
+                    return new Color(0.45f, 1f, 0.62f, 1f);
+                case BeatRole.Factor:
+                case BeatRole.Side:
+                    return new Color(1f, 0.45f, 0.72f, 1f);
+                case BeatRole.Again:
+                    return new Color(0.45f, 0.9f, 1f, 1f);
+                case BeatRole.Writeback:
+                    return new Color(0.65f, 0.82f, 1f, 1f);
+                default:
+                    return new Color(1f, 0.93f, 0.55f, 1f);
+            }
+        }
+
+        void Release(TextMeshProUGUI label, int subject)
+        {
+            if (label != null)
+                Destroy(label.gameObject);
+
+            RestoreSlot(subject);
+        }
+
+        void RestoreSlot(int index)
+        {
+            var portrait = PortraitAt(index);
+            if (portrait != null)
+                portrait.RestoreMotion();
+
+            var root = RootAt(index);
+            if (root != null && InRange(index))
+                root.localScale = _slots[index].RestScale;
         }
 
         IEnumerator Swap(SwapCue cue)
@@ -543,7 +786,7 @@ namespace TheCall.Scoring
             _slots[targetIndex] = target;
         }
 
-        IEnumerator ThrowScore(int amount, Vector2 head, RectTransform monster, Vector3 monsterRest)
+        IEnumerator ThrowScore(int amount, Vector2 head, RectTransform monster, Vector3 monsterRest, float fontSize)
         {
             if (SkipWait())
             {
@@ -551,15 +794,16 @@ namespace TheCall.Scoring
                 yield break;
             }
 
+            var heavy = fontSize >= 70f;
             var label = Spawn(Signed(amount), head + new Vector2(0f, -36f));
-            label.fontSize = 56f;
+            label.fontSize = fontSize;
             label.color = new Color(1f, 0.93f, 0.55f, 1f);
             label.rectTransform.localScale = Vector3.one * 0.4f;
             var rise = Live(label.rectTransform.DOAnchorPos(head, Span(RiseSeconds)).SetEase(Ease.OutQuad));
-            var grow = Live(label.rectTransform.DOScale(1.12f, Span(RiseSeconds)).SetEase(Ease.OutBack));
+            var grow = Live(label.rectTransform.DOScale(heavy ? 1.3f : 1.12f, Span(RiseSeconds)).SetEase(Ease.OutBack));
             Tween monsterUp = null;
             if (monster != null)
-                monsterUp = Live(monster.DOScale(monsterRest * 1.1f, Span(RiseSeconds)).SetEase(Ease.OutQuad));
+                monsterUp = Live(monster.DOScale(monsterRest * (heavy ? 1.18f : 1.1f), Span(RiseSeconds)).SetEase(Ease.OutQuad));
 
             yield return Wait(RiseSeconds);
             rise.Kill(false);
@@ -589,7 +833,7 @@ namespace TheCall.Scoring
             }
 
             var target = CurrentPoint();
-            var fly = Live(label.rectTransform.DOAnchorPos(target, Span(FlightSeconds)).SetEase(Ease.InCubic));
+            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, heavy ? 96f : 72f, 1, Span(FlightSeconds)));
             var shrink = Live(label.rectTransform.DOScale(0.35f, Span(FlightSeconds)).SetEase(Ease.InQuad));
             yield return Wait(FlightSeconds);
             fly.Kill(false);

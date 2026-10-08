@@ -92,10 +92,7 @@ namespace TheCall
 #if UNITY_EDITOR
         void OnEnable()
         {
-            if (Application.isPlaying || !_editorPreview)
-                return;
-
-            EditorApplication.delayCall += RefreshEditorPreview;
+            ScheduleEditorPreview();
         }
 
         void OnDisable()
@@ -105,15 +102,30 @@ namespace TheCall
 
         void OnValidate()
         {
-            if (Application.isPlaying || !_editorPreview)
+            ScheduleEditorPreview();
+        }
+
+        void ScheduleEditorPreview()
+        {
+            if (!CanRefreshEditorPreview())
                 return;
 
+            EditorApplication.delayCall -= RefreshEditorPreview;
             EditorApplication.delayCall += RefreshEditorPreview;
+        }
+
+        /// <summary>
+        /// 退出播放后，预制体资源上的组件也会进 OnValidate，并排进这次预览。
+        /// 资源上的 Transform 禁止 SetParent，只能刷新场景里的实例。
+        /// </summary>
+        bool CanRefreshEditorPreview()
+        {
+            return !Application.isPlaying && _editorPreview && !EditorUtility.IsPersistent(this);
         }
 
         void RefreshEditorPreview()
         {
-            if (this == null || Application.isPlaying || !_editorPreview)
+            if (this == null || !CanRefreshEditorPreview())
                 return;
 
             RemoveBakedRig();
