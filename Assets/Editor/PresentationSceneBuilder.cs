@@ -782,6 +782,7 @@ namespace TheCall.Editor
             image.color = Color.white;
             image.raycastTarget = false;
             image.preserveAspect = true;
+            image.gameObject.SetActive(false);
             return image;
         }
 
@@ -1523,7 +1524,7 @@ namespace TheCall.Editor
             DrawDefaultInspector();
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox(
-                "界面已经放在场景里。点下面的按钮只显示其中一个，方便换图片、挪位置。怪物立绘由 MonsterPortrait + MonsterRig 驱动，视口尺寸随 Rig 采样自动建议。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
+                "界面已经放在场景里。点下面的按钮只显示其中一个。怪物立绘看 Portrait 上的矩形：里面是运行时那套拼接怪物，改矩形的位置和大小，游戏里和拖拽松手后的位置会一起变。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
                 MessageType.Info);
             using (new EditorGUILayout.HorizontalScope())
             {

@@ -13,7 +13,9 @@ namespace TheCall
     /// Rules supply stable part IDs; the catalog supplies sprites, anchors and layer data.
     /// 有骨架时待机、拖拽、计分反应都由 MonsterMotionController 在同一副骨架上叠加；
     /// 没有骨架时退回旧的分组装配，只为兼容保留。
+    /// 编辑器里用同一条拼接路径画预览，矩形就是视口：游戏和拖拽虚影都把怪物放进这个矩形的中心。
     /// </summary>
+    [ExecuteAlways]
     public sealed class MonsterPortrait : MonoBehaviour
     {
         [SerializeField] Image _tail;
@@ -59,6 +61,9 @@ namespace TheCall
         Sprite[] _boneSprites;
         RectTransform _rigRoot;
         readonly List<Image> _rigImages = new List<Image>();
+#if UNITY_EDITOR
+        Vector2 _editorViewport;
+#endif
 
         public MonsterMotionProfile MotionProfile => _motionProfile != null
             ? _motionProfile
@@ -98,11 +103,20 @@ namespace TheCall
             EditorApplication.delayCall -= RefreshEditorPreview;
         }
 
+        void OnValidate()
+        {
+            if (Application.isPlaying || !_editorPreview)
+                return;
+
+            EditorApplication.delayCall += RefreshEditorPreview;
+        }
+
         void RefreshEditorPreview()
         {
             if (this == null || Application.isPlaying || !_editorPreview)
                 return;
 
+            RemoveBakedRig();
             Show(MonsterAppearance.FromSeed(_editorPreviewSeed));
         }
 #endif
@@ -123,7 +137,7 @@ namespace TheCall
             MonsterPartLibrary.Ensure();
             var key = AppearanceSalt(appearance);
             // 同一只怪物每帧都会被刷新一次：外观和种子没变时保留它的运动状态，否则拖拽会被打断。
-            if (_showed && key == _showKey && Mathf.Approximately(seed, _idleSeed))
+            if (_showed && key == _showKey && Mathf.Approximately(seed, _idleSeed) && RigVisualIntact())
                 return;
 
             _showed = true;
@@ -190,9 +204,13 @@ namespace TheCall
 
         void Update()
         {
+#if UNITY_EDITOR
             if (!Application.isPlaying)
+            {
+                EditorTrackViewport();
                 return;
-
+            }
+#endif
             if (_motion != null)
             {
                 _motion.Advance(Time.unscaledDeltaTime);
@@ -307,10 +325,16 @@ namespace TheCall
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = sourceRect.rect.size;
-            var layerScale = Mathf.Max(0.0001f, Mathf.Abs(layer.lossyScale.x));
-            var scale = source.transform.lossyScale.x / layerScale;
-            rect.localScale = new Vector3(scale, scale, 1f);
+            var viewport = sourceRect.rect.size;
+            if (viewport.x < 1f || viewport.y < 1f)
+                viewport = sourceRect.sizeDelta;
+            rect.sizeDelta = viewport;
+            var layerScale = layer.lossyScale;
+            var sourceScale = source.transform.lossyScale;
+            rect.localScale = new Vector3(
+                sourceScale.x / Mathf.Max(0.0001f, Mathf.Abs(layerScale.x)),
+                sourceScale.y / Mathf.Max(0.0001f, Mathf.Abs(layerScale.y)),
+                1f);
             rect.position = sourceRect.TransformPoint(sourceRect.rect.center);
 
             var ghost = go.AddComponent<MonsterPortrait>();
@@ -387,6 +411,9 @@ namespace TheCall
                         && definition.sprite != null
                         && catalog.IsCompatible(slot, definition);
             var rect = image.rectTransform;
+
+            if (!image.gameObject.activeSelf)
+                image.gameObject.SetActive(true);
 
             if (parent != null && image.transform.parent != parent)
                 image.transform.SetParent(parent, false);
@@ -472,6 +499,27 @@ namespace TheCall
         }
 
         /// <summary>
+        /// 编辑器预览用 HideAndDontSave 画出骨架。进入播放时这些物体会被清掉，
+        /// 而项目关掉了域重载，组件字段还指着它们。画面要能在下一帧重新装上。
+        /// </summary>
+        bool RigVisualIntact()
+        {
+            if (_motion == null)
+                return true;
+
+            if (_rigRoot == null || _rigImages.Count == 0)
+                return false;
+
+            for (var i = 0; i < _rigImages.Count; i++)
+            {
+                if (_rigImages[i] == null)
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// 把当前帧的骨架写到画面上。每根骨头一个 Image，挂在 rig 根下，位置、旋转、镜像都来自同一帧数据；
         /// 根骨头的安装点是原点，所以整只怪物跟着抓取位置平移。
         /// </summary>
@@ -481,7 +529,17 @@ namespace TheCall
                 return;
 
             _motion.Compose(_frame);
+            var rebuilt = _rigRoot == null;
             EnsureRigRoot();
+            for (var i = _rigImages.Count - 1; i >= 0; i--)
+            {
+                if (_rigImages[i] == null)
+                {
+                    _rigImages.RemoveAt(i);
+                    rebuilt = true;
+                }
+            }
+
             var order = _skeleton.DrawOrder;
             while (_rigImages.Count < order.Length)
                 _rigImages.Add(CreateRigImage());
@@ -518,6 +576,9 @@ namespace TheCall
                 image.raycastTarget = false;
                 image.transform.SetSiblingIndex(slot);
             }
+
+            if (rebuilt)
+                FitCreatureToViewport();
         }
 
         void FitCreatureToViewport()
@@ -535,47 +596,32 @@ namespace TheCall
             if (host == null || _rigRoot == null)
                 return;
 
-            var min = new Vector3(float.PositiveInfinity, float.PositiveInfinity, 0f);
-            var max = new Vector3(float.NegativeInfinity, float.NegativeInfinity, 0f);
-            var hasAny = false;
-            for (var i = 0; i < _rigImages.Count; i++)
-            {
-                var image = _rigImages[i];
-                if (image == null || !image.enabled)
-                    continue;
-
-                hasAny = true;
-                var corners = new Vector3[4];
-                image.rectTransform.GetWorldCorners(corners);
-                for (var c = 0; c < corners.Length; c++)
-                {
-                    var local = host.InverseTransformPoint(corners[c]);
-                    min = Vector3.Min(min, local);
-                    max = Vector3.Max(max, local);
-                }
-            }
-
-            if (!hasAny)
+            _rigRoot.localRotation = Quaternion.identity;
+            _rigRoot.localScale = Vector3.one;
+            _rigRoot.anchoredPosition = Vector2.zero;
+            if (!MonsterPortraitLayout.TryMeasure(_rigRoot, out var min, out var max))
                 return;
 
-            ApplyViewportFit(host, min, max);
+            if (!MonsterPortraitLayout.TryFit(min, max, ViewportSize(host), out var scale, out var position))
+                return;
+
+            _rigRoot.localScale = new Vector3(scale, scale, 1f);
+            _rigRoot.anchoredPosition = position;
+#if UNITY_EDITOR
+            _editorViewport = host.rect.size;
+#endif
         }
 
-        void ApplyViewportFit(RectTransform host, Vector3 min, Vector3 max)
+        static Vector2 ViewportSize(RectTransform host)
         {
-            var size = max - min;
-            if (size.x < 1f || size.y < 1f)
-                return;
+            var size = host.rect.size;
+            if (size.x >= 1f && size.y >= 1f)
+                return size;
 
-            var viewport = host.rect.size;
-            if (viewport.x < 1f || viewport.y < 1f)
-                viewport = RecommendedViewportSize;
+            if (host.anchorMin == host.anchorMax && Mathf.Abs(host.sizeDelta.x) >= 1f && Mathf.Abs(host.sizeDelta.y) >= 1f)
+                return new Vector2(Mathf.Abs(host.sizeDelta.x), Mathf.Abs(host.sizeDelta.y));
 
-            const float padding = 6f;
-            var scale = Mathf.Min((viewport.x - padding) / size.x, (viewport.y - padding) / size.y);
-            var center = (min + max) * 0.5f;
-            _rigRoot.localScale = Vector3.one * scale;
-            _rigRoot.anchoredPosition = new Vector2(-center.x * scale, -center.y * scale);
+            return RecommendedViewportSize;
         }
 
         void EnsureRigRoot()
@@ -585,6 +631,10 @@ namespace TheCall
 
             var go = new GameObject("Rig", typeof(RectTransform));
             go.transform.SetParent(transform, false);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                go.hideFlags = HideFlags.HideAndDontSave;
+#endif
             _rigRoot = go.GetComponent<RectTransform>();
             _rigRoot.anchorMin = new Vector2(0.5f, 0.5f);
             _rigRoot.anchorMax = new Vector2(0.5f, 0.5f);
@@ -597,6 +647,10 @@ namespace TheCall
         {
             var go = new GameObject("Part", typeof(RectTransform), typeof(Image));
             go.transform.SetParent(_rigRoot, false);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                go.hideFlags = HideFlags.HideAndDontSave;
+#endif
             var image = go.GetComponent<Image>();
             image.raycastTarget = false;
             return image;
@@ -604,16 +658,58 @@ namespace TheCall
 
         void HideLegacy()
         {
-            ClearImage(_tail);
-            ClearImage(_foot);
-            ClearImage(_body);
-            ClearImage(_hand);
-            ClearImage(_head);
-            ClearImage(_eye);
-            ClearImage(_mouth);
-            ClearImage(_hat);
-            ClearImage(_accessory);
+            if (!Application.isPlaying)
+                return;
+
+            Deactivate(_tail);
+            Deactivate(_foot);
+            Deactivate(_body);
+            Deactivate(_hand);
+            Deactivate(_head);
+            Deactivate(_eye);
+            Deactivate(_mouth);
+            Deactivate(_hat);
+            Deactivate(_accessory);
         }
+
+        static void Deactivate(Image image)
+        {
+            if (image != null && image.gameObject.activeSelf)
+                image.gameObject.SetActive(false);
+        }
+
+#if UNITY_EDITOR
+        void RemoveBakedRig()
+        {
+            for (var i = transform.childCount - 1; i >= 0; i--)
+            {
+                var child = transform.GetChild(i);
+                if (child.name != "Rig" || (child.gameObject.hideFlags & HideFlags.DontSave) != 0)
+                    continue;
+
+                DestroyImmediate(child.gameObject);
+                _rigRoot = null;
+                _rigImages.Clear();
+                _showed = false;
+            }
+        }
+
+        void EditorTrackViewport()
+        {
+            if (!_editorPreview || _rigRoot == null)
+                return;
+
+            var host = transform as RectTransform;
+            if (host == null)
+                return;
+
+            var size = host.rect.size;
+            if (size == _editorViewport)
+                return;
+
+            FitCreatureToViewport();
+        }
+#endif
 
         void HideRig()
         {

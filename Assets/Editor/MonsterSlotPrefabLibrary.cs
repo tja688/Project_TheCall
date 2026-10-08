@@ -103,96 +103,35 @@ namespace TheCall.Editor
 
         public static string SyncPortraitViewports()
         {
+            var hidden = HideBakedPortraitParts();
             var size = MonsterPortrait.RecommendedViewportSize;
-            var count = 0;
-            count += ResizePortraitInAsset(PortraitPrefabPath, size) ? 1 : 0;
-
-            var cardPrefabs = new[]
-            {
-                ActionPath,
-                WideActionPath,
-                GlassyBreedingPath,
-                GlassyExtractionPath,
-                CompactPath,
-                StripPath,
-            };
-
-            for (var i = 0; i < cardPrefabs.Length; i++)
-                count += ResizePortraitsInAsset(cardPrefabs[i], size);
-
-            if (File.Exists(MainScenePath)
-                && EditorSceneManager.GetActiveScene().path != MainScenePath)
-                EditorSceneManager.OpenScene(MainScenePath);
-
-            var scenePortraits = UnityEngine.Object.FindObjectsByType<MonsterPortrait>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
-            for (var i = 0; i < scenePortraits.Length; i++)
-            {
-                if (ResizePortraitRect(scenePortraits[i], size))
-                    count++;
-            }
-
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            EditorSceneManager.SaveOpenScenes();
-            AssetDatabase.SaveAssets();
-            return "立绘视口 → " + size.x + "×" + size.y + "，已更新 " + count + " 处 MonsterPortrait。";
+            return "立绘视口保持各张卡上已经摆好的 Portrait 矩形。建议新卡起点 "
+                   + size.x + "×" + size.y
+                   + "。已关掉 " + hidden + " 张静态零件图，预制体里显示的是拼接预览。";
         }
 
-        static bool ResizePortraitInAsset(string assetPath, Vector2 size)
+        public static int HideBakedPortraitParts()
         {
-            var root = PrefabUtility.LoadPrefabContents(assetPath);
-            if (root == null)
-                return false;
-
-            var changed = false;
-            var portraits = root.GetComponentsInChildren<MonsterPortrait>(true);
-            for (var i = 0; i < portraits.Length; i++)
-                changed |= ResizePortraitRect(portraits[i], size);
-
-            if (changed)
-                PrefabUtility.SaveAsPrefabAsset(root, assetPath);
-
-            PrefabUtility.UnloadPrefabContents(root);
-            return changed;
-        }
-
-        static int ResizePortraitsInAsset(string assetPath, Vector2 size)
-        {
-            var root = PrefabUtility.LoadPrefabContents(assetPath);
+            var root = PrefabUtility.LoadPrefabContents(PortraitPrefabPath);
             if (root == null)
                 return 0;
 
-            var changed = 0;
-            var portraits = root.GetComponentsInChildren<MonsterPortrait>(true);
-            for (var i = 0; i < portraits.Length; i++)
+            var count = 0;
+            var images = root.GetComponentsInChildren<UnityEngine.UI.Image>(true);
+            for (var i = 0; i < images.Length; i++)
             {
-                if (ResizePortraitRect(portraits[i], size))
-                    changed++;
+                if (images[i] == null || !images[i].gameObject.activeSelf)
+                    continue;
+
+                images[i].gameObject.SetActive(false);
+                count++;
             }
 
-            if (changed > 0)
-                PrefabUtility.SaveAsPrefabAsset(root, assetPath);
+            if (count > 0)
+                PrefabUtility.SaveAsPrefabAsset(root, PortraitPrefabPath);
 
             PrefabUtility.UnloadPrefabContents(root);
-            return changed;
-        }
-
-        static bool ResizePortraitRect(MonsterPortrait portrait, Vector2 size)
-        {
-            if (portrait == null)
-                return false;
-
-            var rect = portrait.transform as RectTransform;
-            if (rect == null)
-                return false;
-
-            if (Mathf.Approximately(rect.sizeDelta.x, size.x)
-                && Mathf.Approximately(rect.sizeDelta.y, size.y))
-                return false;
-
-            rect.sizeDelta = size;
-            return true;
+            return count;
         }
 
         static TemplateGroup[] BuildGroups()
