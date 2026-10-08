@@ -37,17 +37,7 @@ namespace TheCall.Editor
         static string monsterRootId;
         static int palette;
         static bool headTurnPreview;
-        static float previewTime;
-        static float cycles = 0.42f;
         static MonsterMotionProfile motionProfile;
-        static bool pointerDown;
-        static bool dragActive;
-        static float lastVelocityX;
-        static float dragHead;
-        static float dragHeadVelocity;
-        static float dragFeet;
-        static float dragFeetVelocity;
-        static float lastMotionTime = -1f;
         static System.Random random = new System.Random(1);
 
         static List<MonsterRigAssignment> ActiveAssignments =>
@@ -61,8 +51,6 @@ namespace TheCall.Editor
                 return;
 
             motionProfile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>("Assets/Resources/MonsterMotionProfile.asset");
-            if (motionProfile != null)
-                cycles = motionProfile.idleCyclesPerSecond;
 
             ScanArt();
             var disk = ReadDisk();
@@ -123,7 +111,7 @@ namespace TheCall.Editor
             if (error == null)
             {
                 revision += 1;
-                if (command != "setPreviewTime" && command != "setDrag" && command != "selectPart" && command != "selectSocket" && command != "armGroup" && command != "setMode")
+                if (command != "selectPart" && command != "selectSocket" && command != "armGroup" && command != "setMode")
                     PersistTransient();
             }
 
@@ -214,13 +202,8 @@ namespace TheCall.Editor
                     return null;
                 case "setLayer":
                     return WithPiece(SelectedId(payload), piece => SetLayer(piece, Str(payload, "band")));
-                case "setPreviewTime":
-                    previewTime = Float(payload, "time");
-                    if (dragActive)
-                        StepDrag(pointerDown ? lastVelocityX : 0f, previewTime);
-                    return null;
-                case "setDrag":
-                    return SetDrag(payload);
+                case "setMotion":
+                    return WithPiece(Str(payload, "partId"), piece => SetMotion(piece, payload));
                 case "setMode":
                     return SetMode(Str(payload, "mode"));
                 case "save":
@@ -396,48 +379,17 @@ namespace TheCall.Editor
             return null;
         }
 
-        static string SetDrag(JObject payload)
+        /// <summary>网页里调的是部件的待机摆动、拖拽偏转和惯性。没有传的字段保持原值。</summary>
+        static string SetMotion(MonsterRigPiece piece, JObject payload)
         {
-            pointerDown = Bool(payload, "active");
-            lastVelocityX = pointerDown ? Float(payload, "velocityX") : 0f;
-            if (pointerDown)
-                dragActive = true;
-            StepDrag(lastVelocityX, Float(payload, "time"));
-            return null;
-        }
-
-        static void StepDrag(float velocityX, float time)
-        {
-            if (!dragActive)
-                return;
-
-            var dt = lastMotionTime < 0f ? 0f : Mathf.Clamp(time - lastMotionTime, 0f, 0.05f);
-            lastMotionTime = time;
-            var profile = Profile();
-            var drive = pointerDown ? Mathf.Clamp(velocityX / 700f, -1f, 1f) : 0f;
-            MonsterMotion.StepSpring(
-                ref dragHead,
-                ref dragHeadVelocity,
-                -drive * profile.headDragDegrees,
-                dt,
-                profile.springStiffness,
-                profile.springDamping);
-            MonsterMotion.StepSpring(
-                ref dragFeet,
-                ref dragFeetVelocity,
-                drive * profile.feetDragDegrees,
-                dt,
-                profile.springStiffness,
-                profile.springDamping);
-            if (!pointerDown
-                && Mathf.Abs(dragHead) < 0.04f
-                && Mathf.Abs(dragFeet) < 0.04f
-                && Mathf.Abs(dragHeadVelocity) < 0.04f
-                && Mathf.Abs(dragFeetVelocity) < 0.04f)
-            {
-                dragActive = false;
-                dragHead = dragHeadVelocity = dragFeet = dragFeetVelocity = 0f;
-            }
+            string error = null;
+            if (payload["swingDegrees"] != null)
+                error = MonsterRigEdits.SetSwing(piece, Float(payload, "swingDegrees")) ?? error;
+            if (payload["dragDegrees"] != null)
+                error = MonsterRigEdits.SetDragDegrees(piece, Float(payload, "dragDegrees")) ?? error;
+            if (payload["inertia"] != null)
+                error = MonsterRigEdits.SetInertia(piece, Float(payload, "inertia")) ?? error;
+            return error;
         }
 
         static string Randomize(bool wholeMonster)
@@ -678,16 +630,20 @@ namespace TheCall.Editor
                 root = FirstBody();
 
             var visible = mode == "monster" ? null : Visible;
-            var pose = MonsterRigLayout.Build(root, pieces, ActiveAssignments, visible, headTurnPreview, previewTime, cycles);
-            if (mode == "monster")
-                MonsterRigColor.Paint(pose, RollColor);
+            var skeleton = MonsterRigLayout.Compile(root, pieces, ActiveAssignments, visible, headTurnPreview);
+            var pose = MonsterRigLayout.Rest(skeleton);
             if (mode == "monster")
             {
-                var sample = dragActive
-                    ? MonsterMotionSample.Drag(Profile(), dragHead, dragFeet)
-                    : MonsterMotionSample.Idle(Profile(), previewTime, 0f);
-                pose = MonsterRigMotion.Present(pose, sample);
+                MonsterRigColor.Paint(pose, RollColor);
+                for (var i = 0; i < pose.Nodes.Count; i++)
+                {
+                    var node = pose.Nodes[i];
+                    if (node.Bone >= 0 && node.Bone < skeleton.Bones.Count)
+                        skeleton.Bones[node.Bone].PaletteIndex = node.PaletteIndex;
+                }
             }
+
+            pose.Nodes.Sort((a, b) => a.Order.CompareTo(b.Order));
             return new
             {
                 dirty = Hash(JsonUtility.ToJson(file, true)) != Hash(JsonUtility.ToJson(ParseOrEmpty(baselineJson), true)),
@@ -699,15 +655,99 @@ namespace TheCall.Editor
                 armedGroup,
                 palette,
                 headTurnPreview,
-                cyclesPerSecond = cycles,
                 swingMax = MonsterRigEdits.MaxSwingDegrees,
+                dragMax = MonsterRigEdits.MaxDragDegrees,
+                inertiaMin = MonsterRigEdits.MinInertia,
+                inertiaMax = MonsterRigEdits.MaxInertia,
+                motion = MotionPayload(Profile()),
                 palettes = PalettePayload(),
                 groups = GroupPayload(),
                 layerBands = LayerPayload(),
                 parts = PartPayload(),
                 visibleGroups = VisibleNames(),
                 assignments = AssignmentPayload(),
+                skeleton = SkeletonPayload(skeleton),
                 pose = PosePayload(pose),
+            };
+        }
+
+        /// <summary>
+        /// 网页端 motion.js 用这份骨架做同样的前向运动学：骨头的父子、安装点、挂点偏移、关节类型和调参都在这里。
+        /// </summary>
+        static object SkeletonPayload(MonsterRigSkeleton skeleton)
+        {
+            var bones = new object[skeleton.Bones.Count];
+            for (var i = 0; i < bones.Length; i++)
+            {
+                var bone = skeleton.Bones[i];
+                bones[i] = new
+                {
+                    partId = bone.PartId,
+                    socketId = bone.SocketId ?? "",
+                    parent = bone.Parent,
+                    width = bone.Width,
+                    height = bone.Height,
+                    mountX = bone.MountX,
+                    mountY = bone.MountY,
+                    socketOffsetX = bone.SocketOffsetX,
+                    socketOffsetY = bone.SocketOffsetY,
+                    localMirror = bone.LocalMirror,
+                    order = bone.Order,
+                    kind = bone.Kind.ToString(),
+                    color = bone.Color.ToString(),
+                    joint = bone.Joint.ToString(),
+                    swing = bone.Swing,
+                    drag = bone.Drag,
+                    inertia = bone.Inertia,
+                    paletteIndex = bone.PaletteIndex,
+                    pinStart = bone.PinStart,
+                    sockets = SocketRefPayload(bone.Sockets),
+                };
+            }
+
+            return new { bones, drawOrder = skeleton.DrawOrder, pinCount = skeleton.PinCount, warnings = skeleton.Warnings.ToArray() };
+        }
+
+        static object[] SocketRefPayload(List<MonsterRigSocketRef> sockets)
+        {
+            var list = new object[sockets.Count];
+            for (var i = 0; i < list.Length; i++)
+            {
+                var socket = sockets[i];
+                list[i] = new
+                {
+                    id = socket.Id,
+                    group = socket.Group.ToString(),
+                    accepts = socket.Accepts.ToString(),
+                    mount = socket.Mount,
+                    x = socket.X,
+                    y = socket.Y,
+                };
+            }
+
+            return list;
+        }
+
+        static object MotionPayload(MonsterMotionProfile profile)
+        {
+            profile = profile == null ? MonsterMotionProfile.Fallback : profile;
+            return new
+            {
+                idleEnabled = profile.idleEnabled,
+                idleCyclesPerSecond = profile.idleCyclesPerSecond,
+                idleBodyLift = profile.idleBodyLift,
+                gripResponse = profile.gripResponse,
+                gripDamping = profile.gripDamping,
+                dragSpeedReference = profile.dragSpeedReference,
+                blendInSeconds = profile.blendInSeconds,
+                blendOutSeconds = profile.blendOutSeconds,
+                driverSmoothing = profile.driverSmoothing,
+                rootTiltResponse = profile.rootTiltResponse,
+                rootTiltDamping = profile.rootTiltDamping,
+                jointResponse = profile.jointResponse,
+                jointDamping = profile.jointDamping,
+                reactionResponse = profile.reactionResponse,
+                reactionDamping = profile.reactionDamping,
             };
         }
 
@@ -783,6 +823,8 @@ namespace TheCall.Editor
                     attachY = data.attachY,
                     nativeFacing = data.nativeFacing.ToString(),
                     swingDegrees = data.swingDegrees,
+                    dragDegrees = data.dragDegrees,
+                    inertia = data.inertia,
                     headTurn = data.headTurn,
                     layerBand = MonsterLayerBands.Resolve(data, piece.Kind).ToString(),
                     mountSocketId = data.mountSocketId,
@@ -864,6 +906,7 @@ namespace TheCall.Editor
                     order = node.Order,
                     color = node.Color.ToString(),
                     paletteIndex = node.PaletteIndex,
+                    bone = node.Bone,
                     sizeX = placement.Size.x,
                     sizeY = placement.Size.y,
                     pivotX = placement.Pivot.x,
@@ -941,6 +984,10 @@ namespace TheCall.Editor
                 part.excluded ??= new List<string>();
                 part.sockets ??= new List<MonsterRigSocket>();
                 part.swingDegrees = Mathf.Clamp(part.swingDegrees, 0f, MonsterRigEdits.MaxSwingDegrees);
+                part.dragDegrees = Mathf.Clamp(part.dragDegrees, 0f, MonsterRigEdits.MaxDragDegrees);
+                part.inertia = part.inertia > 0f
+                    ? Mathf.Clamp(part.inertia, MonsterRigEdits.MinInertia, MonsterRigEdits.MaxInertia)
+                    : 1f;
             }
 
             foreach (var pair in Art)
@@ -949,7 +996,10 @@ namespace TheCall.Editor
                     continue;
 
                 MonsterRigCatalog.TryFolder(pair.Value.Folder, out var spec);
-                file.parts.Add(MonsterRigEdits.CreatePart(pair.Key, pair.Value.Width, pair.Value.Height, spec != null && spec.Kind == MonsterPartKind.Head));
+                var created = MonsterRigEdits.CreatePart(pair.Key, pair.Value.Width, pair.Value.Height, spec != null && spec.Kind == MonsterPartKind.Head);
+                if (spec != null)
+                    MonsterRigEdits.ApplyKindDefaults(created, spec.Kind);
+                file.parts.Add(created);
             }
 
             file.parts.Sort((a, b) => string.CompareOrdinal(a.id, b.id));
@@ -1072,8 +1122,9 @@ namespace TheCall.Editor
 
             try
             {
-                var parsed = JsonUtility.FromJson<MonsterRigFile>(json);
-                return parsed ?? new MonsterRigFile();
+                var parsed = JsonUtility.FromJson<MonsterRigFile>(json) ?? new MonsterRigFile();
+                parsed.Upgrade();
+                return parsed;
             }
             catch (Exception)
             {

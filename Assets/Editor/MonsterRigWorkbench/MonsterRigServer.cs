@@ -224,6 +224,12 @@ namespace TheCall.Editor
                     return;
                 }
 
+                if (path.Equals("/motion.js", StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteStatic(context, "application/javascript; charset=utf-8", ReadWeb("motion.js"));
+                    return;
+                }
+
                 if (path.Equals("/app.js", StringComparison.OrdinalIgnoreCase))
                 {
                     WriteStatic(context, "application/javascript; charset=utf-8", ReadWeb("app.js"));

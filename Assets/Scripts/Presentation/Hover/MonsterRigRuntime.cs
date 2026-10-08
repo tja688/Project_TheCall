@@ -9,9 +9,10 @@ namespace TheCall
         static List<MonsterRigPiece> pieces;
         static Dictionary<string, Sprite> sprites;
 
-        public static bool TryCompose(int recipe, int salt, out MonsterRigPose pose)
+        /// <summary>按配方挑一个身体、随机装上配件，编译成骨架并配好配色。游戏里的怪物和编辑器的预览都从这里来。</summary>
+        public static bool TryBuildSkeleton(int recipe, int salt, out MonsterRigSkeleton skeleton)
         {
-            pose = new MonsterRigPose();
+            skeleton = null;
             var catalog = Catalog();
             var bodies = new List<MonsterRigPiece>();
             for (var i = 0; i < catalog.Count; i++)
@@ -38,9 +39,30 @@ namespace TheCall
                 MonsterRigRandom.Units(salt),
                 true,
                 null);
-            pose = MonsterRigLayout.Build(bodies[index], catalog, assignments, null, false, 0f, 0f);
+
+            var built = MonsterRigLayout.Compile(bodies[index], catalog, assignments, null, false);
+            var rest = MonsterRigLayout.Rest(built);
             var paintSalt = salt;
-            MonsterRigColor.Paint(pose, key => MonsterRigColor.IndexFor(paintSalt, key, MonsterPortrait.Palette.Length));
+            MonsterRigColor.Paint(rest, key => MonsterRigColor.IndexFor(paintSalt, key, MonsterPortrait.Palette.Length));
+            for (var i = 0; i < rest.Nodes.Count; i++)
+            {
+                var node = rest.Nodes[i];
+                if (node.Bone >= 0 && node.Bone < built.Bones.Count)
+                    built.Bones[node.Bone].PaletteIndex = node.PaletteIndex;
+            }
+
+            skeleton = built;
+            return built.Bones.Count > 0;
+        }
+
+        /// <summary>静止姿势，供需要一次性画出怪物而不需要动画的场景（测试和旧工具）。</summary>
+        public static bool TryCompose(int recipe, int salt, out MonsterRigPose pose)
+        {
+            pose = new MonsterRigPose();
+            if (!TryBuildSkeleton(recipe, salt, out var skeleton))
+                return false;
+
+            pose = MonsterRigLayout.Rest(skeleton);
             return pose.Nodes.Count > 0;
         }
 
@@ -109,14 +131,21 @@ namespace TheCall
         {
             var asset = Resources.Load<TextAsset>("MonsterRig");
             if (asset != null && !string.IsNullOrEmpty(asset.text))
-                return JsonUtility.FromJson<MonsterRigFile>(asset.text) ?? new MonsterRigFile();
+                return Parse(asset.text);
 
 #if UNITY_EDITOR
             var path = Path.Combine(Application.dataPath, "Resources/MonsterRig.json");
             if (File.Exists(path))
-                return JsonUtility.FromJson<MonsterRigFile>(File.ReadAllText(path)) ?? new MonsterRigFile();
+                return Parse(File.ReadAllText(path));
 #endif
             return new MonsterRigFile();
+        }
+
+        static MonsterRigFile Parse(string json)
+        {
+            var parsed = JsonUtility.FromJson<MonsterRigFile>(json) ?? new MonsterRigFile();
+            parsed.Upgrade();
+            return parsed;
         }
     }
 }

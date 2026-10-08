@@ -8,6 +8,8 @@ namespace TheCall
     /// <summary>
     /// Shared runtime renderer for the componentized monster assembly.
     /// Rules supply stable part IDs; the catalog supplies sprites, anchors and layer data.
+    /// 有骨架时待机、拖拽、计分反应都由 MonsterMotionController 在同一副骨架上叠加；
+    /// 没有骨架时退回旧的分组装配，只为兼容保留。
     /// </summary>
     public sealed class MonsterPortrait : MonoBehaviour
     {
@@ -27,15 +29,17 @@ namespace TheCall
         [SerializeField] MonsterMotionProfile _motionProfile;
         [SerializeField] MonsterAssemblyCatalog _assemblyCatalog;
 
-        bool _dragMotionActive;
         bool _layersBound;
-        bool _useRig;
+        bool _showed;
+        bool _reacting;
         float _idlePhase;
         float _idleSeed;
-        float _restOriginX;
-        float _restOriginY;
-        int _paletteIndex;
-        MonsterRigPose _restPose;
+        int _showKey;
+        MonsterAppearance _appearance;
+        MonsterRigSkeleton _skeleton;
+        MonsterRigFrame _frame;
+        MonsterMotionController _motion;
+        Sprite[] _boneSprites;
         RectTransform _rigRoot;
         readonly List<Image> _rigImages = new List<Image>();
 
@@ -57,40 +61,42 @@ namespace TheCall
             new Color32(88, 196, 191, 255),
         };
 
+        /// <summary>是否已经装上了一只可以拖拽、会摆动的怪物。</summary>
+        public bool HasCreature => _motion != null;
+
+        /// <summary>抓取分量和反应都已回到静止。没有怪物时视为静止。</summary>
+        public bool Settled => _motion == null || _motion.Settled;
+
         public void Show(string monsterId)
         {
             var seed = Seed(monsterId);
-            Show(MonsterAppearance.FromSeed(seed));
-            _idleSeed = (seed & 1023) * 0.0137f;
+            ShowAppearance(MonsterAppearance.FromSeed(seed), (seed & 1023) * 0.0137f);
         }
 
         public void Show(MonsterAppearance appearance)
         {
+            ShowAppearance(appearance, (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f);
+        }
+
+        void ShowAppearance(MonsterAppearance appearance, float seed)
+        {
             MonsterPartLibrary.Ensure();
-            _paletteIndex = appearance.Palette;
-            _idleSeed = (appearance.Recipe * 97 + appearance.Palette * 31) * 0.0137f;
-            if (MonsterRigRuntime.TryCompose(appearance.Recipe, AppearanceSalt(appearance), out var pose))
+            var key = AppearanceSalt(appearance);
+            // 同一只怪物每帧都会被刷新一次：外观和种子没变时保留它的运动状态，否则拖拽会被打断。
+            if (_showed && key == _showKey && Mathf.Approximately(seed, _idleSeed))
+                return;
+
+            _showed = true;
+            _showKey = key;
+            _appearance = appearance;
+            _idleSeed = seed;
+            if (MonsterRigRuntime.TryBuildSkeleton(appearance.Recipe, key, out var skeleton))
             {
-                _useRig = true;
-                _restPose = pose;
-                _restOriginX = 0f;
-                _restOriginY = 0f;
-                for (var i = 0; i < pose.Nodes.Count; i++)
-                {
-                    if (!string.IsNullOrEmpty(pose.Nodes[i].SocketId))
-                        continue;
-
-                    _restOriginX = pose.Nodes[i].WorldAttachX;
-                    _restOriginY = pose.Nodes[i].WorldAttachY;
-                    break;
-                }
-
-                HideLegacy();
-                RestoreMotion();
+                AdoptSkeleton(skeleton);
                 return;
             }
 
-            _useRig = false;
+            DropSkeleton();
             HideRig();
             BindLayerParents();
 
@@ -117,22 +123,53 @@ namespace TheCall
             RestoreMotion();
         }
 
+        void AdoptSkeleton(MonsterRigSkeleton skeleton)
+        {
+            _skeleton = skeleton;
+            _frame = new MonsterRigFrame(skeleton);
+            _motion = new MonsterMotionController(skeleton, MotionProfile, _idleSeed);
+            _boneSprites = new Sprite[skeleton.Bones.Count];
+            for (var i = 0; i < _boneSprites.Length; i++)
+                _boneSprites[i] = MonsterRigRuntime.SpriteFor(skeleton.Bones[i].PartId);
+
+            _reacting = false;
+            HideLegacy();
+            ApplyRig();
+        }
+
+        void DropSkeleton()
+        {
+            _skeleton = null;
+            _frame = null;
+            _motion = null;
+            _boneSprites = null;
+            _reacting = false;
+        }
+
         void Update()
         {
-            if (!Application.isPlaying || !MotionProfile.idleEnabled || _dragMotionActive)
+            if (!Application.isPlaying)
+                return;
+
+            if (_motion != null)
+            {
+                _motion.Advance(Time.unscaledDeltaTime);
+                ApplyRig();
+                return;
+            }
+
+            if (!MotionProfile.idleEnabled || _reacting)
                 return;
 
             _idlePhase += Time.unscaledDeltaTime;
             SetIdleMotion(_idlePhase, _idleSeed);
         }
 
+        /// <summary>旧装配路径的待机。有骨架时待机由控制器负责，这里不做任何事。</summary>
         public void SetIdleMotion(float time, float phase = 0f)
         {
-            if (_useRig)
-            {
-                ApplyRig(MonsterMotionSample.Idle(MotionProfile, time, phase));
+            if (_motion != null)
                 return;
-            }
 
             var profile = MotionProfile;
             var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
@@ -145,49 +182,107 @@ namespace TheCall
                 wave * profile.idleBodyLift);
         }
 
+        /// <summary>计分时头和脚弹一下（度）。有骨架时由控制器平滑过去，松开后自动回落。</summary>
         public void SetSpringMotion(float headAngle, float feetAngle)
         {
-            _dragMotionActive = true;
-            if (_useRig)
+            _reacting = true;
+            if (_motion != null)
             {
-                ApplyRig(MonsterMotionSample.Drag(MotionProfile, headAngle, feetAngle));
+                _motion.SetReaction(headAngle, feetAngle);
                 return;
             }
 
-            var profile = MotionProfile;
-            var tail = Mathf.Clamp(
-                feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
-                -profile.tailDragDegrees,
-                profile.tailDragDegrees);
-            var body = Mathf.Clamp(
-                feetAngle * profile.bodyDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
-                -profile.bodyDragDegrees,
-                profile.bodyDragDegrees);
-            SetMotion(headAngle, feetAngle, tail, body, 0f);
-        }
-
-        public void SetDragMotion(Vector2 velocity)
-        {
-            var profile = MotionProfile;
-            var drive = Mathf.Clamp(velocity.x / 700f, -1f, 1f);
-            SetSpringMotion(-drive * profile.headDragDegrees, drive * profile.feetDragDegrees);
+            SetMotion(headAngle, feetAngle, 0f, 0f, 0f);
         }
 
         public void RestoreMotion()
         {
-            _dragMotionActive = false;
-            if (_useRig)
+            _reacting = false;
+            if (_motion != null)
             {
-                ApplyRig(new MonsterMotionSample(0f, 0f, 0f, 0f, 0f));
+                _motion.SetReaction(0f, 0f);
                 return;
             }
 
             SetMotion(0f, 0f, 0f, 0f, 0f);
         }
 
+        /// <summary>抓住怪物。screenPoint 是按下时的屏幕坐标；这里只改变抓取状态，不做任何视觉切换。</summary>
+        public void Grab(Vector2 screenPoint, Camera eventCamera)
+        {
+            if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
+                return;
+
+            _motion.Grab(point.x, point.y);
+        }
+
+        public void Hold(Vector2 screenPoint, Camera eventCamera)
+        {
+            if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
+                return;
+
+            _motion.Hold(point.x, point.y);
+        }
+
+        public void Release()
+        {
+            if (_motion != null)
+                _motion.Release();
+        }
+
+        /// <summary>整只怪物的透明度（用于拖拽时把原位淡下去）。不挡射线。</summary>
+        public void SetVisibility(float alpha)
+        {
+            var group = GetComponent<CanvasGroup>();
+            if (group == null)
+            {
+                if (alpha >= 1f)
+                    return;
+
+                group = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            var visible = alpha >= 1f;
+            group.alpha = Mathf.Clamp01(alpha);
+            group.blocksRaycasts = visible;
+            group.interactable = visible;
+        }
+
+        /// <summary>
+        /// 拖拽时的怪物实体：与原位同样的位置、大小和外观，由自己的控制器驱动。
+        /// 不复制卡片、文字或窗口，只有怪物本身。
+        /// </summary>
+        public static MonsterPortrait SpawnGhost(RectTransform layer, MonsterPortrait source)
+        {
+            var go = new GameObject("MonsterGhost", typeof(RectTransform), typeof(CanvasGroup));
+            var rect = go.GetComponent<RectTransform>();
+            rect.SetParent(layer, false);
+            var group = go.GetComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            group.interactable = false;
+
+            var sourceRect = source.transform as RectTransform;
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.sizeDelta = sourceRect.rect.size;
+            var layerScale = Mathf.Max(0.0001f, Mathf.Abs(layer.lossyScale.x));
+            var scale = source.transform.lossyScale.x / layerScale;
+            rect.localScale = new Vector3(scale, scale, 1f);
+            rect.position = sourceRect.TransformPoint(sourceRect.rect.center);
+
+            var ghost = go.AddComponent<MonsterPortrait>();
+            ghost._motionProfile = source._motionProfile;
+            ghost._assemblyCatalog = source._assemblyCatalog;
+            if (source._showed)
+                ghost.ShowAppearance(source._appearance, source._idleSeed);
+            return ghost;
+        }
+
         public void Clear()
         {
-            _useRig = false;
+            _showed = false;
+            DropSkeleton();
             HideRig();
             ClearImage(_tail);
             ClearImage(_foot);
@@ -199,6 +294,13 @@ namespace TheCall
             ClearImage(_hat);
             ClearImage(_accessory);
             RestoreMotion();
+        }
+
+        bool TryRigPoint(Vector2 screenPoint, Camera eventCamera, out Vector2 point)
+        {
+            point = Vector2.zero;
+            return _rigRoot != null
+                && RectTransformUtility.ScreenPointToLocalPointInRectangle(_rigRoot, screenPoint, eventCamera, out point);
         }
 
         void BindLayerParents()
@@ -260,7 +362,6 @@ namespace TheCall
             image.color = valid ? Tint(definition.colorRole, appearance.Palette) : Color.white;
             image.enabled = valid;
             image.preserveAspect = false;
-
         }
 
         static Vector2 ClampPivot(Vector2 pivot, MonsterPartDefinition definition)
@@ -323,43 +424,52 @@ namespace TheCall
             image.color = Color.white;
         }
 
-        void ApplyRig(MonsterMotionSample sample)
+        /// <summary>
+        /// 把当前帧的骨架写到画面上。每根骨头一个 Image，挂在 rig 根下，位置、旋转、镜像都来自同一帧数据；
+        /// 根骨头的安装点是原点，所以整只怪物跟着抓取位置平移。
+        /// </summary>
+        void ApplyRig()
         {
-            if (_restPose == null)
+            if (_motion == null || _skeleton == null)
                 return;
 
-            var posed = MonsterRigMotion.Present(_restPose, sample);
+            _motion.Compose(_frame);
             EnsureRigRoot();
-            while (_rigImages.Count < posed.Nodes.Count)
+            var order = _skeleton.DrawOrder;
+            while (_rigImages.Count < order.Length)
                 _rigImages.Add(CreateRigImage());
 
-            for (var i = 0; i < _rigImages.Count; i++)
+            var bones = _skeleton.Bones;
+            var originX = bones[0].MountX;
+            var originY = bones[0].MountY;
+            for (var slot = 0; slot < _rigImages.Count; slot++)
             {
-                var image = _rigImages[i];
-                if (i >= posed.Nodes.Count)
+                var image = _rigImages[slot];
+                if (slot >= order.Length)
                 {
                     image.enabled = false;
                     continue;
                 }
 
-                var node = posed.Nodes[i];
-                var sprite = MonsterRigRuntime.SpriteFor(node.PartId);
+                var index = order[slot];
+                var bone = bones[index];
+                var sprite = _boneSprites[index];
                 var rect = image.rectTransform;
                 rect.anchorMin = new Vector2(0.5f, 0.5f);
                 rect.anchorMax = new Vector2(0.5f, 0.5f);
                 rect.pivot = new Vector2(
-                    node.Width <= 0 ? 0.5f : node.AttachX / node.Width,
-                    node.Height <= 0 ? 0.5f : node.AttachY / node.Height);
-                rect.sizeDelta = sprite != null ? sprite.rect.size : new Vector2(node.Width, node.Height);
-                rect.anchoredPosition = new Vector2(node.WorldAttachX - _restOriginX, node.WorldAttachY - _restOriginY);
-                rect.localRotation = Quaternion.Euler(0f, 0f, node.WorldRotation);
-                rect.localScale = new Vector3(node.WorldMirror ? -1f : 1f, 1f, 1f);
+                    bone.Width <= 0 ? 0.5f : bone.MountX / bone.Width,
+                    bone.Height <= 0 ? 0.5f : bone.MountY / bone.Height);
+                rect.sizeDelta = sprite != null ? sprite.rect.size : new Vector2(bone.Width, bone.Height);
+                rect.anchoredPosition = new Vector2(_frame.X[index] - originX, _frame.Y[index] - originY);
+                rect.localRotation = Quaternion.Euler(0f, 0f, _frame.Rotation[index]);
+                rect.localScale = new Vector3(_frame.Mirror[index] ? -1f : 1f, 1f, 1f);
                 image.sprite = sprite;
-                image.color = sprite == null ? Color.white : Tint(node.Color, node.PaletteIndex);
+                image.color = sprite == null ? Color.white : Tint(bone.Color, bone.PaletteIndex);
                 image.enabled = sprite != null;
                 image.preserveAspect = false;
                 image.raycastTarget = false;
-                image.transform.SetSiblingIndex(i);
+                image.transform.SetSiblingIndex(slot);
             }
         }
 

@@ -353,43 +353,82 @@ namespace TheCall.Hover.Tests
         [Test]
         public void 身体转动九十度时手绕身体挂点转出()
         {
-            var nodes = new List<MonsterRigNode>
+            var skeleton = new MonsterRigSkeleton();
+            skeleton.Bones.Add(new MonsterRigBone
             {
-                new MonsterRigNode
-                {
-                    PartId = "身体/身体1",
-                    Kind = MonsterPartKind.Body,
-                    WorldAttachX = 71f,
-                    WorldAttachY = 51f,
-                },
-                new MonsterRigNode
-                {
-                    PartId = "手/手1",
-                    SocketId = "身体/身体1#1",
-                    Kind = MonsterPartKind.Hand,
-                    WorldAttachX = 80f,
-                    WorldAttachY = 51f,
-                },
-            };
+                PartId = "身体/身体1",
+                Parent = -1,
+                MountX = 71f,
+                MountY = 51f,
+                Joint = MonsterJoint.Root,
+                Kind = MonsterPartKind.Body,
+                Inertia = 1f,
+            });
+            skeleton.Bones.Add(new MonsterRigBone
+            {
+                PartId = "手/手1",
+                SocketId = "身体/身体1#1",
+                Parent = 0,
+                SocketOffsetX = 9f,
+                Joint = MonsterJoint.Hand,
+                Kind = MonsterPartKind.Hand,
+                Inertia = 1f,
+            });
 
-            MonsterRigMotion.Apply(nodes, new MonsterMotionSample(0f, 0f, 0f, 90f, 0f));
+            var frame = new MonsterRigFrame(skeleton);
+            MonsterRigKinematics.Solve(skeleton, frame, new float[2], 90f, 71f, 51f, 71f, 51f, 0f);
 
-            Assert.That(nodes[1].WorldAttachX, Is.EqualTo(71f).Within(0.001f));
-            Assert.That(nodes[1].WorldAttachY, Is.EqualTo(60f).Within(0.001f));
-            Assert.That(nodes[1].WorldRotation, Is.EqualTo(90f).Within(0.001f));
+            Assert.That(frame.X[1], Is.EqualTo(71f).Within(0.001f));
+            Assert.That(frame.Y[1], Is.EqualTo(60f).Within(0.001f));
+            Assert.That(frame.Rotation[1], Is.EqualTo(90f).Within(0.001f));
         }
 
         [Test]
         public void 待机在四分之一周期时头和身体抬起用的是动作配置()
         {
             var profile = ScriptableObject.CreateInstance<MonsterMotionProfile>();
-            var time = 1f / (4f * profile.idleCyclesPerSecond);
-            var sample = MonsterMotionSample.Idle(profile, time, 0f);
+            var skeleton = new MonsterRigSkeleton();
+            skeleton.Bones.Add(new MonsterRigBone
+            {
+                PartId = "身体/身体1",
+                Parent = -1,
+                MountX = 71f,
+                MountY = 51f,
+                Joint = MonsterJoint.Root,
+                Kind = MonsterPartKind.Body,
+                Swing = 0.45f,
+                Drag = 10f,
+                Inertia = 1f,
+            });
+            skeleton.Bones.Add(new MonsterRigBone
+            {
+                PartId = "头/头1",
+                SocketId = "身体/身体1#0",
+                Parent = 0,
+                SocketOffsetY = 20f,
+                Joint = MonsterJoint.Head,
+                Kind = MonsterPartKind.Head,
+                Swing = 1.35f,
+                Drag = 9f,
+                Inertia = 1f,
+            });
 
-            Assert.That(sample.Head, Is.EqualTo(profile.idleHeadDegrees).Within(0.001f));
-            Assert.That(sample.Feet, Is.EqualTo(profile.idleFeetDegrees).Within(0.001f));
-            Assert.That(sample.Lift, Is.EqualTo(profile.idleBodyLift).Within(0.001f));
-            Assert.That(sample.Tail, Is.EqualTo(profile.idleTailDegrees * Mathf.Sin(Mathf.PI / 4f)).Within(0.001f));
+            var controller = new MonsterMotionController(skeleton, profile, 0f);
+            var cycle = 1f / (4f * profile.idleCyclesPerSecond);
+            for (var remaining = cycle; remaining > 1e-6f;)
+            {
+                var step = Mathf.Min(0.05f, remaining);
+                controller.Advance(step);
+                remaining -= step;
+            }
+
+            var frame = new MonsterRigFrame(skeleton);
+            controller.Compose(frame);
+
+            var tilt = skeleton.Bones[0].Swing * Mathf.Sin(Mathf.PI / 4f);
+            Assert.That(frame.Rotation[0], Is.EqualTo(tilt).Within(0.001f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f + profile.idleBodyLift).Within(0.001f));
+            Assert.That(frame.Rotation[1], Is.EqualTo(tilt + 1.35f).Within(0.001f));
             Object.DestroyImmediate(profile);
         }
 

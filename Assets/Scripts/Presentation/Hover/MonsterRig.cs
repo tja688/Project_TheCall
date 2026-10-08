@@ -65,6 +65,8 @@ namespace TheCall
         public int attachY;
         public MonsterFacing nativeFacing;
         public float swingDegrees;
+        public float dragDegrees;
+        public float inertia = 1f;
         public bool headTurn;
         public string mountSocketId;
         public int nextSocket = 1;
@@ -76,8 +78,37 @@ namespace TheCall
     [Serializable]
     public sealed class MonsterRigFile
     {
-        public int version = 1;
+        public int version = 2;
         public List<MonsterRigPart> parts = new List<MonsterRigPart>();
+
+        /// <summary>
+        /// v1 没有拖拽角度和惯性：按部件类型补上默认值。
+        /// 已经写过的待机摆动（非零）保留，零则换成该类型的默认摆动。
+        /// </summary>
+        public void Upgrade()
+        {
+            if (version >= 2)
+                return;
+
+            if (parts != null)
+            {
+                for (var i = 0; i < parts.Count; i++)
+                {
+                    var part = parts[i];
+                    if (part == null || !MonsterRigCatalog.TrySplitId(part.id, out var folder, out _))
+                        continue;
+                    if (!MonsterRigCatalog.TryFolder(folder, out var spec))
+                        continue;
+
+                    var swing = part.swingDegrees;
+                    MonsterRigEdits.ApplyKindDefaults(part, spec.Kind);
+                    if (swing != 0f)
+                        part.swingDegrees = swing;
+                }
+            }
+
+            version = 2;
+        }
     }
 
     public sealed class MonsterRigAssignment
@@ -133,6 +164,7 @@ namespace TheCall
         public MonsterPartKind Kind;
         public MonsterColorRole Color;
         public int PaletteIndex = -1;
+        public int Bone = -1;
     }
 
     public sealed class MonsterRigPin
@@ -334,6 +366,8 @@ namespace TheCall
                 attachY = height / 2,
                 nativeFacing = MonsterFacing.Right,
                 swingDegrees = 0f,
+                dragDegrees = 0f,
+                inertia = 1f,
                 headTurn = head,
                 excluded = new List<string>(),
                 sockets = new List<MonsterRigSocket>(),
@@ -479,6 +513,69 @@ namespace TheCall
                 return "摆动幅度无效";
 
             piece.Data.swingDegrees = Mathf.Clamp(degrees, 0f, MaxSwingDegrees);
+            return null;
+        }
+
+        public const float MaxDragDegrees = 45f;
+        public const float MinInertia = 0.5f;
+        public const float MaxInertia = 2.5f;
+
+        /// <summary>待机摆动的默认值：身体只是轻微呼吸，尾巴摆得最明显。</summary>
+        public static float DefaultSwing(MonsterPartKind kind)
+        {
+            switch (kind)
+            {
+                case MonsterPartKind.Body: return 0.45f;
+                case MonsterPartKind.Head: return 1.35f;
+                case MonsterPartKind.Hand: return 0.6f;
+                case MonsterPartKind.Foot: return 0.35f;
+                case MonsterPartKind.Tail: return 1.8f;
+                default: return 0f;
+            }
+        }
+
+        /// <summary>拖拽时的最大偏转（度）。配饰和五官不参与拖拽，固定为 0。</summary>
+        public static float DefaultDrag(MonsterPartKind kind)
+        {
+            switch (kind)
+            {
+                case MonsterPartKind.Body: return 10f;
+                case MonsterPartKind.Head: return 9f;
+                case MonsterPartKind.Hand: return 14f;
+                case MonsterPartKind.Foot: return 7f;
+                case MonsterPartKind.Tail: return 22f;
+                default: return 0f;
+            }
+        }
+
+        public static void ApplyKindDefaults(MonsterRigPart part, MonsterPartKind kind)
+        {
+            part.swingDegrees = DefaultSwing(kind);
+            part.dragDegrees = DefaultDrag(kind);
+            part.inertia = 1f;
+        }
+
+        public static string SetDragDegrees(MonsterRigPiece piece, float degrees)
+        {
+            if (piece == null || piece.Data == null)
+                return "没有选中的部件";
+
+            if (float.IsNaN(degrees) || float.IsInfinity(degrees))
+                return "拖拽角度无效";
+
+            piece.Data.dragDegrees = Mathf.Clamp(degrees, 0f, MaxDragDegrees);
+            return null;
+        }
+
+        public static string SetInertia(MonsterRigPiece piece, float value)
+        {
+            if (piece == null || piece.Data == null)
+                return "没有选中的部件";
+
+            if (float.IsNaN(value) || float.IsInfinity(value))
+                return "惯性无效";
+
+            piece.Data.inertia = Mathf.Clamp(value, MinInertia, MaxInertia);
             return null;
         }
 
@@ -656,6 +753,41 @@ namespace TheCall
             y = nextY;
         }
 
+        /// <summary>把一只怪物（或编辑中的一个部件）编译成骨架：谁挂在谁身上、每根骨头的参数。</summary>
+        public static MonsterRigSkeleton Compile(
+            MonsterRigPiece root,
+            IReadOnlyList<MonsterRigPiece> catalog,
+            IReadOnlyList<MonsterRigAssignment> assignments,
+            ISet<MonsterSocketGroup> visibleGroups,
+            bool headTurnPreview)
+        {
+            var skeleton = new MonsterRigSkeleton();
+            if (root == null || root.Data == null)
+            {
+                skeleton.Warnings.Add("没有可预览的部件");
+                return skeleton;
+            }
+
+            AddBone(skeleton, root, catalog, assignments, visibleGroups, headTurnPreview, -1, null, 0f, 0f, 0, true);
+
+            var pins = 0;
+            for (var i = 0; i < skeleton.Bones.Count; i++)
+            {
+                skeleton.Bones[i].PinStart = pins;
+                pins += skeleton.Bones[i].Sockets.Count;
+            }
+
+            skeleton.PinCount = pins;
+            skeleton.DrawOrder = DrawOrder(skeleton);
+            return skeleton;
+        }
+
+        /// <summary>静止姿势（不加任何摆动），用于编辑器的预览和随机配色。</summary>
+        public static MonsterRigPose Rest(MonsterRigSkeleton skeleton)
+        {
+            return Posed(skeleton, 0f, 0f);
+        }
+
         public static MonsterRigPose Build(
             MonsterRigPiece root,
             IReadOnlyList<MonsterRigPiece> catalog,
@@ -665,31 +797,158 @@ namespace TheCall
             float time,
             float cyclesPerSecond)
         {
-            var pose = new MonsterRigPose();
-            if (root == null || root.Data == null)
-            {
-                pose.Warnings.Add("没有可预览的部件");
-                return pose;
-            }
-
-            Walk(
-                pose,
-                root,
-                catalog,
-                assignments,
-                visibleGroups,
-                headTurnPreview,
-                time,
-                cyclesPerSecond,
-                null,
-                0,
-                0,
-                0,
-                false,
-                true,
-                0);
+            var skeleton = Compile(root, catalog, assignments, visibleGroups, headTurnPreview);
+            var pose = Posed(skeleton, time, cyclesPerSecond);
             pose.Nodes.Sort((a, b) => a.Order.CompareTo(b.Order));
             return pose;
+        }
+
+        static MonsterRigPose Posed(MonsterRigSkeleton skeleton, float time, float cyclesPerSecond)
+        {
+            var frame = new MonsterRigFrame(skeleton);
+            if (skeleton.Bones.Count > 0)
+            {
+                var angles = new float[skeleton.Bones.Count];
+                for (var i = 1; i < angles.Length; i++)
+                    angles[i] = LocalSwing(skeleton.Bones[i].Swing, time, cyclesPerSecond);
+
+                var root = skeleton.Bones[0];
+                var tilt = LocalSwing(root.Swing, time, cyclesPerSecond);
+                MonsterRigKinematics.Solve(skeleton, frame, angles, tilt, root.MountX, root.MountY, root.MountX, root.MountY, 0f);
+            }
+
+            return MonsterRigKinematics.ToPose(skeleton, frame);
+        }
+
+        static int[] DrawOrder(MonsterRigSkeleton skeleton)
+        {
+            var order = new int[skeleton.Bones.Count];
+            for (var i = 0; i < order.Length; i++)
+                order[i] = i;
+
+            // 稳定的插入排序：部件数量很少，同层的保持原来的先后。
+            for (var i = 1; i < order.Length; i++)
+            {
+                var current = order[i];
+                var j = i - 1;
+                while (j >= 0 && skeleton.Bones[order[j]].Order > skeleton.Bones[current].Order)
+                {
+                    order[j + 1] = order[j];
+                    j -= 1;
+                }
+
+                order[j + 1] = current;
+            }
+
+            return order;
+        }
+
+        static int AddBone(
+            MonsterRigSkeleton skeleton,
+            MonsterRigPiece piece,
+            IReadOnlyList<MonsterRigPiece> catalog,
+            IReadOnlyList<MonsterRigAssignment> assignments,
+            ISet<MonsterSocketGroup> visibleGroups,
+            bool headTurnPreview,
+            int parent,
+            MonsterRigSocket parentSocket,
+            float socketOffsetX,
+            float socketOffsetY,
+            int order,
+            bool isRoot)
+        {
+            MonsterRigEdits.MountPoint(piece, out var mountX, out var mountY);
+            var index = skeleton.Bones.Count;
+            var bone = new MonsterRigBone
+            {
+                PartId = piece.Data.id,
+                SocketId = parentSocket == null ? null : parentSocket.id,
+                Parent = parent,
+                Width = piece.Width,
+                Height = piece.Height,
+                MountX = mountX,
+                MountY = mountY,
+                SocketOffsetX = socketOffsetX,
+                SocketOffsetY = socketOffsetY,
+                LocalMirror = LocalMirror(piece, parentSocket, headTurnPreview),
+                Order = MonsterLayerBands.Order(piece, order),
+                Kind = piece.Kind,
+                Color = piece.Color,
+                Joint = isRoot ? MonsterJoint.Root : JointFor(piece.Kind),
+                Swing = piece.Data.swingDegrees,
+                Drag = piece.Data.dragDegrees,
+                Inertia = Mathf.Clamp(piece.Data.inertia > 0f ? piece.Data.inertia : 1f, 0.25f, 4f),
+            };
+            skeleton.Bones.Add(bone);
+
+            if (piece.Kind == MonsterPartKind.Head && piece.Data.sockets != null)
+            {
+                var hasNeck = false;
+                for (var i = 0; i < piece.Data.sockets.Count; i++)
+                {
+                    if (piece.Data.sockets[i].group == MonsterSocketGroup.Neck)
+                        hasNeck = true;
+                }
+
+                if (!hasNeck)
+                    skeleton.Warnings.Add(piece.Data.id + " 还没有身体对接点，暂时用画布中心");
+            }
+
+            if (piece.Data.sockets == null)
+                return index;
+
+            for (var i = 0; i < piece.Data.sockets.Count; i++)
+            {
+                var socket = piece.Data.sockets[i];
+                var spec = MonsterRigCatalog.GroupSpec(socket.group);
+                bone.Sockets.Add(new MonsterRigSocketRef
+                {
+                    Id = socket.id,
+                    Group = socket.group,
+                    Accepts = socket.accepts,
+                    Mount = spec != null && spec.Mount,
+                    X = socket.x,
+                    Y = socket.y,
+                });
+
+                if (spec == null || spec.Mount)
+                    continue;
+
+                if (visibleGroups != null && !visibleGroups.Contains(socket.group))
+                    continue;
+
+                var child = FindPiece(catalog, Assigned(assignments, socket.id));
+                if (child == null)
+                    continue;
+
+                AddBone(
+                    skeleton,
+                    child,
+                    catalog,
+                    assignments,
+                    visibleGroups,
+                    headTurnPreview,
+                    index,
+                    socket,
+                    socket.x - mountX,
+                    socket.y - mountY,
+                    i,
+                    false);
+            }
+
+            return index;
+        }
+
+        static MonsterJoint JointFor(MonsterPartKind kind)
+        {
+            switch (kind)
+            {
+                case MonsterPartKind.Head: return MonsterJoint.Head;
+                case MonsterPartKind.Hand: return MonsterJoint.Hand;
+                case MonsterPartKind.Foot: return MonsterJoint.Foot;
+                case MonsterPartKind.Tail: return MonsterJoint.Tail;
+                default: return MonsterJoint.Trim;
+            }
         }
 
         public static SpritePlacement PlacementFor(MonsterRigNode node)
@@ -704,123 +963,6 @@ namespace TheCall
                 Rotation = node.WorldRotation,
                 Scale = new Vector3(node.WorldMirror ? -1f : 1f, 1f, 1f),
             };
-        }
-
-        static void Walk(
-            MonsterRigPose pose,
-            MonsterRigPiece piece,
-            IReadOnlyList<MonsterRigPiece> catalog,
-            IReadOnlyList<MonsterRigAssignment> assignments,
-            ISet<MonsterSocketGroup> visibleGroups,
-            bool headTurnPreview,
-            float time,
-            float cyclesPerSecond,
-            MonsterRigSocket parentSocket,
-            double parentWorldX,
-            double parentWorldY,
-            double parentRotation,
-            bool parentMirror,
-            bool isRoot,
-            int order)
-        {
-            MonsterRigEdits.MountPoint(piece, out var mountX, out var mountY);
-            var localMirror = LocalMirror(piece, parentSocket, headTurnPreview);
-            var localSwing = LocalSwing(piece.Data.swingDegrees, time, cyclesPerSecond);
-            double worldX;
-            double worldY;
-            double worldRotation;
-            var worldMirror = parentMirror ^ localMirror;
-            if (isRoot)
-            {
-                worldX = mountX;
-                worldY = mountY;
-                worldRotation = localSwing;
-                worldMirror = localMirror;
-            }
-            else
-            {
-                worldX = parentWorldX;
-                worldY = parentWorldY;
-                worldRotation = parentRotation + localSwing;
-            }
-
-            if (piece.Kind == MonsterPartKind.Head && piece.Data.sockets != null)
-            {
-                var hasNeck = false;
-                for (var i = 0; i < piece.Data.sockets.Count; i++)
-                {
-                    if (piece.Data.sockets[i].group == MonsterSocketGroup.Neck)
-                        hasNeck = true;
-                }
-
-                if (!hasNeck)
-                    pose.Warnings.Add(piece.Data.id + " 还没有身体对接点，暂时用画布中心");
-            }
-
-            pose.Nodes.Add(new MonsterRigNode
-            {
-                PartId = piece.Data.id,
-                SocketId = parentSocket == null ? null : parentSocket.id,
-                Width = piece.Width,
-                Height = piece.Height,
-                AttachX = mountX,
-                AttachY = mountY,
-                WorldAttachX = (float)worldX,
-                WorldAttachY = (float)worldY,
-                WorldRotation = (float)worldRotation,
-                WorldMirror = worldMirror,
-                Order = MonsterLayerBands.Order(piece, order),
-                Kind = piece.Kind,
-                Color = piece.Color,
-            });
-
-            if (piece.Data.sockets == null)
-                return;
-
-            for (var i = 0; i < piece.Data.sockets.Count; i++)
-            {
-                var socket = piece.Data.sockets[i];
-                TransformPoint(worldX, worldY, worldRotation, worldMirror, mountX, mountY, socket.x, socket.y, out var pinX, out var pinY);
-                var spec = MonsterRigCatalog.GroupSpec(socket.group);
-                pose.Pins.Add(new MonsterRigPin
-                {
-                    PartId = piece.Data.id,
-                    SocketId = socket.id,
-                    Group = socket.group,
-                    Accepts = socket.accepts,
-                    WorldX = (float)pinX,
-                    WorldY = (float)pinY,
-                    Mount = spec != null && spec.Mount,
-                });
-
-                if (spec == null || spec.Mount)
-                    continue;
-
-                if (visibleGroups != null && !visibleGroups.Contains(socket.group))
-                    continue;
-
-                var childId = Assigned(assignments, socket.id);
-                var child = FindPiece(catalog, childId);
-                if (child == null)
-                    continue;
-
-                Walk(
-                    pose,
-                    child,
-                    catalog,
-                    assignments,
-                    visibleGroups,
-                    headTurnPreview,
-                    time,
-                    cyclesPerSecond,
-                    socket,
-                    pinX,
-                    pinY,
-                    worldRotation,
-                    worldMirror,
-                    false,
-                    i);
-            }
         }
 
         public static void TransformPoint(
@@ -1098,51 +1240,6 @@ namespace TheCall
         }
     }
 
-    public readonly struct MonsterMotionSample
-    {
-        public readonly float Head;
-        public readonly float Feet;
-        public readonly float Tail;
-        public readonly float Body;
-        public readonly float Lift;
-
-        public MonsterMotionSample(float head, float feet, float tail, float body, float lift)
-        {
-            Head = head;
-            Feet = feet;
-            Tail = tail;
-            Body = body;
-            Lift = lift;
-        }
-
-        public static MonsterMotionSample Idle(MonsterMotionProfile profile, float time, float phase)
-        {
-            profile = profile == null ? MonsterMotionProfile.Fallback : profile;
-            var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
-            var slowWave = Mathf.Sin((time + phase * 0.7f) * Mathf.PI * profile.idleCyclesPerSecond);
-            return new MonsterMotionSample(
-                wave * profile.idleHeadDegrees,
-                wave * profile.idleFeetDegrees,
-                slowWave * profile.idleTailDegrees,
-                slowWave * profile.idleBodyDegrees,
-                wave * profile.idleBodyLift);
-        }
-
-        public static MonsterMotionSample Drag(MonsterMotionProfile profile, float headAngle, float feetAngle)
-        {
-            profile = profile == null ? MonsterMotionProfile.Fallback : profile;
-            var tail = Mathf.Clamp(
-                feetAngle * profile.tailDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
-                -profile.tailDragDegrees,
-                profile.tailDragDegrees);
-            var body = Mathf.Clamp(
-                feetAngle * profile.bodyDragDegrees / Mathf.Max(1f, profile.feetDragDegrees),
-                -profile.bodyDragDegrees,
-                profile.bodyDragDegrees);
-            return new MonsterMotionSample(headAngle, feetAngle, tail, body, 0f);
-        }
-    }
-
     public static class MonsterMotion
     {
         public static void StepSpring(
@@ -1156,119 +1253,6 @@ namespace TheCall
             var acceleration = (target - angle) * stiffness - velocity * damping;
             velocity += acceleration * deltaTime;
             angle += velocity * deltaTime;
-        }
-    }
-
-    public static class MonsterRigMotion
-    {
-        public static MonsterRigPose Present(MonsterRigPose rest, MonsterMotionSample sample)
-        {
-            var posed = new MonsterRigPose();
-            if (rest == null)
-                return posed;
-
-            for (var i = 0; i < rest.Nodes.Count; i++)
-                posed.Nodes.Add(Copy(rest.Nodes[i]));
-            posed.Pins.AddRange(rest.Pins);
-            posed.Warnings.AddRange(rest.Warnings);
-            Apply(posed.Nodes, sample);
-            return posed;
-        }
-
-        public static void Apply(List<MonsterRigNode> nodes, MonsterMotionSample sample)
-        {
-            if (nodes == null || nodes.Count == 0)
-                return;
-
-            MonsterRigNode body = null;
-            MonsterRigNode head = null;
-            for (var i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes[i];
-                if (node.Kind == MonsterPartKind.Body && string.IsNullOrEmpty(node.SocketId))
-                    body = node;
-                if (node.Kind == MonsterPartKind.Head)
-                    head = node;
-            }
-
-            if (body != null)
-                Orbit(nodes, body.WorldAttachX, body.WorldAttachY, sample.Body, sample.Lift, BodyGroup);
-            if (head != null)
-                Orbit(nodes, head.WorldAttachX, head.WorldAttachY, sample.Head, 0f, HeadGroup);
-            AddSpin(nodes, MonsterPartKind.Foot, sample.Feet);
-            AddSpin(nodes, MonsterPartKind.Tail, sample.Tail);
-        }
-
-        static bool BodyGroup(MonsterPartKind kind)
-        {
-            return kind == MonsterPartKind.Body || kind == MonsterPartKind.Hand || kind == MonsterPartKind.Accessory;
-        }
-
-        static bool HeadGroup(MonsterPartKind kind)
-        {
-            return kind == MonsterPartKind.Head
-                || kind == MonsterPartKind.Eye
-                || kind == MonsterPartKind.Mouth
-                || kind == MonsterPartKind.Hat;
-        }
-
-        static void Orbit(
-            List<MonsterRigNode> nodes,
-            float pivotX,
-            float pivotY,
-            float angle,
-            float lift,
-            Func<MonsterPartKind, bool> include)
-        {
-            if (angle == 0f && lift == 0f)
-                return;
-
-            for (var i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes[i];
-                if (!include(node.Kind))
-                    continue;
-
-                var x = (double)(node.WorldAttachX - pivotX);
-                var y = (double)(node.WorldAttachY - pivotY);
-                MonsterRigLayout.Rotate(ref x, ref y, angle);
-                node.WorldAttachX = pivotX + (float)x;
-                node.WorldAttachY = pivotY + (float)y + lift;
-                node.WorldRotation += angle;
-            }
-        }
-
-        static void AddSpin(List<MonsterRigNode> nodes, MonsterPartKind kind, float angle)
-        {
-            if (angle == 0f)
-                return;
-
-            for (var i = 0; i < nodes.Count; i++)
-            {
-                if (nodes[i].Kind == kind)
-                    nodes[i].WorldRotation += angle;
-            }
-        }
-
-        static MonsterRigNode Copy(MonsterRigNode source)
-        {
-            return new MonsterRigNode
-            {
-                PartId = source.PartId,
-                SocketId = source.SocketId,
-                Width = source.Width,
-                Height = source.Height,
-                AttachX = source.AttachX,
-                AttachY = source.AttachY,
-                WorldAttachX = source.WorldAttachX,
-                WorldAttachY = source.WorldAttachY,
-                WorldRotation = source.WorldRotation,
-                WorldMirror = source.WorldMirror,
-                Order = source.Order,
-                Kind = source.Kind,
-                Color = source.Color,
-                PaletteIndex = source.PaletteIndex,
-            };
         }
     }
 

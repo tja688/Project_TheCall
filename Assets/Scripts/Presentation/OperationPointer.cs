@@ -13,6 +13,11 @@ namespace TheCall
         IEndDragHandler,
         IPointerUpHandler
     {
+        // 拖拽怪物时，原位只保留一个半透明的影子；松手后怪物自己回到原位，再淡出幽灵。
+        const float SourceAlpha = 0.28f;
+        const float MaxReleaseSeconds = 1.5f;
+        const float FadeSeconds = 0.16f;
+
         public RectTransform dragLayer;
 
         TheCallPresentation _presentation;
@@ -23,15 +28,14 @@ namespace TheCall
         bool _hasArmed;
         bool _dragging;
         bool _finished = true;
-        GameObject _ghost;
-        Vector2 _previousPointer;
-        Vector2 _pointerVelocity;
-        MonsterPortrait _ghostPortrait;
-        float _headAngle;
-        float _headVelocity;
-        float _footAngle;
-        float _footVelocity;
-        Vector2 _ghostOffset;
+        GameObject _card;
+        Vector2 _cardOffset;
+        MonsterPortrait _carried;
+        MonsterPortrait _home;
+        bool _releasing;
+        float _releaseClock;
+        bool _fading;
+        float _fadeClock;
         readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
         public DropPayload? Armed => _hasArmed ? _armed : (DropPayload?)null;
@@ -55,22 +59,17 @@ namespace TheCall
 
             _dragging = true;
             _hasArmed = false;
-            _previousPointer = eventData.position;
-            _pointerVelocity = Vector2.zero;
-            ResetSpring();
+            ResetVisuals();
             if (_hasPressedPayload && source == _pressed)
-                SpawnGhost(source, eventData);
+                Carry(source, eventData);
         }
 
         public void MoveGhost(PointerEventData eventData)
         {
-            if (_ghost == null)
-                return;
-
-            var deltaTime = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
-            _pointerVelocity = Vector2.ClampMagnitude((eventData.position - _previousPointer) / deltaTime, 1000f);
-            _previousPointer = eventData.position;
-            _ghost.transform.position = eventData.position + _ghostOffset;
+            if (_card != null)
+                _card.transform.position = eventData.position + _cardOffset;
+            if (_carried != null)
+                _carried.Hold(eventData.position, eventData.pressEventCamera);
         }
 
         public void Finish(PointerEventData eventData)
@@ -81,9 +80,11 @@ namespace TheCall
             _finished = true;
             if (_dragging)
             {
+                var applied = false;
                 if (_hasPressedPayload && _presentation != null)
-                    _presentation.CommitDrop(new OperationDrop(_pressedPayload, RayLanding(eventData)));
+                    applied = _presentation.CommitDrop(new OperationDrop(_pressedPayload, RayLanding(eventData)));
 
+                LetGo(applied);
                 ClearGesture();
                 Paint();
                 return;
@@ -128,25 +129,66 @@ namespace TheCall
         {
             _finished = true;
             ClearGesture();
+            ResetVisuals();
         }
 
-        void SpawnGhost(OperationPayloadDrag source, PointerEventData eventData)
+        /// <summary>
+        /// 怪物拖拽：在原位生成一只同样的怪物，指针抓住它上面按下的那一点。
+        /// 原位压暗成影子；怪物本身带着抓取、摆动和回弹，不复制卡片。
+        /// </summary>
+        void Carry(OperationPayloadDrag source, PointerEventData eventData)
         {
-            ClearGhost();
+            if (source.payloadKind != PayloadKind.Monster)
+            {
+                SpawnCard(source, eventData);
+                return;
+            }
+
             if (dragLayer == null)
                 return;
 
-            _ghost = Instantiate(source.gameObject, dragLayer);
-            _ghostOffset = (Vector2)source.transform.position - eventData.position;
-            var group = _ghost.AddComponent<CanvasGroup>();
+            var home = source.GetComponentInChildren<MonsterPortrait>(true);
+            if (home == null || !home.HasCreature)
+                return;
+
+            _home = home;
+            _home.SetVisibility(SourceAlpha);
+            _carried = MonsterPortrait.SpawnGhost(dragLayer, _home);
+            _carried.Grab(eventData.pressPosition, eventData.pressEventCamera);
+            _carried.Hold(eventData.position, eventData.pressEventCamera);
+        }
+
+        /// <summary>技能芯片没有怪物可以承载，仍按原来的方式跟着指针走。</summary>
+        void SpawnCard(OperationPayloadDrag source, PointerEventData eventData)
+        {
+            ClearCard();
+            if (dragLayer == null)
+                return;
+
+            _card = Instantiate(source.gameObject, dragLayer);
+            _cardOffset = (Vector2)source.transform.position - eventData.position;
+            var group = _card.AddComponent<CanvasGroup>();
             group.blocksRaycasts = false;
             group.interactable = false;
-            var copy = _ghost.GetComponent<OperationPayloadDrag>();
+            var copy = _card.GetComponent<OperationPayloadDrag>();
             if (copy != null)
                 copy.enabled = false;
-            _ghostPortrait = _ghost.GetComponentInChildren<MonsterPortrait>(true);
-            if (_ghostPortrait != null && _ghostPortrait.gameObject.activeInHierarchy)
-                _ghostPortrait.SetDragMotion(_pointerVelocity);
+        }
+
+        /// <summary>松手。落在有效位置时（applied）怪物已被挪走，原位立即恢复；否则怪物自己回到原位。</summary>
+        void LetGo(bool applied)
+        {
+            if (_carried == null)
+                return;
+
+            _carried.Release();
+            _releasing = true;
+            _releaseClock = 0f;
+            if (applied)
+            {
+                RestoreHome();
+                BeginFade();
+            }
         }
 
         DropLanding RayLanding(PointerEventData eventData)
@@ -172,58 +214,66 @@ namespace TheCall
             _hasArmed = false;
             _hasPressedPayload = false;
             _pressed = null;
-            ClearGhost();
+            ClearCard();
         }
 
-        void ClearGhost()
+        void ClearCard()
         {
-            if (_ghostPortrait != null)
-                _ghostPortrait.RestoreMotion();
-            _ghostPortrait = null;
-            if (_ghost == null)
-                return;
+            if (_card != null)
+                Destroy(_card);
+            _card = null;
+        }
 
-            Destroy(_ghost);
-            _ghost = null;
+        void RestoreHome()
+        {
+            if (_home != null)
+                _home.SetVisibility(1f);
+            _home = null;
+        }
+
+        void ResetVisuals()
+        {
+            ClearCard();
+            RestoreHome();
+            if (_carried != null)
+                Destroy(_carried.gameObject);
+            _carried = null;
+            _releasing = false;
+            _releaseClock = 0f;
+            _fading = false;
+            _fadeClock = 0f;
+        }
+
+        void BeginFade()
+        {
+            _fading = true;
+            _fadeClock = 0f;
         }
 
         void Update()
         {
-            if (_ghost == null)
+            if (_carried == null)
                 return;
 
             var dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
-            _pointerVelocity = Vector2.Lerp(_pointerVelocity, Vector2.zero, 1f - Mathf.Exp(-14f * dt));
-            AdvanceSpring(dt);
-        }
+            if (_fading)
+            {
+                _fadeClock += dt;
+                var t = Mathf.Clamp01(_fadeClock / FadeSeconds);
+                _carried.SetVisibility(1f - t);
+                if (_home != null)
+                    _home.SetVisibility(Mathf.Lerp(SourceAlpha, 1f, t));
+                if (t >= 1f)
+                    ResetVisuals();
+                return;
+            }
 
-        void AdvanceSpring(float deltaTime)
-        {
-            if (_ghostPortrait == null)
+            if (!_releasing)
                 return;
 
-            var drive = Mathf.Clamp(_pointerVelocity.x / 700f, -1f, 1f);
-            var profile = _ghostPortrait.MotionProfile;
-            MonsterMotion.StepSpring(
-                ref _headAngle,
-                ref _headVelocity,
-                -drive * profile.headDragDegrees,
-                deltaTime,
-                profile.springStiffness,
-                profile.springDamping);
-            MonsterMotion.StepSpring(
-                ref _footAngle,
-                ref _footVelocity,
-                drive * profile.feetDragDegrees,
-                deltaTime,
-                profile.springStiffness,
-                profile.springDamping);
-            _ghostPortrait.SetSpringMotion(_headAngle, _footAngle);
-        }
-
-        void ResetSpring()
-        {
-            _headAngle = _headVelocity = _footAngle = _footVelocity = 0f;
+            _releaseClock += dt;
+            if (_carried.Settled || _releaseClock >= MaxReleaseSeconds)
+                BeginFade();
         }
 
         void Paint()
