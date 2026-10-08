@@ -15,16 +15,23 @@ namespace TheCall
                 return null;
 
             var copy = this.GetArchitecture().GetUtility<SkillCopy>();
+            var run = this.GetModel<RunModel>();
+            var level = this.GetModel<LevelModel>();
+            var catalog = this.GetArchitecture().GetUtility<SkillCatalog>();
+            var tools = this.GetArchitecture().GetUtility<IToolCatalog>().Tools;
             var skills = new MonsterSkillDetail[view.Skills.Count];
             for (var i = 0; i < view.Skills.Count; i++)
             {
                 var skill = view.Skills[i];
                 if (skill == null || string.IsNullOrEmpty(skill.Name))
                     return null;
-                if (!copy.TryDescribe(skill.Name, out var kind, out var sentence, out var function))
+                if (!copy.TryDescribe(skill.Name, out var kind, out _, out var function))
+                    return null;
+                if (!copy.TrySkill(skill.Name, out var def))
                     return null;
 
-                skills[i] = new MonsterSkillDetail(skill.Name, sentence, kind, skill.Rarity, function);
+                var spans = SkillReadout.Render(def, skill.Quote, view.Id, run, level, catalog, tools);
+                skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans);
             }
 
             return new MonsterDetails(view.Id, view.DisplayName, skills, view.Modifier, view.Immovable, view.Capacity, view.Appearance);

@@ -38,6 +38,12 @@ namespace TheCall
             return function.Length > 0;
         }
 
+        internal bool TrySkill(string skillName, out SkillDef skill)
+        {
+            skill = _book.FindSkill(skillName);
+            return skill != null;
+        }
+
         static string FunctionText(SkillRole role)
         {
             var text = "";

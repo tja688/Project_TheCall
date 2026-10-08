@@ -87,7 +87,7 @@ namespace TheCall
                 _subRarities[i].text = RarityText(skill.Rarity);
                 _subRarities[i].color = RarityInk(skill.Rarity);
                 _subFunctions[i].text = skill.Function;
-                _subSentences[i].text = skill.Sentence;
+                _subSentences[i].text = skill.DisplaySentence;
             }
 
             var graphics = _window.GetComponentsInChildren<Graphic>(true);

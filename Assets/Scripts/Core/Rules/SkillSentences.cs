@@ -3,25 +3,45 @@ using System.Text;
 
 namespace TheCall
 {
+    internal enum FigureKind
+    {
+        None,
+        Energy,
+        PerHead,
+        Population,
+        SkillMultiple,
+    }
+
     internal readonly struct SentencePiece
     {
-        public SentencePiece(string text, int energy, bool isEnergy)
+        public SentencePiece(string text, int energy, FigureKind kind)
         {
             Text = text;
             Energy = energy;
-            IsEnergy = isEnergy;
+            Kind = kind;
         }
 
         public string Text { get; }
 
         public int Energy { get; }
 
-        public bool IsEnergy { get; }
+        public FigureKind Kind { get; }
 
-        public static SentencePiece Literal(string text) => new SentencePiece(text, 0, false);
+        public bool IsEnergy => Kind == FigureKind.Energy || Kind == FigureKind.PerHead;
 
-        // 上台后会随其他怪物的能量加成改写。次数、产能、光环自己的加值不要用这个。
-        public static SentencePiece Points(int value) => new SentencePiece(null, value, true);
+        public static SentencePiece Literal(string text) => new SentencePiece(text, 0, FigureKind.None);
+
+        // 这一下产出的能量。悬停时改成报价、加项、倍率算完的数。
+        public static SentencePiece Points(int value) => new SentencePiece(null, value, FigureKind.Energy);
+
+        // 一侧每只的单价。写回和倍率改这个数；平加只在这一侧恰好一只时并进单价。
+        public static SentencePiece PerHead(int value) => new SentencePiece(null, value, FigureKind.PerHead);
+
+        // 原文里的这段在目录句子里照字面留着，悬停时换成算出来的数。
+        public static SentencePiece Named(string text, FigureKind kind) => new SentencePiece(text, 0, kind);
+
+        // 目录句子不出现这个数，悬停时补在句尾。
+        public static SentencePiece Current(FigureKind kind) => new SentencePiece(null, 0, kind);
     }
 
     // 技能句子只写在这里。新的效果组合补一条；已有组合只改 call-book.json 就会进怪物库和技能库。
@@ -32,7 +52,12 @@ namespace TheCall
             var pieces = Pieces(skill);
             var buffer = new StringBuilder();
             for (var i = 0; i < pieces.Length; i++)
-                buffer.Append(pieces[i].IsEnergy ? pieces[i].Energy.ToString() : pieces[i].Text);
+            {
+                if (pieces[i].IsEnergy)
+                    buffer.Append(pieces[i].Energy.ToString());
+                else if (pieces[i].Text != null)
+                    buffer.Append(pieces[i].Text);
+            }
 
             return buffer.ToString();
         }
@@ -49,7 +74,7 @@ namespace TheCall
                 return new[]
                 {
                     SentencePiece.Literal(side + "每有一个怪物产生"),
-                    SentencePiece.Points(effect.A),
+                    SentencePiece.PerHead(effect.A),
                     SentencePiece.Literal("点能量"),
                 };
             }
@@ -101,9 +126,23 @@ namespace TheCall
             if (key == "DoubleAdjacentEnergy")
                 return new[] { SentencePiece.Literal("相邻怪物产生的能量翻倍") };
             if (key == "OwnSkillMultiple")
-                return new[] { SentencePiece.Literal("产生等同于怪物技能数数值两倍的能量") };
+            {
+                return new[]
+                {
+                    SentencePiece.Literal("产生等同于怪物技能数数值两倍的能量"),
+                    SentencePiece.Current(FigureKind.SkillMultiple),
+                };
+            }
+
             if (key == "PopulationQuote")
-                return new[] { SentencePiece.Literal("产生等同于怪物总量数值（培育槽+提取槽+怪物笼）的能量") };
+            {
+                return new[]
+                {
+                    SentencePiece.Literal("产生等同于"),
+                    SentencePiece.Named("怪物总量数值", FigureKind.Population),
+                    SentencePiece.Literal("（培育槽+提取槽+怪物笼）的能量"),
+                };
+            }
             if (key == "EnergyQuote+GrowOnClear")
             {
                 return new[]
