@@ -192,7 +192,9 @@ namespace TheCall
 
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = MonsterAssemblyCatalog.CanvasSize;
+            rect.sizeDelta = definition != null && definition.sprite != null
+                ? definition.sprite.rect.size
+                : MonsterAssemblyCatalog.CanvasSize;
             var animationPivot = ClampPivot(slot.pivot, definition);
             rect.pivot = animationPivot;
             rect.anchoredPosition = catalog.ResolveSpritePivotPosition(template, slot, definition, headDefinition);

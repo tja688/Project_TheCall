@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workbench</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <span id="connectionBadge" data-ok="0">idle</span>
+    <span id="statusLine">waiting for snapshot</span>
+    <span id="errorLine"></span>
+  </header>
+  <main id="app">
+    <button type="button" data-command="ping">ping</button>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

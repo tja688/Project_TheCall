@@ -1,0 +1,178 @@
+:root {
+  --bg: #12110f;
+  --panel: #1c1a16;
+  --panel-2: #26231d;
+  --line: #3d372d;
+  --text: #f3eee4;
+  --muted: #a89b88;
+  --brass: #e4c36a;
+  --brass-ink: #2a220f;
+  --danger: #e07a5f;
+  --ok: #8fbf9f;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  color-scheme: dark;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+button, select, input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+button:hover { border-color: #6d624f; }
+
+button.primary {
+  background: var(--brass);
+  color: var(--brass-ink);
+  border-color: #f0d48a;
+  font-weight: 650;
+}
+
+button[aria-pressed="true"], button.on {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #181612;
+}
+
+.brand { display: flex; gap: 10px; align-items: center; min-width: 220px; }
+.brand strong { display: block; font-size: 16px; letter-spacing: 0.04em; }
+.brand small { color: var(--muted); }
+.mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: conic-gradient(#e07a5f, #7dba8a, #6aa6d6, #e2b656, #e07a5f);
+}
+
+.connection { color: var(--muted); font-size: 13px; }
+.connection[data-ok="1"] { color: var(--ok); }
+.connection[data-dirty="1"] { color: var(--brass); }
+
+.modes, .actions, .zoom { display: flex; gap: 8px; align-items: center; }
+.actions { margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
+.palette { color: var(--muted); display: flex; gap: 6px; align-items: center; }
+select, input[type="number"] {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.banner {
+  margin: 8px 16px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #3a2a22;
+  color: #f2d2c4;
+}
+
+main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 340px;
+}
+
+.panel {
+  overflow: auto;
+  border-right: 1px solid var(--line);
+  padding: 12px;
+}
+
+#inspector { border-right: 0; border-left: 1px solid var(--line); }
+
+.stage { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.stage-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  color: var(--muted);
+}
+#viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.02), transparent 80px),
+    #100f0d;
+}
+#view { box-shadow: var(--shadow); cursor: crosshair; }
+.hint { margin: 0; padding: 8px 14px 12px; color: var(--muted); font-size: 13px; }
+
+.folder { margin-bottom: 14px; }
+.folder h2 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.part {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  text-align: left;
+}
+.part small { color: var(--muted); }
+.part.on { background: #332c20; }
+
+.group {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: var(--panel-2);
+}
+.group header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.swatch { width: 10px; height: 10px; border-radius: 99px; }
+.row { display: flex; gap: 6px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.socket {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+}
+.socket.on { outline: 1px solid var(--brass); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border-radius: 99px; padding: 4px 8px; }
+label.check { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+.slider { width: 100%; accent-color: var(--brass); }
+h3 { margin: 0 0 8px; font-size: 15px; }
+.muted { color: var(--muted); font-size: 13px; }
+.warn { color: #f0c7a0; }

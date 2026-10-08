@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>怪物装配</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark"></span>
+      <div>
+        <strong>怪物装配</strong>
+        <small>原图像素 · 和游戏同一套摆放</small>
+      </div>
+    </div>
+    <div id="connection" class="connection">正在连接</div>
+    <div class="modes" id="modes">
+      <button type="button" data-mode="edit">编辑挂点</button>
+      <button type="button" data-mode="monster">整只预览</button>
+    </div>
+    <div class="actions">
+      <button type="button" id="turn">预览扭头</button>
+      <button type="button" id="roll">随机勾选组</button>
+      <button type="button" id="rollAll">随机整只</button>
+      <label class="palette">颜色 <select id="palette"></select></label>
+      <button type="button" id="revert">还原</button>
+      <button type="button" id="save" class="primary">保存</button>
+    </div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <main>
+    <aside id="library" class="panel"></aside>
+    <section class="stage">
+      <div class="stage-bar">
+        <div id="stageTitle">选一个部件</div>
+        <div class="zoom" id="zoom">
+          <button type="button" data-zoom="3">3×</button>
+          <button type="button" data-zoom="5">5×</button>
+          <button type="button" data-zoom="8">8×</button>
+        </div>
+      </div>
+      <div id="viewport"><canvas id="view"></canvas></div>
+      <p id="hint" class="hint"></p>
+    </section>
+    <aside id="inspector" class="panel"></aside>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

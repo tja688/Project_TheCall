@@ -1,0 +1,372 @@
+#if UNITY_EDITOR
+// TEMPLATE — rename YourDomain* and wire Authoring + Snapshot builders.
+// Copy into an Editor assembly. Requires Newtonsoft.Json (or equivalent).
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Net;
+using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEngine;
+
+namespace YourDomain.Editor
+{
+    [InitializeOnLoad]
+    public static class YourDomainWorkbenchServer
+    {
+        public const string TokenSessionKey = "YourDomain.Workbench.Token.v1";
+        public const string PortSessionKey = "YourDomain.Workbench.Port.v1";
+        public const int ProtocolVersion = 1;
+        public const int MaxPayloadBytes = 1 * 1024 * 1024;
+        public const int MinPort = 7910;
+        public const int MaxPort = 7939;
+        public const int MaxJobsPerTick = 32;
+
+        private static readonly ConcurrentQueue<Action> MainThreadJobs = new ConcurrentQueue<Action>();
+        private static readonly object Gate = new object();
+
+        private static HttpListener listener;
+        private static CancellationTokenSource cts;
+        private static string token;
+        private static int port;
+        private static bool websocketSupported = true;
+        private static bool updateHooked;
+        private static string webRoot;
+        private static string cachedIndex, cachedCss, cachedJs;
+
+        static YourDomainWorkbenchServer()
+        {
+            EditorApplication.quitting += Shutdown;
+            AssemblyReloadEvents.beforeAssemblyReload += Shutdown;
+        }
+
+        public static string LaunchUrl
+        {
+            get
+            {
+                EnsureStarted();
+                return "http://127.0.0.1:" + port + "/#token=" + Uri.EscapeDataString(token);
+            }
+        }
+
+        public static void EnsureStarted()
+        {
+            lock (Gate)
+            {
+                if (listener != null && listener.IsListening) return;
+
+                EnsureTokenAndPort();
+                webRoot = ResolveWebRoot(); // folder containing index.html, styles.css, app.js
+                cachedIndex = File.ReadAllText(Path.Combine(webRoot, "index.html"), Encoding.UTF8);
+                cachedCss = File.ReadAllText(Path.Combine(webRoot, "styles.css"), Encoding.UTF8);
+                cachedJs = File.ReadAllText(Path.Combine(webRoot, "app.js"), Encoding.UTF8);
+
+                listener = new HttpListener();
+                listener.Prefixes.Add("http://127.0.0.1:" + port + "/");
+                listener.Prefixes.Add("http://localhost:" + port + "/");
+                listener.Start();
+
+                cts = new CancellationTokenSource();
+                websocketSupported = typeof(HttpListenerContext).GetMethod("AcceptWebSocketAsync") != null;
+
+                if (!updateHooked)
+                {
+                    EditorApplication.update += PumpMainThread;
+                    updateHooked = true;
+                }
+
+                var cancel = cts.Token;
+                Task.Run(() => AcceptLoop(cancel), cancel);
+            }
+        }
+
+        public static void Shutdown()
+        {
+            lock (Gate)
+            {
+                try { cts?.Cancel(); } catch { /* ignore */ }
+                cts = null;
+                try { listener?.Stop(); listener?.Close(); } catch { /* ignore */ }
+                listener = null;
+            }
+        }
+
+        private static void EnsureTokenAndPort()
+        {
+            token = SessionState.GetString(TokenSessionKey, "");
+            if (string.IsNullOrEmpty(token))
+            {
+                var bytes = new byte[32];
+                RandomNumberGenerator.Fill(bytes);
+                token = Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                SessionState.SetString(TokenSessionKey, token);
+            }
+
+            port = SessionState.GetInt(PortSessionKey, 0);
+            if (port < MinPort || port > MaxPort) port = MinPort; // replace with FindFreePort in real code
+            SessionState.SetInt(PortSessionKey, port);
+        }
+
+        private static string ResolveWebRoot()
+        {
+            return Path.GetFullPath(Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "Assets/Path/To/YourDomainWorkbenchWeb"));
+        }
+
+        private static void PumpMainThread()
+        {
+            var n = 0;
+            while (n < MaxJobsPerTick && MainThreadJobs.TryDequeue(out var job))
+            {
+                try { job(); } catch (Exception e) { Debug.LogException(e); }
+                n++;
+            }
+            // Optional: if authoring revision advanced, push delta/snapshot to WS clients.
+        }
+
+        private static T RunOnMainThread<T>(Func<T> fn)
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode == false &&
+                Thread.CurrentThread.ManagedThreadId == 0)
+            {
+                // Prefer always queuing; this stub shows the pattern.
+            }
+
+            T result = default;
+            Exception error = null;
+            var done = new ManualResetEventSlim(false);
+            MainThreadJobs.Enqueue(() =>
+            {
+                try { result = fn(); }
+                catch (Exception e) { error = e; }
+                finally { done.Set(); }
+            });
+            done.Wait();
+            if (error != null) throw error;
+            return result;
+        }
+
+        private static async Task AcceptLoop(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                HttpListenerContext context;
+                try { context = await listener.GetContextAsync().ConfigureAwait(false); }
+                catch { break; }
+                _ = Task.Run(() => HandleContext(context), cancellationToken);
+            }
+        }
+
+        private static void HandleContext(HttpListenerContext context)
+        {
+            try
+            {
+                if (!IPAddress.IsLoopback(context.Request.RemoteEndPoint.Address))
+                {
+                    WriteText(context, 403, "forbidden: non-loopback");
+                    return;
+                }
+
+                var path = context.Request.Url?.AbsolutePath ?? "/";
+                if (path.IndexOf("..", StringComparison.Ordinal) >= 0 ||
+                    path.IndexOf('\\') >= 0)
+                {
+                    WriteText(context, 400, "forbidden: path traversal");
+                    return;
+                }
+
+                if (!IsAllowedHost(context.Request))
+                {
+                    WriteText(context, 403, "forbidden: host/origin");
+                    return;
+                }
+
+                if (path == "/" || path.Equals("/index.html", StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteStatic(context, "text/html; charset=utf-8", cachedIndex);
+                    return;
+                }
+                if (path.Equals("/styles.css", StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteStatic(context, "text/css; charset=utf-8", cachedCss);
+                    return;
+                }
+                if (path.Equals("/app.js", StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteStatic(context, "application/javascript; charset=utf-8", cachedJs);
+                    return;
+                }
+
+                if (path.Equals("/stream", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!websocketSupported || !context.Request.IsWebSocketRequest)
+                    {
+                        WriteText(context, 501, "websocket unavailable; use /api/events");
+                        return;
+                    }
+                    HandleWebSocket(context).GetAwaiter().GetResult();
+                    return;
+                }
+
+                if (path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!IsAuthorized(context.Request))
+                    {
+                        WriteText(context, 401, "unauthorized");
+                        return;
+                    }
+                    HandleApi(context);
+                    return;
+                }
+
+                WriteText(context, 404, "not found");
+            }
+            catch (Exception e)
+            {
+                try { WriteText(context, 500, e.Message); } catch { /* ignore */ }
+            }
+        }
+
+        private static void HandleApi(HttpListenerContext context)
+        {
+            var path = context.Request.Url.AbsolutePath;
+            var method = context.Request.HttpMethod ?? "GET";
+
+            if (path.Equals("/api/snapshot", StringComparison.OrdinalIgnoreCase) && method == "GET")
+            {
+                var envelope = RunOnMainThread(BuildSnapshotEnvelope);
+                WriteJson(context, 200, envelope);
+                return;
+            }
+
+            if (path.Equals("/api/command", StringComparison.OrdinalIgnoreCase) && method == "POST")
+            {
+                if (!TryReadBody(context, out var body, out var err))
+                {
+                    WriteJson(context, 413, new { type = "commandResult", ok = false, error = err });
+                    return;
+                }
+
+                var result = RunOnMainThread(() => DispatchCommandJson(body));
+                WriteJson(context, 200, result);
+                return;
+            }
+
+            // TODO: /api/events long-poll when websocketSupported == false
+            WriteText(context, 404, "not found");
+        }
+
+        private static async Task HandleWebSocket(HttpListenerContext context)
+        {
+            var wsContext = await context.AcceptWebSocketAsync(null).ConfigureAwait(false);
+            var socket = wsContext.WebSocket;
+            // TODO: read hello JSON, validate token, push snapshot, loop deltas/commands
+            await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "template", CancellationToken.None);
+        }
+
+        // --- wire these to YourDomainWorkbenchEditorState ---
+
+        private static object BuildSnapshotEnvelope()
+        {
+            return new
+            {
+                type = "snapshot",
+                protocolVersion = ProtocolVersion,
+                revision = 0L, // authoring.Revision
+                payload = new { } // playMode, rows, runtime, errors, ...
+            };
+        }
+
+        private static object DispatchCommandJson(string body)
+        {
+            // parse requestId/command/payload; call session.TryDispatchCommand
+            return new
+            {
+                type = "commandResult",
+                requestId = "",
+                ok = false,
+                revision = 0L,
+                payload = (object)null,
+                error = "not wired"
+            };
+        }
+
+        private static bool IsAllowedHost(HttpListenerRequest request)
+        {
+            var expected = new[]
+            {
+                "127.0.0.1:" + port,
+                "localhost:" + port,
+            };
+            var host = request.UserHostName ?? "";
+            var okHost = false;
+            foreach (var e in expected)
+                if (host.Equals(e, StringComparison.OrdinalIgnoreCase)) okHost = true;
+            if (!okHost) return false;
+
+            var origin = request.Headers["Origin"];
+            if (string.IsNullOrEmpty(origin)) return true;
+            return origin.Equals("http://127.0.0.1:" + port, StringComparison.OrdinalIgnoreCase)
+                || origin.Equals("http://localhost:" + port, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsAuthorized(HttpListenerRequest request)
+        {
+            var header = request.Headers["Authorization"] ?? "";
+            const string prefix = "Bearer ";
+            if (!header.StartsWith(prefix, StringComparison.Ordinal)) return false;
+            return header.Substring(prefix.Length) == token;
+        }
+
+        private static bool TryReadBody(HttpListenerContext context, out string body, out string error)
+        {
+            body = null;
+            error = null;
+            if (context.Request.ContentLength64 > MaxPayloadBytes)
+            {
+                error = "payload too large";
+                return false;
+            }
+            using (var reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding))
+                body = reader.ReadToEnd();
+            if (body != null && Encoding.UTF8.GetByteCount(body) > MaxPayloadBytes)
+            {
+                error = "payload too large";
+                return false;
+            }
+            return true;
+        }
+
+        private static void WriteStatic(HttpListenerContext context, string contentType, string body)
+        {
+            context.Response.Headers["Content-Security-Policy"] =
+                "default-src 'self'; connect-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'";
+            context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            context.Response.Headers["Cache-Control"] = "no-store";
+            WriteText(context, 200, body, contentType);
+        }
+
+        private static void WriteJson(HttpListenerContext context, int status, object obj)
+        {
+            var json = JsonConvert.SerializeObject(obj);
+            WriteText(context, status, json, "application/json; charset=utf-8");
+        }
+
+        private static void WriteText(HttpListenerContext context, int status, string body, string contentType = "text/plain")
+        {
+            var bytes = Encoding.UTF8.GetBytes(body ?? "");
+            context.Response.StatusCode = status;
+            context.Response.ContentType = contentType;
+            context.Response.ContentLength64 = bytes.Length;
+            context.Response.OutputStream.Write(bytes, 0, bytes.Length);
+            context.Response.OutputStream.Close();
+        }
+    }
+}
+#endif

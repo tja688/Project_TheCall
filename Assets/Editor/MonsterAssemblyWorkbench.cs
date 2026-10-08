@@ -90,7 +90,7 @@ namespace TheCall.Editor
         float _bodyAngle;
         float _bodyVelocity;
 
-        [MenuItem("The Call/怪物拼装工作区")]
+        [MenuItem("The Call/怪物拼装工作区（旧窗口）")]
         public static void Open()
         {
             var window = GetWindow<MonsterAssemblyWorkbench>();

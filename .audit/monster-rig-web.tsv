@@ -1,0 +1,11 @@
+ts	phase	decision	why	evidence	result
+2026-10-08T02:20:00Z	start	开始这一轮装配改造，前面没有别的运行记录	用户要先做出可试的网页装配台	agent 4c26d70f-b888-4150-86dd-f6178454cc18	open
+2026-10-08T02:22:00Z	frame	完成标准是网页里能给主体加分组挂点、次主体左右镜像、运动和排除，并且预览摆放数字和游戏用的 SpritePlacement 相同	用户要试过再调，所以这一轮先做出可操作的装配台	user request	open
+2026-10-08T02:28:00Z	frame	不跑 WebGL 发布优化，改做本机网页工作台	optimize-web 管的是播放器体积，解决不了编辑器难用	.cursor/skills/unity-localhost-workbench/SKILL.md	open
+2026-10-08T02:36:00Z	frame	脚归入次主体，嘴作为副体挂在头的嘴部组	脚被同时写进副体和次主体，左右镜像是更具体的要求。嘴有素材目录，不归组就没处挂	Assets/Arts/Others/怪物部位	open
+2026-10-08T02:40:00Z	frame	跳过三份相同模型的方案赛，直接采用部件挂点组这一形	可用的架构模型都落到同一个，再赛一次不会多出第二种结构	pstack-models.mdc architect runners	open
+2026-10-08T02:45:00Z	model	9 条装配测试通过，旧的两条拼装测试也通过	摆放、镜像、扭头、排除和随机用固定数字对过	unity run_tests filter MonsterRig 9/9，MonsterAssembly 2/2	tests green
+2026-10-08T02:49:00Z	page	在网页上给身体1点出手挂点并装上手1，挂点落在身体上	预览要能看见原图和挂点	浏览器截图 page-2026-10-08T02-49-04	手装在挂点上
+2026-10-08T02:50:00Z	page	还原掉试挂点，打开时默认选中身体1	不想把试出来的点留给下次	页面标题 身体 / 身体1，检查器里没有 68,43	reverted trial socket
+2026-10-08T02:51:00Z	open	游戏内画像仍走旧的叠层配方	现在把 Show 换成空挂点会把现有怪物拆空	MonsterPortrait.Show	open
+2026-10-08T02:56:00Z	draw	配饰改到头的后面绘制	游戏里配饰挂在身体组，头组盖在上面	MonsterRigTests.配饰画在头后面 passed	tests green

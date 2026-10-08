@@ -1,0 +1,134 @@
+// TEMPLATE — paste into app.js (or split modules later). No npm.
+(() => {
+  const token = new URLSearchParams(location.hash.replace(/^#/, "")).get("token") || "";
+  let revision = 0;
+  let useLongPoll = false;
+  let state = null;
+
+  async function api(path, options = {}) {
+    const headers = Object.assign({ Authorization: "Bearer " + token }, options.headers || {});
+    const res = await fetch(path, Object.assign({}, options, { headers }));
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { /* ignore */ }
+    if (!res.ok) {
+      const msg = (json && (json.error || json.message)) || (path + " -> " + res.status);
+      throw new Error(msg);
+    }
+    return json;
+  }
+
+  let requestSeq = 0;
+  async function command(name, payload = {}) {
+    const requestId = "r" + (++requestSeq);
+    const result = await api("/api/command", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestId, command: name, payload }),
+    });
+    if (!result.ok) throw new Error(result.error || (name + " failed"));
+    if (typeof result.revision === "number") revision = result.revision;
+    return result;
+  }
+
+  function applyEnvelope(env) {
+    if (!env || typeof env.revision !== "number") return;
+    if (env.type === "snapshot") {
+      revision = env.revision;
+      state = env.payload;
+      render();
+      return;
+    }
+    if (env.type === "delta") {
+      if (env.revision !== revision + 1) {
+        refreshSnapshot();
+        return;
+      }
+      revision = env.revision;
+      // merge env.payload into state (domain-specific)
+      Object.assign(state || (state = {}), env.payload);
+      render();
+    }
+  }
+
+  async function refreshSnapshot() {
+    const snap = await api("/api/snapshot");
+    applyEnvelope(snap);
+  }
+
+  function render() {
+    const badge = document.getElementById("connectionBadge");
+    const status = document.getElementById("statusLine");
+    if (badge) {
+      badge.textContent = state ? "connected" : "idle";
+      badge.dataset.ok = state ? "1" : "0";
+    }
+    if (status) {
+      status.textContent = state
+        ? ("revision " + revision + (state.playMode ? " · play" : " · edit"))
+        : "waiting for snapshot";
+    }
+  }
+
+  async function connectStream() {
+    await refreshSnapshot();
+    if (useLongPoll) {
+      longPollLoop();
+      return;
+    }
+    try {
+      const ws = new WebSocket(
+        (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/stream"
+      );
+      ws.onopen = () => {
+        ws.send(JSON.stringify({ type: "hello", token, afterRevision: revision }));
+      };
+      ws.onmessage = (ev) => {
+        try { applyEnvelope(JSON.parse(ev.data)); } catch { /* ignore */ }
+      };
+      ws.onerror = () => {
+        useLongPoll = true;
+        longPollLoop();
+      };
+      ws.onclose = () => {
+        if (!useLongPoll) setTimeout(connectStream, 1000);
+      };
+    } catch {
+      useLongPoll = true;
+      longPollLoop();
+    }
+  }
+
+  async function longPollLoop() {
+    for (;;) {
+      try {
+        const env = await api("/api/events?afterRevision=" + revision + "&timeoutMs=25000");
+        if (env) applyEnvelope(env);
+      } catch (e) {
+        console.warn(e);
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+  }
+
+  // Example: wire a button with data-command="ping"
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-command]");
+    if (!btn) return;
+    const name = btn.getAttribute("data-command");
+    command(name, {}).then(refreshSnapshot).catch((err) => {
+      const errEl = document.getElementById("errorLine");
+      if (errEl) errEl.textContent = String(err.message || err);
+    });
+  });
+
+  if (!token) {
+    const errEl = document.getElementById("errorLine");
+    if (errEl) errEl.textContent = "missing #token= in URL — open LaunchUrl from Unity";
+  } else {
+    connectStream();
+  }
+
+  // export for domain modules
+  window.Workbench = { api, command, refreshSnapshot, getState: () => state, getRevision: () => revision };
+})();

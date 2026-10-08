@@ -69,6 +69,7 @@ MonoBehaviour:
   _bodyGroup: {fileID: 8450686889486549818}
   _tailGroup: {fileID: 4958473406919751215}
   _motionProfile: {fileID: 11400000, guid: e261783848b774b4c9c5fb6010f76668, type: 2}
+  _assemblyCatalog: {fileID: 0}
 --- !u!1 &804664364443362080
 GameObject:
   m_ObjectHideFlags: 0
