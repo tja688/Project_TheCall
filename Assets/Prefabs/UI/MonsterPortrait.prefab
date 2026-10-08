@@ -41,7 +41,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 142, y: 102}
+  m_SizeDelta: {x: 279, y: 299}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7555852281051528263
 MonoBehaviour:
@@ -70,6 +70,9 @@ MonoBehaviour:
   _tailGroup: {fileID: 4958473406919751215}
   _motionProfile: {fileID: 11400000, guid: e261783848b774b4c9c5fb6010f76668, type: 2}
   _assemblyCatalog: {fileID: 0}
+  _fitToViewport: 1
+  _editorPreview: 1
+  _editorPreviewSeed: 48291
 --- !u!1 &804664364443362080
 GameObject:
   m_ObjectHideFlags: 0

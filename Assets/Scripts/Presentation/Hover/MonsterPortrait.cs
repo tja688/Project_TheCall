@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +31,20 @@ namespace TheCall
         [SerializeField] Transform _tailGroup;
         [SerializeField] MonsterMotionProfile _motionProfile;
         [SerializeField] MonsterAssemblyCatalog _assemblyCatalog;
+        [SerializeField] bool _fitToViewport = true;
+#if UNITY_EDITOR
+        [SerializeField] bool _editorPreview = true;
+        [SerializeField] int _editorPreviewSeed = 48291;
+#endif
+
+        public const float LegacyViewportWidth = 142f;
+        public const float LegacyViewportHeight = 102f;
+
+        static Vector2? _recommendedViewport;
+
+        /// <summary>UI 卡面上 MonsterPortrait 矩形建议尺寸，按当前 Rig 静止姿势采样。</summary>
+        public static Vector2 RecommendedViewportSize =>
+            _recommendedViewport ??= MonsterRigRuntime.RecommendedPortraitViewport();
 
         bool _layersBound;
         bool _showed;
@@ -66,6 +83,29 @@ namespace TheCall
 
         /// <summary>抓取分量和反应都已回到静止。没有怪物时视为静止。</summary>
         public bool Settled => _motion == null || _motion.Settled;
+
+#if UNITY_EDITOR
+        void OnEnable()
+        {
+            if (Application.isPlaying || !_editorPreview)
+                return;
+
+            EditorApplication.delayCall += RefreshEditorPreview;
+        }
+
+        void OnDisable()
+        {
+            EditorApplication.delayCall -= RefreshEditorPreview;
+        }
+
+        void RefreshEditorPreview()
+        {
+            if (this == null || Application.isPlaying || !_editorPreview)
+                return;
+
+            Show(MonsterAppearance.FromSeed(_editorPreviewSeed));
+        }
+#endif
 
         public void Show(string monsterId)
         {
@@ -134,7 +174,9 @@ namespace TheCall
 
             _reacting = false;
             HideLegacy();
+            _motion.Compose(_frame);
             ApplyRig();
+            FitCreatureToViewport();
         }
 
         void DropSkeleton()
@@ -294,6 +336,11 @@ namespace TheCall
             ClearImage(_hat);
             ClearImage(_accessory);
             RestoreMotion();
+            if (_rigRoot != null)
+            {
+                _rigRoot.localScale = Vector3.one;
+                _rigRoot.anchoredPosition = Vector2.zero;
+            }
         }
 
         bool TryRigPoint(Vector2 screenPoint, Camera eventCamera, out Vector2 point)
@@ -471,6 +518,64 @@ namespace TheCall
                 image.raycastTarget = false;
                 image.transform.SetSiblingIndex(slot);
             }
+        }
+
+        void FitCreatureToViewport()
+        {
+            if (!_fitToViewport)
+                return;
+
+            if (_motion != null && _rigRoot != null)
+                FitRigToViewport();
+        }
+
+        void FitRigToViewport()
+        {
+            var host = transform as RectTransform;
+            if (host == null || _rigRoot == null)
+                return;
+
+            var min = new Vector3(float.PositiveInfinity, float.PositiveInfinity, 0f);
+            var max = new Vector3(float.NegativeInfinity, float.NegativeInfinity, 0f);
+            var hasAny = false;
+            for (var i = 0; i < _rigImages.Count; i++)
+            {
+                var image = _rigImages[i];
+                if (image == null || !image.enabled)
+                    continue;
+
+                hasAny = true;
+                var corners = new Vector3[4];
+                image.rectTransform.GetWorldCorners(corners);
+                for (var c = 0; c < corners.Length; c++)
+                {
+                    var local = host.InverseTransformPoint(corners[c]);
+                    min = Vector3.Min(min, local);
+                    max = Vector3.Max(max, local);
+                }
+            }
+
+            if (!hasAny)
+                return;
+
+            ApplyViewportFit(host, min, max);
+        }
+
+        void ApplyViewportFit(RectTransform host, Vector3 min, Vector3 max)
+        {
+            var size = max - min;
+            if (size.x < 1f || size.y < 1f)
+                return;
+
+            var viewport = host.rect.size;
+            if (viewport.x < 1f || viewport.y < 1f)
+                viewport = RecommendedViewportSize;
+
+            const float padding = 6f;
+            var scale = Mathf.Min((viewport.x - padding) / size.x, (viewport.y - padding) / size.y);
+            var center = (min + max) * 0.5f;
+            _rigRoot.localScale = Vector3.one * scale;
+            _rigRoot.anchoredPosition = new Vector2(-center.x * scale, -center.y * scale);
         }
 
         void EnsureRigRoot()

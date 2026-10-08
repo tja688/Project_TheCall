@@ -10,34 +10,40 @@ namespace TheCall
 
     public readonly struct LandingAdd
     {
-        public LandingAdd(string label, int amount)
+        public LandingAdd(string label, int amount, string sourceName = null)
         {
             Label = label;
             Amount = amount;
+            SourceName = sourceName;
         }
 
         public string Label { get; }
 
         public int Amount { get; }
+
+        public string SourceName { get; }
     }
 
     public readonly struct LandingFactor
     {
-        public LandingFactor(string label, int factor)
+        public LandingFactor(string label, int factor, string sourceName = null)
         {
             Label = label;
             Factor = factor;
+            SourceName = sourceName;
         }
 
         public string Label { get; }
 
         public int Factor { get; }
+
+        public string SourceName { get; }
     }
 
     public sealed class SettlementLanding : SettlementEntry
     {
-        public SettlementLanding(string monsterId, string skillName, int baseValue, int multiplier, int energy, int writeback)
-            : this(monsterId, skillName, baseValue, multiplier, energy, writeback, baseValue, 0, false, System.Array.Empty<LandingAdd>(), System.Array.Empty<LandingFactor>())
+        public SettlementLanding(string monsterId, string skillName, int baseValue, int multiplier, int energy, int writeback, string monsterName = null, int cell = -1)
+            : this(monsterId, skillName, baseValue, multiplier, energy, writeback, baseValue, 0, false, System.Array.Empty<LandingAdd>(), System.Array.Empty<LandingFactor>(), monsterName, cell, null)
         {
         }
 
@@ -52,7 +58,10 @@ namespace TheCall
             int sideCount,
             bool side,
             System.Collections.Generic.IReadOnlyList<LandingAdd> adds,
-            System.Collections.Generic.IReadOnlyList<LandingFactor> factors)
+            System.Collections.Generic.IReadOnlyList<LandingFactor> factors,
+            string monsterName = null,
+            int cell = -1,
+            string countedSideName = null)
         {
             MonsterId = monsterId;
             SkillName = skillName;
@@ -65,6 +74,9 @@ namespace TheCall
             Adds = adds ?? System.Array.Empty<LandingAdd>();
             Factors = factors ?? System.Array.Empty<LandingFactor>();
             Side = side;
+            MonsterName = monsterName;
+            Cell = cell;
+            CountedSideName = countedSideName;
             Check();
         }
 
@@ -85,6 +97,12 @@ namespace TheCall
         public int SideCount { get; }
 
         public bool Side { get; }
+
+        public string MonsterName { get; }
+
+        public int Cell { get; }
+
+        public string CountedSideName { get; }
 
         public System.Collections.Generic.IReadOnlyList<LandingAdd> Adds { get; }
 

@@ -147,5 +147,95 @@ namespace TheCall
             parsed.Upgrade();
             return parsed;
         }
+
+        /// <summary>静止姿势下整只怪物的轴对齐包围盒（与 MonsterPortrait 里 Rig 坐标一致）。</summary>
+        public static bool TryMeasureRestBounds(int recipe, int salt, out Rect bounds)
+        {
+            bounds = default;
+            if (!TryCompose(recipe, salt, out var pose) || pose.Nodes.Count == 0)
+                return false;
+
+            bounds = MeasurePoseBounds(pose);
+            return bounds.width > 0.5f && bounds.height > 0.5f;
+        }
+
+        /// <summary>覆盖开局/商店常见配方后，给 UI 卡面留出的推荐视口大小。</summary>
+        public static Vector2 RecommendedPortraitViewport(int recipeSamples = 12, int saltSamples = 8)
+        {
+            var minX = float.PositiveInfinity;
+            var minY = float.PositiveInfinity;
+            var maxX = float.NegativeInfinity;
+            var maxY = float.NegativeInfinity;
+            for (var recipe = 0; recipe < recipeSamples; recipe++)
+            {
+                for (var salt = 1; salt <= saltSamples; salt++)
+                {
+                    if (!TryMeasureRestBounds(recipe, salt * 9973 + recipe * 131, out var bounds))
+                        continue;
+
+                    minX = Mathf.Min(minX, bounds.xMin);
+                    minY = Mathf.Min(minY, bounds.yMin);
+                    maxX = Mathf.Max(maxX, bounds.xMax);
+                    maxY = Mathf.Max(maxY, bounds.yMax);
+                }
+            }
+
+            if (float.IsPositiveInfinity(minX))
+                return new Vector2(142f, 102f);
+
+            return new Vector2(Mathf.Ceil(maxX - minX + 12f), Mathf.Ceil(maxY - minY + 12f));
+        }
+
+        static Rect MeasurePoseBounds(MonsterRigPose pose)
+        {
+            var minX = float.PositiveInfinity;
+            var minY = float.PositiveInfinity;
+            var maxX = float.NegativeInfinity;
+            var maxY = float.NegativeInfinity;
+            for (var i = 0; i < pose.Nodes.Count; i++)
+            {
+                var node = pose.Nodes[i];
+                var placement = MonsterRigLayout.PlacementFor(node);
+                AccumulatePlacement(ref minX, ref minY, ref maxX, ref maxY, placement);
+            }
+
+            if (float.IsPositiveInfinity(minX))
+                return default;
+
+            return Rect.MinMaxRect(minX, minY, maxX, maxY);
+        }
+
+        static void AccumulatePlacement(
+            ref float minX,
+            ref float minY,
+            ref float maxX,
+            ref float maxY,
+            SpritePlacement placement)
+        {
+            var size = placement.Size;
+            var pivot = placement.Pivot;
+            var local = new Vector2[4];
+            local[0] = new Vector2(-pivot.x * size.x, -pivot.y * size.y);
+            local[1] = new Vector2((1f - pivot.x) * size.x, -pivot.y * size.y);
+            local[2] = new Vector2((1f - pivot.x) * size.x, (1f - pivot.y) * size.y);
+            local[3] = new Vector2(-pivot.x * size.x, (1f - pivot.y) * size.y);
+
+            var radians = placement.Rotation * Mathf.Deg2Rad;
+            var cos = Mathf.Cos(radians);
+            var sin = Mathf.Sin(radians);
+            for (var i = 0; i < local.Length; i++)
+            {
+                var x = local[i].x * placement.Scale.x;
+                var y = local[i].y * placement.Scale.y;
+                var rotatedX = x * cos - y * sin;
+                var rotatedY = x * sin + y * cos;
+                var worldX = placement.AnchoredPosition.x + rotatedX;
+                var worldY = placement.AnchoredPosition.y + rotatedY;
+                minX = Mathf.Min(minX, worldX);
+                minY = Mathf.Min(minY, worldY);
+                maxX = Mathf.Max(maxX, worldX);
+                maxY = Mathf.Max(maxY, worldY);
+            }
+        }
     }
 }

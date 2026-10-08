@@ -35,6 +35,7 @@ namespace TheCall
         bool _sellTab;
         bool _wired;
         bool _busy;
+        ProductionLogView _log;
         string _selectedTech = "基因实验";
         float _noticeUntil;
 
@@ -59,6 +60,8 @@ namespace TheCall
             _back = BackTarget.None;
             _sellTab = false;
             _busy = false;
+            if (_log != null)
+                _log.Hide();
             if (_toast != null)
                 _toast.SetActive(false);
 
@@ -128,6 +131,25 @@ namespace TheCall
             ListenCards(_shop != null ? _shop.cards : null);
             ListenSlots(_shop != null ? _shop.sellSlots : null, OnSell);
             Listen(_result != null ? _result.restartButton : null, OnTitle);
+            BindLog();
+        }
+
+        void BindLog()
+        {
+            _log = FindAnyObjectByType<ProductionLogView>(FindObjectsInactive.Include);
+            var buttonObject = _operation != null ? _operation.transform.Find("LogButton") : null;
+            Listen(buttonObject != null ? buttonObject.GetComponent<UnityEngine.UI.Button>() : null, ToggleLog);
+        }
+
+        void ToggleLog()
+        {
+            if (_log == null)
+                return;
+
+            if (_log.IsOpen)
+                _log.Hide();
+            else
+                _log.Show(ProductionLogText.Format(this.SendQuery(new ProductionLogQuery())));
         }
 
         internal void Refresh()

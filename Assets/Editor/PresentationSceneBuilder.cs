@@ -14,6 +14,9 @@ namespace TheCall.Editor
     {
         const string PortraitPath = "Assets/Prefabs/UI/MonsterPortrait.prefab";
 
+        static float PortraitViewportWidth => MonsterPortrait.RecommendedViewportSize.x;
+        static float PortraitViewportHeight => MonsterPortrait.RecommendedViewportSize.y;
+
         static readonly Color Stage = new Color32(16, 20, 28, 255);
         static readonly Color Panel = new Color32(27, 38, 52, 245);
         static readonly Color PanelDeep = new Color32(18, 28, 40, 250);
@@ -121,7 +124,7 @@ namespace TheCall.Editor
             var card = Box(window, "Card", Panel);
             Center(card.rectTransform, new Vector2(320f, 400f));
             var portrait = SpawnPortrait(card.transform, "Portrait");
-            At(portrait, 89f, 16f, 142f, 102f);
+            At(portrait, 89f, 16f, PortraitViewportWidth, PortraitViewportHeight);
             var title = Label(card.transform, "Title", "", 26f, Ink, TextAlignmentOptions.Center);
             At(title, 16f, 132f, 288f, 40f);
             var skillLine = Label(card.transform, "SkillLine", "", 18f, Ink, TextAlignmentOptions.Center);
@@ -672,7 +675,7 @@ namespace TheCall.Editor
             At(title, 60, 48, 880, 64);
             var portrait = SpawnPortrait(card.transform, "Portrait");
             var portraitRect = portrait.GetComponent<RectTransform>();
-            At(portraitRect, 358, 160, 142, 102);
+            At(portraitRect, 358, 160, PortraitViewportWidth, PortraitViewportHeight);
             portraitRect.localScale = new Vector3(2.4f, 2.4f, 1f);
             var body = Label(card.transform, "Body", "", 22, Muted, TextAlignmentOptions.Center);
             At(body, 80, 460, 840, 80);
@@ -699,7 +702,7 @@ namespace TheCall.Editor
         {
             var root = new GameObject("MonsterPortrait", typeof(RectTransform));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(142f, 102f);
+            rect.sizeDelta = MonsterPortrait.RecommendedViewportSize;
             var portrait = root.AddComponent<MonsterPortrait>();
             var tailGroup = PivotGroup(root.transform, "TailMotion", new Vector2(0.5f, 0.5f));
             var tail = Layer(tailGroup, "Tail", "Tail");
@@ -791,6 +794,9 @@ namespace TheCall.Editor
 
         static MonsterSlotView MonsterCard(Transform parent, string name, float x, float y, float w, float h, float scale, string action, bool glassy = false)
         {
+            if (MonsterSlotPrefabLibrary.TryLoadPrefab(w, h, action, glassy, out var slotPrefab))
+                return PlaceMonsterSlotPrefab(parent, name, x, y, w, h, slotPrefab);
+
             var button = Click(parent, name, "", Panel, Ink, 18, out var unusedLabel);
             unusedLabel.gameObject.SetActive(false);
             At(button, x, y, w, h);
@@ -810,10 +816,10 @@ namespace TheCall.Editor
             selection.gameObject.SetActive(false);
             var portrait = SpawnPortrait(button.transform, "Portrait");
             var portraitRect = portrait.GetComponent<RectTransform>();
-            var visualW = 142f * scale;
+            var visualW = PortraitViewportWidth * scale;
             var wide = w > h * 2.2f;
             var portraitX = wide ? 12f : Mathf.Max(8f, (w - visualW) * 0.5f);
-            At(portraitRect, portraitX, 8f, 142f, 102f);
+            At(portraitRect, portraitX, 8f, PortraitViewportWidth, PortraitViewportHeight);
             portraitRect.localScale = new Vector3(scale, scale, 1f);
             var empty = Label(button.transform, "EmptyMark", "?", 36, Muted, TextAlignmentOptions.Center);
             At(empty, 0, h * 0.28f, w, 48);
@@ -837,7 +843,7 @@ namespace TheCall.Editor
             }
             else
             {
-                var portraitBottom = 8f + 102f * scale;
+                var portraitBottom = 8f + PortraitViewportHeight * scale;
                 At(title, 8, portraitBottom + 12f, w - 16, 28);
                 At(subtitle, 8, portraitBottom + 42f, w - 16, 22);
                 var bar = Box(button.transform, "ActionBar", Mint);
@@ -854,6 +860,28 @@ namespace TheCall.Editor
             view.subtitle = subtitle;
             view.emptyMark = empty.gameObject;
             view.selection = selection.gameObject;
+            return view;
+        }
+
+        static MonsterSlotView PlaceMonsterSlotPrefab(
+            Transform parent,
+            string name,
+            float x,
+            float y,
+            float w,
+            float h,
+            GameObject prefab)
+        {
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+            instance.name = name;
+            var rect = instance.GetComponent<RectTransform>();
+            if (rect != null)
+                At(rect, x, y, w, h);
+
+            var view = instance.GetComponent<MonsterSlotView>();
+            if (view == null)
+                throw new InvalidOperationException("Monster slot prefab is missing MonsterSlotView: " + prefab.name);
+
             return view;
         }
 
@@ -886,7 +914,7 @@ namespace TheCall.Editor
             At(stock, 20, 190, 200, 24);
             var portrait = SpawnPortrait(panel.transform, "Portrait");
             var portraitRect = portrait.GetComponent<RectTransform>();
-            At(portraitRect, 300, 70, 142, 102);
+            At(portraitRect, 300, 70, PortraitViewportWidth, PortraitViewportHeight);
             portraitRect.localScale = new Vector3(1.15f, 1.15f, 1f);
             var icon = Box(panel.transform, "IconImage", Color.white);
             At(icon, 300, 70, 128, 128);
@@ -1041,7 +1069,9 @@ namespace TheCall.Editor
 
         static void Zone(GameObject go, LandingPlace place, MonsterSlotView monster, SkillChipView chip)
         {
-            var zone = go.AddComponent<OperationZone>();
+            var zone = go.GetComponent<OperationZone>();
+            if (zone == null)
+                zone = go.AddComponent<OperationZone>();
             zone.Place = place;
             zone.monsterView = monster;
             zone.chipView = chip;
@@ -1049,7 +1079,9 @@ namespace TheCall.Editor
 
         static void Drag(GameObject go, PayloadKind kind, OperationPointer session)
         {
-            var drag = go.AddComponent<OperationPayloadDrag>();
+            var drag = go.GetComponent<OperationPayloadDrag>();
+            if (drag == null)
+                drag = go.AddComponent<OperationPayloadDrag>();
             drag.payloadKind = kind;
             drag.session = session;
         }
@@ -1491,7 +1523,7 @@ namespace TheCall.Editor
             DrawDefaultInspector();
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox(
-                "界面已经放在场景里。点下面的按钮只显示其中一个，方便换图片、挪位置。怪物外观配方、调色和动态枢轴由 MonsterPortrait 控制；各层共用原画 142x102 画布。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
+                "界面已经放在场景里。点下面的按钮只显示其中一个，方便换图片、挪位置。怪物立绘由 MonsterPortrait + MonsterRig 驱动，视口尺寸随 Rig 采样自动建议。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
                 MessageType.Info);
             using (new EditorGUILayout.HorizontalScope())
             {

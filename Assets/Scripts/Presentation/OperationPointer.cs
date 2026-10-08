@@ -41,7 +41,23 @@ namespace TheCall
 
         public DropPayload? Armed => _hasArmed ? _armed : (DropPayload?)null;
 
-        public void Attach(TheCallPresentation presentation) => _presentation = presentation;
+        public void Attach(TheCallPresentation presentation)
+        {
+            _presentation = presentation;
+            WirePayloadDrags();
+        }
+
+        static void WirePayloadDrags()
+        {
+            var drags = FindObjectsByType<OperationPayloadDrag>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            for (var i = 0; i < drags.Length; i++)
+            {
+                if (drags[i] == null || drags[i].session != null)
+                    continue;
+
+                drags[i].session = FindAnyObjectByType<OperationPointer>();
+            }
+        }
 
         public void Press(OperationPayloadDrag source, PointerEventData eventData)
         {

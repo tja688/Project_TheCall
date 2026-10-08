@@ -122,6 +122,7 @@ namespace TheCall
         readonly List<string> _shelfTools = new List<string>();
         readonly List<string> _skillSlots = new List<string>();
         readonly List<string> _unlockedTech = new List<string>();
+        readonly List<ProductionSubmission> _productionLog = new List<ProductionSubmission>();
         int _nextId = 1;
 
         public RunPhase Phase { get; private set; } = RunPhase.Opening;
@@ -137,6 +138,10 @@ namespace TheCall
         public IReadOnlyList<string> SkillSlots => _skillSlots;
 
         public IReadOnlyList<string> UnlockedTech => _unlockedTech;
+
+        public IReadOnlyList<ProductionSubmission> ProductionLog => _productionLog;
+
+        public void AppendProduction(ProductionSubmission submission) => _productionLog.Add(submission);
 
         public IReadOnlyList<Monster> Candidates => _candidates;
 

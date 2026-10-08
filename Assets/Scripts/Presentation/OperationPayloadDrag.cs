@@ -48,17 +48,56 @@ namespace TheCall
             return chip.label != null && chip.label.text != "投入技能";
         }
 
-        public void OnPointerDown(PointerEventData eventData) => session.Press(this, eventData);
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!TrySession(out var pointer))
+                return;
+
+            pointer.Press(this, eventData);
+        }
 
         public void OnInitializePotentialDrag(PointerEventData eventData) =>
             eventData.useDragThreshold = true;
 
-        public void OnBeginDrag(PointerEventData eventData) => session.BeginDrag(this, eventData);
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (!TrySession(out var pointer))
+                return;
 
-        public void OnDrag(PointerEventData eventData) => session.MoveGhost(eventData);
+            pointer.BeginDrag(this, eventData);
+        }
 
-        public void OnEndDrag(PointerEventData eventData) => session.Finish(eventData);
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!TrySession(out var pointer))
+                return;
 
-        public void OnPointerUp(PointerEventData eventData) => session.Finish(eventData);
+            pointer.MoveGhost(eventData);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (!TrySession(out var pointer))
+                return;
+
+            pointer.Finish(eventData);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!TrySession(out var pointer))
+                return;
+
+            pointer.Finish(eventData);
+        }
+
+        bool TrySession(out OperationPointer pointer)
+        {
+            if (session == null)
+                session = FindAnyObjectByType<OperationPointer>();
+
+            pointer = session;
+            return pointer != null;
+        }
     }
 }
