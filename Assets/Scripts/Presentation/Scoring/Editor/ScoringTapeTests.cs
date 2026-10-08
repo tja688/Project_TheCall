@@ -341,7 +341,7 @@ namespace TheCall.Scoring
             var tape = ScoringTape.Arrange(
                 new SettlementEntry[]
                 {
-                    SettlementMark.Again("gland"),
+                    SettlementMark.Again("gland", "左复制腺体"),
                     new SettlementLanding("breath", "双头能量体", 2, 1, 2, 0),
                     new SettlementLanding("breath", "双头能量体", 2, 1, 2, 0),
                 },
@@ -349,7 +349,7 @@ namespace TheCall.Scoring
 
             Assert.That(tape.Produced, Is.EqualTo(4));
             var mark = tape.Cues.OfType<MarkCue>().Single();
-            Assert.That(mark.Label, Is.EqualTo("技能触发+1"));
+            Assert.That(mark.Label, Is.EqualTo("左复制腺体触发+1"));
             var pops = tape.Cues.OfType<PopCue>().ToArray();
             Assert.That(pops.Length, Is.EqualTo(2));
             Assert.That(pops[0].Energy, Is.EqualTo(2));

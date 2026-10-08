@@ -97,7 +97,7 @@ namespace TheCall.Tests
             Assert.That(shown[2], Is.InstanceOf<SettlementMark>());
             var again = (SettlementMark)shown[2];
             Assert.That(again.MonsterId, Is.EqualTo(echoId));
-            Assert.That(again.Label, Is.EqualTo("技能触发+1"));
+            Assert.That(again.Label, Is.EqualTo("回响嗓触发+1"));
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
             var again = App.SendQuery(new SettlementRecordQuery())
                 .OfType<SettlementMark>()
-                .Single(mark => mark.Label == "技能触发+1");
+                .Single(mark => mark.Label == "左复制腺体触发+1");
             Assert.That(again.MonsterId, Is.EqualTo(glandId));
         }
 

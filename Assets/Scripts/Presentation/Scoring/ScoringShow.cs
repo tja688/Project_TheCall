@@ -46,15 +46,29 @@ namespace TheCall.Scoring
         const float PlayheadLift = 70f;
         const float FigureLift = 64f;
         const float WalkSeconds = 0.18f;
-        const float FlightSeconds = 0.36f;
-        const float RiseSeconds = 0.12f;
-        const float HoldSeconds = 0.14f;
         const float SwapSeconds = 0.28f;
         const float RemoveSeconds = 0.22f;
-        const float PaySeconds = 0.9f;
         const float ShakeSeconds = 0.28f;
         const float EatSquashSeconds = 0.07f;
         const float EatSettleSeconds = 0.14f;
+        const float PaceWarmup = 10f;
+        const float PacePerStep = 0.08f;
+        const float PaceCeiling = 3f;
+        const float PayPaceCeiling = 2f;
+        const float SkipPace = 4f;
+        const float FigureLinger = 1.5f;
+        const float RiseSeconds = 0.12f * FigureLinger;
+        const float HoldSeconds = 0.14f * FigureLinger;
+        const float FlightSeconds = 0.36f * FigureLinger;
+        const float FigureInSeconds = 0.12f * FigureLinger;
+        const float FigureStaySeconds = 0.1f * FigureLinger;
+        const float FigureOutSeconds = 0.1f * FigureLinger;
+        const float BeatGrowSeconds = 0.1f * FigureLinger;
+        const float BeatFlySeconds = 0.26f * FigureLinger;
+        const float PunchSeconds = 0.08f * FigureLinger;
+        const float SettleSeconds = 0.1f * FigureLinger;
+        const float FigureShakeSeconds = 0.16f * FigureLinger;
+        const float PaySeconds = 0.9f * FigureLinger;
 
         static readonly object TweenId = new object();
         static ScoringShow _active;
@@ -75,6 +89,7 @@ namespace TheCall.Scoring
         bool _boardHeld;
         int _shown;
         float _pace = 1f;
+        bool _boosted;
         bool _cutToPay;
         bool _finishPay;
         bool _paying;
@@ -131,8 +146,13 @@ namespace TheCall.Scoring
                     if (cue is PayCue)
                     {
                         _cutToPay = false;
-                        _pace = 1f;
+                        _pace = Mathf.Min(_pace, PayPaceCeiling);
                         _paying = true;
+                    }
+                    else
+                    {
+                        var ramp = Mathf.Min(PaceCeiling, 1f + Mathf.Max(0f, i - PaceWarmup) * PacePerStep);
+                        _pace = Mathf.Max(_pace, ramp);
                     }
 
                     yield return cue.Accept(this);
@@ -338,8 +358,8 @@ namespace TheCall.Scoring
                 : OriginOf(subject) + new Vector2(0f, FigureLift + 110f);
             var label = SpawnMark(beat, origin);
             label.rectTransform.localScale = Vector3.one * 0.35f;
-            var grow = Live(label.rectTransform.DOScale(1.05f, Span(0.1f)).SetEase(Ease.OutBack));
-            yield return Wait(0.1f);
+            var grow = Live(label.rectTransform.DOScale(1.05f, Span(BeatGrowSeconds)).SetEase(Ease.OutBack));
+            yield return Wait(BeatGrowSeconds);
             grow.Kill(false);
             label.rectTransform.localScale = Vector3.one;
             if (SkipWait())
@@ -349,8 +369,8 @@ namespace TheCall.Scoring
             }
 
             var target = OriginOf(subject) + new Vector2(0f, 36f);
-            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, 70f, 1, Span(0.26f)));
-            yield return Wait(0.26f);
+            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, 70f, 1, Span(BeatFlySeconds)));
+            yield return Wait(BeatFlySeconds);
             fly.Kill(false);
             label.rectTransform.anchoredPosition = target;
             if (SkipWait())
@@ -371,9 +391,9 @@ namespace TheCall.Scoring
             var head = OriginOf(subject) + new Vector2(0f, FigureLift);
             var label = SpawnMark(beat, head + new Vector2(0f, -22f));
             label.rectTransform.localScale = Vector3.one * 0.4f;
-            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(0.12f)).SetEase(Ease.OutBack));
-            var grow = Live(label.rectTransform.DOScale(1f, Span(0.12f)).SetEase(Ease.OutBack));
-            yield return Wait(0.12f);
+            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(FigureInSeconds)).SetEase(Ease.OutBack));
+            var grow = Live(label.rectTransform.DOScale(1f, Span(FigureInSeconds)).SetEase(Ease.OutBack));
+            yield return Wait(FigureInSeconds);
             rise.Kill(false);
             grow.Kill(false);
             if (SkipWait())
@@ -382,9 +402,9 @@ namespace TheCall.Scoring
                 yield break;
             }
 
-            yield return Wait(0.1f);
-            var fade = Live(label.DOFade(0f, Span(0.1f)));
-            yield return Wait(0.1f);
+            yield return Wait(FigureStaySeconds);
+            var fade = Live(label.DOFade(0f, Span(FigureOutSeconds)));
+            yield return Wait(FigureOutSeconds);
             fade.Kill(false);
             Release(label, subject);
         }
@@ -399,16 +419,16 @@ namespace TheCall.Scoring
 
             Tween punch = null;
             if (root != null)
-                punch = Live(root.DOScale(rest * 1.12f, Span(0.08f)).SetEase(Ease.OutQuad));
-            var pop = Live(label.rectTransform.DOScale(1.22f, Span(0.08f)).SetEase(Ease.OutQuad));
-            yield return Wait(0.08f);
+                punch = Live(root.DOScale(rest * 1.12f, Span(PunchSeconds)).SetEase(Ease.OutQuad));
+            var pop = Live(label.rectTransform.DOScale(1.22f, Span(PunchSeconds)).SetEase(Ease.OutQuad));
+            yield return Wait(PunchSeconds);
             punch?.Kill(false);
             pop.Kill(false);
             Tween back = null;
             if (root != null)
-                back = Live(root.DOScale(rest, Span(0.1f)).SetEase(Ease.OutQuad));
-            var fade = Live(label.DOFade(0f, Span(0.1f)));
-            yield return Wait(0.1f);
+                back = Live(root.DOScale(rest, Span(SettleSeconds)).SetEase(Ease.OutQuad));
+            var fade = Live(label.DOFade(0f, Span(FigureOutSeconds)));
+            yield return Wait(SettleSeconds);
             back?.Kill(false);
             fade.Kill(false);
             if (root != null)
@@ -423,7 +443,7 @@ namespace TheCall.Scoring
         {
             var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
             var label = Spawn(cue.Label, head + new Vector2(0f, -22f));
-            label.fontSize = 52f;
+            label.fontSize = cue.Label.Length > 6 ? 40f : 52f;
             label.color = ToneColor(cue.Tone);
             label.rectTransform.localScale = Vector3.one * 0.4f;
             if (cue.Motion == MarkMotion.Shake)
@@ -431,9 +451,9 @@ namespace TheCall.Scoring
             else
                 yield return SpringMark(cue.SlotIndex);
 
-            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(0.12f)).SetEase(Ease.OutBack));
-            var grow = Live(label.rectTransform.DOScale(1f, Span(0.12f)).SetEase(Ease.OutBack));
-            yield return Wait(0.12f);
+            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(FigureInSeconds)).SetEase(Ease.OutBack));
+            var grow = Live(label.rectTransform.DOScale(1f, Span(FigureInSeconds)).SetEase(Ease.OutBack));
+            yield return Wait(FigureInSeconds);
             rise.Kill(false);
             grow.Kill(false);
             if (SkipWait())
@@ -442,9 +462,9 @@ namespace TheCall.Scoring
                 yield break;
             }
 
-            yield return Wait(0.1f);
-            var fade = Live(label.DOFade(0f, Span(0.1f)));
-            yield return Wait(0.1f);
+            yield return Wait(FigureStaySeconds);
+            var fade = Live(label.DOFade(0f, Span(FigureOutSeconds)));
+            yield return Wait(FigureOutSeconds);
             fade.Kill(false);
             Destroy(label.gameObject);
         }
@@ -459,15 +479,15 @@ namespace TheCall.Scoring
             var rest = root != null && InRange(index) ? _slots[index].RestScale : Vector3.one;
             Tween grow = null;
             if (root != null)
-                grow = Live(root.DOScale(rest * 1.12f, Span(0.08f)).SetEase(Ease.OutQuad));
+                grow = Live(root.DOScale(rest * 1.12f, Span(PunchSeconds)).SetEase(Ease.OutQuad));
 
-            yield return Wait(0.08f);
+            yield return Wait(PunchSeconds);
             grow?.Kill(false);
             Tween back = null;
             if (root != null)
-                back = Live(root.DOScale(rest, Span(0.1f)).SetEase(Ease.OutQuad));
+                back = Live(root.DOScale(rest, Span(SettleSeconds)).SetEase(Ease.OutQuad));
 
-            yield return Wait(0.1f);
+            yield return Wait(SettleSeconds);
             back?.Kill(false);
             if (root != null)
                 root.localScale = rest;
@@ -500,8 +520,8 @@ namespace TheCall.Scoring
             var rest = InRange(index) ? _slots[index].RestAnchoredPosition : Vector2.zero;
             Tween shake = null;
             if (root != null)
-                shake = Live(root.DOShakeAnchorPos(Span(0.16f), 13f, 16, 90f, false, true));
-            yield return Wait(0.16f);
+                shake = Live(root.DOShakeAnchorPos(Span(FigureShakeSeconds), 13f, 16, 90f, false, true));
+            yield return Wait(FigureShakeSeconds);
             shake?.Kill(false);
             if (root != null)
                 root.anchoredPosition = rest;
@@ -1066,10 +1086,15 @@ namespace TheCall.Scoring
                 return;
             }
 
-            if (_pace <= 1f && !_cutToPay)
-                _pace = 4f;
+            if (!_boosted && !_cutToPay)
+            {
+                _boosted = true;
+                _pace = SkipPace;
+            }
             else
+            {
                 _cutToPay = true;
+            }
         }
 
         bool SkipWait() => _cutToPay || _finishPay;

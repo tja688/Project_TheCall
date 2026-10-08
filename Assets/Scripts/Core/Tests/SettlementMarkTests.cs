@@ -75,7 +75,7 @@ namespace TheCall.Tests
             Assert.That(((SettlementLanding)shown[1]).Energy, Is.EqualTo(2));
             var again = (SettlementMark)shown[2];
             Assert.That(again.MonsterId, Is.EqualTo(glandId));
-            Assert.That(again.Label, Is.EqualTo("技能触发+1"));
+            Assert.That(again.Label, Is.EqualTo("左复制腺体触发+1"));
             Assert.That(((SettlementLanding)shown[3]).MonsterId, Is.EqualTo(breathId));
             Assert.That(((SettlementLanding)shown[3]).Energy, Is.EqualTo(2));
             Assert.That(((SettlementLanding)shown[4]).MonsterId, Is.EqualTo(breathId));

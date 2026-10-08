@@ -1526,6 +1526,15 @@ namespace TheCall
             return -1;
         }
 
+        static string SkillNameOf(RunModel run, string monsterId, int skillIndex)
+        {
+            var monster = run.Find(monsterId);
+            if (monster == null || skillIndex < 0 || skillIndex >= monster.Skills.Count)
+                return null;
+
+            return monster.Skills[skillIndex].Name;
+        }
+
         static int KinIndex(Monster monster, SkillCatalog catalog)
         {
             for (var index = 0; index < monster.Skills.Count; index++)
@@ -1572,7 +1581,7 @@ namespace TheCall
                 var cause = _entries[i] as SettlementCause;
                 if (cause != null)
                 {
-                    next.Add(SettlementMark.Again(cause.SourceId));
+                    next.Add(SettlementMark.Again(cause.SourceId, SkillNameOf(run, cause.SourceId, cause.SkillIndex)));
                     continue;
                 }
 

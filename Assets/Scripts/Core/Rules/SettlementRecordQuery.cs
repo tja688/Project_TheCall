@@ -89,8 +89,12 @@ namespace TheCall
         public static SettlementMark Miss(string monsterId) =>
             new SettlementMark(monsterId, "+0", MarkMotion.Spring, MarkTone.Miss);
 
-        public static SettlementMark Again(string monsterId) =>
-            new SettlementMark(monsterId, "技能触发+1", MarkMotion.Shake, MarkTone.Again);
+        public static SettlementMark Again(string monsterId, string skillName) =>
+            new SettlementMark(
+                monsterId,
+                (string.IsNullOrEmpty(skillName) ? "技能" : skillName) + "触发+1",
+                MarkMotion.Shake,
+                MarkTone.Again);
 
         public static SettlementMark Gold(string monsterId, int amount) =>
             new SettlementMark(monsterId, "+" + amount + "金", MarkMotion.Spring, MarkTone.Gold);
@@ -115,7 +119,7 @@ namespace TheCall
         {
             if (label == "+0")
                 return motion == MarkMotion.Spring && tone == MarkTone.Miss;
-            if (label == "技能触发+1")
+            if (label != null && label.EndsWith("触发+1"))
                 return motion == MarkMotion.Shake && tone == MarkTone.Again;
             if (label != null && label.Length > 1 && label[0] == '+' && label.EndsWith("金"))
                 return motion == MarkMotion.Spring && tone == MarkTone.Gold;
