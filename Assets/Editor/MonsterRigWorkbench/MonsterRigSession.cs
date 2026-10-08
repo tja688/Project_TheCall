@@ -700,6 +700,7 @@ namespace TheCall.Editor
                 palette,
                 headTurnPreview,
                 cyclesPerSecond = cycles,
+                swingMax = MonsterRigEdits.MaxSwingDegrees,
                 palettes = PalettePayload(),
                 groups = GroupPayload(),
                 layerBands = LayerPayload(),
@@ -939,7 +940,7 @@ namespace TheCall.Editor
                 known.Add(part.id);
                 part.excluded ??= new List<string>();
                 part.sockets ??= new List<MonsterRigSocket>();
-                part.swingDegrees = Mathf.Clamp(part.swingDegrees, 0f, 40f);
+                part.swingDegrees = Mathf.Clamp(part.swingDegrees, 0f, MonsterRigEdits.MaxSwingDegrees);
             }
 
             foreach (var pair in Art)

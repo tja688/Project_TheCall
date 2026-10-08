@@ -109,6 +109,29 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
+        public void 拖拽松手后弹簧回到静止()
+        {
+            var angle = 0f;
+            var velocity = 0f;
+            for (var i = 0; i < 60; i++)
+                MonsterMotion.StepSpring(ref angle, ref velocity, 7f, 1f / 60f, 90f, 18f);
+            Assert.That(angle, Is.GreaterThan(3f));
+
+            for (var i = 0; i < 300; i++)
+                MonsterMotion.StepSpring(ref angle, ref velocity, 0f, 1f / 60f, 90f, 18f);
+            Assert.That(angle, Is.EqualTo(0f).Within(0.05f));
+            Assert.That(velocity, Is.EqualTo(0f).Within(0.05f));
+        }
+
+        [Test]
+        public void 摆动超过上限会被夹到上限()
+        {
+            var body = Piece("身体", "身体1", 10, 10);
+            Assert.That(MonsterRigEdits.SetSwing(body, 99f), Is.Null);
+            Assert.That(body.Data.swingDegrees, Is.EqualTo(MonsterRigEdits.MaxSwingDegrees).Within(0.001f));
+        }
+
+        [Test]
         public void 扭头以头部对接点为轴镜像()
         {
             var head = Piece("头", "头1", 10, 10);

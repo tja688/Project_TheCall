@@ -71,7 +71,6 @@ namespace TheCall
             _pointerVelocity = Vector2.ClampMagnitude((eventData.position - _previousPointer) / deltaTime, 1000f);
             _previousPointer = eventData.position;
             _ghost.transform.position = eventData.position + _ghostOffset;
-            AdvanceSpring(deltaTime);
         }
 
         public void Finish(PointerEventData eventData)
@@ -188,6 +187,16 @@ namespace TheCall
             _ghost = null;
         }
 
+        void Update()
+        {
+            if (_ghost == null)
+                return;
+
+            var dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
+            _pointerVelocity = Vector2.Lerp(_pointerVelocity, Vector2.zero, 1f - Mathf.Exp(-14f * dt));
+            AdvanceSpring(dt);
+        }
+
         void AdvanceSpring(float deltaTime)
         {
             if (_ghostPortrait == null)
@@ -195,14 +204,14 @@ namespace TheCall
 
             var drive = Mathf.Clamp(_pointerVelocity.x / 700f, -1f, 1f);
             var profile = _ghostPortrait.MotionProfile;
-            StepSpring(
+            MonsterMotion.StepSpring(
                 ref _headAngle,
                 ref _headVelocity,
                 -drive * profile.headDragDegrees,
                 deltaTime,
                 profile.springStiffness,
                 profile.springDamping);
-            StepSpring(
+            MonsterMotion.StepSpring(
                 ref _footAngle,
                 ref _footVelocity,
                 drive * profile.feetDragDegrees,
@@ -210,19 +219,6 @@ namespace TheCall
                 profile.springStiffness,
                 profile.springDamping);
             _ghostPortrait.SetSpringMotion(_headAngle, _footAngle);
-        }
-
-        static void StepSpring(
-            ref float angle,
-            ref float velocity,
-            float target,
-            float deltaTime,
-            float stiffness,
-            float damping)
-        {
-            var acceleration = (target - angle) * stiffness - velocity * damping;
-            velocity += acceleration * deltaTime;
-            angle += velocity * deltaTime;
         }
 
         void ResetSpring()

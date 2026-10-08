@@ -287,7 +287,7 @@
     const slider = document.createElement("input");
     slider.type = "range";
     slider.min = "0";
-    slider.max = "24";
+    slider.max = String(state.swingMax || 24);
     slider.step = "0.5";
     slider.value = String(part.swingDegrees);
     slider.className = "slider";

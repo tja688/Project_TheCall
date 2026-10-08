@@ -468,6 +468,8 @@ namespace TheCall
             return null;
         }
 
+        public const float MaxSwingDegrees = 24f;
+
         public static string SetSwing(MonsterRigPiece piece, float degrees)
         {
             if (piece == null || piece.Data == null)
@@ -476,7 +478,7 @@ namespace TheCall
             if (float.IsNaN(degrees) || float.IsInfinity(degrees))
                 return "摆动幅度无效";
 
-            piece.Data.swingDegrees = Mathf.Clamp(degrees, 0f, 40f);
+            piece.Data.swingDegrees = Mathf.Clamp(degrees, 0f, MaxSwingDegrees);
             return null;
         }
 
