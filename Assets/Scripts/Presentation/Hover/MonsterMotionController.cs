@@ -4,8 +4,9 @@ namespace TheCall
 {
     /// <summary>
     /// 怪物运动控制器：待机摆动、抓取拖拽、计分反应三层叠加在同一副骨架上。
-    /// 抓住时 weight 渐入，待机按 (1 - weight) 渐出；拖拽分量由抓点、根部倾斜和各关节弹簧叠加。
-    /// 松手后 weight 渐出，抓点回到原位，弹簧把姿势带回静止，待机再接回来。
+    /// 抓住的是身体中心，不是按下的那个像素。按下点若偏离中心，中心会在约零点一秒内移到指针上；
+    /// 这段时间里指针移动多少，中心就移动多少。对齐之后中心与指针重合，不再用弹簧去追。
+    /// 身体倾斜和头、手、脚、尾巴仍由拖拽速度驱动的弹簧摆动。松手后中心弹簧回到原位，待机再接回来。
     /// 关节的拖拽角度是硬上限：弹簧过冲时会被夹住并小幅回弹。
     /// 固定 1/120 秒子步长积分；网页编辑器的 motion.js 按同样的步骤实现，两边数值一致。
     /// </summary>
@@ -14,6 +15,10 @@ namespace TheCall
         public const float StepSeconds = 1f / 120f;
         public const float MaxFrameSeconds = 0.1f;
 
+        /// <summary>按下点偏离身体中心时，偏差按这个时间常数收掉。大约零点一秒内收到位。</summary>
+        public const float CenterCatchSeconds = 0.02f;
+
+        const float CenterCatchSnap = 0.35f;
         const float Bounce = 0.2f;
         const float StepEpsilon = 1e-5f;
 
@@ -41,6 +46,10 @@ namespace TheCall
         float _gripY;
         float _targetX;
         float _targetY;
+        float _alignX;
+        float _alignY;
+        float _pointerSampleX;
+        float _pointerSampleY;
         float _pivotX;
         float _pivotY;
         float _pivotSpeedX;
@@ -91,16 +100,20 @@ namespace TheCall
 
         public float Weight => _weight;
 
-        /// <summary>抓住：抓点落在指针当前位置，之后指针移动只改目标，不会让身体跳动。</summary>
+        /// <summary>
+        /// 抓住身体中心。x、y 是指针相对身体安装点的位置。
+        /// 这一下不挪怪物：中心和指针的偏差记下来，随后收到零。
+        /// </summary>
         public void Grab(float x, float y)
         {
-            _pivotX += x - _gripX;
-            _pivotY += y - _gripY;
-            _gripX = x;
-            _gripY = y;
+            _alignX = _pivotX - x;
+            _alignY = _pivotY - y;
             _targetX = x;
             _targetY = y;
+            _pointerSampleX = x;
+            _pointerSampleY = y;
             _holding = true;
+            PlaceBody();
         }
 
         public void Hold(float x, float y)
@@ -110,6 +123,7 @@ namespace TheCall
 
             _targetX = x;
             _targetY = y;
+            PlaceBody();
         }
 
         public void Release()
@@ -159,6 +173,8 @@ namespace TheCall
 
             var dt = Mathf.Clamp(deltaSeconds, 0f, MaxFrameSeconds);
             _time += dt;
+            if (_holding && dt > 0f)
+                CatchUp(dt);
             _accumulator += dt;
             while (_accumulator >= StepSeconds - StepEpsilon)
             {
@@ -220,8 +236,11 @@ namespace TheCall
             var raw = Mathf.Clamp(_pivotSpeedX / reference, -1f, 1f) * _weight;
             _driver += (raw - _driver) * (1f - Mathf.Exp(-h / Mathf.Max(0.001f, _profile.driverSmoothing)));
 
-            Spring(ref _pivotX, ref _pivotSpeedX, _holding ? _targetX : _gripX, h, _gripOmega, _gripZeta, float.MaxValue);
-            Spring(ref _pivotY, ref _pivotSpeedY, _holding ? _targetY : _gripY, h, _gripOmega, _gripZeta, float.MaxValue);
+            if (!_holding)
+            {
+                Spring(ref _pivotX, ref _pivotSpeedX, _gripX, h, _gripOmega, _gripZeta, float.MaxValue);
+                Spring(ref _pivotY, ref _pivotSpeedY, _gripY, h, _gripOmega, _gripZeta, float.MaxValue);
+            }
 
             var root = _skeleton.Bones[0];
             Spring(ref _tilt, ref _tiltSpeed, -root.Drag * _driver, h, _rootOmega, _rootZeta, Mathf.Max(0f, root.Drag));
@@ -237,6 +256,31 @@ namespace TheCall
 
             Spring(ref _reactHead, ref _reactHeadSpeed, _targetHead, h, _reactionOmega, _reactionZeta, float.MaxValue);
             Spring(ref _reactFeet, ref _reactFeetSpeed, _targetFeet, h, _reactionOmega, _reactionZeta, float.MaxValue);
+        }
+
+        /// <summary>身体中心 = 指针 + 尚未收完的按下偏差。旋转仍绕安装点，也就是身体中心。</summary>
+        void PlaceBody()
+        {
+            _pivotX = _targetX + _alignX;
+            _pivotY = _targetY + _alignY;
+        }
+
+        void CatchUp(float dt)
+        {
+            var decay = Mathf.Exp(-dt / CenterCatchSeconds);
+            _alignX *= decay;
+            _alignY *= decay;
+            if (_alignX * _alignX + _alignY * _alignY <= CenterCatchSnap * CenterCatchSnap)
+            {
+                _alignX = 0f;
+                _alignY = 0f;
+            }
+
+            PlaceBody();
+            _pivotSpeedX = (_targetX - _pointerSampleX) / dt;
+            _pivotSpeedY = (_targetY - _pointerSampleY) / dt;
+            _pointerSampleX = _targetX;
+            _pointerSampleY = _targetY;
         }
 
         static void Spring(ref float value, ref float speed, float target, float h, float omega, float zeta, float limit)

@@ -13,9 +13,9 @@ namespace TheCall
         [SerializeField, HideInInspector] bool _defaultsApplied;
 
         [Header("Grab · 抓住")]
-        [Tooltip("抓点跟着指针的快慢（越大越跟手）")]
+        [Tooltip("松手后身体回到原位的快慢（越大越快）。按住时身体中心直接贴着指针，不用这个值。")]
         [Range(2f, 40f)] public float gripResponse = 16f;
-        [Tooltip("抓点阻尼（越大越不晃）")]
+        [Tooltip("松手回位的阻尼（越大越不晃）")]
         [Range(0.1f, 2f)] public float gripDamping = 0.75f;
         [Tooltip("指针速度达到这个值（画布像素/秒）时，拖拽角度打满")]
         [Range(40f, 1000f)] public float dragSpeedReference = 360f;

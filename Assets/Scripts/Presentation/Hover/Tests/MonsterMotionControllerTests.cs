@@ -18,7 +18,7 @@ namespace TheCall.Hover.Tests
             var peak = 0f;
             for (var i = 0; i < 120; i++)
             {
-                controller.Hold(400f, 0f);
+                controller.Hold((i + 1) * 8f, 0f);
                 controller.Advance(1f / 60f);
                 controller.Compose(frame);
                 var bend = Mathf.Abs(frame.Rotation[1] - frame.Rotation[0]);
@@ -27,6 +27,38 @@ namespace TheCall.Hover.Tests
             }
 
             Assert.That(peak, Is.GreaterThan(10f));
+            UnityEngine.Object.DestroyImmediate(profile);
+        }
+
+        [Test]
+        public void 按下点偏离中心时身体先不动再把中心贴到指针上()
+        {
+            var profile = CreateProfile();
+            profile.idleEnabled = false;
+            var skeleton = Creature(14f);
+            var controller = new MonsterMotionController(skeleton, profile, 0f);
+            var frame = new MonsterRigFrame(skeleton);
+
+            controller.Grab(30f, -12f);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(71f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f).Within(0.02f));
+
+            controller.Hold(35f, -12f);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(76f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f).Within(0.02f));
+
+            controller.Advance(MonsterMotionController.MaxFrameSeconds);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(71f + 35f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f - 12f).Within(0.02f));
+
+            controller.Hold(80f, 10f);
+            controller.Advance(1f / 60f);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(71f + 80f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f + 10f).Within(0.02f));
             UnityEngine.Object.DestroyImmediate(profile);
         }
 

@@ -410,7 +410,7 @@ namespace TheCall
             if (slot.emptyMark != null)
                 slot.emptyMark.SetActive(!occupied);
             if (slot.title != null)
-                slot.title.text = occupied && monster.Skills.Count > 0 ? monster.Skills[0].Name : "";
+                slot.title.text = occupied ? monster.DisplayName : "";
             if (slot.subtitle != null)
                 slot.subtitle.text = occupied ? SkillLine(monster) : "";
             if (slot.selection != null)
@@ -441,7 +441,7 @@ namespace TheCall
 
             if (card.icon != null)
                 card.icon.enabled = false;
-            card.title.text = item.SkillNames.Count > 0 ? item.SkillNames[0] : "怪物";
+            card.title.text = item.DisplayName;
             card.body.text = Join(item.SkillNames);
             card.price.text = item.Price + " 金币";
             card.stock.text = "本轮剩余 1 件";

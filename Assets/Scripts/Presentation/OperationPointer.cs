@@ -13,7 +13,8 @@ namespace TheCall
         IEndDragHandler,
         IPointerUpHandler
     {
-        // 拖拽怪物时，原位只保留一个半透明的影子；松手后怪物自己回到原位，再淡出幽灵。
+        // 拖拽怪物时，原位只保留一个半透明的影子。没落到槽位时，怪物自己回到原位再淡出。
+        // 落到槽位时怪物已经挪走，拖着的那只直接消失，不再飞回原位。
         const float SourceAlpha = 0.28f;
         const float MaxReleaseSeconds = 1.5f;
         const float FadeSeconds = 0.16f;
@@ -133,7 +134,7 @@ namespace TheCall
         }
 
         /// <summary>
-        /// 怪物拖拽：在原位生成一只同样的怪物，指针抓住它上面按下的那一点。
+        /// 怪物拖拽：在原位生成一只同样的怪物，拖的是身体中心。按下点偏了，中心会自己移到指针上。
         /// 原位压暗成影子；怪物本身带着抓取、摆动和回弹，不复制卡片。
         /// </summary>
         void Carry(OperationPayloadDrag source, PointerEventData eventData)
@@ -175,20 +176,24 @@ namespace TheCall
                 copy.enabled = false;
         }
 
-        /// <summary>松手。落在有效位置时（applied）怪物已被挪走，原位立即恢复；否则怪物自己回到原位。</summary>
+        /// <summary>松手。落到槽位时拖着的怪物直接消失；没落到槽位时它自己回到原位，再淡出。</summary>
         void LetGo(bool applied)
         {
             if (_carried == null)
                 return;
 
-            _carried.Release();
-            _releasing = true;
-            _releaseClock = 0f;
             if (applied)
             {
                 RestoreHome();
-                BeginFade();
+                var ghost = _carried.gameObject;
+                _carried = null;
+                Destroy(ghost);
+                return;
             }
+
+            _carried.Release();
+            _releasing = true;
+            _releaseClock = 0f;
         }
 
         DropLanding RayLanding(PointerEventData eventData)

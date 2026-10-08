@@ -32,6 +32,7 @@ namespace TheCall
     {
         public MonsterDetails(
             string id,
+            string displayName,
             IReadOnlyList<MonsterSkillDetail> skills,
             int modifier,
             bool immovable,
@@ -52,6 +53,7 @@ namespace TheCall
             }
 
             Id = id;
+            DisplayName = displayName;
             Skills = copy;
             Modifier = modifier;
             Immovable = immovable;
@@ -60,6 +62,8 @@ namespace TheCall
         }
 
         public string Id { get; }
+
+        public string DisplayName { get; }
 
         public IReadOnlyList<MonsterSkillDetail> Skills { get; }
 

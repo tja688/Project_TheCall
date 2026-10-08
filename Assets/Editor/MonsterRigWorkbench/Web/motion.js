@@ -9,6 +9,8 @@
   const DEG = Math.PI / 180;
   const STEP_SECONDS = 1 / 120;
   const MAX_FRAME_SECONDS = 0.1;
+  const CENTER_CATCH_SECONDS = 0.02;
+  const CENTER_CATCH_SNAP = 0.35;
   const BOUNCE = 0.2;
   const STEP_EPSILON = 1e-5;
 
@@ -182,7 +184,8 @@
 
   /*
    * 控制器：待机、抓取、计分反应三层叠加在同一副骨架上。
-   * 抓住时 weight 渐入，待机按 (1 - weight) 渐出；松手后抓点回到原位，姿势回落，待机接回来。
+   * 抓住的是身体中心。按下点偏了，偏差在约 0.1 秒内收到零；这段时间指针移动多少，中心就移动多少。
+   * 对齐之后中心与指针重合。身体倾斜和四肢仍由拖拽速度的弹簧驱动。松手后中心弹簧回原位。
    * 关节的拖拽角度是硬上限：弹簧过冲时会被夹住并小幅回弹。
    * idleScale 是网页端专用的开关（编辑挂点时传 0 让待机暂停），不影响和游戏一致的动力学。
    */
@@ -220,6 +223,10 @@
       gripY: 0,
       targetX: 0,
       targetY: 0,
+      alignX: 0,
+      alignY: 0,
+      pointerSampleX: 0,
+      pointerSampleY: 0,
       pivotX: 0,
       pivotY: 0,
       pivotSpeedX: 0,
@@ -243,12 +250,15 @@
       const raw = clamp(s.pivotSpeedX / reference, -1, 1) * s.weight;
       s.driver += (raw - s.driver) * (1 - Math.exp(-h / Math.max(0.001, p.driverSmoothing)));
 
-      let next = spring(s.pivotX, s.pivotSpeedX, s.holding ? s.targetX : s.gripX, h, gripOmega, gripZeta, Infinity);
-      s.pivotX = next.value;
-      s.pivotSpeedX = next.speed;
-      next = spring(s.pivotY, s.pivotSpeedY, s.holding ? s.targetY : s.gripY, h, gripOmega, gripZeta, Infinity);
-      s.pivotY = next.value;
-      s.pivotSpeedY = next.speed;
+      let next;
+      if (!s.holding) {
+        next = spring(s.pivotX, s.pivotSpeedX, s.gripX, h, gripOmega, gripZeta, Infinity);
+        s.pivotX = next.value;
+        s.pivotSpeedX = next.speed;
+        next = spring(s.pivotY, s.pivotSpeedY, s.gripY, h, gripOmega, gripZeta, Infinity);
+        s.pivotY = next.value;
+        s.pivotSpeedY = next.speed;
+      }
 
       if (count > 0) {
         const root = bones[0];
@@ -273,10 +283,31 @@
       s.reactFeetSpeed = next.speed;
     }
 
+    function placeBody() {
+      s.pivotX = s.targetX + s.alignX;
+      s.pivotY = s.targetY + s.alignY;
+    }
+
+    function catchUp(dt) {
+      const decay = Math.exp(-dt / CENTER_CATCH_SECONDS);
+      s.alignX *= decay;
+      s.alignY *= decay;
+      if (s.alignX * s.alignX + s.alignY * s.alignY <= CENTER_CATCH_SNAP * CENTER_CATCH_SNAP) {
+        s.alignX = 0;
+        s.alignY = 0;
+      }
+      placeBody();
+      s.pivotSpeedX = (s.targetX - s.pointerSampleX) / dt;
+      s.pivotSpeedY = (s.targetY - s.pointerSampleY) / dt;
+      s.pointerSampleX = s.targetX;
+      s.pointerSampleY = s.targetY;
+    }
+
     function advance(delta) {
       if (count === 0) return;
       const dt = clamp(delta, 0, MAX_FRAME_SECONDS);
       s.time += dt;
+      if (s.holding && dt > 0) catchUp(dt);
       s.accumulator += dt;
       while (s.accumulator >= STEP_SECONDS - STEP_EPSILON) {
         step(STEP_SECONDS);
@@ -320,20 +351,23 @@
       );
     }
 
+    /* 抓住身体中心。这一下不挪怪物，偏差随后收到零。 */
     function grab(x, y) {
-      s.pivotX += x - s.gripX;
-      s.pivotY += y - s.gripY;
-      s.gripX = x;
-      s.gripY = y;
+      s.alignX = s.pivotX - x;
+      s.alignY = s.pivotY - y;
       s.targetX = x;
       s.targetY = y;
+      s.pointerSampleX = x;
+      s.pointerSampleY = y;
       s.holding = true;
+      placeBody();
     }
 
     function hold(x, y) {
       if (!s.holding) return;
       s.targetX = x;
       s.targetY = y;
+      placeBody();
     }
 
     function release() {

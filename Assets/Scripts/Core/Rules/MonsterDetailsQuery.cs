@@ -27,7 +27,7 @@ namespace TheCall
                 skills[i] = new MonsterSkillDetail(skill.Name, sentence, kind, skill.Rarity);
             }
 
-            return new MonsterDetails(view.Id, skills, view.Modifier, view.Immovable, view.Capacity, view.Appearance);
+            return new MonsterDetails(view.Id, view.DisplayName, skills, view.Modifier, view.Immovable, view.Capacity, view.Appearance);
         }
     }
 }

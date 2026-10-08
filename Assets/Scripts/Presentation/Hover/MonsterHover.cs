@@ -73,7 +73,7 @@ namespace TheCall
         void Show(MonsterDetails details, in HoverPlacement placement)
         {
             _window.gameObject.SetActive(true);
-            _title.text = details.Skills[0].Name;
+            _title.text = details.DisplayName;
             _skillLine.text = SkillNames(details);
             _modifier.text = ModifierText(details.Modifier);
             _capacity.text = "产能 " + details.Capacity;
@@ -119,7 +119,7 @@ namespace TheCall
 
         static string SkillNames(MonsterDetails details)
         {
-            if (details.Skills.Count < 2)
+            if (details.Skills.Count == 0)
                 return "";
 
             var text = details.Skills[0].Name;

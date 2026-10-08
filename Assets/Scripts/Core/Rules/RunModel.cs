@@ -30,14 +30,15 @@ namespace TheCall
 
     internal sealed class Monster
     {
-        public Monster(string id, SkillInstance skill)
-            : this(id, new[] { skill })
+        public Monster(string id, string displayName, SkillInstance skill)
+            : this(id, displayName, new[] { skill })
         {
         }
 
-        public Monster(string id, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
+        public Monster(string id, string displayName, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
         {
             Id = id;
+            DisplayName = displayName;
             Skills = new List<SkillInstance>(skills);
             Modifier = modifier;
             Appearance = appearance ?? MonsterAppearance.FromSeed(StableSeed(id));
@@ -47,6 +48,8 @@ namespace TheCall
         public IReadOnlyList<string> ParentIds { get; }
 
         public string Id { get; }
+
+        public string DisplayName { get; }
 
         public List<SkillInstance> Skills { get; }
 
@@ -452,8 +455,9 @@ namespace TheCall
             for (var i = 0; i < skills.Length; i++)
                 skills[i] = MakeSkill(skillNames[i]);
 
-            var id = "m" + _nextId++;
-            var monster = new Monster(id, skills, modifier, appearance, parentIds);
+            var serial = _nextId++;
+            var id = "m" + serial;
+            var monster = new Monster(id, MonsterCodenames.ForSerial(serial), skills, modifier, appearance, parentIds);
             _byId.Add(monster.Id, monster);
             return monster;
         }

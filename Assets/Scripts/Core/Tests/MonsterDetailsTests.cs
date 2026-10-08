@@ -16,6 +16,8 @@ namespace TheCall.Tests
 
             var details = App.SendQuery(new MonsterDetailsQuery(monster.Id));
 
+            Assert.That(details.DisplayName, Is.Not.EqualTo("左能量体"));
+            Assert.That(details.DisplayName, Does.StartWith("SCP-"));
             Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量"));
             Assert.That(details.Skills[0].Kind, Is.EqualTo(SkillUse.Active));
             Assert.That(details.Skills[0].Rarity, Is.EqualTo(Rarity.White));
