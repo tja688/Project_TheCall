@@ -107,7 +107,7 @@ namespace TheCall.Tests
             var victim = IdOf("能量体");
             var right = Ids("换位手")[1];
             App.SendCommand(new DiscardMonsterCommand(IdOf("吞噬大嘴")));
-            App.SendCommand(new EquipSkillCommand(host, 0));
+            InstallFromSlot(host);
             App.SendCommand(new PlaceMonsterCommand(victim, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(right, OperationArea.Extraction, 2));
@@ -214,7 +214,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
             Assert.That(Landings().Single().Energy, Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
         }
 
         [Test]
@@ -376,7 +376,7 @@ namespace TheCall.Tests
                 names[3 + i] = i < alsoInCage.Length ? alsoInCage[i] : "孤独心";
 
             UseRules(new ScriptedDraw(names), levels, intents: intents);
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
         }
 
         void AssertCells(params string[] monsterIds)
@@ -403,7 +403,7 @@ namespace TheCall.Tests
 
         string[] Ids(string skillName) =>
             App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Count == 1 && monster.SkillNames[0] == skillName)
+                .Where(monster => Holds(monster, skillName))
                 .Select(monster => monster.Id)
                 .ToArray();
     }

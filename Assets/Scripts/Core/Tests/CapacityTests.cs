@@ -48,9 +48,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "能量体");
 
-            var hostId = IdOf("镜眼");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("双头能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            var hostId = IdOf("双头能量体");
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -77,7 +75,7 @@ namespace TheCall.Tests
                 "孤独心");
 
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             var leftId = breaths[0].Id;
             var rightId = breaths[1].Id;
@@ -110,10 +108,10 @@ namespace TheCall.Tests
 
             var hostId = IdOf("镜眼");
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new DiscardMonsterCommand(breaths[0].Id));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             var plainId = breaths[1].Id;
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(IdOf("左复制腺体"), OperationArea.Extraction, 1));
@@ -150,7 +148,7 @@ namespace TheCall.Tests
             var headId = IdOf("回响嗓");
             var organId = IdOf("左复制腺体");
             App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(headId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(organId, OperationArea.Extraction, 2));
@@ -205,10 +203,10 @@ namespace TheCall.Tests
                 "孤独心",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var hostId = IdOf("镜眼");
             App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
@@ -288,7 +286,7 @@ namespace TheCall.Tests
 
             var hostId = IdOf("镜眼");
             App.SendCommand(new DiscardMonsterCommand(IdOf("奇异香")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -308,9 +306,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "双头能量体");
 
-            var hostId = IdOf("镜眼");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            var hostId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             return hostId;
         }
@@ -318,10 +314,10 @@ namespace TheCall.Tests
         void Open(params string[] names)
         {
             UseDraw(names);
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
         }
 
         string IdOf(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
     }
 }

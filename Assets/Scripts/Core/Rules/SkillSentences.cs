@@ -50,7 +50,7 @@ namespace TheCall
                 {
                     SentencePiece.Literal(side + "每有一个怪物产生"),
                     SentencePiece.Points(effect.A),
-                    SentencePiece.Literal("点能量，加减加在这次总产出上"),
+                    SentencePiece.Literal("点能量"),
                 };
             }
 
@@ -79,9 +79,9 @@ namespace TheCall
                     SentencePiece.Literal("点能量两次"),
                 };
             if (key == "CapacityExtraForLeftNeighbor")
-                return new[] { SentencePiece.Literal("左侧相邻怪物，产生能量的技能次数+" + skill.Get(EffectKind.CapacityExtraForLeftNeighbor).A) };
+                return new[] { SentencePiece.Literal("左侧相邻怪物，产生能量的触发次数+" + skill.Get(EffectKind.CapacityExtraForLeftNeighbor).A) };
             if (key == "CapacityExtraForRightNeighbor")
-                return new[] { SentencePiece.Literal("右侧相邻怪物，产生能量的技能次数+" + skill.Get(EffectKind.CapacityExtraForRightNeighbor).A) };
+                return new[] { SentencePiece.Literal("右侧相邻怪物，产生能量的触发次数+" + skill.Get(EffectKind.CapacityExtraForRightNeighbor).A) };
             if (key == "ExtraWalksForRightNeighbor")
                 return new[] { SentencePiece.Literal("右侧相邻怪物的所有技能效果都触发" + Times(skill.Get(EffectKind.ExtraWalksForRightNeighbor).A + 1)) };
             if (key == "EnergyQuote+NextEnergyBonus")

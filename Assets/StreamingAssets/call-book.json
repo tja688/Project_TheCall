@@ -1,7 +1,7 @@
 {
   "economy": {
-    "wage": 40,
-    "overtimeWage": 20,
+    "wage": 60,
+    "overtimeWage": 40,
     "price": { "White": 10, "Blue": 20, "Gold": 30 },
     "weight": { "White": 7, "Blue": 2, "Gold": 1 },
     "techPercent": 10,
@@ -24,7 +24,7 @@
   "tools": [
     { "name": "急急装置", "price": 30, "rarity": "White", "effect": "DoubleFirstEnergy" },
     { "name": "上级员工证", "price": 40, "rarity": "Blue", "effect": "ExtractionCells", "cells": 6 },
-    { "name": "独孤装置", "price": 50, "rarity": "Gold", "effect": "DoubleSingleAffix" }
+    { "name": "劣胜装置", "price": 50, "rarity": "Gold", "effect": "DoubleSingleAffix" }
   ],
   "techs": [
     { "name": "基因实验", "flag": "BreedingSkill" },
@@ -52,7 +52,7 @@
     { "name": "右复制腺体", "rarity": "Blue", "poolIndex": 5, "use": "Passive", "roles": ["Support"], "affix": [], "effects": [ { "kind": "CapacityExtraForRightNeighbor", "layers": 1 } ] },
     { "name": "换位手", "rarity": "Blue", "poolIndex": 6, "use": "Active", "roles": ["Support"], "affix": ["Immovable"], "effects": [ { "kind": "SwapWithLeft" } ] },
     { "name": "汲取鼻", "rarity": "Blue", "poolIndex": 7, "use": "Passive", "roles": ["Produce", "Support"], "affix": [], "effects": [ { "kind": "LandingResponse", "quote": 1 } ] },
-    { "name": "优质肉体", "rarity": "Blue", "poolIndex": 8, "use": "Passive", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "SkillCountExtra", "when": 3, "walks": 1 } ] },
+    { "name": "优质肉体", "rarity": "White", "poolIndex": 10, "use": "Passive", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "SkillCountExtra", "when": 3, "walks": 1 } ] },
     { "name": "传能耳", "rarity": "Blue", "poolIndex": 9, "use": "Passive", "roles": ["Support"], "affix": [], "effects": [ { "kind": "RightRowOnLeftActive", "amount": 2 } ] },
     { "name": "外接胚胎", "rarity": "Blue", "poolIndex": 10, "use": "Passive", "roles": ["Economy"], "affix": [], "effects": [ { "kind": "LegacyOnDiscard" } ] },
     { "name": "产金管道", "rarity": "Blue", "poolIndex": 11, "use": "Active", "roles": ["Economy"], "affix": [], "effects": [ { "kind": "GainGold", "amount": 5 } ] },
@@ -60,7 +60,7 @@
     { "name": "潜藏基因", "rarity": "Blue", "poolIndex": 13, "use": "Passive", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "EdgeBonus", "side": "Right", "amount": 5 } ] },
     { "name": "不稳定肉体", "rarity": "Blue", "poolIndex": 14, "use": "Active", "roles": ["Produce", "Support"], "affix": [], "effects": [ { "kind": "CopyBreeding" } ] },
     { "name": "重血脉心", "rarity": "Blue", "poolIndex": 15, "use": "Passive", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "KinExtra" } ] },
-    { "name": "孤独心", "rarity": "Blue", "poolIndex": 16, "use": "Active", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "DoubleWhenIsolated" } ] },
+    { "name": "孤独心", "rarity": "White", "poolIndex": 11, "use": "Active", "roles": ["Amplify"], "affix": [], "effects": [ { "kind": "DoubleWhenIsolated" } ] },
     { "name": "回响嗓", "rarity": "Gold", "poolIndex": 0, "use": "Passive", "roles": ["Support"], "affix": [], "effects": [ { "kind": "ExtraWalksForRightNeighbor", "walks": 1 } ] },
     { "name": "镜眼", "rarity": "Gold", "poolIndex": 1, "use": "Passive", "roles": ["Support"], "affix": [], "effects": [ { "kind": "DoubleAdjacentEnergy" } ] },
     { "name": "无穷肌肉", "rarity": "Gold", "poolIndex": 2, "use": "Active", "roles": ["Produce", "Support"], "affix": [], "effects": [ { "kind": "FillSkills" } ] }

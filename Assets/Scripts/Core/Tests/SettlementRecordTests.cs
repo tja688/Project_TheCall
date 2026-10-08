@@ -19,7 +19,7 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -57,7 +57,7 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var swapperId = IdOf("换位手");
             App.SendCommand(new PlaceMonsterCommand(swapperId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -83,7 +83,7 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = IdOf("能量体");
             var swapperId = IdOf("换位手");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
@@ -117,7 +117,7 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             var victimId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(victimId, OperationArea.Extraction, 0));
@@ -149,7 +149,7 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -191,7 +191,7 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = Ids("能量体");
             App.SendCommand(new PlaceMonsterCommand(breaths[0], OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1], OperationArea.Extraction, 2));
@@ -203,16 +203,16 @@ namespace TheCall.Tests
             Assert.That(payment.Overtime, Is.False);
             Assert.That(payment.Failed, Is.False);
             Assert.That(payment.Excess, Is.True);
-            Assert.That(payment.Wage, Is.EqualTo(40));
+            Assert.That(payment.Wage, Is.EqualTo(60));
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
         }
 
         string IdOf(string skillName) => Ids(skillName).Single();
 
         string[] Ids(string skillName) =>
             App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Count == 1 && monster.SkillNames[0] == skillName)
+                .Where(monster => Holds(monster, skillName))
                 .Select(monster => monster.Id)
                 .ToArray();
     }

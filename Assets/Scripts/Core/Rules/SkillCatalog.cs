@@ -20,22 +20,63 @@ namespace TheCall
         Right = 1,
     }
 
+    internal enum DrawnPool
+    {
+        HasAmplify,
+        AmplifyOnly,
+        NotAmplifyOnly,
+        NoAmplifyBit,
+        Produce,
+        Support,
+    }
+
     internal sealed class SkillCatalog : IUtility
     {
         readonly ContentBook _book;
 
         public SkillCatalog(ContentBook book) => _book = book;
 
-        public IReadOnlyList<string> Names
+        public IReadOnlyList<string> Names()
         {
-            get
-            {
-                var names = new string[_book.Skills.Count];
-                for (var i = 0; i < names.Length; i++)
-                    names[i] = _book.Skills[i].Name;
+            var names = new string[_book.Skills.Count];
+            for (var i = 0; i < names.Length; i++)
+                names[i] = _book.Skills[i].Name;
 
-                return names;
+            return names;
+        }
+
+        public IReadOnlyList<string> Names(DrawnPool pool)
+        {
+            var names = new List<string>();
+            for (var i = 0; i < _book.Skills.Count; i++)
+            {
+                if (InPool(_book.Skills[i], pool))
+                    names.Add(_book.Skills[i].Name);
             }
+
+            return names;
+        }
+
+        public IReadOnlyList<string> Names(DrawnPool pool, Rarity rarity, string taken)
+        {
+            var matches = new List<SkillDef>();
+            for (var i = 0; i < _book.Skills.Count; i++)
+            {
+                var skill = _book.Skills[i];
+                if (skill.Rarity != rarity || !InPool(skill, pool))
+                    continue;
+                if (taken != null && skill.Name == taken)
+                    continue;
+
+                matches.Add(skill);
+            }
+
+            matches.Sort((left, right) => left.PoolIndex.CompareTo(right.PoolIndex));
+            var names = new string[matches.Count];
+            for (var i = 0; i < names.Length; i++)
+                names[i] = matches[i].Name;
+
+            return names;
         }
 
         public IReadOnlyList<string> NamesOf(Rarity rarity)
@@ -337,6 +378,23 @@ namespace TheCall
             side = CountedSide.Left;
             amount = 0;
             return false;
+        }
+
+        static bool InPool(SkillDef skill, DrawnPool pool)
+        {
+            var role = skill.Role;
+            if (pool == DrawnPool.HasAmplify)
+                return (role & SkillRole.Amplify) != 0;
+            if (pool == DrawnPool.AmplifyOnly)
+                return role == SkillRole.Amplify;
+            if (pool == DrawnPool.NotAmplifyOnly)
+                return role != SkillRole.None && role != SkillRole.Amplify;
+            if (pool == DrawnPool.NoAmplifyBit)
+                return role != SkillRole.None && (role & SkillRole.Amplify) == 0;
+            if (pool == DrawnPool.Produce)
+                return (role & SkillRole.Produce) != 0;
+
+            return (role & SkillRole.Support) != 0;
         }
 
         bool Has(string skillName, EffectKind kind)

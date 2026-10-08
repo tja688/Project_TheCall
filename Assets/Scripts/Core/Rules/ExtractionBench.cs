@@ -140,7 +140,7 @@ namespace TheCall
 
         static bool Known(SkillCatalog skills, string name)
         {
-            var names = skills.Names;
+            var names = skills.Names();
             for (var i = 0; i < names.Count; i++)
             {
                 if (names[i] == name)

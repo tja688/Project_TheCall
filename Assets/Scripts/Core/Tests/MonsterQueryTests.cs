@@ -8,23 +8,24 @@ namespace TheCall.Tests
         [Test]
         public void 摆上提取槽后怪物笼里没有它但查询仍返回技能报价和稀有度()
         {
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "吞噬大嘴").Id;
+                .Single(monster => Holds(monster, "吞噬大嘴")).Id;
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
 
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(devourerId));
             var placed = App.SendQuery(new MonsterQuery(devourerId));
             Assert.That(placed.SkillNames, Is.EqualTo(new[] { "吞噬大嘴" }));
-            Assert.That(placed.Skills.Single().Quote, Is.EqualTo(0));
-            Assert.That(placed.Skills.Single().Rarity, Is.EqualTo(Rarity.White));
+            var devour = placed.Skills.Single(skill => skill.Name == "吞噬大嘴");
+            Assert.That(devour.Quote, Is.EqualTo(0));
+            Assert.That(devour.Rarity, Is.EqualTo(Rarity.White));
             Assert.That(placed.Immovable, Is.False);
             Assert.That(placed.Capacity, Is.EqualTo(0));
 
             App.SendCommand(new ConfirmSettlementCommand());
 
             var after = App.SendQuery(new MonsterQuery(devourerId));
-            Assert.That(after.Skills.Single().Quote, Is.EqualTo(0));
+            Assert.That(after.Skills.Single(skill => skill.Name == "吞噬大嘴").Quote, Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
         }
 
@@ -43,7 +44,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var solarId = IdOf("镜眼");
             var breathId = IdOf("能量体");
             var swapperId = IdOf("换位手");
@@ -60,7 +61,7 @@ namespace TheCall.Tests
 
         string IdOf(string skillName) =>
             App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Count == 1 && monster.SkillNames[0] == skillName)
+                .Single(monster => Holds(monster, skillName))
                 .Id;
     }
 }

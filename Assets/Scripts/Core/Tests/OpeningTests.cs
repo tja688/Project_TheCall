@@ -5,21 +5,34 @@ namespace TheCall.Tests
 {
     public sealed class OpeningTests : RulesFixture
     {
+        static readonly string[] Draw =
+        {
+            "吞噬大嘴", "能量体",
+            "良好肉体", "左能量体",
+            "优质肉体", "右能量体",
+            "能量体", "双头能量体", "蜜能量体", "优秀能量体",
+            "奇异香", "怪异香", "汲取鼻", "换位手",
+        };
+
+        [SetUp]
+        public void UseOpeningDraw() => UseExactDraw(Draw);
+
         [Test]
-        public void 开局给出三只单技能候选且怪物笼为空()
+        public void 开局给出三只双技能候选且怪物笼为空()
         {
             var candidates = App.SendQuery(new OpeningCandidatesQuery());
             var cage = App.SendQuery(new MonsterCageQuery());
 
-            Assert.That(candidates.Select(monster => monster.Id).Distinct().Count(), Is.EqualTo(3));
-            Assert.That(
-                candidates.Select(monster => monster.SkillNames.Single()).ToArray(),
-                Is.EqualTo(new[] { "能量体", "左能量体", "右能量体" }));
+            Assert.That(candidates.Count, Is.EqualTo(3));
+            Assert.That(candidates.Select(monster => monster.SkillNames.Count).ToArray(), Is.EqualTo(new[] { 2, 2, 2 }));
+            Assert.That(candidates[0].SkillNames, Is.EqualTo(new[] { "吞噬大嘴", "能量体" }));
+            Assert.That(candidates[1].SkillNames, Is.EqualTo(new[] { "良好肉体", "左能量体" }));
+            Assert.That(candidates[2].SkillNames, Is.EqualTo(new[] { "优质肉体", "右能量体" }));
             Assert.That(cage, Is.Empty);
         }
 
         [Test]
-        public void 留下一只后落选不进笼并补到七只单技能()
+        public void 留下一只后落选不进笼并补到九只()
         {
             var candidates = App.SendQuery(new OpeningCandidatesQuery());
             var keptId = candidates[0].Id;
@@ -27,25 +40,20 @@ namespace TheCall.Tests
 
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
 
-            var cage = App.SendQuery(new MonsterCageQuery());
-            Assert.That(cage.Count(), Is.EqualTo(7));
-            Assert.That(cage.All(monster => monster.SkillNames.Count == 1), Is.True);
+            var cage = App.SendQuery(new MonsterCageQuery()).ToArray();
+            Assert.That(cage.Length, Is.EqualTo(9));
+            Assert.That(cage[0].Id, Is.EqualTo(keptId));
+            Assert.That(cage[0].SkillNames, Is.EqualTo(new[] { "吞噬大嘴", "能量体" }));
+            Assert.That(cage.Skip(1).All(monster => monster.SkillNames.Count == 1), Is.True);
+            Assert.That(
+                cage.Skip(1).Take(4).Select(monster => monster.SkillNames[0]).ToArray(),
+                Is.EqualTo(new[] { "能量体", "双头能量体", "蜜能量体", "优秀能量体" }));
+            Assert.That(
+                cage.Skip(5).Select(monster => monster.SkillNames[0]).ToArray(),
+                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻", "换位手" }));
             var cageIds = cage.Select(monster => monster.Id).ToArray();
-            Assert.That(cageIds, Does.Contain(keptId));
             Assert.That(cageIds, Does.Not.Contain(rejectedIds[0]));
             Assert.That(cageIds, Does.Not.Contain(rejectedIds[1]));
-            Assert.That(
-                cage.Select(monster => monster.SkillNames.Single()),
-                Is.EquivalentTo(new[]
-                {
-                    "能量体",
-                    "奇异香",
-                    "怪异香",
-                    "汲取鼻",
-                    "孤独心",
-                    "吞噬大嘴",
-                    "双头能量体",
-                }));
         }
 
         [Test]

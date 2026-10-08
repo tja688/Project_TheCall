@@ -8,12 +8,15 @@ namespace TheCall.Tests
         [Test]
         public void 左能量体的详情是主动白字且句子来自效果说明()
         {
-            var monster = App.SendQuery(new OpeningCandidatesQuery())
-                .Single(candidate => candidate.SkillNames.Single() == "左能量体");
+            KeepOpened();
+            var run = App.GetModel<RunModel>();
+            var created = run.CreateMonster(new[] { "左能量体" });
+            run.AddToCage(created);
+            var monster = App.SendQuery(new MonsterQuery(created.Id));
 
             var details = App.SendQuery(new MonsterDetailsQuery(monster.Id));
 
-            Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量，加减加在这次总产出上"));
+            Assert.That(details.Skills[0].Sentence, Is.EqualTo("右侧每有一个怪物产生2点能量"));
             Assert.That(details.Skills[0].Kind, Is.EqualTo(SkillUse.Active));
             Assert.That(details.Skills[0].Rarity, Is.EqualTo(Rarity.White));
         }
@@ -30,7 +33,7 @@ namespace TheCall.Tests
             var catalog = App.GetUtility<SkillCatalog>();
             var copy = App.GetUtility<SkillCopy>();
 
-            Assert.That(copy.Names, Is.EqualTo(catalog.Names));
+            Assert.That(copy.Names, Is.EqualTo(catalog.Names()));
             Assert.That(copy.TryDescribe("能量体", out var kind, out var sentence), Is.True);
             Assert.That(kind, Is.EqualTo(SkillUse.Active));
             Assert.That(sentence, Is.EqualTo("产生5点能量"));
@@ -54,14 +57,20 @@ namespace TheCall.Tests
 
             var share = SkillSentences.Pieces(ContentGate.Current.FindSkill("蜜能量体"));
             Assert.That(share.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(2));
+            Assert.That(
+                SkillSentences.Format(ContentGate.Current.FindSkill("左复制腺体")),
+                Is.EqualTo("左侧相邻怪物，产生能量的触发次数+1"));
+            Assert.That(
+                SkillSentences.Format(ContentGate.Current.FindSkill("右复制腺体")),
+                Is.EqualTo("右侧相邻怪物，产生能量的触发次数+1"));
         }
 
         [Test]
         public void 吞噬大嘴的句子没有星号()
         {
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourer = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "吞噬大嘴");
+                .Single(monster => Holds(monster, "吞噬大嘴"));
 
             var details = App.SendQuery(new MonsterDetailsQuery(devourer.Id));
 

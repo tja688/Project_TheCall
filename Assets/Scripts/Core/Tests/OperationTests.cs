@@ -18,14 +18,14 @@ namespace TheCall.Tests
             Assert.That(cells[2].MonsterId, Is.EqualTo(monsterId));
             Assert.That(cells.Where(cell => cell.Index != 2).All(cell => cell.MonsterId == null), Is.True);
             var placedCage = App.SendQuery(new MonsterCageQuery());
-            Assert.That(placedCage.Count(), Is.EqualTo(6));
+            Assert.That(placedCage.Count(), Is.EqualTo(8));
             Assert.That(placedCage.Select(monster => monster.Id), Does.Not.Contain(monsterId));
 
             App.SendCommand(new ReturnMonsterCommand(monsterId));
 
             Assert.That(App.SendQuery(new ExtractionSlotsQuery())[2].MonsterId, Is.Null);
             var returned = App.SendQuery(new MonsterCageQuery());
-            Assert.That(returned.Count(), Is.EqualTo(7));
+            Assert.That(returned.Count(), Is.EqualTo(9));
             Assert.That(returned.Select(monster => monster.Id), Does.Contain(monsterId));
         }
 
@@ -130,7 +130,7 @@ namespace TheCall.Tests
         public void 从提取格废弃怪物后格子空出并且技能进槽()
         {
             EnterOperation();
-            var victim = CageIds()[1];
+            var victim = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "奇异香")).Id;
             App.SendCommand(new PlaceMonsterCommand(victim, OperationArea.Extraction, 2));
 
             var applied = App.SendCommand(new CommitOperationDropCommand(new OperationDrop(
@@ -148,19 +148,20 @@ namespace TheCall.Tests
         public void 技能槽已有三份时从棋盘废弃不会发生()
         {
             EnterOperation();
-            var cage = CageIds();
-            App.SendCommand(new DiscardMonsterCommand(cage[1]));
-            App.SendCommand(new DiscardMonsterCommand(cage[2]));
-            App.SendCommand(new DiscardMonsterCommand(cage[3]));
-            App.SendCommand(new PlaceMonsterCommand(cage[4], OperationArea.Extraction, 1));
+            var cage = App.SendQuery(new MonsterCageQuery());
+            var staying = cage.Single(monster => Holds(monster, "双头能量体")).Id;
+            App.SendCommand(new DiscardMonsterCommand(cage.Single(monster => Holds(monster, "奇异香") && monster.SkillNames.Count == 1).Id));
+            App.SendCommand(new DiscardMonsterCommand(cage.Single(monster => Holds(monster, "怪异香")).Id));
+            App.SendCommand(new DiscardMonsterCommand(cage.Single(monster => Holds(monster, "汲取鼻")).Id));
+            App.SendCommand(new PlaceMonsterCommand(staying, OperationArea.Extraction, 1));
 
             var applied = App.SendCommand(new CommitOperationDropCommand(new OperationDrop(
-                DropPayload.Monster(cage[4]),
+                DropPayload.Monster(staying),
                 new DropLanding(LandingPlace.Discard, 0, null))));
 
             Assert.That(applied, Is.False);
-            Assert.That(App.SendQuery(new ExtractionSlotsQuery())[1].MonsterId, Is.EqualTo(cage[4]));
-            Assert.That(App.SendQuery(new MonsterQuery(cage[4])).SkillNames, Is.EqualTo(new[] { "孤独心" }));
+            Assert.That(App.SendQuery(new ExtractionSlotsQuery())[1].MonsterId, Is.EqualTo(staying));
+            Assert.That(App.SendQuery(new MonsterQuery(staying)).SkillNames, Is.EqualTo(new[] { "双头能量体" }));
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
                 Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
@@ -174,16 +175,16 @@ namespace TheCall.Tests
             var donor = CageIds()[1];
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 3));
             App.SendCommand(new DiscardMonsterCommand(donor));
+            var beforeSkills = App.SendQuery(new MonsterQuery(host)).SkillNames.ToArray();
+            var beforeSlot = App.SendQuery(new RunLedgerQuery()).SkillSlots.ToArray();
 
             var applied = App.SendCommand(new CommitOperationDropCommand(new OperationDrop(
                 DropPayload.SkillChip(0),
                 new DropLanding(LandingPlace.Extraction, 3, host))));
 
-            Assert.That(applied, Is.True);
-            Assert.That(
-                App.SendQuery(new MonsterQuery(host)).SkillNames,
-                Is.EqualTo(new[] { "能量体", "奇异香" }));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
+            Assert.That(applied, Is.False);
+            Assert.That(App.SendQuery(new MonsterQuery(host)).SkillNames, Is.EqualTo(beforeSkills));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(beforeSlot));
             Assert.That(App.SendQuery(new ExtractionSlotsQuery())[3].MonsterId, Is.EqualTo(host));
         }
 
@@ -201,7 +202,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "吞噬大嘴",
                 "双头能量体");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
             App.SendCommand(new UnlockTechCommand("基因实验"));
@@ -212,7 +213,7 @@ namespace TheCall.Tests
                 for (var i = 0; i < cage.Length; i++)
                 {
                     var monster = App.SendQuery(new MonsterQuery(cage[i]));
-                    if (monster != null && monster.SkillNames.Count == 1 && monster.SkillNames[0] == skillName)
+                    if (monster != null && Holds(monster, skillName))
                         return cage[i];
                 }
 
@@ -275,11 +276,7 @@ namespace TheCall.Tests
             Assert.That(CageIds(), Is.EqualTo(cage));
         }
 
-        void EnterOperation()
-        {
-            var keptId = App.SendQuery(new OpeningCandidatesQuery())[0].Id;
-            App.SendCommand(new KeepOpeningMonsterCommand(keptId));
-        }
+        void EnterOperation() => KeepOpened();
 
         string[] CageIds() => App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
     }

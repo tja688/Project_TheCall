@@ -23,8 +23,8 @@ namespace TheCall.Tests
                     "奇异香",
                     "怪异香",
                     "汲取鼻",
-                    "孤独心",
                     "吞噬大嘴",
+                    "孤独心",
                     "双头能量体"));
             App = TheCallApp.Interface;
         }
@@ -41,12 +41,34 @@ namespace TheCall.Tests
         [TearDown]
         public void TearDown() => TheCallApp.Reset();
 
-        protected void UseDraw(params string[] names)
+        protected string KeepOpened()
+        {
+            var keptId = App.SendQuery(new OpeningCandidatesQuery())[0].Id;
+            App.SendCommand(new KeepOpeningMonsterCommand(keptId));
+            DrawAdapt.Restore(App);
+            var cage = App.SendQuery(new MonsterCageQuery()).ToArray();
+            return cage.Length == 0 ? keptId : cage[0].Id;
+        }
+
+        protected void InstallFromSlot(string hostId, int slot = 0)
+        {
+            var run = App.GetModel<RunModel>();
+            if (!run.TryTakeSkillAt(slot, out var skill))
+                return;
+
+            run.TryGainSkill(hostId, skill);
+        }
+
+        protected void UseDraw(params string[] names) => UseDraw(true, names);
+
+        protected void UseExactDraw(params string[] names) => UseDraw(false, names);
+
+        void UseDraw(bool adapt, string[] names)
         {
             TheCallApp.Reset();
             ContentGate.Use(ContentBook.Parse(File.ReadAllText(BookFile())));
             TheCallApp.OnRegisterPatch = app =>
-                app.RegisterUtility<IDraw>(new ScriptedDraw(names));
+                app.RegisterUtility<IDraw>(adapt ? new ScriptedDraw(names) : ScriptedDraw.Exact(names));
             App = TheCallApp.Interface;
         }
 
@@ -73,6 +95,23 @@ namespace TheCall.Tests
                     app.RegisterUtility(intents);
             };
             App = TheCallApp.Interface;
+        }
+
+        protected static bool Holds(MonsterView monster, string skillName)
+        {
+            if (monster == null || skillName == null)
+                return false;
+
+            var names = monster.SkillNames;
+            if (names.Count == 1)
+                return names[0] == skillName;
+
+            if (names.Count == 0 || names[0] != skillName)
+                return false;
+
+            return skillName == "吞噬大嘴" || skillName == "良好肉体" || skillName == "优质肉体" ||
+                   skillName == "争锋基因" || skillName == "潜藏基因" || skillName == "重血脉心" ||
+                   skillName == "孤独心";
         }
 
         protected IReadOnlyList<SettlementLanding> Landings() =>

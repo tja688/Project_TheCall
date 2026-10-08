@@ -104,7 +104,7 @@ namespace TheCall
             if (names.Count >= 4)
                 return pool;
 
-            var all = catalog.Names;
+            var all = catalog.Names();
             for (var i = 0; i < all.Count; i++)
             {
                 if (!names.Contains(all[i]))

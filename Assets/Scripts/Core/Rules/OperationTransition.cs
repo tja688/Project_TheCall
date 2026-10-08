@@ -109,7 +109,6 @@ namespace TheCall
         Exchange,
         Return,
         Discard,
-        Equip,
         Invest,
         ReturnBreedingSkill,
     }
@@ -126,8 +125,7 @@ namespace TheCall
             OperationArea toArea,
             int toCell,
             int skillSlotIndex,
-            int breedingSlot,
-            string equipMonsterId)
+            int breedingSlot)
         {
             Effect = effect;
             SourceWhere = sourceWhere;
@@ -139,7 +137,6 @@ namespace TheCall
             ToCell = toCell;
             SkillSlotIndex = skillSlotIndex;
             BreedingSlot = breedingSlot;
-            EquipMonsterId = equipMonsterId;
         }
 
         public TransitionEffect Effect { get; }
@@ -162,8 +159,6 @@ namespace TheCall
 
         public int BreedingSlot { get; }
 
-        public string EquipMonsterId { get; }
-
         public static TransitionPlan Move(MonsterFact source, OperationArea toArea, int toCell) =>
             new TransitionPlan(
                 TransitionEffect.Move,
@@ -175,8 +170,7 @@ namespace TheCall
                 toArea,
                 toCell,
                 0,
-                0,
-                null);
+                0);
 
         public static TransitionPlan Replace(MonsterFact source, string occupantId, OperationArea toArea, int toCell) =>
             new TransitionPlan(
@@ -189,8 +183,7 @@ namespace TheCall
                 toArea,
                 toCell,
                 0,
-                0,
-                null);
+                0);
 
         public static TransitionPlan Exchange(MonsterFact source, string occupantId, OperationArea toArea, int toCell) =>
             new TransitionPlan(
@@ -203,8 +196,7 @@ namespace TheCall
                 toArea,
                 toCell,
                 0,
-                0,
-                null);
+                0);
 
         public static TransitionPlan Return(MonsterFact source) =>
             new TransitionPlan(
@@ -217,8 +209,7 @@ namespace TheCall
                 source.Area,
                 source.Cell,
                 0,
-                0,
-                null);
+                0);
 
         public static TransitionPlan Discard(MonsterFact source) =>
             new TransitionPlan(
@@ -231,22 +222,7 @@ namespace TheCall
                 source.Area,
                 source.Cell,
                 0,
-                0,
-                null);
-
-        public static TransitionPlan Equip(string monsterId, int skillSlotIndex) =>
-            new TransitionPlan(
-                TransitionEffect.Equip,
-                MonsterWhere.Absent,
-                null,
-                null,
-                OperationArea.Extraction,
-                0,
-                OperationArea.Extraction,
-                0,
-                skillSlotIndex,
-                0,
-                monsterId);
+                0);
 
         public static TransitionPlan Invest(int skillSlotIndex, int breedingSlot) =>
             new TransitionPlan(
@@ -259,8 +235,7 @@ namespace TheCall
                 OperationArea.Extraction,
                 0,
                 skillSlotIndex,
-                breedingSlot,
-                null);
+                breedingSlot);
 
         public static TransitionPlan ReturnBreedingSkill(int breedingSlot) =>
             new TransitionPlan(
@@ -273,8 +248,7 @@ namespace TheCall
                 OperationArea.Extraction,
                 0,
                 0,
-                breedingSlot,
-                null);
+                breedingSlot);
     }
 
     internal static class OperationTransition
@@ -365,15 +339,8 @@ namespace TheCall
         {
             plan = default;
             var place = drop.Landing.Place;
-            if ((place == LandingPlace.Cage || place == LandingPlace.Extraction || place == LandingPlace.BreedingSeat)
-                && !string.IsNullOrEmpty(drop.Landing.MonsterId))
-            {
-                if (!CanEquip(facts, drop.Landing.MonsterId, drop.Payload.Index))
-                    return false;
-
-                plan = TransitionPlan.Equip(drop.Landing.MonsterId, drop.Payload.Index);
-                return true;
-            }
+            if (place == LandingPlace.Cage || place == LandingPlace.Extraction || place == LandingPlace.BreedingSeat)
+                return false;
 
             if (place != LandingPlace.BreedingSocket)
                 return false;
@@ -387,24 +354,6 @@ namespace TheCall
                 return false;
 
             plan = TransitionPlan.Invest(drop.Payload.Index, slot);
-            return true;
-        }
-
-        static bool CanEquip(TransitionFacts facts, string monsterId, int skillSlotIndex)
-        {
-            if (!facts.TrySkillName(skillSlotIndex, out var skillName))
-                return false;
-            if (!facts.TryMonster(monsterId, out var monster))
-                return false;
-            if (monster.SkillNames.Count >= 4)
-                return false;
-
-            for (var i = 0; i < monster.SkillNames.Count; i++)
-            {
-                if (monster.SkillNames[i] == skillName)
-                    return false;
-            }
-
             return true;
         }
 

@@ -35,7 +35,7 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var cage = App.SendQuery(new MonsterCageQuery());
             var onExtraction = cage[0].Id;
             var onBreeding = cage[1].Id;
@@ -64,7 +64,7 @@ namespace TheCall.Tests
             var returned = App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
             Assert.That(returned, Does.Contain(onExtraction));
             Assert.That(returned, Does.Contain(onBreeding));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
         }
 
         [Test]
@@ -83,8 +83,8 @@ namespace TheCall.Tests
                 "双头能量体",
                 "奇异香");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var spareId = App.SendQuery(new MonsterCageQuery())[1].Id;
+            KeepOpened();
+            var spareId = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "奇异香") && monster.SkillNames.Count == 1).Id;
             App.SendCommand(new DiscardMonsterCommand(spareId));
             Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.EqualTo(new[] { "奇异香" }));
 
@@ -102,7 +102,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
             Assert.That(App.SendQuery(new LevelTargetQuery()).LevelNumber, Is.EqualTo(7));
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(0));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(280));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(420));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Count(), Is.EqualTo(6));
 
             App.SendCommand(new LeaveShopCommand());

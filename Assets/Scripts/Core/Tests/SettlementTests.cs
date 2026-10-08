@@ -12,7 +12,7 @@ namespace TheCall.Tests
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
 
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "能量体").Id;
+                .Single(monster => Holds(monster, "能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -42,7 +42,7 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
 
             var cage = App.SendQuery(new MonsterCageQuery());
             var atThree = cage[0].Id;
@@ -100,10 +100,10 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
 
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));
@@ -113,7 +113,7 @@ namespace TheCall.Tests
         void AssertPaid()
         {
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
     }

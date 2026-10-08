@@ -639,7 +639,7 @@ namespace TheCall.Editor
             {
                 ToolArt(artRoot.transform, "急急装置", "最先触发的产能技能再执行一次。", Icons.GetValueOrDefault("急急装置")),
                 ToolArt(artRoot.transform, "上级员工证", "提取轨增加一格。", Icons.GetValueOrDefault("上级员工证")),
-                ToolArt(artRoot.transform, "独孤装置", "单词条怪物的能量数值加倍。", Icons.GetValueOrDefault("独孤装置")),
+                ToolArt(artRoot.transform, "劣胜装置", "单词条怪物的能量数值加倍。", Icons.GetValueOrDefault("劣胜装置")),
             };
             artRoot.SetActive(false);
 
@@ -1359,7 +1359,7 @@ namespace TheCall.Editor
             Icons.Clear();
             Icons["急急装置"] = LoadSprite("IconRocket.png");
             Icons["上级员工证"] = LoadSprite("IconBadge.png");
-            Icons["独孤装置"] = LoadSprite("IconBolt.png");
+            Icons["劣胜装置"] = LoadSprite("IconBolt.png");
             Icons["基因实验"] = LoadSprite("IconGene.png");
             Icons["槽位扩容"] = LoadSprite("IconSlot.png");
             Icons["变异学说"] = LoadSprite("IconMutant.png");

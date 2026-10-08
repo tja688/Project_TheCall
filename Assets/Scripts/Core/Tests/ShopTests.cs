@@ -9,15 +9,11 @@ namespace TheCall.Tests
     {
         static readonly string[] OpeningDraws =
         {
-            "能量体",
-            "左能量体",
-            "右能量体",
-            "能量体",
-            "奇异香",
-            "汲取鼻",
-            "孤独心",
-            "吞噬大嘴",
-            "双头能量体",
+            "吞噬大嘴", "外接胚胎",
+            "良好肉体", "产金管道",
+            "优质肉体", "外接胚胎",
+            "能量体", "能量体", "左能量体", "右能量体",
+            "奇异香", "怪异香", "汲取鼻", "换位手",
         };
 
         static readonly string[] FourSingles =
@@ -93,11 +89,11 @@ namespace TheCall.Tests
             KeepAndPay();
             App.SendQuery(new ShelfQuery());
 
-            var counts = draw.Lists.Where(list => list.All(item => item == "1" || item == "2")).ToArray();
+            var counts = draw.Lists.Where(list => list.Length > 0 && list.All(item => item == "单" || item == "双" || item == "幅")).ToArray();
             var rarities = draw.Lists.Where(list => list.All(item => item == "白" || item == "蓝" || item == "金")).ToArray();
 
             Assert.That(counts.Length, Is.EqualTo(4));
-            Assert.That(counts[0], Is.EqualTo(new[] { "1", "1", "1", "1", "1", "1", "1", "1", "1", "2" }));
+            Assert.That(counts[0], Is.EqualTo(new[] { "单", "单", "单", "单", "单", "单", "双", "幅", "幅", "幅" }));
             Assert.That(rarities.Length, Is.EqualTo(4));
             Assert.That(rarities[0], Is.EqualTo(new[] { "白", "白", "白", "白", "白", "白", "白", "蓝", "蓝", "金" }));
         }
@@ -116,13 +112,13 @@ namespace TheCall.Tests
             {
                 "急急装置", "急急装置", "急急装置", "急急装置", "急急装置", "急急装置", "急急装置",
                 "上级员工证", "上级员工证",
-                "独孤装置",
+                "劣胜装置",
             }));
-            Assert.That(toolLists[1], Is.EqualTo(new[] { "上级员工证", "上级员工证", "独孤装置" }));
+            Assert.That(toolLists[1], Is.EqualTo(new[] { "上级员工证", "上级员工证", "劣胜装置" }));
             Assert.That(shelf.Tools.Select(tool => tool.Name).ToArray(), Is.EqualTo(new[] { "急急装置", "上级员工证" }));
             Assert.That(shelf.Tools.Select(tool => tool.Price).ToArray(), Is.EqualTo(new[] { 30, 40 }));
             Assert.That(shelf.Tools.Select(tool => tool.Rarity).ToArray(), Is.EqualTo(new[] { Rarity.White, Rarity.Blue }));
-            Assert.That(shelf.Tools.Select(tool => tool.Name), Does.Not.Contain("独孤装置"));
+            Assert.That(shelf.Tools.Select(tool => tool.Name), Does.Not.Contain("劣胜装置"));
         }
 
         [Test]
@@ -151,20 +147,22 @@ namespace TheCall.Tests
                 "1", "白", "能量体",
                 "1", "白", "左能量体",
                 "1", "白", "右能量体",
-                "独孤装置",
+                "劣胜装置",
                 "急急装置");
             var shelf = App.SendQuery(new ShelfQuery());
             var poor = shelf.Monsters[0];
+            App.SendCommand(new BuyToolCommand("急急装置"));
             var before = App.SendQuery(new RunLedgerQuery()).Gold;
 
-            App.SendCommand(new BuyToolCommand("独孤装置"));
+            App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new BuyMonsterCommand(poor.Id));
 
             var after = App.SendQuery(new ShelfQuery());
             Assert.That(poor.Price, Is.EqualTo(50));
+            Assert.That(before, Is.EqualTo(30));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(before));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.Empty);
-            Assert.That(after.Tools.Select(tool => tool.Name), Does.Contain("独孤装置"));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置" }));
+            Assert.That(after.Tools.Select(tool => tool.Name), Does.Contain("劣胜装置"));
             Assert.That(after.Monsters.Select(monster => monster.Id), Does.Contain(poor.Id));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(poor.Id));
         }
@@ -195,7 +193,7 @@ namespace TheCall.Tests
                 new FixedTools(
                     new ToolDefinition("急急装置", 10, Rarity.White),
                     new ToolDefinition("上级员工证", 10, Rarity.Blue),
-                    new ToolDefinition("独孤装置", 10, Rarity.Gold)),
+                    new ToolDefinition("劣胜装置", 10, Rarity.Gold)),
                 And(FourSingles, "上级员工证", "急急装置"));
             var before = App.SendQuery(new RunLedgerQuery()).Gold;
 
@@ -239,8 +237,8 @@ namespace TheCall.Tests
         public void 出售怪物笼里的怪物按稀有度一半得金币()
         {
             ReachShop(And(FourSingles, "急急装置", "上级员工证"));
-            var gland = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "汲取鼻");
-            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "奇异香");
+            var gland = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "汲取鼻"));
+            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "奇异香"));
             var before = App.SendQuery(new RunLedgerQuery()).Gold;
 
             App.SendCommand(new SellMonsterCommand(gland.Id));
@@ -275,8 +273,8 @@ namespace TheCall.Tests
         public void 商店之外不能买卖()
         {
             UseLevel(new ScriptedLevelCatalog(5), Draws(And(FourSingles, "急急装置", "上级员工证")));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == "奇异香");
+            KeepOpened();
+            var hand = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "奇异香"));
 
             App.SendCommand(new SellMonsterCommand(hand.Id));
             App.SendCommand(new BuyToolCommand("急急装置"));
@@ -317,9 +315,9 @@ namespace TheCall.Tests
 
         void KeepAndPay()
         {
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));
@@ -338,7 +336,7 @@ namespace TheCall.Tests
     {
         readonly Queue<string> _names;
 
-        public RecordingDraw(params string[] names) => _names = new Queue<string>(names);
+        public RecordingDraw(params string[] names) => _names = new Queue<string>(DrawAdapt.Adapt(names));
 
         public List<string[]> Lists { get; } = new List<string[]>();
 

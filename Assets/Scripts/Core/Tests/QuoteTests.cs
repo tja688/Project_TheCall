@@ -19,9 +19,9 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "双头能量体").Id;
+                .Single(monster => Holds(monster, "双头能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -47,7 +47,7 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             var victimId = IdOf("能量体");
             var stayingId = IdOf("镜眼");
@@ -90,14 +90,14 @@ namespace TheCall.Tests
                 "双头能量体",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(Landings(), Is.Empty);
             Assert.That(App.SendQuery(new ExtractionSlotsQuery())[2].MonsterId, Is.EqualTo(devourerId));
-            Assert.That(App.SendQuery(new MonsterQuery(devourerId)).Skills.Single().Quote, Is.EqualTo(0));
+            Assert.That(App.SendQuery(new MonsterQuery(devourerId)).Skills.Single(skill => skill.Name == "吞噬大嘴").Quote, Is.EqualTo(0));
 
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -119,7 +119,7 @@ namespace TheCall.Tests
                 "蜜能量体");
             UseRules(draw, new ScriptedLevelCatalog(50));
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             var leftId = IdOf("能量体");
             var rightId = IdOf("镜眼");
@@ -154,17 +154,12 @@ namespace TheCall.Tests
                 "孤独心",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
-            var cage = App.SendQuery(new MonsterCageQuery());
-            var firstId = cage[0].Id;
-            var secondId = cage[1].Id;
-            App.SendCommand(new PlaceMonsterCommand(firstId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(secondId, OperationArea.Extraction, 2));
+            var devourerId = KeepOpened();
+            App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(Landings(), Is.Empty);
-            Assert.That(App.SendQuery(new MonsterQuery(firstId)).Skills.Single().Quote, Is.EqualTo(0));
-            Assert.That(App.SendQuery(new MonsterQuery(secondId)).Skills.Single().Quote, Is.EqualTo(0));
+            Assert.That(App.SendQuery(new MonsterQuery(devourerId)).Skills.Single(skill => skill.Name == "吞噬大嘴").Quote, Is.EqualTo(0));
         }
 
         [Test]
@@ -181,10 +176,10 @@ namespace TheCall.Tests
                 "孤独心",
                 "蜜能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var devourerId = IdOf("吞噬大嘴");
             App.SendCommand(new DiscardMonsterCommand(IdOf("双头能量体")));
-            App.SendCommand(new EquipSkillCommand(devourerId, 0));
+            InstallFromSlot(devourerId);
             App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -210,7 +205,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = IdOf("能量体");
             var devourerId = IdOf("吞噬大嘴");
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
@@ -231,7 +226,7 @@ namespace TheCall.Tests
         }
 
         string IdOf(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
     }
 
     sealed class PinnedDraw : IDraw
@@ -239,7 +234,7 @@ namespace TheCall.Tests
         readonly System.Collections.Generic.Queue<string> _names;
 
         public PinnedDraw(params string[] names) =>
-            _names = new System.Collections.Generic.Queue<string>(names);
+            _names = new System.Collections.Generic.Queue<string>(DrawAdapt.Adapt(names));
 
         public string Pinned { get; set; }
 

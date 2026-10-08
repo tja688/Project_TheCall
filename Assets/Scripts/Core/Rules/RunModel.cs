@@ -253,9 +253,9 @@ namespace TheCall
 
         public void AddUnlockedTech(string name) => _unlockedTech.Add(name);
 
-        public Monster AddCandidate(string skillName)
+        public Monster AddCandidate(IReadOnlyList<string> skillNames)
         {
-            var monster = Create(skillName);
+            var monster = Create(skillNames, 0, null);
             _candidates.Add(monster);
             return monster;
         }
@@ -364,27 +364,6 @@ namespace TheCall
 
             skillName = _skillSlots[index];
             _skillSlots.RemoveAt(index);
-            return true;
-        }
-
-        public bool TryEquip(string monsterId, int skillSlotIndex)
-        {
-            if (skillSlotIndex < 0 || skillSlotIndex >= _skillSlots.Count)
-                return false;
-
-            var monster = Find(monsterId);
-            if (monster == null || monster.Skills.Count >= 4)
-                return false;
-
-            var skillName = _skillSlots[skillSlotIndex];
-            for (var i = 0; i < monster.Skills.Count; i++)
-            {
-                if (monster.Skills[i].Name == skillName)
-                    return false;
-            }
-
-            _skillSlots.RemoveAt(skillSlotIndex);
-            monster.Skills.Add(MakeSkill(skillName));
             return true;
         }
 

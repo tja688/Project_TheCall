@@ -22,8 +22,10 @@ namespace TheCall
         readonly Dictionary<string, int> _rowBonus = new Dictionary<string, int>();
         readonly Dictionary<string, int> _skillExtra = new Dictionary<string, int>();
         int _removalSequence;
-        bool _doubleFirstEnergy;
-        bool _doubleSingleAffix;
+        string _hasteToolName;
+        string _hasteMonsterId;
+        string _hasteSkillName;
+        string _singleAffixToolName;
 
         public IReadOnlyList<SettlementEntry> Entries => _entries;
 
@@ -81,9 +83,10 @@ namespace TheCall
             var catalog = this.GetUtility<SkillCatalog>();
             var intents = this.GetUtility<ClockIntents>();
             level.ClearEnergy();
-            var tools = this.GetUtility<IToolCatalog>();
-            _doubleFirstEnergy = tools.DoublesFirstEnergyExecution(run.Tools);
-            _doubleSingleAffix = tools.DoublesSingleAffixEnergy(run.Tools);
+            var tools = this.GetUtility<IToolCatalog>().Tools;
+            _hasteToolName = ToolRules.HeldName(tools, run.Tools, ToolEffect.DoubleFirstEnergy);
+            _singleAffixToolName = ToolRules.HeldName(tools, run.Tools, ToolEffect.DoubleSingleAffix);
+            BindHaste(level, run, catalog);
             GrantPermanentImmovable(run, intents);
             ApplyKin(level, run, catalog);
 
@@ -191,6 +194,7 @@ namespace TheCall
             var stayingId = cells[cell];
             var extraTrigger = ExtraWalksAtStayStart(run, catalog, cells, cell);
             var capacityExtra = CapacityExtraAtStayStart(run, catalog, cells, cell);
+            var affixEnergy = AffixEnergySnapshot(run, catalog, stayingId);
             var points = SecondPointCount(stayingId);
             for (var point = 0; point < points; point++)
             {
@@ -216,6 +220,7 @@ namespace TheCall
                 var extra = catalog.ProducesEnergy(skill.Name) ? extraTrigger + capacityExtra : extraTrigger;
                 extra += CountExtra(run, catalog, stayingId, skill.Name);
                 extra += PendingExtra(stayingId, skill.Name);
+                extra += AffixExtra(affixEnergy, skill.Name);
                 for (var time = 0; time < extra; time++)
                 {
                     if (cell >= cells.Count || cells[cell] != stayingId)
@@ -348,16 +353,14 @@ namespace TheCall
                     if (!this.GetUtility<IDraw>().Chance(percent))
                         return;
 
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, TakeFirstEnergyDouble(catalog, skillName));
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
                 }
 
-                var doubleFirstExecution = TakeFirstEnergyDouble(catalog, skillName);
-
                 if (catalog.TryRepeatedQuote(skillName, out var times))
                 {
-                    Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false, doubleFirstExecution);
+                    Quote(level, run, catalog, cells, cell, monsterId, skill, times, 0, false);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
                 }
@@ -365,7 +368,7 @@ namespace TheCall
                 var nextBonus = catalog.NextEnergyBonus(skillName);
                 if (nextBonus > 0)
                 {
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, doubleFirstExecution);
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
                     AddNextBonus(level.Extraction, cell, nextBonus);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
@@ -375,28 +378,28 @@ namespace TheCall
                 {
                     var host = run.Find(monsterId);
                     var count = host == null ? 0 : host.Skills.Count;
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, count * factor + skill.Quote, doubleFirstExecution);
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, count * factor + skill.Quote);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
                 }
 
                 if (catalog.IsPopulation(skillName))
                 {
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, Population(level, run) + skill.Quote, doubleFirstExecution);
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, Population(level, run) + skill.Quote);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
                 }
 
                 if (catalog.TrySideCount(skillName, out _, out _))
                 {
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, doubleFirstExecution);
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                     return;
                 }
 
                 if (catalog.TryEnergyQuote(skillName, out _))
                 {
-                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote, doubleFirstExecution);
+                    Land(level, run, catalog, cells, cell, monsterId, skillName, skill.Quote);
                     OpenCapacity(level, run, catalog, cells, cell, monsterId);
                 }
             }
@@ -405,15 +408,6 @@ namespace TheCall
                 if (catalog.GrantsSameNameExtra(skillName))
                     GrantSameName(run, cells, skillName, monsterId);
             }
-        }
-
-        bool TakeFirstEnergyDouble(SkillCatalog catalog, string skillName)
-        {
-            if (!_doubleFirstEnergy || !catalog.ProducesEnergy(skillName))
-                return false;
-
-            _doubleFirstEnergy = false;
-            return true;
         }
 
         void OpenCapacity(
@@ -430,7 +424,7 @@ namespace TheCall
 
             var layers = monster.Capacity;
             for (var layer = 0; layer < layers; layer++)
-                Land(level, run, catalog, cells, cell, monsterId, "产能", 1, false);
+                Land(level, run, catalog, cells, cell, monsterId, "产能", 1);
         }
 
         void Quote(
@@ -443,12 +437,11 @@ namespace TheCall
             SkillInstance skill,
             int times,
             int writeback,
-            bool permanent,
-            bool doubleFirstExecution)
+            bool permanent)
         {
             for (var time = 0; time < times; time++)
             {
-                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote, doubleFirstExecution, writeback);
+                Land(level, run, catalog, cells, cell, monsterId, skill.Name, skill.Quote, writeback);
                 if (writeback != 0)
                     skill.Add(writeback, permanent);
             }
@@ -463,7 +456,6 @@ namespace TheCall
             string monsterId,
             string skillName,
             int quote,
-            bool doubleFirstExecution,
             int writeback = 0)
         {
             var host = run.Find(monsterId);
@@ -490,16 +482,16 @@ namespace TheCall
             }
 
             multiplier *= RecordAdjacent(run, catalog, cells, cell, factors);
-            if (doubleFirstExecution)
+            if (_hasteToolName != null && monsterId == _hasteMonsterId && skillName == _hasteSkillName)
             {
                 multiplier *= 2;
-                factors.Add(new LandingFactor("急急装置", 2));
+                factors.Add(new LandingFactor(_hasteToolName, 2));
             }
 
-            if (_doubleSingleAffix && IsSingleAffix(run, catalog, monsterId))
+            if (_singleAffixToolName != null && IsSingleAffix(run, catalog, monsterId))
             {
                 multiplier *= 2;
-                factors.Add(new LandingFactor("独孤装置", 2));
+                factors.Add(new LandingFactor(_singleAffixToolName, 2));
             }
 
             if (_fullDoubles.TryGetValue(monsterId, out var fullDoubles))
@@ -552,7 +544,7 @@ namespace TheCall
                     if (!catalog.TryLandingResponse(skills[index].Name, causeSkill, out _))
                         continue;
 
-                    Land(level, run, catalog, cells, cell, id, skills[index].Name, skills[index].Quote, false);
+                    Land(level, run, catalog, cells, cell, id, skills[index].Name, skills[index].Quote);
                 }
             }
         }
@@ -750,6 +742,69 @@ namespace TheCall
 
         protected override void OnInit()
         {
+        }
+
+        void BindHaste(LevelModel level, RunModel run, SkillCatalog catalog)
+        {
+            _hasteMonsterId = null;
+            _hasteSkillName = null;
+            if (_hasteToolName == null)
+                return;
+
+            var cells = level.Extraction;
+            for (var i = 0; i < cells.Count; i++)
+            {
+                if (cells[i] == null)
+                    continue;
+
+                var monster = run.Find(cells[i]);
+                if (monster == null)
+                    return;
+
+                var skills = monster.Skills;
+                for (var skill = 0; skill < skills.Count; skill++)
+                {
+                    if (!catalog.ProducesEnergy(skills[skill].Name))
+                        continue;
+
+                    _hasteMonsterId = monster.Id;
+                    _hasteSkillName = skills[skill].Name;
+                    return;
+                }
+
+                return;
+            }
+        }
+
+        string[] AffixEnergySnapshot(RunModel run, SkillCatalog catalog, string monsterId)
+        {
+            if (_singleAffixToolName == null || !IsSingleAffix(run, catalog, monsterId))
+                return null;
+
+            var monster = run.Find(monsterId);
+            var names = new List<string>();
+            var skills = monster.Skills;
+            for (var i = 0; i < skills.Count; i++)
+            {
+                if (catalog.ProducesEnergy(skills[i].Name))
+                    names.Add(skills[i].Name);
+            }
+
+            return names.ToArray();
+        }
+
+        static int AffixExtra(string[] names, string skillName)
+        {
+            if (names == null)
+                return 0;
+
+            for (var i = 0; i < names.Length; i++)
+            {
+                if (names[i] == skillName)
+                    return 1;
+            }
+
+            return 0;
         }
 
         static bool IsSingleAffix(RunModel run, SkillCatalog catalog, string monsterId)
@@ -1047,7 +1102,7 @@ namespace TheCall
         static List<string> Missing(SkillCatalog catalog, Monster monster)
         {
             var options = new List<string>();
-            var names = catalog.Names;
+            var names = catalog.Names();
             for (var index = 0; index < names.Count; index++)
             {
                 if (!Owns(monster, names[index]))

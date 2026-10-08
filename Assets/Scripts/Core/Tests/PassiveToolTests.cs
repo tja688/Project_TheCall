@@ -25,7 +25,7 @@ namespace TheCall.Tests
             App.SendCommand(new LeaveShopCommand());
 
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量体").Id;
+                .First(monster => Holds(monster, "能量体")).Id;
             Assert.That(App.SendQuery(new ExtractionSlotsQuery()).Count, Is.EqualTo(6));
 
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 5));
@@ -118,8 +118,9 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId, breathId }));
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 2, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 10, 5 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5 }));
+            Assert.That(landings.All(landing => landing.Factors.All(factor => factor.Label != "急急装置")), Is.True);
         }
 
         [Test]
@@ -138,9 +139,7 @@ namespace TheCall.Tests
             App.SendCommand(new BuyToolCommand("急急装置"));
             App.SendCommand(new LeaveShopCommand());
 
-            var hostId = IdOf("镜眼");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            var hostId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -152,10 +151,10 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 独孤装置把单词条怪物的产能量计分翻倍()
+        public void 劣胜装置把单词条怪物的产能量计分翻倍()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
+                new FixedTools(new ToolDefinition("劣胜装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量体",
                 "左能量体",
                 "右能量体",
@@ -165,30 +164,30 @@ namespace TheCall.Tests
                 "孤独心",
                 "吞噬大嘴",
                 "双头能量体");
-            App.SendCommand(new BuyToolCommand("独孤装置"));
+            App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new LeaveShopCommand());
 
             var hostId = IdOf("换位手");
             App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 2 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 10 }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, hostId }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 2, 2 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 10, 10 }));
         }
 
         [Test]
         public void 同时带消灭和永久或者没有词条都不是单词条()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
+                new FixedTools(new ToolDefinition("劣胜装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 TwoBreaths);
-            App.SendCommand(new BuyToolCommand("独孤装置"));
+            App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new LeaveShopCommand());
 
             var devourId = IdOf("吞噬大嘴");
@@ -209,7 +208,7 @@ namespace TheCall.Tests
         public void 身上合起来有两个词条的怪物不是单词条()
         {
             OpenAndReachShop(
-                new FixedTools(new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
+                new FixedTools(new ToolDefinition("劣胜装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量体",
                 "左能量体",
                 "右能量体",
@@ -219,12 +218,12 @@ namespace TheCall.Tests
                 "孤独心",
                 "吞噬大嘴",
                 "双头能量体");
-            App.SendCommand(new BuyToolCommand("独孤装置"));
+            App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new LeaveShopCommand());
 
             var hostId = IdOf("吞噬大嘴");
             App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -241,7 +240,7 @@ namespace TheCall.Tests
             OpenAndReachShop(
                 new FixedTools(
                     new ToolDefinition("急急装置", 10, Rarity.White, ToolEffect.DoubleFirstEnergy, 0),
-                    new ToolDefinition("独孤装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
+                    new ToolDefinition("劣胜装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
                 "能量体",
                 "左能量体",
                 "右能量体",
@@ -252,37 +251,46 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
             App.SendCommand(new BuyToolCommand("急急装置"));
-            App.SendCommand(new BuyToolCommand("独孤装置"));
+            App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new LeaveShopCommand());
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "独孤装置" }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "劣胜装置" }));
 
             var hostId = IdOf("换位手");
             var breaths = Breaths();
             App.SendCommand(new DiscardMonsterCommand(breaths[0].Id));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, breaths[1].Id }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 4, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 20, 5 }));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "独孤装置" }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, hostId, breaths[1].Id }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体", "能量体" }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 4, 4, 1 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 20, 20, 5 }));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "劣胜装置" }));
         }
 
         [Test]
         public void 急急装置的翻倍乘进孤独心已有的倍率()
         {
-            OpenAndReachShop(TwoBreaths);
+            OpenAndReachShop(
+                "孤独心",
+                "能量体",
+                "左能量体",
+                "右能量体",
+                "能量体",
+                "奇异香",
+                "汲取鼻",
+                "换位手",
+                "双头能量体");
             App.SendCommand(new BuyToolCommand("急急装置"));
             App.SendCommand(new LeaveShopCommand());
 
-            var hostId = Breaths()[0].Id;
-            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
-            App.SendCommand(new EquipSkillCommand(hostId, 0));
+            var hostId = IdOf("孤独心");
+            App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
+            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -308,19 +316,19 @@ namespace TheCall.Tests
         };
 
         MonsterView[] Breaths() =>
-            App.SendQuery(new MonsterCageQuery()).Where(monster => monster.SkillNames.Single() == "能量体").ToArray();
+            App.SendQuery(new MonsterCageQuery()).Where(monster => Holds(monster, "能量体")).ToArray();
 
         string IdOf(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
 
         void OpenAndReachShop(params string[] openingDraws) => OpenAndReachShop(null, openingDraws);
 
         void OpenAndReachShop(IToolCatalog tools, params string[] openingDraws)
         {
             UseRules(new ScriptedDraw(openingDraws), new ScriptedLevelCatalog(5), tools);
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量体").Id;
+                .First(monster => Holds(monster, "能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
         }

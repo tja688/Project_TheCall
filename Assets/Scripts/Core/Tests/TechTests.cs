@@ -28,7 +28,7 @@ namespace TheCall.Tests
         public void 没有科技点时金币不能解锁科技()
         {
             UseLevel(new ScriptedLevelCatalog(0, 1), OpeningNames);
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
             var gold = App.SendQuery(new RunLedgerQuery()).Gold;
@@ -165,11 +165,11 @@ namespace TheCall.Tests
                 "孤独心",
                 "吞噬大嘴",
                 "双头能量体");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("基因实验"));
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new DiscardMonsterCommand(breaths[1].Id));
             App.SendCommand(new PlaceBreedingSkillCommand(0, 0));
@@ -448,7 +448,7 @@ namespace TheCall.Tests
             };
             var draw = new TechDraw(names, true);
             UseRules(draw, new ScriptedLevelCatalog(new[] { 0, 0, 3 }, new[] { 0, 0, 60 }));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             EarnTechPoint();
             App.SendCommand(new UnlockTechCommand("科学培育"));
             var before = CageIds();
@@ -525,11 +525,11 @@ namespace TheCall.Tests
         void Open(IDraw draw)
         {
             UseRules(draw, new ScriptedLevelCatalog(0, 0));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
         }
 
         string Parent(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
 
         string[] CageIds() => App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
 
@@ -561,7 +561,7 @@ namespace TheCall.Tests
 
         public TechDraw(string[] opening, params bool[] chances)
         {
-            _names = new Queue<string>(opening);
+            _names = new Queue<string>(DrawAdapt.Adapt(opening));
             _chances = new Queue<bool>(chances);
         }
 

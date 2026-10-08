@@ -5,23 +5,29 @@ namespace TheCall
 {
     internal sealed class ShopSystem : AbstractSystem
     {
-        static readonly string[] SkillCounts =
-        {
-            "1", "1", "1", "1", "1", "1", "1", "1", "1", "2",
-        };
-
-        static readonly string[] Rarities =
-        {
-            "白", "白", "白", "白", "白", "白", "白", "蓝", "蓝", "金",
-        };
-
         public Shelf View()
         {
             var run = this.GetModel<RunModel>();
             if (run.Phase != RunPhase.Shop)
                 return Empty();
 
-            return new Shelf(MonsterViews(run), ToolViews(run));
+            return new Shelf(MonsterViews(run), ToolViews(run), this.GetModel<LevelModel>().RefreshPrice);
+        }
+
+        public void Refresh()
+        {
+            var run = this.GetModel<RunModel>();
+            if (run.Phase != RunPhase.Shop)
+                return;
+
+            var level = this.GetModel<LevelModel>();
+            if (!run.TrySpend(level.RefreshPrice))
+                return;
+
+            DiscardUnsold(run);
+            StockMonsters(run);
+            StockTools(run);
+            level.NotePaidRefresh();
         }
 
         public void Open()
@@ -95,17 +101,7 @@ namespace TheCall
             var draw = this.GetUtility<IDraw>();
             var catalog = this.GetUtility<SkillCatalog>();
             for (var i = 0; i < 4; i++)
-            {
-                var count = draw.Choose(SkillCounts) == "2" ? 2 : 1;
-                var names = new List<string>(count);
-                for (var skill = 0; skill < count; skill++)
-                {
-                    var rarity = RarityOfToken(draw.Choose(Rarities));
-                    names.Add(draw.Choose(Available(catalog, rarity, names)));
-                }
-
-                run.AddShelfMonster(run.CreateMonster(names).Id);
-            }
+                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw)).Id);
         }
 
         void StockTools(RunModel run)
@@ -228,35 +224,12 @@ namespace TheCall
             return false;
         }
 
-        static List<string> Available(SkillCatalog catalog, Rarity rarity, List<string> taken)
-        {
-            var source = catalog.NamesOf(rarity);
-            var pool = new List<string>();
-            for (var i = 0; i < source.Count; i++)
-            {
-                if (!taken.Contains(source[i]))
-                    pool.Add(source[i]);
-            }
-
-            return pool;
-        }
-
-        static Rarity RarityOfToken(string token)
-        {
-            if (token == "蓝")
-                return Rarity.Blue;
-            if (token == "金")
-                return Rarity.Gold;
-
-            return Rarity.White;
-        }
-
         static int Weight(Rarity rarity) => ContentGate.Current.Weight(rarity);
 
         static int PriceOf(Rarity rarity) => ContentGate.Current.Price(rarity);
 
         static int ProceedsOf(Rarity rarity) => PriceOf(rarity) / 2;
 
-        static Shelf Empty() => new Shelf(System.Array.Empty<ShelfMonster>(), System.Array.Empty<ShelfTool>());
+        static Shelf Empty() => new Shelf(System.Array.Empty<ShelfMonster>(), System.Array.Empty<ShelfTool>(), 0);
     }
 }

@@ -7,7 +7,20 @@ namespace TheCall.Tests
     {
         readonly Queue<string> _names;
 
-        public ScriptedDraw(params string[] names) => _names = new Queue<string>(names);
+        public ScriptedDraw(params string[] names)
+            : this(true, names)
+        {
+        }
+
+        public static ScriptedDraw Exact(params string[] names) => new ScriptedDraw(false, names);
+
+        ScriptedDraw(bool adapt, string[] names)
+        {
+            if (!adapt)
+                DrawAdapt.ClearPending();
+
+            _names = new Queue<string>(adapt ? DrawAdapt.Adapt(names) : names ?? new string[0]);
+        }
 
         public T Choose<T>(IReadOnlyList<T> options)
         {

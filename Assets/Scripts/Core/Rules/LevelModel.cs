@@ -42,6 +42,10 @@ namespace TheCall
 
         public int Energy { get; private set; }
 
+        public int PaidRefreshCount { get; private set; }
+
+        public int RefreshPrice => 5 << PaidRefreshCount;
+
         public IReadOnlyList<string> Extraction => _extraction;
 
         public IReadOnlyList<string> Breeding
@@ -68,7 +72,10 @@ namespace TheCall
             ClearProgress();
             EnergyDue = energyDue;
             ExcessEnergy = excessEnergy;
+            PaidRefreshCount = 0;
         }
+
+        public void NotePaidRefresh() => PaidRefreshCount++;
 
         public void ClearProgress()
         {

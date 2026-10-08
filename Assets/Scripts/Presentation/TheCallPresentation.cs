@@ -120,7 +120,10 @@ namespace TheCall
             Listen(_shop != null ? _shop.researchButton : null, () => OpenResearch(BackTarget.Shop));
             Listen(_shop != null ? _shop.saveButton : null, () => Notice("这一版还不能存档。"));
             Listen(_shop != null ? _shop.titleButton : null, OnTitle);
+            if (_shop != null)
+                _shop.EnsureRefreshControl();
             Listen(_shop != null ? _shop.leaveButton : null, OnLeaveShop);
+            Listen(_shop != null ? _shop.refreshButton : null, OnRefreshShelf);
             ListenCards(_shop != null ? _shop.cards : null);
             ListenSlots(_shop != null ? _shop.sellSlots : null, OnSell);
             Listen(_result != null ? _result.restartButton : null, OnTitle);
@@ -227,6 +230,8 @@ namespace TheCall
             _shop.balanceLabel.text = run.Gold.ToString();
             if (_shop.portraitBalanceLabel != null)
                 _shop.portraitBalanceLabel.text = run.Gold.ToString();
+            if (_shop.refreshPriceLabel != null)
+                _shop.refreshPriceLabel.text = "刷新 " + shelf.NextRefreshPrice;
             if (_shop.buyPage != null)
                 _shop.buyPage.SetActive(!_sellTab);
             if (_shop.sellPage != null)
@@ -636,6 +641,12 @@ namespace TheCall
                 () => !CageContains(id),
                 "已出售。",
                 "这只现在不能出售。锁定中的亲本要等后代出生。");
+        }
+
+        void OnRefreshShelf()
+        {
+            this.SendCommand(new RefreshShelfCommand());
+            Refresh();
         }
 
         void OnLeaveShop()

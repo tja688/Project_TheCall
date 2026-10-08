@@ -44,12 +44,6 @@ namespace TheCall
 
         int ExtractionCells(IReadOnlyList<string> held) =>
             ToolRules.ExtractionCells(5, Tools, held);
-
-        bool DoublesFirstEnergyExecution(IReadOnlyList<string> held) =>
-            ToolRules.DoublesFirstEnergy(Tools, held);
-
-        bool DoublesSingleAffixEnergy(IReadOnlyList<string> held) =>
-            ToolRules.DoublesSingleAffix(Tools, held);
     }
 
     internal sealed class ToolCatalog : IToolCatalog

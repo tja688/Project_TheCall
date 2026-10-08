@@ -10,11 +10,11 @@ namespace TheCall
             return tool == null ? baseCells : tool.ExtractionCells;
         }
 
-        public static bool DoublesFirstEnergy(IReadOnlyList<ToolDefinition> tools, IReadOnlyList<string> held) =>
-            Find(tools, held, ToolEffect.DoubleFirstEnergy) != null;
-
-        public static bool DoublesSingleAffix(IReadOnlyList<ToolDefinition> tools, IReadOnlyList<string> held) =>
-            Find(tools, held, ToolEffect.DoubleSingleAffix) != null;
+        public static string HeldName(IReadOnlyList<ToolDefinition> tools, IReadOnlyList<string> held, ToolEffect effect)
+        {
+            var tool = Find(tools, held, effect);
+            return tool == null ? null : tool.Name;
+        }
 
         static ToolDefinition Find(IReadOnlyList<ToolDefinition> tools, IReadOnlyList<string> held, ToolEffect effect)
         {

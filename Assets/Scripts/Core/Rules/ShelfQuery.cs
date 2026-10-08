@@ -39,15 +39,18 @@ namespace TheCall
 
     public sealed class Shelf
     {
-        public Shelf(IReadOnlyList<ShelfMonster> monsters, IReadOnlyList<ShelfTool> tools)
+        public Shelf(IReadOnlyList<ShelfMonster> monsters, IReadOnlyList<ShelfTool> tools, int nextRefreshPrice)
         {
             Monsters = monsters;
             Tools = tools;
+            NextRefreshPrice = nextRefreshPrice;
         }
 
         public IReadOnlyList<ShelfMonster> Monsters { get; }
 
         public IReadOnlyList<ShelfTool> Tools { get; }
+
+        public int NextRefreshPrice { get; }
     }
 
     public sealed class ShelfQuery : AbstractQuery<Shelf>

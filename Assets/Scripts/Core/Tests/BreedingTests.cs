@@ -22,10 +22,10 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var before = App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
             var parent = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "奇异香");
+                .Single(monster => Holds(monster, "奇异香"));
 
             App.SendCommand(new PlaceMonsterCommand(parent.Id, OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -71,7 +71,7 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
             var parents = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             var before = CageIds();
 
@@ -90,10 +90,10 @@ namespace TheCall.Tests
                 OpeningNames,
                 "奇异香");
             UseRules(draw, new ScriptedLevelCatalog(0));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var host = Parent("能量体");
             App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
-            App.SendCommand(new EquipSkillCommand(host, 0));
+            InstallFromSlot(host);
             var before = CageIds();
 
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Breeding, 0));
@@ -121,12 +121,12 @@ namespace TheCall.Tests
                 },
                 "能量体");
             UseRules(draw, new ScriptedLevelCatalog(0));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
-            App.SendCommand(new EquipSkillCommand(breaths[0].Id, 0));
+            InstallFromSlot(breaths[0].Id);
             var before = CageIds();
 
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Breeding, 0));
@@ -156,16 +156,16 @@ namespace TheCall.Tests
                 "能量体",
                 "能量体");
             UseRules(draw, new ScriptedLevelCatalog(0));
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             var hand = Parent("奇异香");
             var heart = Parent("孤独心");
             App.SendCommand(new DiscardMonsterCommand(hand));
-            App.SendCommand(new EquipSkillCommand(breaths[0].Id, 0));
+            InstallFromSlot(breaths[0].Id);
             App.SendCommand(new DiscardMonsterCommand(heart));
-            App.SendCommand(new EquipSkillCommand(breaths[1].Id, 0));
+            InstallFromSlot(breaths[1].Id);
             var before = CageIds();
 
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Breeding, 0));
@@ -232,7 +232,7 @@ namespace TheCall.Tests
                 "孤独心",
                 "吞噬大嘴",
                 "双头能量体");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breath = Parent("能量体");
             var dropped = Parent("奇异香");
             var kept = Parent("怪异香");
@@ -284,11 +284,11 @@ namespace TheCall.Tests
                 names = OpeningNames;
 
             UseLevel(new ScriptedLevelCatalog(0), names);
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
         }
 
         string Parent(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
 
         string[] CageIds() => App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
 
@@ -307,7 +307,7 @@ namespace TheCall.Tests
 
         public BreedingDraw(string[] opening, params string[] picks)
         {
-            _opening = new Queue<string>(opening);
+            _opening = new Queue<string>(DrawAdapt.Adapt(opening));
             _picks = new Queue<string>(picks);
         }
 

@@ -12,7 +12,7 @@ namespace TheCall.Tests
             App.SendCommand(new KeepOpeningMonsterCommand(keptId));
 
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => monster.SkillNames.Single() == "能量体").Id;
+                .Single(monster => Holds(monster, "能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -38,9 +38,9 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量体").Id;
+                .First(monster => Holds(monster, "能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
@@ -70,14 +70,14 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breathId = App.SendQuery(new MonsterCageQuery())
-                .First(monster => monster.SkillNames.Single() == "能量体").Id;
+                .First(monster => Holds(monster, "能量体")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(20));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
@@ -99,10 +99,10 @@ namespace TheCall.Tests
                 "双头能量体",
                 "奇异香");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var cage = App.SendQuery(new MonsterCageQuery());
-            var breathId = cage.First(monster => monster.SkillNames.Single() == "能量体").Id;
-            var spareId = cage.First(monster => monster.SkillNames.Single() == "奇异香").Id;
+            var breathId = cage.First(monster => Holds(monster, "能量体")).Id;
+            var spareId = cage.First(monster => Holds(monster, "奇异香")).Id;
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
             App.SendCommand(new DiscardMonsterCommand(spareId));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -145,7 +145,7 @@ namespace TheCall.Tests
             PayWithTwoBreaths(5, 5);
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
@@ -156,7 +156,7 @@ namespace TheCall.Tests
             PayWithTwoBreaths(5, 10);
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
             Assert.That(Payment().Excess, Is.True);
         }
 
@@ -166,7 +166,7 @@ namespace TheCall.Tests
             PayWithTwoBreaths(5, 11);
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(0));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
@@ -186,9 +186,9 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -198,7 +198,7 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(10));
             Assert.That(Payment().Deducted, Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(20));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
@@ -218,9 +218,9 @@ namespace TheCall.Tests
                 "吞噬大嘴",
                 "双头能量体");
 
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Extraction, 2));

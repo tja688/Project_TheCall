@@ -10,8 +10,9 @@ namespace TheCall
             var run = this.GetModel<RunModel>();
             var catalog = this.GetUtility<SkillCatalog>();
             var draw = this.GetUtility<IDraw>();
-            for (var i = 0; i < 3; i++)
-                run.AddCandidate(draw.Choose(catalog.Names));
+            var pairs = StockDraw.OpeningCandidates(catalog, draw);
+            for (var i = 0; i < pairs.Length; i++)
+                run.AddCandidate(pairs[i]);
         }
 
         public void Keep(string monsterId)
@@ -23,8 +24,9 @@ namespace TheCall
             run.AddToCage(kept);
             var catalog = this.GetUtility<SkillCatalog>();
             var draw = this.GetUtility<IDraw>();
-            for (var i = 0; i < 6; i++)
-                run.AddNewToCage(draw.Choose(catalog.Names));
+            var fillers = StockDraw.OpeningFillers(catalog, draw);
+            for (var i = 0; i < fillers.Length; i++)
+                run.AddNewToCage(fillers[i]);
 
             run.EnterOperation(1);
             var levels = this.GetUtility<ILevelCatalog>();
@@ -107,7 +109,7 @@ namespace TheCall
                 if (!run.TryDestroy(monsterId))
                     return;
 
-                var names = catalog.Names;
+                var names = catalog.Names();
                 if (names.Count == 0)
                     return;
 
@@ -125,15 +127,6 @@ namespace TheCall
                 return;
 
             run.PutSkillInSlot(skillName);
-        }
-
-        public void Equip(string monsterId, int skillSlotIndex)
-        {
-            var run = this.GetModel<RunModel>();
-            if (!EnterOperation(run))
-                return;
-
-            run.TryEquip(monsterId, skillSlotIndex);
         }
 
         public void Unlock(string name)
@@ -344,8 +337,6 @@ namespace TheCall
 
                     run.PutSkillInSlot(drawnSkill);
                     return true;
-                case TransitionEffect.Equip:
-                    return run.TryEquip(plan.EquipMonsterId, plan.SkillSlotIndex);
                 case TransitionEffect.Invest:
                     if (!run.TryTakeSkillAt(plan.SkillSlotIndex, out var invested))
                         return false;

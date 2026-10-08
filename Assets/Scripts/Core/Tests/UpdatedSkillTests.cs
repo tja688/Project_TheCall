@@ -18,9 +18,9 @@ namespace TheCall.Tests
                 "能量体",
                 "换位手",
                 "汲取鼻");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .Select(monster => monster.Id)
                 .ToArray();
             App.SendCommand(new PlaceMonsterCommand(breaths[0], OperationArea.Extraction, 0));
@@ -48,9 +48,9 @@ namespace TheCall.Tests
                 "换位手",
                 "汲取鼻",
                 "双头能量体");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var breaths = App.SendQuery(new MonsterCageQuery())
-                .Where(monster => monster.SkillNames.Single() == "能量体")
+                .Where(monster => Holds(monster, "能量体"))
                 .Select(monster => monster.Id)
                 .ToArray();
             var before = App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id).ToArray();
@@ -60,7 +60,7 @@ namespace TheCall.Tests
 
             var child = App.SendQuery(new MonsterCageQuery()).Single(monster => !before.Contains(monster.Id));
             App.SendCommand(new DiscardMonsterCommand(IdOf("重血脉心")));
-            App.SendCommand(new EquipSkillCommand(child.Id, 0));
+            InstallFromSlot(child.Id);
             App.SendCommand(new PlaceMonsterCommand(breaths[0], OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(child.Id, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(breaths[1], OperationArea.Extraction, 2));
@@ -87,7 +87,7 @@ namespace TheCall.Tests
                 "汲取鼻",
                 "双头能量体",
                 "回响嗓");
-            App.SendCommand(new KeepOpeningMonsterCommand(App.SendQuery(new OpeningCandidatesQuery())[0].Id));
+            KeepOpened();
             var groupId = IdOf("群能量体");
             var otherId = IdOf("能量体");
             App.SendCommand(new PlaceMonsterCommand(otherId, OperationArea.Breeding, 0));
@@ -100,6 +100,6 @@ namespace TheCall.Tests
         }
 
         string IdOf(string skillName) =>
-            App.SendQuery(new MonsterCageQuery()).Single(monster => monster.SkillNames.Single() == skillName).Id;
+            App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, skillName)).Id;
     }
 }
