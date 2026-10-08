@@ -36,6 +36,12 @@ namespace TheCall
 
         public SkillCatalog(ContentBook book) => _book = book;
 
+        public IReadOnlyList<Effect> Effects(string skillName)
+        {
+            var skill = _book.FindSkill(skillName);
+            return skill == null ? Array.Empty<Effect>() : skill.Effects;
+        }
+
         public IReadOnlyList<string> Names()
         {
             var names = new string[_book.Skills.Count];

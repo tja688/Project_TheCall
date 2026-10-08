@@ -93,8 +93,8 @@ namespace TheCall.Scoring
                         3,
                         2,
                         true,
-                        new[] { new LandingAdd("标签", 2) },
-                        new[] { new LandingFactor("暴击", 3) }),
+                        new[] { new LandingAdd("标签", 2, null, -1, null) },
+                        new[] { new LandingFactor("暴击", 3, null, -1, null) }),
                 },
                 new[] { "sided" });
 
@@ -231,8 +231,8 @@ namespace TheCall.Scoring
                         5,
                         0,
                         false,
-                        new[] { new LandingAdd("奇异香", 1), new LandingAdd("怪异香", 2) },
-                        new[] { new LandingFactor("镜眼", 2) }),
+                        new[] { new LandingAdd("奇异香", 1, null, -1, null), new LandingAdd("怪异香", 2, null, -1, null) },
+                        new[] { new LandingFactor("镜眼", 2, null, -1, null) }),
                 },
                 new[] { "breath" });
             var addedPop = added.Cues.OfType<PopCue>().Single();
@@ -254,8 +254,8 @@ namespace TheCall.Scoring
                         3,
                         2,
                         true,
-                        new[] { new LandingAdd("标签", 2) },
-                        new[] { new LandingFactor("暴击", 3) }),
+                        new[] { new LandingAdd("标签", 2, null, -1, null) },
+                        new[] { new LandingFactor("暴击", 3, null, -1, null) }),
                 },
                 new[] { "sided" });
             var sidedPop = sided.Cues.OfType<PopCue>().Single();
@@ -283,15 +283,13 @@ namespace TheCall.Scoring
                         false,
                         new[]
                         {
-                            new LandingAdd("奇异香", 1, "SCP-096"),
-                            new LandingAdd("良好肉体", 2, "SCP-173"),
+                            new LandingAdd("奇异香", 1, null, -1, "SCP-096"),
+                            new LandingAdd("良好肉体", 2, null, -1, "SCP-173"),
                         },
-                        new[] { new LandingFactor("镜眼", 2, "SCP-682") },
+                        new[] { new LandingFactor("镜眼", 2, null, -1, "SCP-682") },
                         "SCP-173",
                         1,
-                        null,
-                        "SCP-049",
-                        "回响嗓"),
+                        null),
                 },
                 new[] { "incense", "breath", "eye" });
 
@@ -300,7 +298,6 @@ namespace TheCall.Scoring
                 pop.Beats.Select(beat => beat.Role).ToArray(),
                 Is.EqualTo(new[]
                 {
-                    BeatRole.Again,
                     BeatRole.Quote,
                     BeatRole.Add,
                     BeatRole.Add,
@@ -309,16 +306,56 @@ namespace TheCall.Scoring
                 }));
             Assert.That(
                 pop.Beats.Select(beat => beat.Text).ToArray(),
-                Is.EqualTo(new[] { "+1次", "5", "+1", "+2", "×2", "+16" }));
+                Is.EqualTo(new[] { "5", "+1", "+2", "×2", "+16" }));
             Assert.That(
                 pop.Beats.Select(beat => beat.SourceName).ToArray(),
-                Is.EqualTo(new[] { "SCP-049", "", "SCP-096", "", "SCP-682", "" }));
-            Assert.That(pop.Beats[0].Caption, Is.EqualTo("回响嗓"));
-            Assert.That(pop.Beats[2].Caption, Is.EqualTo("奇异香"));
-            Assert.That(pop.Beats[3].Caption, Is.EqualTo("良好肉体"));
-            Assert.That(pop.Beats[4].Caption, Is.EqualTo("镜眼"));
+                Is.EqualTo(new[] { "", "SCP-096", "", "SCP-682", "" }));
+            Assert.That(pop.Beats.Any(beat => beat.Role == BeatRole.Again || beat.Text == "+1次"), Is.False);
+            Assert.That(pop.Beats[1].Caption, Is.EqualTo("奇异香"));
+            Assert.That(pop.Beats[2].Caption, Is.EqualTo("良好肉体"));
+            Assert.That(pop.Beats[3].Caption, Is.EqualTo("镜眼"));
             Assert.That(pop.Bits.Sum(), Is.EqualTo(16));
             Assert.That(tape.Produced, Is.EqualTo(16));
+        }
+
+        [Test]
+        public void 未中先走到那一格再亮红字且不计入产出()
+        {
+            var tape = ScoringTape.Arrange(
+                new SettlementEntry[] { SettlementMark.Miss("breath") },
+                new[] { "breath" });
+
+            Assert.That(tape.Produced, Is.EqualTo(0));
+            Assert.That(tape.Cues.Count, Is.EqualTo(2));
+            var walk = (WalkCue)tape.Cues[0];
+            Assert.That(walk.FromIndex, Is.EqualTo(-1));
+            Assert.That(walk.ToIndex, Is.EqualTo(0));
+            var mark = (MarkCue)tape.Cues[1];
+            Assert.That(mark.Label, Is.EqualTo("+0"));
+            Assert.That(mark.Tone, Is.EqualTo(MarkTone.Miss));
+        }
+
+        [Test]
+        public void 再触发字在来源上且弹出里不再有加一次()
+        {
+            var tape = ScoringTape.Arrange(
+                new SettlementEntry[]
+                {
+                    SettlementMark.Again("gland"),
+                    new SettlementLanding("breath", "双头能量体", 2, 1, 2, 0),
+                    new SettlementLanding("breath", "双头能量体", 2, 1, 2, 0),
+                },
+                new[] { "breath", "gland" });
+
+            Assert.That(tape.Produced, Is.EqualTo(4));
+            var mark = tape.Cues.OfType<MarkCue>().Single();
+            Assert.That(mark.Label, Is.EqualTo("技能触发+1"));
+            var pops = tape.Cues.OfType<PopCue>().ToArray();
+            Assert.That(pops.Length, Is.EqualTo(2));
+            Assert.That(pops[0].Energy, Is.EqualTo(2));
+            Assert.That(pops[1].Energy, Is.EqualTo(2));
+            Assert.That(pops[0].Beats.Any(beat => beat.Role == BeatRole.Again || beat.Text == "+1次"), Is.False);
+            Assert.That(pops[1].Beats.Any(beat => beat.Role == BeatRole.Again || beat.Text == "+1次"), Is.False);
         }
 
         static void AssertRolesOnce(ScoringTape tape)

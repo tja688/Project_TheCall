@@ -80,7 +80,6 @@ namespace TheCall.Tests
             var leftId = breaths[0].Id;
             var rightId = breaths[1].Id;
             var echoId = IdOf("回响嗓");
-            var echoName = App.SendQuery(new MonsterQuery(echoId)).DisplayName;
             App.SendCommand(new PlaceMonsterCommand(leftId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(echoId, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(rightId, OperationArea.Extraction, 2));
@@ -92,10 +91,13 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
-            Assert.That(landings[0].AssistName, Is.Null);
-            Assert.That(landings[1].AssistName, Is.Null);
-            Assert.That(landings[2].AssistName, Is.EqualTo(echoName));
-            Assert.That(landings[2].AssistCaption, Is.EqualTo("回响嗓"));
+            var shown = App.SendQuery(new SettlementRecordQuery())
+                .Where(entry => entry is SettlementLanding || entry is SettlementMark)
+                .ToArray();
+            Assert.That(shown[2], Is.InstanceOf<SettlementMark>());
+            var again = (SettlementMark)shown[2];
+            Assert.That(again.MonsterId, Is.EqualTo(echoId));
+            Assert.That(again.Label, Is.EqualTo("技能触发+1"));
         }
 
         [Test]
@@ -120,7 +122,6 @@ namespace TheCall.Tests
             InstallFromSlot(hostId);
             var plainId = breaths[1].Id;
             var glandId = IdOf("左复制腺体");
-            var glandName = App.SendQuery(new MonsterQuery(glandId)).DisplayName;
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(glandId, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(plainId, OperationArea.Extraction, 2));
@@ -136,10 +137,10 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
-            Assert.That(landings[0].AssistName, Is.Null);
-            Assert.That(landings[1].AssistName, Is.EqualTo(glandName));
-            Assert.That(landings[1].AssistCaption, Is.EqualTo("左复制腺体"));
-            Assert.That(landings[2].AssistName, Is.Null);
+            var again = App.SendQuery(new SettlementRecordQuery())
+                .OfType<SettlementMark>()
+                .Single(mark => mark.Label == "技能触发+1");
+            Assert.That(again.MonsterId, Is.EqualTo(glandId));
         }
 
         [Test]

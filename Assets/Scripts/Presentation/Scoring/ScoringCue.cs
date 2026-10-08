@@ -16,6 +16,7 @@ namespace TheCall.Scoring
         IEnumerator Swap(SwapCue cue);
         IEnumerator Remove(RemovalCue cue);
         IEnumerator Pay(PayCue cue);
+        IEnumerator Mark(MarkCue cue);
     }
 
     public enum FigureRole
@@ -67,6 +68,24 @@ namespace TheCall.Scoring
         public BeatRole Role { get; }
         public string SourceName { get; }
         public string Caption { get; }
+    }
+
+    public sealed class MarkCue : ScoringCue
+    {
+        internal MarkCue(int slotIndex, string label, MarkTone tone, MarkMotion motion)
+        {
+            SlotIndex = slotIndex;
+            Label = label;
+            Tone = tone;
+            Motion = motion;
+        }
+
+        public int SlotIndex { get; }
+        public string Label { get; }
+        public MarkTone Tone { get; }
+        public MarkMotion Motion { get; }
+
+        internal override IEnumerator Accept(ICueSink sink) => sink.Mark(this);
     }
 
     public sealed class WalkCue : ScoringCue

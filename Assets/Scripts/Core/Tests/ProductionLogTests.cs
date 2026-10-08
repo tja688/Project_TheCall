@@ -111,8 +111,8 @@ namespace TheCall.Tests
                 false,
                 new[]
                 {
-                    new LandingAdd("宿主修正", 2),
-                    new LandingAdd("下家", 3),
+                    new LandingAdd("宿主修正", 2, null, -1, null),
+                    new LandingAdd("下家", 3, null, -1, null),
                 },
                 System.Array.Empty<LandingFactor>(),
                 "SCP-173",

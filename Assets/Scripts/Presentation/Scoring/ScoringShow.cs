@@ -238,6 +238,7 @@ namespace TheCall.Scoring
         IEnumerator ICueSink.Swap(SwapCue cue) => Swap(cue);
         IEnumerator ICueSink.Remove(RemovalCue cue) => Remove(cue);
         IEnumerator ICueSink.Pay(PayCue cue) => Pay(cue);
+        IEnumerator ICueSink.Mark(MarkCue cue) => Mark(cue);
 
         IEnumerator Walk(WalkCue cue)
         {
@@ -416,6 +417,77 @@ namespace TheCall.Scoring
                 portrait.RestoreMotion();
             if (label != null)
                 Destroy(label.gameObject);
+        }
+
+        IEnumerator Mark(MarkCue cue)
+        {
+            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
+            var label = Spawn(cue.Label, head + new Vector2(0f, -22f));
+            label.fontSize = 52f;
+            label.color = ToneColor(cue.Tone);
+            label.rectTransform.localScale = Vector3.one * 0.4f;
+            if (cue.Motion == MarkMotion.Shake)
+                yield return ShakeFree(cue.SlotIndex);
+            else
+                yield return SpringMark(cue.SlotIndex);
+
+            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(0.12f)).SetEase(Ease.OutBack));
+            var grow = Live(label.rectTransform.DOScale(1f, Span(0.12f)).SetEase(Ease.OutBack));
+            yield return Wait(0.12f);
+            rise.Kill(false);
+            grow.Kill(false);
+            if (SkipWait())
+            {
+                Destroy(label.gameObject);
+                yield break;
+            }
+
+            yield return Wait(0.1f);
+            var fade = Live(label.DOFade(0f, Span(0.1f)));
+            yield return Wait(0.1f);
+            fade.Kill(false);
+            Destroy(label.gameObject);
+        }
+
+        IEnumerator SpringMark(int index)
+        {
+            var portrait = PortraitAt(index);
+            if (portrait != null)
+                portrait.SetSpringMotion(-14f, 9f);
+
+            var root = RootAt(index);
+            var rest = root != null && InRange(index) ? _slots[index].RestScale : Vector3.one;
+            Tween grow = null;
+            if (root != null)
+                grow = Live(root.DOScale(rest * 1.12f, Span(0.08f)).SetEase(Ease.OutQuad));
+
+            yield return Wait(0.08f);
+            grow?.Kill(false);
+            Tween back = null;
+            if (root != null)
+                back = Live(root.DOScale(rest, Span(0.1f)).SetEase(Ease.OutQuad));
+
+            yield return Wait(0.1f);
+            back?.Kill(false);
+            if (root != null)
+                root.localScale = rest;
+            if (portrait != null)
+                portrait.RestoreMotion();
+        }
+
+        static Color ToneColor(MarkTone tone)
+        {
+            switch (tone)
+            {
+                case MarkTone.Miss:
+                    return new Color(0.85f, 0.12f, 0.12f, 1f);
+                case MarkTone.Gold:
+                    return new Color(1f, 0.82f, 0.25f, 1f);
+                case MarkTone.Again:
+                    return new Color(0.45f, 0.9f, 1f, 1f);
+                default:
+                    return new Color(1f, 0.93f, 0.55f, 1f);
+            }
         }
 
         IEnumerator ShakeFree(int index)

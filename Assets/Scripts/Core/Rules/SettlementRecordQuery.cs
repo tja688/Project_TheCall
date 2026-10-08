@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using QFramework;
@@ -10,34 +11,144 @@ namespace TheCall
 
     public readonly struct LandingAdd
     {
-        public LandingAdd(string label, int amount, string sourceName = null)
+        public LandingAdd(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName)
         {
             Label = label;
             Amount = amount;
+            SourceId = sourceId;
+            SourceSkillIndex = sourceSkillIndex;
             SourceName = sourceName;
         }
+
+        public static LandingAdd Of(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName) =>
+            new LandingAdd(label, amount, sourceId, sourceSkillIndex, sourceName);
 
         public string Label { get; }
 
         public int Amount { get; }
+
+        public string SourceId { get; }
+
+        public int SourceSkillIndex { get; }
 
         public string SourceName { get; }
     }
 
     public readonly struct LandingFactor
     {
-        public LandingFactor(string label, int factor, string sourceName = null)
+        public LandingFactor(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName)
         {
             Label = label;
             Factor = factor;
+            SourceId = sourceId;
+            SourceSkillIndex = sourceSkillIndex;
             SourceName = sourceName;
         }
+
+        public static LandingFactor Of(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName) =>
+            new LandingFactor(label, factor, sourceId, sourceSkillIndex, sourceName);
 
         public string Label { get; }
 
         public int Factor { get; }
 
+        public string SourceId { get; }
+
+        public int SourceSkillIndex { get; }
+
         public string SourceName { get; }
+    }
+
+    public enum MarkMotion
+    {
+        Spring,
+        Shake,
+    }
+
+    public enum MarkTone
+    {
+        Miss,
+        Again,
+        Gold,
+        Skills,
+    }
+
+    public sealed class SettlementMark : SettlementEntry
+    {
+        SettlementMark(string monsterId, string label, MarkMotion motion, MarkTone tone)
+        {
+            if (!Fits(label, motion, tone))
+                throw new InvalidOperationException("结算头顶字不成立");
+
+            MonsterId = monsterId;
+            Label = label;
+            Motion = motion;
+            Tone = tone;
+        }
+
+        public static SettlementMark Miss(string monsterId) =>
+            new SettlementMark(monsterId, "+0", MarkMotion.Spring, MarkTone.Miss);
+
+        public static SettlementMark Again(string monsterId) =>
+            new SettlementMark(monsterId, "技能触发+1", MarkMotion.Shake, MarkTone.Again);
+
+        public static SettlementMark Gold(string monsterId, int amount) =>
+            new SettlementMark(monsterId, "+" + amount + "金", MarkMotion.Spring, MarkTone.Gold);
+
+        public static SettlementMark Skills(string monsterId, int count)
+        {
+            if (count <= 0)
+                throw new InvalidOperationException("技能个数为 0 时用未中");
+
+            return new SettlementMark(monsterId, "技能+" + count, MarkMotion.Spring, MarkTone.Skills);
+        }
+
+        public string MonsterId { get; }
+
+        public string Label { get; }
+
+        public MarkMotion Motion { get; }
+
+        public MarkTone Tone { get; }
+
+        static bool Fits(string label, MarkMotion motion, MarkTone tone)
+        {
+            if (label == "+0")
+                return motion == MarkMotion.Spring && tone == MarkTone.Miss;
+            if (label == "技能触发+1")
+                return motion == MarkMotion.Shake && tone == MarkTone.Again;
+            if (label != null && label.Length > 1 && label[0] == '+' && label.EndsWith("金"))
+                return motion == MarkMotion.Spring && tone == MarkTone.Gold;
+            if (label != null && label.StartsWith("技能+") && label.Length > "技能+".Length)
+                return motion == MarkMotion.Spring && tone == MarkTone.Skills;
+            return false;
+        }
+    }
+
+    internal sealed class SettlementHold : SettlementEntry
+    {
+        public SettlementHold(string actorId, int skillIndex)
+        {
+            ActorId = actorId;
+            SkillIndex = skillIndex;
+        }
+
+        public string ActorId { get; }
+
+        public int SkillIndex { get; }
+    }
+
+    internal sealed class SettlementCause : SettlementEntry
+    {
+        public SettlementCause(string sourceId, int skillIndex)
+        {
+            SourceId = sourceId;
+            SkillIndex = skillIndex;
+        }
+
+        public string SourceId { get; }
+
+        public int SkillIndex { get; }
     }
 
     public sealed class SettlementLanding : SettlementEntry
@@ -61,9 +172,7 @@ namespace TheCall
             System.Collections.Generic.IReadOnlyList<LandingFactor> factors,
             string monsterName = null,
             int cell = -1,
-            string countedSideName = null,
-            string assistName = null,
-            string assistCaption = null)
+            string countedSideName = null)
         {
             MonsterId = monsterId;
             SkillName = skillName;
@@ -79,8 +188,6 @@ namespace TheCall
             MonsterName = monsterName;
             Cell = cell;
             CountedSideName = countedSideName;
-            AssistName = assistName;
-            AssistCaption = assistCaption;
             Check();
         }
 
@@ -107,10 +214,6 @@ namespace TheCall
         public int Cell { get; }
 
         public string CountedSideName { get; }
-
-        public string AssistName { get; }
-
-        public string AssistCaption { get; }
 
         public System.Collections.Generic.IReadOnlyList<LandingAdd> Adds { get; }
 
@@ -199,7 +302,11 @@ namespace TheCall
 
     public sealed class SettlementRecordQuery : AbstractQuery<IReadOnlyList<SettlementEntry>>
     {
-        protected override IReadOnlyList<SettlementEntry> OnDo() =>
-            this.GetSystem<SettlementSystem>().Entries.ToArray();
+        protected override IReadOnlyList<SettlementEntry> OnDo()
+        {
+            var system = this.GetSystem<SettlementSystem>();
+            system.Seal();
+            return system.Entries.ToArray();
+        }
     }
 }

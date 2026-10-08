@@ -41,6 +41,19 @@ namespace TheCall.Scoring
             ref int head,
             ref int produced)
         {
+            if (entry is SettlementMark mark)
+            {
+                var slot = IndexOf(ids, mark.MonsterId);
+                if (slot != head)
+                {
+                    cues.Add(new WalkCue(head, slot));
+                    head = slot;
+                }
+
+                cues.Add(new MarkCue(slot, mark.Label, mark.Tone, mark.Motion));
+                return;
+            }
+
             if (entry is SettlementLanding landing)
             {
                 var slot = IndexOf(ids, landing.MonsterId);
@@ -119,6 +132,9 @@ namespace TheCall.Scoring
             }
 
             var name = entry == null ? "null" : entry.GetType().Name;
+            if (name == "SettlementHold" || name == "SettlementCause")
+                throw new InvalidOperationException(name);
+
             throw new InvalidOperationException(name);
         }
 
@@ -155,15 +171,6 @@ namespace TheCall.Scoring
         static ScoreBeat[] BeatsOf(SettlementLanding landing)
         {
             var beats = new List<ScoreBeat>();
-            if (!string.IsNullOrEmpty(landing.AssistName) || !string.IsNullOrEmpty(landing.AssistCaption))
-            {
-                beats.Add(new ScoreBeat(
-                    "+1次",
-                    BeatRole.Again,
-                    Other(landing.AssistName, landing.MonsterName),
-                    landing.AssistCaption));
-            }
-
             var formula = landing.Side || landing.Adds.Count > 0 || landing.Factors.Count > 0;
             if (formula)
             {
