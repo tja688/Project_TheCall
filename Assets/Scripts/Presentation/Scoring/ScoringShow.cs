@@ -823,21 +823,23 @@ namespace TheCall.Scoring
                     continue;
 
                 var root = slot.Portrait.transform as RectTransform;
-                if (root != null && slot.View != null && root.parent != slot.View.transform)
+                if (root == null || root.gameObject.IsDestroying())
+                    continue;
+
+                if (slot.View != null && root.parent != slot.View.transform)
                 {
                     root.SetParent(slot.View.transform, false);
                     root.anchoredPosition = slot.RestAnchoredPosition;
                     root.localScale = slot.RestScale;
-                    root.gameObject.SetActive(true);
                 }
-                else if (root != null)
+                else
                 {
                     root.localScale = slot.RestScale;
                     if (slot.View != null && root.parent == slot.View.transform)
                         root.anchoredPosition = slot.RestAnchoredPosition;
-                    root.gameObject.SetActive(true);
                 }
 
+                root.gameObject.SetActive(true);
                 slot.Portrait.RestoreMotion();
             }
         }
