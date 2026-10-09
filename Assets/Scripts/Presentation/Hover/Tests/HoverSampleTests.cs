@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace TheCall.Hover.Tests
@@ -108,6 +109,60 @@ namespace TheCall.Hover.Tests
             view.buyButton = buttonObject.AddComponent<Button>();
 
             Assert.That(HoverSample.TryOwner(buttonObject, out _, out _), Is.False);
+        }
+
+        [Test]
+        public void 挡板命中时继续找下面的怪物()
+        {
+            var blocker = Root("blocker");
+            blocker.AddComponent<HoverPassthrough>();
+            var slot = Root("slot");
+            slot.AddComponent<MonsterSlotView>().monsterId = "m1";
+            var graphic = Child(slot, "graphic");
+            graphic.AddComponent<Image>();
+            var hits = new List<RaycastResult>
+            {
+                new RaycastResult { gameObject = blocker },
+                new RaycastResult { gameObject = graphic },
+            };
+
+            var found = HoverSample.TryPick(hits, out var monsterId, out var anchor);
+
+            Assert.That(found, Is.True);
+            Assert.That(monsterId, Is.EqualTo("m1"));
+            Assert.That(anchor, Is.SameAs(slot.GetComponent<RectTransform>()));
+        }
+
+        [Test]
+        public void 飞行中的肖像比槽位上的旧编号优先()
+        {
+            var body = Root("body");
+            body.AddComponent<HoverBody>().monsterId = "flying";
+            var graphic = Child(body, "graphic");
+            var slot = Root("slot");
+            slot.AddComponent<MonsterSlotView>().monsterId = "stale";
+            var slotGraphic = Child(slot, "graphic");
+            var hits = new List<RaycastResult>
+            {
+                new RaycastResult { gameObject = graphic },
+                new RaycastResult { gameObject = slotGraphic },
+            };
+
+            var found = HoverSample.TryPick(hits, out var monsterId, out _);
+
+            Assert.That(found, Is.True);
+            Assert.That(monsterId, Is.EqualTo("flying"));
+        }
+
+        [Test]
+        public void 消失后的空槽不再给出技能对象()
+        {
+            var slot = Root("slot");
+            slot.AddComponent<MonsterSlotView>().monsterId = null;
+            var graphic = Child(slot, "graphic");
+            var hits = new List<RaycastResult> { new RaycastResult { gameObject = graphic } };
+
+            Assert.That(HoverSample.TryPick(hits, out _, out _), Is.False);
         }
 
         GameObject Root(string name)

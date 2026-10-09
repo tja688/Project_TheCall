@@ -27,6 +27,18 @@
   Use the skill name that produced the call (e.g. `unity-cli` when following that skill).
 - Make scene changes through Unity editor operations driven by the CLI. Never manually edit scene YAML.
 
+### 打包到桌面
+
+When the user says **「打包到桌面」**, they mean the project’s Editor menu tool — not a hand-rolled `BuildPipeline` script, not `-batchmode`, and not the generic Pipeline `build` command unless they explicitly ask for that.
+
+- **Menu:** `TheCall/Build/打包到桌面 (monster_game1)` (`Assets/Editor/LocalDesktopBuildTool.cs`).
+- **Output:** `%USERPROFILE%\Desktop\monster_game1\` (Windows Standalone x64 player; folder is wiped and rebuilt each run).
+- **Via CLI:** With a `ready` Editor on this project, run the same logic without confirmation dialogs (second argument is eval timeout in ms):
+  ```bash
+  unity --no-banner --non-interactive command eval --project-path "<项目路径>" --caller plugin --skill unity-cli --timeout 3600 -- "TheCall.Editor.LocalDesktopBuildTool.BuildToDesktopInternal(false);" 7200000
+  ```
+  Raise both `--timeout` (CLI wait) and the eval `timeout` positional if the build is slow. Prefer `BuildToDesktopInternal(false)` over `menu` when automating, because the menu entry shows a confirmation dialog.
+
 ### When CLI cannot connect
 
 Work through this order before reinstalling packages or opening another Editor:

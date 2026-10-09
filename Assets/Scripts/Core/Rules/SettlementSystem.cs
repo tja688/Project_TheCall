@@ -32,11 +32,12 @@ namespace TheCall
 
         public PaymentResult Settle()
         {
+            var level = this.GetModel<LevelModel>();
+            var run = this.GetModel<RunModel>();
+            this.GetModel<SettlementSight>().Capture(level, run);
             Score();
             ExecuteSwaps();
             ExecuteEndRemovals();
-            var level = this.GetModel<LevelModel>();
-            var run = this.GetModel<RunModel>();
             var wasOvertime = level.InOvertime;
             var due = wasOvertime ? level.Shortfall : level.EnergyDue;
             var produced = level.Energy;

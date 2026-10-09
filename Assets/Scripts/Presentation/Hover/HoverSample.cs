@@ -144,6 +144,20 @@ namespace TheCall
             var node = topHit.transform;
             while (node != null)
             {
+                var body = node.GetComponent<HoverBody>();
+                if (body != null)
+                {
+                    if (string.IsNullOrEmpty(body.monsterId))
+                        return false;
+
+                    anchor = body.transform as RectTransform;
+                    if (anchor == null)
+                        return false;
+
+                    monsterId = body.monsterId;
+                    return true;
+                }
+
                 var slot = node.GetComponent<MonsterSlotView>();
                 if (slot != null)
                 {
@@ -214,11 +228,30 @@ namespace TheCall
             var data = new PointerEventData(EventSystem.current) { position = pointer.Screen };
             hits.Clear();
             EventSystem.current.RaycastAll(data, hits);
-            if (hits.Count == 0 || !TryOwner(hits[0].gameObject, out var monsterId, out var anchor))
+            if (!TryPick(hits, out var monsterId, out var anchor))
                 return false;
 
             target = new HoverTarget(monsterId, ToCanvas(anchor, canvas), pointer.Screen.x);
             return true;
+        }
+
+        internal static bool TryPick(List<RaycastResult> hits, out string monsterId, out RectTransform anchor)
+        {
+            monsterId = null;
+            anchor = null;
+            if (hits == null)
+                return false;
+
+            for (var i = 0; i < hits.Count; i++)
+            {
+                var hit = hits[i].gameObject;
+                if (hit == null || hit.GetComponentInParent<HoverPassthrough>() != null)
+                    continue;
+                if (TryOwner(hit, out monsterId, out anchor))
+                    return true;
+            }
+
+            return false;
         }
 
         static Camera OverlayCamera(RectTransform canvas)

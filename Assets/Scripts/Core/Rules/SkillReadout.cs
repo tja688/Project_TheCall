@@ -5,7 +5,31 @@ namespace TheCall
     // 悬停句子里的能量数。加项先加进报价，倍率再乘。只算摆上去就已经成立的那部分。
     internal static class SkillReadout
     {
+        static SettlementSight _sight;
+
         public static SentenceSpan[] Render(
+            SkillDef skill,
+            int quote,
+            string monsterId,
+            RunModel run,
+            LevelModel level,
+            SkillCatalog catalog,
+            IReadOnlyList<ToolDefinition> tools,
+            SettlementSight sight = null)
+        {
+            var previous = _sight;
+            _sight = sight;
+            try
+            {
+                return RenderNow(skill, quote, monsterId, run, level, catalog, tools);
+            }
+            finally
+            {
+                _sight = previous;
+            }
+        }
+
+        static SentenceSpan[] RenderNow(
             SkillDef skill,
             int quote,
             string monsterId,
@@ -15,7 +39,7 @@ namespace TheCall
             IReadOnlyList<ToolDefinition> tools)
         {
             var pieces = SkillSentences.Pieces(skill);
-            var cells = level.Extraction;
+            var cells = CellsOf(level);
             var cell = CellOf(cells, monsterId);
             var adds = StandingAdds(catalog, run, cells, cell, monsterId, catalog.ProducesEnergy(skill.Name), tools);
             var mult = Multiplier(catalog, run, cells, cell, monsterId, skill.Name, tools);
@@ -66,6 +90,22 @@ namespace TheCall
             return spans.ToArray();
         }
 
+        // 演出进行时读开场记下的那一排，换位和消失改这一排，不读已经写完的结算结果。
+        static IReadOnlyList<string> CellsOf(LevelModel level) =>
+            _sight != null && _sight.Showing ? _sight.Cells : level.Extraction;
+
+        static Monster FindMonster(RunModel run, string monsterId)
+        {
+            if (_sight != null && _sight.Showing)
+            {
+                var cast = _sight.Find(monsterId);
+                if (cast != null)
+                    return cast;
+            }
+
+            return run.Find(monsterId);
+        }
+
         // 平加不按只数摊。一侧恰好一只时，句子里的单价就是这一下的全部，可以并进去。
         static int PerHead(int quote, int adds, int mult, int sideCount)
         {
@@ -84,7 +124,7 @@ namespace TheCall
             bool selfBuffs,
             IReadOnlyList<ToolDefinition> tools)
         {
-            var host = run.Find(monsterId);
+            var host = FindMonster(run, monsterId);
             if (host == null)
                 return 0;
 
@@ -110,7 +150,7 @@ namespace TheCall
                 if (otherId == null || otherId == monsterId)
                     continue;
 
-                var otherMonster = run.Find(otherId);
+                var otherMonster = FindMonster(run, otherId);
                 if (otherMonster == null)
                     continue;
 
@@ -144,7 +184,7 @@ namespace TheCall
                 if (id == null || id == monsterId || NextMonster(cells, index) != monsterId)
                     continue;
 
-                var donor = run.Find(id);
+                var donor = FindMonster(run, id);
                 if (donor == null)
                     continue;
 
@@ -170,8 +210,8 @@ namespace TheCall
                 if (earId == null || ear == 0 || cells[ear - 1] == null)
                     continue;
 
-                var earMonster = run.Find(earId);
-                if (earMonster == null || run.Find(cells[ear - 1]) == null)
+                var earMonster = FindMonster(run, earId);
+                if (earMonster == null || FindMonster(run, cells[ear - 1]) == null)
                     continue;
 
                 var bonus = 0;
@@ -195,7 +235,7 @@ namespace TheCall
             int cell,
             IReadOnlyList<ToolDefinition> tools)
         {
-            var monster = run.Find(cells[cell]);
+            var monster = FindMonster(run, cells[cell]);
             if (monster == null)
                 return 0;
 
@@ -255,7 +295,7 @@ namespace TheCall
 
         static int SumSkills(RunModel run, string monsterId, System.Func<string, int> amount)
         {
-            var monster = run.Find(monsterId);
+            var monster = FindMonster(run, monsterId);
             if (monster == null)
                 return 0;
 
@@ -314,7 +354,7 @@ namespace TheCall
                 if (cells[index] == null)
                     continue;
 
-                var monster = run.Find(cells[index]);
+                var monster = FindMonster(run, cells[index]);
                 if (monster == null)
                     return false;
 
@@ -337,7 +377,7 @@ namespace TheCall
 
         static bool IsSingleAffix(SkillCatalog catalog, RunModel run, string monsterId)
         {
-            var monster = run.Find(monsterId);
+            var monster = FindMonster(run, monsterId);
             if (monster == null)
                 return false;
 
@@ -352,7 +392,7 @@ namespace TheCall
 
         static bool HasIsolatedDouble(SkillCatalog catalog, RunModel run, string monsterId)
         {
-            var monster = run.Find(monsterId);
+            var monster = FindMonster(run, monsterId);
             if (monster == null)
                 return false;
 
@@ -371,7 +411,7 @@ namespace TheCall
             if (cell < 0 || cell >= cells.Count || cells[cell] == null)
                 return 1;
 
-            var neighbor = run.Find(cells[cell]);
+            var neighbor = FindMonster(run, cells[cell]);
             if (neighbor == null)
                 return 1;
 
@@ -439,7 +479,7 @@ namespace TheCall
         static int Population(LevelModel level, RunModel run)
         {
             var count = run.Cage.Count;
-            var cells = level.Extraction;
+            var cells = CellsOf(level);
             for (var index = 0; index < cells.Count; index++)
             {
                 if (cells[index] != null)
@@ -483,7 +523,7 @@ namespace TheCall
 
         static int SkillCount(RunModel run, string monsterId)
         {
-            var monster = run.Find(monsterId);
+            var monster = FindMonster(run, monsterId);
             return monster == null ? 0 : monster.Skills.Count;
         }
     }

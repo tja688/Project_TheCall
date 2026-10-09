@@ -10,12 +10,13 @@ namespace TheCall
 
         protected override MonsterDetails OnDo()
         {
-            var view = this.GetModel<RunModel>().FindView(_monsterId);
+            var run = this.GetModel<RunModel>();
+            var sight = this.GetModel<SettlementSight>();
+            var view = ViewOf(run, sight);
             if (view?.Skills == null || view.Skills.Count < 1 || view.Skills.Count > 4)
                 return null;
 
             var copy = this.GetArchitecture().GetUtility<SkillCopy>();
-            var run = this.GetModel<RunModel>();
             var level = this.GetModel<LevelModel>();
             var catalog = this.GetArchitecture().GetUtility<SkillCatalog>();
             var tools = this.GetArchitecture().GetUtility<IToolCatalog>().Tools;
@@ -30,11 +31,32 @@ namespace TheCall
                 if (!copy.TrySkill(skill.Name, out var def))
                     return null;
 
-                var spans = SkillReadout.Render(def, skill.Quote, view.Id, run, level, catalog, tools);
+                var spans = SkillReadout.Render(
+                    def,
+                    skill.Quote,
+                    view.Id,
+                    run,
+                    level,
+                    catalog,
+                    tools,
+                    sight.Showing ? sight : null);
                 skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans);
             }
 
             return new MonsterDetails(view.Id, view.DisplayName, skills, view.Modifier, view.Immovable, view.Capacity, view.Appearance);
+        }
+
+        MonsterView ViewOf(RunModel run, SettlementSight sight)
+        {
+            if (!sight.Showing)
+                return run.FindView(_monsterId);
+
+            var cast = sight.Find(_monsterId);
+            if (cast != null && !sight.Contains(_monsterId))
+                return null;
+
+            var monster = cast ?? run.Find(_monsterId);
+            return monster == null ? null : run.ToView(monster);
         }
     }
 }

@@ -136,6 +136,7 @@ namespace TheCall.Scoring
                 var entries = _stage.Architecture.SendQuery(new SettlementRecordQuery());
                 _tape = ScoringTape.Arrange(entries, ids);
                 Capture(ids);
+                _stage.Architecture.SendCommand(new ShowSettlementSightCommand());
                 _restBoardPosition = _stage.BoardRoot.anchoredPosition;
                 _boardHeld = true;
                 BindCurrent();
@@ -201,6 +202,9 @@ namespace TheCall.Scoring
 
         void TeardownPresentation()
         {
+            if (_stage.Architecture != null)
+                _stage.Architecture.SendCommand(new HideSettlementSightCommand());
+
             DOTween.Kill(TweenId);
             RestoreCurrent();
             RestoreSlots();
@@ -635,6 +639,8 @@ namespace TheCall.Scoring
                 yield break;
             }
 
+            Lift(cue.ActorIndex);
+            Lift(cue.TargetIndex);
             var actorRoot = RootAt(cue.ActorIndex);
             var targetRoot = RootAt(cue.TargetIndex);
             if (actorRoot != null && targetRoot != null)
@@ -673,8 +679,12 @@ namespace TheCall.Scoring
                 if (InRange(cue.VictimIndex))
                 {
                     var slot = _slots[cue.VictimIndex];
+                    HoverRide.Detach(slot.Portrait);
                     slot.MonsterId = null;
+                    if (slot.View != null)
+                        slot.View.monsterId = null;
                     _slots[cue.VictimIndex] = slot;
+                    _stage.Architecture.SendCommand(new ClearSettlementSightCommand(cue.VictimIndex));
                 }
 
                 yield break;
@@ -771,6 +781,7 @@ namespace TheCall.Scoring
             overlay.overrideSorting = true;
             overlay.sortingOrder = 50;
             blockerObject.AddComponent<GraphicRaycaster>();
+            blockerObject.AddComponent<HoverPassthrough>();
             var blockerImage = blockerObject.GetComponent<Image>();
             blockerImage.sprite = Pixel();
             blockerImage.color = new Color(1f, 1f, 1f, 0f);
@@ -858,9 +869,6 @@ namespace TheCall.Scoring
                 var portrait = actor.View.portrait;
                 actor.View.portrait = target.View.portrait;
                 target.View.portrait = portrait;
-                var id = actor.View.monsterId;
-                actor.View.monsterId = target.View.monsterId;
-                target.View.monsterId = id;
                 SwapText(actor.View.title, target.View.title);
                 SwapText(actor.View.subtitle, target.View.subtitle);
             }
@@ -874,8 +882,29 @@ namespace TheCall.Scoring
             target.Portrait = actorPortrait;
             target.MonsterId = actorId;
             target.RestScale = actorScale;
+            if (actor.View != null)
+                actor.View.monsterId = actor.MonsterId;
+            if (target.View != null)
+                target.View.monsterId = target.MonsterId;
+            HoverRide.Detach(actor.Portrait);
+            HoverRide.Detach(target.Portrait);
             _slots[actorIndex] = actor;
             _slots[targetIndex] = target;
+            _stage.Architecture.SendCommand(new MoveSettlementSightCommand(actorIndex, targetIndex));
+        }
+
+        void Lift(int index)
+        {
+            if (!InRange(index))
+                return;
+
+            var slot = _slots[index];
+            if (slot.Portrait == null || string.IsNullOrEmpty(slot.MonsterId))
+                return;
+
+            HoverRide.Attach(slot.Portrait, slot.MonsterId);
+            if (slot.View != null)
+                slot.View.monsterId = null;
         }
 
         IEnumerator ThrowScore(int amount, Vector2 head, RectTransform monster, Vector3 monsterRest, float fontSize)

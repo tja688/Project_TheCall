@@ -28,6 +28,7 @@ namespace TheCall
             RegisterUtility(new TechCatalog(book));
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
+            RegisterModel(new SettlementSight());
             RegisterSystem(new FlowSystem());
             RegisterSystem(new SettlementSystem());
             RegisterSystem(new ShopSystem());

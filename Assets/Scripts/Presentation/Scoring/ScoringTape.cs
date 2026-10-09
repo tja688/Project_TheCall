@@ -247,12 +247,12 @@ namespace TheCall.Scoring
         static string PaymentLine(SettlementPayment payment)
         {
             if (payment.Failed)
-                return "加班后仍未补足。";
+                return "加班后仍未能达标";
             if (payment.Deducted == 0 && payment.Shortfall > 0)
-                return "能量不足，欠额 " + payment.Shortfall + "。这是加班，不是重开。";
+                return "能量不足，欠额 " + payment.Shortfall;
             if (payment.Excess)
-                return "结算完成，获得 1 科技点。商店开了。";
-            return "结算完成，商店开了。";
+                return "结算完成，获得 1 科技点";
+            return "结算完成，未能获得科技点";
         }
 
         static int IndexOf(List<string> ids, string id)

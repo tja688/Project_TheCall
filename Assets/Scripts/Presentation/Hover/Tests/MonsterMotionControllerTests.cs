@@ -63,6 +63,37 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
+        public void 画面放大时抓取位移按比例收回且关节角不变()
+        {
+            var profile = CreateProfile();
+            profile.idleEnabled = false;
+            var skeleton = Creature(14f);
+            var controller = new MonsterMotionController(skeleton, profile, 0f);
+            var frame = new MonsterRigFrame(skeleton);
+
+            controller.Grab(0f, 0f);
+            controller.Hold(40f, -16f);
+            controller.Advance(MonsterMotionController.MaxFrameSeconds);
+            controller.Compose(frame);
+            var bend = frame.Rotation[1] - frame.Rotation[0];
+            Assert.That(frame.X[0], Is.EqualTo(71f + 40f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f - 16f).Within(0.02f));
+
+            controller.RescaleGrip(0.5f);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(71f + 20f).Within(0.02f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f - 8f).Within(0.02f));
+            Assert.That(frame.Rotation[1] - frame.Rotation[0], Is.EqualTo(bend).Within(0.02f));
+
+            controller.Hold(20f, -8f);
+            controller.Advance(1f / 60f);
+            controller.Compose(frame);
+            Assert.That(frame.X[0], Is.EqualTo(71f + 20f).Within(0.5f));
+            Assert.That(frame.Y[0], Is.EqualTo(51f - 8f).Within(0.5f));
+            UnityEngine.Object.DestroyImmediate(profile);
+        }
+
+        [Test]
         public void 松手后抓取分量回到静止()
         {
             var profile = CreateProfile();

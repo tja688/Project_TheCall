@@ -131,6 +131,30 @@ namespace TheCall
             _holding = false;
         }
 
+        /// <summary>
+        /// 拖拽虚影的画面缩放变了之后，把抓取位移换算进新的骨架本地坐标。
+        /// 关节角度和弹簧原样保留，只改位置和线速度，避免放大的那一帧被当成突然甩动。
+        /// factor 是旧本地单位相对新本地单位的倍数：画面放大时小于 1。
+        /// </summary>
+        public void RescaleGrip(float factor)
+        {
+            if (float.IsNaN(factor) || float.IsInfinity(factor) || Mathf.Abs(factor - 1f) < 1e-5f)
+                return;
+
+            _gripX *= factor;
+            _gripY *= factor;
+            _pivotX *= factor;
+            _pivotY *= factor;
+            _pivotSpeedX *= factor;
+            _pivotSpeedY *= factor;
+            _targetX *= factor;
+            _targetY *= factor;
+            _alignX *= factor;
+            _alignY *= factor;
+            _pointerSampleX *= factor;
+            _pointerSampleY *= factor;
+        }
+
         /// <summary>计分等外部反应：头和脚的目标角度（度），由弹簧平滑过去；传 0,0 即回到静止。</summary>
         public void SetReaction(float headAngle, float feetAngle)
         {

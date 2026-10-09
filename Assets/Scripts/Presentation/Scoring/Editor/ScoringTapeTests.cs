@@ -33,7 +33,7 @@ namespace TheCall.Scoring
             Assert.That(pay.Produced, Is.EqualTo(5));
             Assert.That(pay.Deducted, Is.EqualTo(0));
             Assert.That(pay.Shortfall, Is.EqualTo(45));
-            Assert.That(pay.Line, Is.EqualTo("能量不足，欠额 45。这是加班，不是重开。"));
+            Assert.That(pay.Line, Is.EqualTo("能量不足，欠额 45"));
             AssertRolesOnce(tape);
         }
 
@@ -72,7 +72,7 @@ namespace TheCall.Scoring
             Assert.That(pay.Kind, Is.EqualTo(PayKind.Paid));
             Assert.That(pay.Produced, Is.EqualTo(6));
             Assert.That(pay.Wage, Is.EqualTo(40));
-            Assert.That(pay.Line, Is.EqualTo("结算完成，商店开了。"));
+            Assert.That(pay.Line, Is.EqualTo("结算完成，未能获得科技点"));
             Assert.That(slots, Is.EqualTo(new[] { "breath", "swapper" }));
             AssertRolesOnce(tape);
         }
@@ -151,21 +151,21 @@ namespace TheCall.Scoring
         {
             var failed = PayOf(new SettlementPayment(0, 9, true, true, true, 0));
             Assert.That(failed.Kind, Is.EqualTo(PayKind.Failed));
-            Assert.That(failed.Line, Is.EqualTo("加班后仍未补足。"));
+            Assert.That(failed.Line, Is.EqualTo("加班后仍未能达标"));
             Assert.That(failed.Produced, Is.EqualTo(0));
 
             var shortfall = PayOf(new SettlementPayment(0, 3, true, false, false, 0));
             Assert.That(shortfall.Kind, Is.EqualTo(PayKind.Short));
-            Assert.That(shortfall.Line, Is.EqualTo("能量不足，欠额 3。这是加班，不是重开。"));
+            Assert.That(shortfall.Line, Is.EqualTo("能量不足，欠额 3"));
 
             var excess = PayOf(new SettlementPayment(8, 0, false, false, true, 40));
             Assert.That(excess.Kind, Is.EqualTo(PayKind.Paid));
             Assert.That(excess.Excess, Is.True);
-            Assert.That(excess.Line, Is.EqualTo("结算完成，获得 1 科技点。商店开了。"));
+            Assert.That(excess.Line, Is.EqualTo("结算完成，获得 1 科技点"));
 
             var paid = PayOf(new SettlementPayment(8, 0, false, false, false, 0));
             Assert.That(paid.Kind, Is.EqualTo(PayKind.Paid));
-            Assert.That(paid.Line, Is.EqualTo("结算完成，商店开了。"));
+            Assert.That(paid.Line, Is.EqualTo("结算完成，未能获得科技点"));
         }
 
         [Test]

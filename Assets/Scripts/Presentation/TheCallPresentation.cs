@@ -21,6 +21,7 @@ namespace TheCall
         [SerializeField] ResearchScreenView _research;
         [SerializeField] ShopScreenView _shop;
         [SerializeField] ResultScreenView _result;
+        [SerializeField] SettingsChromeView _settings;
         [SerializeField] GameObject _toast;
         [SerializeField] TMP_Text _toastText;
 
@@ -62,6 +63,8 @@ namespace TheCall
             _busy = false;
             if (_log != null)
                 _log.Hide();
+            if (_settings != null)
+                _settings.HideAll();
             if (_toast != null)
                 _toast.SetActive(false);
 
@@ -73,7 +76,14 @@ namespace TheCall
             if (_toast != null && _toast.activeSelf && Time.unscaledTime >= _noticeUntil)
                 _toast.SetActive(false);
 
-            if (EscapePressedThisFrame() && CanQuitFromOpening())
+            if (!EscapePressedThisFrame())
+                return;
+
+            if (_settings != null && _settings.CodexOpen)
+                _settings.CloseCodex();
+            else if (_settings != null && _settings.SettingsOpen)
+                _settings.HideAll();
+            else if (CanQuitFromOpening())
                 QuitGame();
         }
 
@@ -132,6 +142,44 @@ namespace TheCall
             ListenSlots(_shop != null ? _shop.sellSlots : null, OnSell);
             Listen(_result != null ? _result.restartButton : null, OnTitle);
             BindLog();
+            BindSettings();
+        }
+
+        void BindSettings()
+        {
+            if (_settings == null)
+                _settings = FindAnyObjectByType<SettingsChromeView>(FindObjectsInactive.Include);
+            if (_settings == null)
+                return;
+
+            var buttons = _settings.openButtons;
+            if (buttons != null)
+            {
+                for (var i = 0; i < buttons.Length; i++)
+                    Listen(buttons[i], ToggleSettings);
+            }
+
+            Listen(_settings.quitButton, QuitGame);
+            Listen(_settings.codexButton, OpenCodex);
+        }
+
+        void ToggleSettings()
+        {
+            if (_settings == null)
+                return;
+
+            if (_settings.SettingsOpen || _settings.CodexOpen)
+                _settings.HideAll();
+            else
+                _settings.ShowSettings();
+        }
+
+        void OpenCodex()
+        {
+            if (_settings == null)
+                return;
+
+            _settings.ShowCodex(this.SendQuery(new SkillIndexQuery()));
         }
 
         void BindLog()
@@ -525,20 +573,12 @@ namespace TheCall
                 return;
 
             var id = slot.monsterId;
-            Run(
-                () => this.SendCommand(new KeepOpeningMonsterCommand(id)),
-                () => this.SendQuery(new RunPhaseQuery()) == RunPhase.Operation,
-                "已留下。",
-                "没能留下这只。");
+            Run(() => this.SendCommand(new KeepOpeningMonsterCommand(id)));
         }
 
         void OnBegin()
         {
-            Run(
-                () => this.SendCommand(new BeginLevelCommand()),
-                () => this.SendQuery(new RunPhaseQuery()) == RunPhase.Operation,
-                "进入操作。",
-                "这一关还不能开始。");
+            Run(() => this.SendCommand(new BeginLevelCommand()));
         }
 
         string ArmedMonsterId()
@@ -663,11 +703,7 @@ namespace TheCall
             if (!string.IsNullOrEmpty(card.monsterId))
             {
                 var id = card.monsterId;
-                Run(
-                    () => this.SendCommand(new BuyMonsterCommand(id)),
-                    () => CageContains(id),
-                    "已买下。",
-                    "没有买成。");
+                Run(() => this.SendCommand(new BuyMonsterCommand(id)));
                 return;
             }
 
@@ -675,11 +711,7 @@ namespace TheCall
                 return;
 
             var tool = card.toolName;
-            Run(
-                () => this.SendCommand(new BuyToolCommand(tool)),
-                () => Contains(this.SendQuery(new RunLedgerQuery()).Tools, tool),
-                "工具已买下。",
-                "没有买成。");
+            Run(() => this.SendCommand(new BuyToolCommand(tool)));
         }
 
         void OnSell(MonsterSlotView slot)
@@ -691,7 +723,6 @@ namespace TheCall
             Run(
                 () => this.SendCommand(new SellMonsterCommand(id)),
                 () => !CageContains(id),
-                "已出售。",
                 "这只现在不能出售。锁定中的亲本要等后代出生。");
         }
 
@@ -701,21 +732,12 @@ namespace TheCall
             Refresh();
         }
 
-        void OnLeaveShop()
-        {
-            var before = this.SendQuery(new RunPhaseQuery());
-            Run(
-                () => this.SendCommand(new LeaveShopCommand()),
-                () => this.SendQuery(new RunPhaseQuery()) != before,
-                "离开商店。",
-                "现在还不能离开。");
-        }
+        void OnLeaveShop() => Run(() => this.SendCommand(new LeaveShopCommand()));
 
         void OnTitle()
         {
             TheCallApp.Reset();
             StartSession();
-            Notice("回到开局。");
         }
 
         void BindOpeningExitButton()
@@ -751,7 +773,7 @@ namespace TheCall
 #endif
         }
 
-        void Run(Action send, Func<bool> succeeded, string success, string failure)
+        void Run(Action send)
         {
             if (_busy)
                 return;
@@ -759,7 +781,19 @@ namespace TheCall
             _busy = true;
             send();
             _busy = false;
-            Notice(succeeded() ? success : failure);
+            Refresh();
+        }
+
+        void Run(Action send, Func<bool> succeeded, string failureNotice)
+        {
+            if (_busy)
+                return;
+
+            _busy = true;
+            send();
+            _busy = false;
+            if (!succeeded() && !string.IsNullOrEmpty(failureNotice))
+                Notice(failureNotice);
 
             Refresh();
         }

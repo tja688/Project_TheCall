@@ -302,6 +302,25 @@ namespace TheCall
                 _motion.Release();
         }
 
+        /// <summary>
+        /// 把这只怪物的画面均匀缩放对齐到目标。拖拽虚影变大时调用。
+        /// 先改矩形，再按同一比例收回骨架本地坐标，布娃娃仍抓住原来的屏幕位置。
+        /// </summary>
+        public void MatchUniformLossyScale(float uniform)
+        {
+            var current = CarryScale.Uniform(transform.lossyScale);
+            if (current < 1e-4f || uniform < 1e-4f)
+                return;
+
+            var ratio = uniform / current;
+            if (Mathf.Abs(ratio - 1f) < 1e-4f)
+                return;
+
+            transform.localScale *= ratio;
+            if (_motion != null)
+                _motion.RescaleGrip(1f / ratio);
+        }
+
         /// <summary>整只怪物的透明度（用于拖拽时把原位淡下去）。不挡射线。</summary>
         public void SetVisibility(float alpha)
         {
