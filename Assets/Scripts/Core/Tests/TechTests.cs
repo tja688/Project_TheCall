@@ -27,11 +27,26 @@ namespace TheCall.Tests
         [Test]
         public void 没有科技点时金币不能解锁科技()
         {
-            UseLevel(new ScriptedLevelCatalog(0, 1), OpeningNames);
+            UseLevel(
+                new ScriptedLevelCatalog(100),
+                "产金管道",
+                "能量体",
+                "左能量体",
+                "右能量体",
+                "奇异香",
+                "怪异香",
+                "汲取鼻",
+                "孤独心",
+                "吞噬大嘴");
             KeepOpened();
+            var pipe = App.SendQuery(new MonsterCageQuery()).Single(monster => Holds(monster, "产金管道")).Id;
+            App.SendCommand(new PlaceMonsterCommand(pipe, OperationArea.Extraction, 0));
             App.SendCommand(new ConfirmSettlementCommand());
-            App.SendCommand(new LeaveShopCommand());
+
+            Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
             var gold = App.SendQuery(new RunLedgerQuery()).Gold;
+            Assert.That(gold, Is.GreaterThan(0));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(0));
 
             App.SendCommand(new UnlockTechCommand("基因实验"));
 
@@ -39,7 +54,6 @@ namespace TheCall.Tests
             Assert.That(ledger.TechPoints, Is.EqualTo(0));
             Assert.That(ledger.UnlockedTech, Is.Empty);
             Assert.That(ledger.Gold, Is.EqualTo(gold));
-            Assert.That(gold, Is.GreaterThan(0));
         }
 
         [Test]

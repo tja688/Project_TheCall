@@ -63,9 +63,8 @@ namespace TheCall
             {
                 level.Pay(due);
                 level.ClearEnergy();
-                var excess = produced >= level.ExcessEnergy;
-                if (excess)
-                    run.AddTechPoint();
+                var excess = produced > due;
+                run.AddTechPoint();
 
                 var wage = ContentGate.Current.Wage(wasOvertime);
                 run.AddGold(wage);

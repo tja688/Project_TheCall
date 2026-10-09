@@ -161,14 +161,26 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 偿付成功但产出能量未达到超额能量时没有科技点()
+        public void 刚好达到目标也获得一点科技点但不记超额()
+        {
+            PayWithTwoBreaths(10, 11);
+
+            Assert.That(Payment().Excess, Is.False);
+            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
+        }
+
+        [Test]
+        public void 达标就获得一点科技点并且清掉剩余能量()
         {
             PayWithTwoBreaths(5, 11);
 
-            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(0));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
+            Assert.That(Payment().Excess, Is.True);
         }
 
         [Test]

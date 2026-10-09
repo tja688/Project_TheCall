@@ -716,10 +716,10 @@ namespace TheCall.Scoring
                 throw new InvalidOperationException("合计 " + _shown + " 和产出 " + cue.Produced + " 不一致");
 
             TextMeshProUGUI label = null;
-            if (cue.Kind == PayKind.Paid)
-                label = Spawn("交 " + cue.Deducted, BesideTotal());
-            else if (cue.Kind == PayKind.Short)
-                label = Spawn("欠额 " + cue.Shortfall, BesideTotal());
+            if (cue.Kind == PayKind.Paid && cue.Excess)
+                label = Spawn("超额", BesideTotal());
+            else if (cue.Kind == PayKind.Paid || cue.Kind == PayKind.Short)
+                label = Spawn("获得 " + cue.Produced, BesideTotal());
 
             if (cue.Wage > 0)
                 yield return RollGold(cue.Wage);

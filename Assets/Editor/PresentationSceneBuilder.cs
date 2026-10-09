@@ -824,6 +824,7 @@ namespace TheCall.Editor
         {
             var panel = Box(parent, name, Panel);
             At(panel, x, y, w, h);
+            panel.raycastTarget = true;
             var title = Label(panel.transform, "Title", "商品", 22, Ink, TextAlignmentOptions.Left);
             At(title, 20, 18, 250, 32);
             var price = Label(panel.transform, "Price", "0 金币", 20, Gold, TextAlignmentOptions.Right);

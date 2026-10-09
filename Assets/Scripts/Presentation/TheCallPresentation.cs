@@ -79,7 +79,11 @@ namespace TheCall
             if (!EscapePressedThisFrame())
                 return;
 
-            if (_settings != null && _settings.CodexOpen)
+            if (_settings != null && _settings.LogOpen && _settings.LogOpenedFromSettings)
+                _settings.CloseLog();
+            else if (_log != null && _log.IsOpen)
+                _log.Hide();
+            else if (_settings != null && _settings.CodexOpen)
                 _settings.CloseCodex();
             else if (_settings != null && _settings.SettingsOpen)
                 _settings.HideAll();
@@ -161,6 +165,8 @@ namespace TheCall
 
             Listen(_settings.quitButton, QuitGame);
             Listen(_settings.codexButton, OpenCodex);
+            _settings.Prepare();
+            Listen(_settings.logButton, OpenLogFromSettings);
         }
 
         void ToggleSettings()
@@ -168,7 +174,7 @@ namespace TheCall
             if (_settings == null)
                 return;
 
-            if (_settings.SettingsOpen || _settings.CodexOpen)
+            if (_settings.SettingsOpen || _settings.CodexOpen || _settings.LogOpenedFromSettings)
                 _settings.HideAll();
             else
                 _settings.ShowSettings();
@@ -189,6 +195,14 @@ namespace TheCall
             Listen(buttonObject != null ? buttonObject.GetComponent<UnityEngine.UI.Button>() : null, ToggleLog);
         }
 
+        void OpenLogFromSettings()
+        {
+            if (_settings == null)
+                return;
+
+            _settings.ShowLog(LogText());
+        }
+
         void ToggleLog()
         {
             if (_log == null)
@@ -197,14 +211,17 @@ namespace TheCall
             if (_log.IsOpen)
                 _log.Hide();
             else
-                _log.Show(ProductionLogText.Format(
-                    this.SendQuery(new ProductionLogQuery()),
-                    id =>
-                    {
-                        var monster = this.SendQuery(new MonsterQuery(id));
-                        return monster?.DisplayName;
-                    }));
+                _log.Show(LogText());
         }
+
+        string LogText() =>
+            ProductionLogText.Format(
+                this.SendQuery(new ProductionLogQuery()),
+                id =>
+                {
+                    var monster = this.SendQuery(new MonsterQuery(id));
+                    return monster?.DisplayName;
+                });
 
         internal void Refresh()
         {
@@ -261,7 +278,10 @@ namespace TheCall
             var target = this.SendQuery(new LevelTargetQuery());
             _levelStart.levelLabel.text = "第 " + target.LevelNumber + " 关";
             _levelStart.dueLabel.text = target.EnergyDue.ToString();
-            _levelStart.excessLabel.text = target.ExcessEnergy + "+";
+            SetLabel(_levelStart.transform, "DueCaption", "目标额度");
+            if (_levelStart.excessLabel != null)
+                _levelStart.excessLabel.gameObject.SetActive(false);
+            SetShown(_levelStart.transform, "ExcessCaption", false);
         }
 
         void DrawOperation()
@@ -271,8 +291,10 @@ namespace TheCall
             var target = this.SendQuery(new LevelTargetQuery());
             var energy = this.SendQuery(new LevelEnergyQuery());
             var shortfall = this.SendQuery(new LevelShortfallQuery());
-            _operation.targetLabel.text = target.EnergyDue.ToString();
-            _operation.energyLabel.text = shortfall > 0 ? "欠额 " + shortfall : "当前 " + energy;
+            var goal = shortfall > 0 ? shortfall : target.EnergyDue;
+            SetLabel(_operation.transform, "TargetCaption", "目标");
+            _operation.targetLabel.text = goal.ToString();
+            _operation.energyLabel.text = "获得 " + energy;
             if (!_busy)
             {
                 var current = _operation.currentNumber;
@@ -288,7 +310,7 @@ namespace TheCall
             }
             _operation.goldLabel.text = run.Gold.ToString();
             _operation.nextDayLabel.text = shortfall > 0
-                ? "补上欠额"
+                ? "再试一次"
                 : target.LevelNumber >= 7 ? "结束第7天" : "进入第" + (target.LevelNumber + 1) + "天";
 
             var cage = this.SendQuery(new MonsterCageQuery());
@@ -376,7 +398,7 @@ namespace TheCall
             _result.title.text = victory ? "七关都交上去了" : "账单没有补上";
             _result.body.text = victory
                 ? "这一局结束。怪物笼、金币和科技都已清空。"
-                : "加班后仍未补足欠额。这一局结束。";
+                : "这一关的目标没有达到。这一局结束。";
             if (_result.portrait != null)
                 _result.portrait.Show(MonsterAppearance.FromSeed(victory ? 73 : 29));
         }
@@ -852,6 +874,41 @@ namespace TheCall
                     return true;
 
             return false;
+        }
+
+        static void SetLabel(Transform root, string name, string value)
+        {
+            var found = FindChild(root, name);
+            if (found == null)
+                return;
+
+            var label = found.GetComponent<TMP_Text>();
+            if (label != null)
+                label.text = value;
+        }
+
+        static void SetShown(Transform root, string name, bool shown)
+        {
+            var found = FindChild(root, name);
+            if (found != null)
+                found.gameObject.SetActive(shown);
+        }
+
+        static Transform FindChild(Transform root, string name)
+        {
+            if (root == null)
+                return null;
+            if (root.name == name)
+                return root;
+
+            for (var i = 0; i < root.childCount; i++)
+            {
+                var found = FindChild(root.GetChild(i), name);
+                if (found != null)
+                    return found;
+            }
+
+            return null;
         }
 
         static string SkillLine(MonsterView monster)

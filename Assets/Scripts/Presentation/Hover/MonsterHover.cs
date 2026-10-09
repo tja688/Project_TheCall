@@ -70,6 +70,7 @@ namespace TheCall
 
         void Show(MonsterDetails details, in HoverPlacement placement)
         {
+            transform.SetAsLastSibling();
             _window.gameObject.SetActive(true);
             _window.anchoredPosition = placement.WindowAnchoredPosition;
 

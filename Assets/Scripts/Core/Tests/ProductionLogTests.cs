@@ -33,14 +33,15 @@ namespace TheCall.Tests
             var text = Format();
 
             Assert.That(text, Does.Contain("—— 第 1 关 · 结算 ——"));
-            Assert.That(text, Does.Contain("产出 12 点能量"));
+            Assert.That(text, Does.Contain("获得 12 点能量"));
             Assert.That(text, Does.Contain("进入加班"));
             Assert.That(text, Does.Contain(breath + " 的「能量体」触发"));
             Assert.That(text, Does.Contain("左起第 2 格"));
             Assert.That(text, Does.Contain(incense + " 的「奇异香」为它加了 1 点"));
             Assert.That(text, Does.Contain(eye + " 的「镜眼」让这次产出 ×2"));
             Assert.That(text, Does.Contain("计入本关总能量 12 点"));
-            Assert.That(text, Does.Contain("<align=\"right\">+12</align>"));
+            Assert.That(text, Does.Contain("\n+12"));
+            Assert.That(text, Does.Not.Contain("<align="));
             Assert.That(text, Does.Contain("<b>合计  12</b>"));
             Assert.That(text, Does.Not.Contain("宿主修正"));
             Assert.That(text, Does.Not.Contain("下家"));
@@ -98,7 +99,7 @@ namespace TheCall.Tests
             Assert.That(text, Does.Contain(left + " 的「左能量体」触发"));
             Assert.That(text, Does.Contain("右侧还有 1 只怪物"));
             Assert.That(text, Does.Contain("计入本关总能量 2 点"));
-            Assert.That(text, Does.Contain("<b>合计  2</b>"));
+            Assert.That(text, Does.Contain("<b>合计  7</b>"));
         }
 
         [Test]

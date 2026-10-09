@@ -69,8 +69,7 @@ namespace TheCall
             var kind = submission.Overtime ? "加班" : "结算";
             buffer.Append("—— 第 ").Append(submission.LevelNumber).Append(" 关 · ").Append(kind).Append(" ——\n");
             buffer.Append(Outcome(submission));
-            buffer.Append("\n\n下面按结算时的实际触发顺序写过程。右侧数字是计入本关总能量的点数。\n");
-            buffer.Append("<align=\"right\"><size=90%>能量</size></align>\n");
+            buffer.Append("\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n");
 
             var names = CollectNames(submission.Entries);
             var energySum = 0;
@@ -88,7 +87,7 @@ namespace TheCall
             if (!anyStep)
                 buffer.Append("\n这次没有任何技能触发记录。");
 
-            buffer.Append("\n<align=\"right\"><b>合计  ").Append(energySum).Append("</b></align>");
+            buffer.Append("\n<b>合计  ").Append(energySum).Append("</b>");
             if (energySum != submission.Produced)
                 buffer.Append("\n（说明：过程里加总的 ").Append(energySum).Append(" 点与系统记录的产出 ")
                     .Append(submission.Produced).Append(" 点不一致，请以产出为准。）");
@@ -97,28 +96,19 @@ namespace TheCall
         static string Outcome(ProductionSubmission submission)
         {
             var payment = submission.Payment;
+            var gained = (submission.Overtime ? "加班获得 " : "本关获得 ") + submission.Produced +
+                         " 点能量，目标 " + submission.Due + " 点。";
             if (payment.Failed)
-                return "本关最终产出 " + submission.Produced + " 点能量，应交 " + submission.Due +
-                       " 点，仍差 " + payment.Shortfall + " 点，游戏失败。";
+                return gained + "游戏失败。";
 
             if (!submission.Overtime && payment.Shortfall > 0)
-                return "本关产出 " + submission.Produced + " 点能量，应交 " + submission.Due + " 点，还差 " +
-                       payment.Shortfall + " 点，进入加班。";
+                return gained + "进入加班。";
 
-            if (submission.Overtime)
-            {
-                var overtime = "加班阶段产出 " + submission.Produced + " 点能量，用来补上欠额 " + payment.Deducted + " 点。";
-                if (payment.Excess)
-                    overtime += "交款超过目标。";
-
-                return overtime + "本段工资 " + payment.Wage + " 金币。";
-            }
-
-            var paid = "本关产出 " + submission.Produced + " 点能量，交上 " + payment.Deducted + " 点。";
             if (payment.Excess)
-                paid += "交款超过目标。";
+                gained += "超额。";
 
-            return paid + "工资 " + payment.Wage + " 金币。";
+            var wage = submission.Overtime ? "本段工资 " : "工资 ";
+            return gained + "获得 1 科技点。" + wage + payment.Wage + " 金币。";
         }
 
         static Dictionary<string, string> CollectNames(IReadOnlyList<SettlementEntry> entries)
@@ -138,6 +128,9 @@ namespace TheCall
 
         static string DisplayName(string monsterId, Dictionary<string, string> names, Func<string, string> nameOf)
         {
+            if (string.IsNullOrEmpty(monsterId))
+                return "（未知怪物）";
+
             if (nameOf != null)
             {
                 var resolved = nameOf(monsterId);
@@ -309,9 +302,9 @@ namespace TheCall
         static string AddSentence(LandingAdd add, string scorerName, Dictionary<string, string> names, Func<string, string> nameOf)
         {
             var label = Speak(add.Label);
-            var from = string.IsNullOrEmpty(add.SourceName)
-                ? DisplayName(add.SourceId, names, nameOf)
-                : add.SourceName;
+            var from = !string.IsNullOrEmpty(add.SourceName)
+                ? add.SourceName
+                : string.IsNullOrEmpty(add.SourceId) ? "" : DisplayName(add.SourceId, names, nameOf);
             if (!string.IsNullOrEmpty(from) && from != scorerName)
                 return from + " 的「" + label + "」为它加了 " + add.Amount + " 点。";
 
@@ -321,9 +314,9 @@ namespace TheCall
         static string FactorSentence(LandingFactor factor, string scorerName, Dictionary<string, string> names, Func<string, string> nameOf)
         {
             var label = Speak(factor.Label);
-            var from = string.IsNullOrEmpty(factor.SourceName)
-                ? DisplayName(factor.SourceId, names, nameOf)
-                : factor.SourceName;
+            var from = !string.IsNullOrEmpty(factor.SourceName)
+                ? factor.SourceName
+                : string.IsNullOrEmpty(factor.SourceId) ? "" : DisplayName(factor.SourceId, names, nameOf);
             if (!string.IsNullOrEmpty(from) && from != scorerName)
                 return from + " 的「" + label + "」让这次产出 ×" + factor.Factor + "。";
 
@@ -332,7 +325,7 @@ namespace TheCall
 
         static void AppendScore(StringBuilder buffer, int energy)
         {
-            buffer.Append("\n<align=\"right\">+").Append(energy).Append("</align>");
+            buffer.Append("\n+").Append(energy);
         }
 
         static string AgainSkillName(string label)

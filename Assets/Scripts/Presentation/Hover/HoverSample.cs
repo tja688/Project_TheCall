@@ -175,12 +175,10 @@ namespace TheCall
                 var card = node.GetComponent<ShopCardView>();
                 if (card != null)
                 {
-                    if (string.IsNullOrEmpty(card.monsterId) || card.buyButton == null)
-                        return false;
-                    if (!topHit.transform.IsChildOf(card.buyButton.transform))
+                    if (string.IsNullOrEmpty(card.monsterId))
                         return false;
 
-                    anchor = card.buyButton.transform as RectTransform;
+                    anchor = card.transform as RectTransform;
                     if (anchor == null)
                         return false;
 

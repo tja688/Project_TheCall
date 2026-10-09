@@ -82,20 +82,28 @@ namespace TheCall.Hover.Tests
         }
 
         [Test]
-        public void 购买按钮命中返回卡上的怪物和按钮矩形()
+        public void 商店卡上指向怪物时返回这只怪物()
         {
             var card = Root("card");
             var view = card.AddComponent<ShopCardView>();
             view.monsterId = "m2";
+            var portrait = Child(card, "portrait");
+            portrait.AddComponent<Image>();
             var buttonObject = Child(card, "buy");
             buttonObject.AddComponent<Image>();
             view.buyButton = buttonObject.AddComponent<Button>();
 
-            var found = HoverSample.TryOwner(buttonObject, out var monsterId, out var anchor);
+            var fromPortrait = HoverSample.TryOwner(portrait, out var monsterId, out var anchor);
 
-            Assert.That(found, Is.True);
+            Assert.That(fromPortrait, Is.True);
             Assert.That(monsterId, Is.EqualTo("m2"));
-            Assert.That(anchor, Is.SameAs(buttonObject.GetComponent<RectTransform>()));
+            Assert.That(anchor, Is.SameAs(card.GetComponent<RectTransform>()));
+
+            var fromButton = HoverSample.TryOwner(buttonObject, out monsterId, out anchor);
+
+            Assert.That(fromButton, Is.True);
+            Assert.That(monsterId, Is.EqualTo("m2"));
+            Assert.That(anchor, Is.SameAs(card.GetComponent<RectTransform>()));
         }
 
         [Test]
