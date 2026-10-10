@@ -303,16 +303,17 @@ namespace TheCall
         }
 
         /// <summary>
-        /// 把这只怪物的画面均匀缩放对齐到目标。拖拽虚影变大时调用。
+        /// 把这只怪物的屏幕尺寸对齐到目标。拖拽虚影靠近容器时调用。
         /// 先改矩形，再按同一比例收回骨架本地坐标，布娃娃仍抓住原来的屏幕位置。
         /// </summary>
-        public void MatchUniformLossyScale(float uniform)
+        public void MatchScreenUniform(float screenUniform)
         {
-            var current = CarryScale.Uniform(transform.lossyScale);
-            if (current < 1e-4f || uniform < 1e-4f)
+            var rect = transform as RectTransform;
+            var current = CanvasMap.ScreenUniform(rect);
+            if (current < 1e-4f || screenUniform < 1e-4f)
                 return;
 
-            var ratio = uniform / current;
+            var ratio = screenUniform / current;
             if (Mathf.Abs(ratio - 1f) < 1e-4f)
                 return;
 

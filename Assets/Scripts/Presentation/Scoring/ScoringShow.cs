@@ -645,8 +645,11 @@ namespace TheCall.Scoring
             var targetRoot = RootAt(cue.TargetIndex);
             if (actorRoot != null && targetRoot != null)
             {
-                actorRoot.SetParent(_stage.DragLayer, true);
-                targetRoot.SetParent(_stage.DragLayer, true);
+                var layer = MotionLayer(actorRoot, targetRoot);
+                actorRoot.SetParent(layer, true);
+                targetRoot.SetParent(layer, true);
+                actorRoot.SetAsLastSibling();
+                targetRoot.SetAsLastSibling();
                 var actorLift = actorRoot.anchoredPosition;
                 var targetLift = targetRoot.anchoredPosition;
                 var actorTween = Live(actorRoot.DOAnchorPos(targetLift, Span(SwapSeconds)));
@@ -1159,7 +1162,7 @@ namespace TheCall.Scoring
             if (_current == null || _blocker == null)
                 return Vector2.zero;
 
-            return _blocker.InverseTransformPoint(GlyphWorld(_current));
+            return CanvasMap.LocalPoint(_blocker, GlyphWorld(_current), CanvasMap.EventCamera(_current.transform));
         }
 
         static Vector3 GlyphWorld(TMP_Text label)
@@ -1231,7 +1234,21 @@ namespace TheCall.Scoring
             return _pixel;
         }
 
-        Vector2 BlockerPoint(RectTransform rect) => _blocker.InverseTransformPoint(rect.position);
+        Vector2 BlockerPoint(RectTransform rect) =>
+            CanvasMap.LocalPoint(_blocker, rect.position, CanvasMap.EventCamera(rect));
+
+        /// <summary>
+        /// 换位时留在怪物自己的画布上。拖到屏幕覆盖层会把世界坐标当成像素，怪物落到画面左下角。
+        /// </summary>
+        RectTransform MotionLayer(RectTransform actor, RectTransform target)
+        {
+            var canvas = actor != null ? actor.GetComponentInParent<Canvas>(true) : null;
+            if (canvas == null && target != null)
+                canvas = target.GetComponentInParent<Canvas>(true);
+
+            var root = canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
+            return root != null ? root : _stage.DragLayer;
+        }
 
         MonsterPortrait PortraitAt(int index) => InRange(index) ? _slots[index].Portrait : null;
 

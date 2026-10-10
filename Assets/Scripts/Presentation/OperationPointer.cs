@@ -38,12 +38,10 @@ namespace TheCall
         bool _fading;
         float _fadeClock;
         float _carryFrom;
-        float _carryBoard;
         float _carryStartDistance;
         float _returnFrom;
         float _returnClock;
         bool _returning;
-        readonly Vector3[] _corners = new Vector3[4];
         readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
         public DropPayload? Armed => _hasArmed ? _armed : (DropPayload?)null;
@@ -98,7 +96,7 @@ namespace TheCall
             // 先按靠近生产区、培育区的程度放大，再把指针交给布娃娃。
             // 放大会改骨架本地坐标，必须发生在 Hold 之前，抓取弹簧才读得到同一套单位。
             if (!_releasing && !_returning)
-                ApplyCarryApproach(eventData.position, eventData.pressEventCamera);
+                ApplyCarryApproach(eventData.position);
             _carried.Hold(eventData.position, eventData.pressEventCamera);
         }
 
@@ -184,11 +182,11 @@ namespace TheCall
             _home = home;
             _home.SetVisibility(SourceAlpha);
             _carried = MonsterPortrait.SpawnGhost(dragLayer, _home);
-            _carryFrom = CarryScale.HierarchyUniform(_home.transform);
-            _carryBoard = BoardUniformScale();
-            _carryStartDistance = BoardDistance(eventData.pressPosition, eventData.pressEventCamera);
+            var homeRect = _home.transform as RectTransform;
+            _carryFrom = CanvasMap.ScreenUniform(homeRect);
+            _carryStartDistance = BoardDistance(eventData.pressPosition);
             _returning = false;
-            ApplyCarryApproach(eventData.position, eventData.pressEventCamera);
+            ApplyCarryApproach(eventData.position);
             _carried.Grab(eventData.pressPosition, eventData.pressEventCamera);
             _carried.Hold(eventData.position, eventData.pressEventCamera);
         }
@@ -229,7 +227,7 @@ namespace TheCall
             _releasing = true;
             _releaseClock = 0f;
             _returning = true;
-            _returnFrom = CarryScale.HierarchyUniform(_carried.transform);
+            _returnFrom = CanvasMap.ScreenUniform(_carried.transform as RectTransform);
             _returnClock = 0f;
         }
 
@@ -329,17 +327,18 @@ namespace TheCall
         }
 
         /// <summary>
-        /// 指针离生产区、培育区卡片越近，虚影越接近生产区怪物的画面大小。
-        /// 还在怪物栏里时距离几乎没缩短，尺寸保持不变。
+        /// 指针离生产区、培育区卡片越近，虚影越接近那一块容器里怪物的屏幕大小。
+        /// 还在怪物栏里时距离几乎没缩短，尺寸保持不变。世界画布和覆盖层不能直接比 lossyScale。
         /// </summary>
-        void ApplyCarryApproach(Vector2 screen, Camera camera)
+        void ApplyCarryApproach(Vector2 screen)
         {
             if (_carried == null)
                 return;
 
-            var distance = BoardDistance(screen, camera);
+            var distance = BoardDistance(screen);
             var approach = CarryScale.Approach(distance, _carryStartDistance);
-            _carried.MatchUniformLossyScale(CarryScale.Blend(_carryFrom, _carryBoard, approach));
+            var board = DestinationScreen(screen);
+            _carried.MatchScreenUniform(CarryScale.Blend(_carryFrom, board, approach));
         }
 
         void EaseBackHome(float dt)
@@ -348,14 +347,7 @@ namespace TheCall
                 return;
 
             _returnClock += dt;
-            _carried.MatchUniformLossyScale(CarryScale.Return(_returnFrom, _carryFrom, _returnClock));
-        }
-
-        float BoardUniformScale()
-        {
-            var view = OperationView();
-            var scale = PortraitScale(view != null ? view.extractionSlots : null);
-            return scale > 0f ? scale : _carryFrom;
+            _carried.MatchScreenUniform(CarryScale.Return(_returnFrom, _carryFrom, _returnClock));
         }
 
         OperationScreenView OperationView()
@@ -363,7 +355,24 @@ namespace TheCall
             return GetComponent<OperationScreenView>();
         }
 
-        static float PortraitScale(MonsterSlotView[] slots)
+        /// <summary>更近的那一块容器（生产区或培育区）里，怪物肖像的屏幕尺寸。</summary>
+        float DestinationScreen(Vector2 screen)
+        {
+            var view = OperationView();
+            if (view == null)
+                return _carryFrom;
+
+            var extraction = ZoneDistance(view.extractionSlots, screen);
+            var breeding = ZoneDistance(view.breedingSlots, screen);
+            var nearer = extraction <= breeding ? view.extractionSlots : view.breedingSlots;
+            var farther = extraction <= breeding ? view.breedingSlots : view.extractionSlots;
+            var scale = PortraitScreen(nearer);
+            if (scale <= 0f)
+                scale = PortraitScreen(farther);
+            return scale > 0f ? scale : _carryFrom;
+        }
+
+        static float PortraitScreen(MonsterSlotView[] slots)
         {
             if (slots == null)
                 return 0f;
@@ -371,32 +380,33 @@ namespace TheCall
             for (var i = 0; i < slots.Length; i++)
             {
                 var portrait = slots[i] != null ? slots[i].portrait : null;
-                if (portrait == null)
-                    continue;
-
-                return CarryScale.HierarchyUniform(portrait.transform);
+                var rect = portrait != null ? portrait.transform as RectTransform : null;
+                var scale = CanvasMap.ScreenUniform(rect);
+                if (scale > 0f)
+                    return scale;
             }
 
             return 0f;
         }
 
-        float BoardDistance(Vector2 screen, Camera camera)
+        float BoardDistance(Vector2 screen)
         {
             var view = OperationView();
             if (view == null)
                 return float.PositiveInfinity;
 
             var best = float.PositiveInfinity;
-            best = Nearer(best, view.extractionSlots, screen, camera);
-            best = Nearer(best, view.breedingSlots, screen, camera);
+            best = Mathf.Min(best, ZoneDistance(view.extractionSlots, screen));
+            best = Mathf.Min(best, ZoneDistance(view.breedingSlots, screen));
             return best;
         }
 
-        float Nearer(float best, MonsterSlotView[] slots, Vector2 screen, Camera camera)
+        float ZoneDistance(MonsterSlotView[] slots, Vector2 screen)
         {
             if (slots == null)
-                return best;
+                return float.PositiveInfinity;
 
+            var best = float.PositiveInfinity;
             for (var i = 0; i < slots.Length; i++)
             {
                 var slot = slots[i];
@@ -407,10 +417,8 @@ namespace TheCall
                 if (rect == null || !rect.gameObject.activeInHierarchy)
                     continue;
 
-                rect.GetWorldCorners(_corners);
-                var a = RectTransformUtility.WorldToScreenPoint(camera, _corners[0]);
-                var b = RectTransformUtility.WorldToScreenPoint(camera, _corners[2]);
-                var distance = CarryScale.DistanceToRect(screen, Vector2.Min(a, b), Vector2.Max(a, b));
+                var screenRect = CanvasMap.ScreenRect(rect);
+                var distance = CarryScale.DistanceToRect(screen, screenRect.min, screenRect.max);
                 if (distance < best)
                     best = distance;
             }
