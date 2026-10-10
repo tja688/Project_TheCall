@@ -24,6 +24,7 @@ namespace TheCall
         [SerializeField] SettingsChromeView _settings;
         [SerializeField] GameObject _toast;
         [SerializeField] TMP_Text _toastText;
+        [SerializeField] GameObject _workspace;
 
         enum BackTarget
         {
@@ -837,6 +838,8 @@ namespace TheCall
             Activate(_research, screen == _research);
             Activate(_shop, screen == _shop);
             Activate(_result, screen == _result);
+            if (_workspace != null)
+                _workspace.SetActive(screen == _operation);
         }
 
         static void Activate(MonoBehaviour view, bool active)
