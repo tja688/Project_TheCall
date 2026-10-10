@@ -50,6 +50,7 @@ namespace TheCall
 
         bool _layersBound;
         bool _showed;
+        bool _worldLit;
         bool _reacting;
         float _idlePhase;
         float _idleSeed;
@@ -223,6 +224,7 @@ namespace TheCall
                 return;
             }
 #endif
+            EnsureWorldLight();
             if (_motion != null)
             {
                 _motion.Advance(Time.unscaledDeltaTime);
@@ -235,6 +237,26 @@ namespace TheCall
 
             _idlePhase += Time.unscaledDeltaTime;
             SetIdleMotion(_idlePhase, _idleSeed);
+        }
+
+        /// <summary>
+        /// 世界画布上的怪物要吃 2D 灯。覆盖层上的卡片保持 UI，拖拽虚影自己再挂灯光。
+        /// </summary>
+        void EnsureWorldLight()
+        {
+            if (_worldLit)
+                return;
+
+            var canvas = GetComponentInParent<Canvas>();
+            if (canvas == null)
+                return;
+
+            _worldLit = true;
+            if (canvas.rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                return;
+
+            if (GetComponent<MonsterLightBody>() == null)
+                gameObject.AddComponent<MonsterLightBody>();
         }
 
         /// <summary>旧装配路径的待机。有骨架时待机由控制器负责，这里不做任何事。</summary>
@@ -374,6 +396,13 @@ namespace TheCall
             ghost._assemblyCatalog = source._assemblyCatalog;
             if (source._showed)
                 ghost.ShowAppearance(source._appearance, source._idleSeed);
+            // 虚影继续留在覆盖层上接指针。离开卡片后由世界精灵吃 2D 灯，UI 着色器采不到那张灯图。
+            if (Application.isPlaying)
+            {
+                var body = go.AddComponent<MonsterLightBody>();
+                body.YieldToOverlay();
+            }
+
             return ghost;
         }
 
