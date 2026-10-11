@@ -84,6 +84,87 @@ namespace TheCall.Scoring
             yield return null;
         }
 
+        [UnityTest]
+        public IEnumerator 界面先销毁后演出结束不访问已销毁的界面()
+        {
+            var root = new GameObject("ScoringOwnerDestroyed");
+            var owner = new GameObject("Presentation");
+            owner.SetActive(false);
+            try
+            {
+                var presentation = owner.AddComponent<TheCallPresentation>();
+                var completed = CompletionOf(presentation);
+                var show = ShowUnder(root.transform, PortraitUnder(root.transform));
+                SetCompletion(show, completed);
+                UnityEngine.Object.DestroyImmediate(owner);
+                UnityEngine.Object.DestroyImmediate(show.gameObject);
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally
+            {
+                if (owner != null)
+                    UnityEngine.Object.DestroyImmediate(owner);
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 界面已停用时演出结束不启动刷新协程()
+        {
+            var root = new GameObject("ScoringOwnerInactive");
+            var owner = new GameObject("Presentation");
+            owner.SetActive(false);
+            try
+            {
+                var presentation = owner.AddComponent<TheCallPresentation>();
+                var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+                typeof(TheCallPresentation).GetField("_busy", flags).SetValue(presentation, true);
+                var show = ShowUnder(root.transform, PortraitUnder(root.transform));
+                SetCompletion(show, CompletionOf(presentation));
+                UnityEngine.Object.DestroyImmediate(show.gameObject);
+                Assert.That(typeof(TheCallPresentation).GetField("_busy", flags).GetValue(presentation), Is.False);
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(owner);
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 演出完成再销毁只通知一次()
+        {
+            var root = new GameObject("ScoringCompleted");
+            var count = 0;
+            try
+            {
+                var show = ShowUnder(root.transform, PortraitUnder(root.transform));
+                SetCompletion(show, () => count++);
+                typeof(ScoringShow).GetMethod("Finish", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(show, null);
+                UnityEngine.Object.DestroyImmediate(show.gameObject);
+                Assert.That(count, Is.EqualTo(1));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+
+            yield return null;
+        }
+
+        static Action CompletionOf(TheCallPresentation presentation) =>
+            (Action)Delegate.CreateDelegate(typeof(Action), presentation,
+                typeof(TheCallPresentation).GetMethod("FinishSettle", BindingFlags.NonPublic | BindingFlags.Instance));
+
+        static void SetCompletion(ScoringShow show, Action completed) =>
+            typeof(ScoringShow).GetField("_stage", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(show,
+                new ScoringStage(null, null, null, null, null, null, null, completed));
+
         static MonsterPortrait PortraitUnder(Transform root)
         {
             var slotObject = new GameObject("Slot", typeof(RectTransform));

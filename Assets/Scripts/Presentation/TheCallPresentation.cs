@@ -654,7 +654,14 @@ namespace TheCall
 
         void FinishSettle()
         {
+            // 演出销毁时仍会通知完成；此时所属界面可能已随场景一起销毁。
+            if (this == null)
+                return;
+
             _busy = false;
+            if (!isActiveAndEnabled)
+                return;
+
             StartCoroutine(RefreshAfterSettle());
         }
 
