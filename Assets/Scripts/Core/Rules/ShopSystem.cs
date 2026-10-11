@@ -61,7 +61,12 @@ namespace TheCall
             var run = this.GetModel<RunModel>();
             if (run.Phase != RunPhase.Shop || !Holds(run.ShelfToolNames, toolName))
                 return;
-            if (!TryTool(toolName, out var tool) || !run.TrySpend(tool.Price))
+            if (!TryTool(toolName, out var tool))
+                return;
+
+            var discount = run.HasTool("批发合同") ? 5 : 0;
+            var price = System.Math.Max(0, tool.Price - discount);
+            if (!run.TrySpend(price))
                 return;
 
             run.TryRemoveShelfTool(toolName);
@@ -100,7 +105,8 @@ namespace TheCall
         {
             var draw = this.GetUtility<IDraw>();
             var catalog = this.GetUtility<SkillCatalog>();
-            for (var i = 0; i < 4; i++)
+            var count = 4 + (run.HasTool("招工海报") ? 1 : 0);
+            for (var i = 0; i < count; i++)
                 run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw)).Id);
         }
 
@@ -108,17 +114,38 @@ namespace TheCall
         {
             var remaining = UnheldTools(run);
             var draw = this.GetUtility<IDraw>();
-            while (run.ShelfToolNames.Count < 2 && remaining.Count > 0)
+            var targetCount = 2 + (run.HasTool("验货单") ? 1 : 0);
+            while (run.ShelfToolNames.Count < targetCount && remaining.Count > 0)
             {
-                var weighted = new List<string>();
+                var white = new List<ToolDefinition>();
+                var blue = new List<ToolDefinition>();
+                var gold = new List<ToolDefinition>();
                 for (var i = 0; i < remaining.Count; i++)
                 {
-                    var copies = Weight(remaining[i].Rarity);
-                    for (var copy = 0; copy < copies; copy++)
-                        weighted.Add(remaining[i].Name);
+                    if (remaining[i].Rarity == Rarity.White) white.Add(remaining[i]);
+                    else if (remaining[i].Rarity == Rarity.Blue) blue.Add(remaining[i]);
+                    else if (remaining[i].Rarity == Rarity.Gold) gold.Add(remaining[i]);
                 }
 
-                var name = draw.Choose(weighted);
+                var pool = new List<Rarity>();
+                var whiteWeight = white.Count > 0 ? Weight(Rarity.White) : 0;
+                var blueWeight = blue.Count > 0 ? Weight(Rarity.Blue) : 0;
+                var goldWeight = gold.Count > 0 ? Weight(Rarity.Gold) : 0;
+
+                for (var i = 0; i < whiteWeight; i++) pool.Add(Rarity.White);
+                for (var i = 0; i < blueWeight; i++) pool.Add(Rarity.Blue);
+                for (var i = 0; i < goldWeight; i++) pool.Add(Rarity.Gold);
+
+                if (pool.Count == 0)
+                    break;
+
+                var chosenRarity = draw.Choose(pool);
+                var candidateList = chosenRarity == Rarity.White ? white : (chosenRarity == Rarity.Blue ? blue : gold);
+                var candidateNames = new List<string>(candidateList.Count);
+                for (var i = 0; i < candidateList.Count; i++)
+                    candidateNames.Add(candidateList[i].Name);
+
+                var name = draw.Choose(candidateNames);
                 run.AddShelfTool(name);
                 remaining.RemoveAll(tool => tool.Name == name);
             }
@@ -171,10 +198,12 @@ namespace TheCall
         {
             var names = run.ShelfToolNames;
             var tools = new ShelfTool[names.Count];
+            var discount = run.HasTool("批发合同") ? 5 : 0;
             for (var i = 0; i < names.Count; i++)
             {
                 TryTool(names[i], out var tool);
-                tools[i] = new ShelfTool(tool.Name, tool.Price, tool.Rarity);
+                var price = System.Math.Max(0, tool.Price - discount);
+                tools[i] = new ShelfTool(tool.Name, price, tool.Rarity);
             }
 
             return tools;

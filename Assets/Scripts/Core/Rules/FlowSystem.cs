@@ -30,16 +30,21 @@ namespace TheCall
 
             run.EnterOperation(1);
             var levels = this.GetUtility<ILevelCatalog>();
-            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(1), levels.ExcessEnergy(1));
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(1), levels.ExcessEnergy(1), run.RetainedEnergy);
+            run.SetRetainedEnergy(0);
             FitBreeding(run);
             FitExtraction(run);
+            TriggerStartPhase(run);
         }
 
         public void BeginLevel()
         {
             var run = this.GetModel<RunModel>();
             if (run.Phase == RunPhase.LevelStart)
+            {
                 run.EnterOperation(run.LevelNumber);
+                TriggerStartPhase(run);
+            }
         }
 
         public bool Commit(OperationDrop drop)
@@ -53,7 +58,13 @@ namespace TheCall
             if (!OperationTransition.TryPlan(facts, drop, out var plan))
                 return false;
 
-            return Apply(plan, run, level);
+            if (!Apply(plan, run, level))
+                return false;
+
+            if (plan.ToArea == OperationArea.Extraction)
+                HandleClockIn(plan.SourceMonsterId);
+
+            return true;
         }
 
         public void Place(string monsterId, OperationArea area, int cell)
@@ -69,6 +80,8 @@ namespace TheCall
                 return;
 
             level.Put(area, cell, monsterId);
+            if (area == OperationArea.Extraction)
+                HandleClockIn(monsterId);
         }
 
         public void ReturnToCage(string monsterId)
@@ -127,6 +140,8 @@ namespace TheCall
                 return;
 
             run.PutSkillInSlot(skillName);
+            if (run.HasTool("研磨机"))
+                run.AddGold(5);
         }
 
         public void Unlock(string name)
@@ -193,8 +208,13 @@ namespace TheCall
             if (run.Phase != RunPhase.Shop)
                 return;
 
+            if (run.HasTool("打卡机"))
+                run.AddGold(10);
+
+            RecordDailyWorkAndMood(run);
             ReturnBoard(run);
             run.GrowAfterClear(this.GetUtility<SkillCatalog>());
+            run.ClearTemporarySkills();
             run.ClearTemporaryQuotes();
             run.ClearTemporaryImmovable();
             run.ClearCapacity();
@@ -209,7 +229,8 @@ namespace TheCall
             var next = run.LevelNumber + 1;
             run.EnterLevelStart(next);
             var levels = this.GetUtility<ILevelCatalog>();
-            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(next), levels.ExcessEnergy(next));
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(next), levels.ExcessEnergy(next), run.RetainedEnergy);
+            run.SetRetainedEnergy(0);
             FitBreeding(run);
             FitExtraction(run);
         }
@@ -336,6 +357,8 @@ namespace TheCall
                         return false;
 
                     run.PutSkillInSlot(drawnSkill);
+                    if (run.HasTool("研磨机"))
+                        run.AddGold(5);
                     return true;
                 case TransitionEffect.Invest:
                     if (!run.TryTakeSkillAt(plan.SkillSlotIndex, out var invested))
@@ -451,6 +474,161 @@ namespace TheCall
                 if (monster != null)
                     run.AddToCage(monster);
             }
+        }
+
+        void RecordDailyWorkAndMood(RunModel run)
+        {
+            var moodCatalog = this.GetUtility<MoodCatalog>();
+            var hasSoundproofCotton = run.HasTool("隔音棉");
+            foreach (var monster in run.LivingMonsters)
+            {
+                if (run.DidWorkToday(monster.Id))
+                    monster.RecordWorkDay();
+                else
+                    monster.RecordRestDay();
+
+                var newMood = moodCatalog.CalculateDailyMood(monster, hasSoundproofCotton);
+                monster.SetMood(newMood);
+            }
+
+            run.ClearWorkedToday();
+            run.ResetDailyClockIn();
+        }
+
+        void TriggerStartPhase(RunModel run)
+        {
+            var draw = this.GetUtility<IDraw>();
+            var moodCatalog = this.GetUtility<MoodCatalog>();
+            var skillCatalog = this.GetUtility<SkillCatalog>();
+
+            // 1. 怪物严选
+            if (run.HasTool("怪物严选"))
+            {
+                var upgradeable = new List<Monster>();
+                foreach (var monster in run.LivingMonsters)
+                {
+                    if (monster.Personality != "稳定" &&
+                        monster.Personality != "乐天派" &&
+                        monster.Personality != "摸鱼派" &&
+                        monster.Personality != "厌世" &&
+                        moodCatalog.TierOf(monster.Mood) < 4)
+                    {
+                        upgradeable.Add(monster);
+                    }
+                }
+
+                if (upgradeable.Count > 0)
+                {
+                    var chosen = draw.Choose(upgradeable);
+                    chosen.SetMood(moodCatalog.UpgradeMood(chosen.Mood));
+                }
+            }
+
+            // 2. 好奇 & 上进心
+            foreach (var monster in run.LivingMonsters)
+            {
+                if (monster.Personality == "上进心")
+                {
+                    monster.AddModifier(1);
+                }
+                else if (monster.Personality == "好奇")
+                {
+                    var maxSkills = monster.Personality == "安于现状" ? 2 : 4;
+                    if (monster.Skills.Count < maxSkills)
+                    {
+                        var allNames = skillCatalog.Names();
+                        var candidates = new List<string>();
+                        for (var i = 0; i < allNames.Count; i++)
+                        {
+                            var name = allNames[i];
+                            if (run.HasTool("复读腺") || !OwnsSkill(monster, name))
+                                candidates.Add(name);
+                        }
+
+                        if (candidates.Count > 0)
+                        {
+                            var addedSkillName = draw.Choose(candidates);
+                            run.TryGainSkill(monster.Id, addedSkillName, isTemporary: false);
+
+                            for (var i = 0; i < monster.Skills.Count - 1; i++)
+                            {
+                                var oldName = monster.Skills[i].Name;
+                                var rewriteCandidates = new List<string>();
+                                for (var j = 0; j < allNames.Count; j++)
+                                {
+                                    var name = allNames[j];
+                                    if (name == oldName)
+                                        continue;
+                                    if (!run.HasTool("复读腺") && OwnsSkill(monster, name))
+                                        continue;
+                                    rewriteCandidates.Add(name);
+                                }
+
+                                if (rewriteCandidates.Count > 0)
+                                {
+                                    var rewrittenName = draw.Choose(rewriteCandidates);
+                                    monster.Skills[i] = new SkillInstance(rewrittenName, skillCatalog.StartingQuote(rewrittenName), false);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        void HandleClockIn(string monsterId)
+        {
+            var run = this.GetModel<RunModel>();
+            var monster = run.Find(monsterId);
+            if (monster == null)
+                return;
+
+            if (!monster.TryClockIn())
+                return;
+
+            if (monster.Personality == "好学")
+            {
+                var level = this.GetModel<LevelModel>();
+                var cells = level.Extraction;
+                var otherIds = new List<string>();
+                for (var i = 0; i < cells.Count; i++)
+                {
+                    if (cells[i] != null && cells[i] != monsterId)
+                        otherIds.Add(cells[i]);
+                }
+
+                if (otherIds.Count == 0)
+                    return;
+
+                var draw = this.GetUtility<IDraw>();
+                var targetId = draw.Choose(otherIds);
+                var target = run.Find(targetId);
+                if (target == null || target.Skills.Count == 0)
+                    return;
+
+                var targetSkillNames = new List<string>();
+                for (var i = 0; i < target.Skills.Count; i++)
+                    targetSkillNames.Add(target.Skills[i].Name);
+
+                var chosenSkill = draw.Choose(targetSkillNames);
+                if (run.TryGainSkill(monsterId, chosenSkill, isTemporary: false))
+                {
+                    monster.ChangePersonality(target.Personality);
+                    var moodCatalog = this.GetUtility<MoodCatalog>();
+                    var hasSoundproofCotton = run.HasTool("隔音棉");
+                    monster.SetMood(moodCatalog.CalculateDailyMood(monster, hasSoundproofCotton));
+                }
+            }
+        }
+
+        static bool OwnsSkill(Monster monster, string skillName)
+        {
+            for (var i = 0; i < monster.Skills.Count; i++)
+            {
+                if (monster.Skills[i].Name == skillName)
+                    return true;
+            }
+            return false;
         }
     }
 }

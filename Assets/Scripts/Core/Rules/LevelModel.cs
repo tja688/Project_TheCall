@@ -67,12 +67,13 @@ namespace TheCall
 
         public int BreedingSlotCount => _slotCount;
 
-        public void BeginLevel(int energyDue, int excessEnergy)
+        public void BeginLevel(int energyDue, int excessEnergy, int retainedEnergy = 0)
         {
             ClearProgress();
             EnergyDue = energyDue;
             ExcessEnergy = excessEnergy;
             PaidRefreshCount = 0;
+            Energy = retainedEnergy;
         }
 
         public void NotePaidRefresh() => PaidRefreshCount++;
@@ -171,7 +172,6 @@ namespace TheCall
         {
             Shortfall = shortfall;
             InOvertime = true;
-            Energy = 0;
         }
 
         public void ClearDebt()

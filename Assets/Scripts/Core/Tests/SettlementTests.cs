@@ -23,7 +23,7 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5 }));
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(45));
-            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(0));
         }
@@ -62,7 +62,7 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 6, 6 }));
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(38));
-            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(12));
         }
 
         [Test]

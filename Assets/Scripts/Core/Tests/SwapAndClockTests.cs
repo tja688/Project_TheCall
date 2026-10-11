@@ -15,10 +15,10 @@ namespace TheCall.Tests
             var landings = Landings()
                 .Where(landing => landing.SkillName == "左能量体")
                 .ToArray();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 2 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 2 }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId, leftId }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 0, 0 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 0, 0 }));
         }
 
         [Test]
@@ -31,14 +31,14 @@ namespace TheCall.Tests
             var landings = Landings()
                 .Where(landing => landing.SkillName == "左能量体")
                 .ToArray();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 2 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 2 }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { leftId, leftId, leftId }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 0, 0 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 0, 0 }));
         }
 
         [Test]
-        public void 全部计分结束后换位手才与左侧相邻怪物交换()
+        public void 换位手即时与左侧相邻怪物交换且插入被交换者主动技能()
         {
             Begin(null, new ScriptedLevelCatalog(50), "左能量体", "换位手");
             var leftId = IdOf("左能量体");
@@ -47,12 +47,12 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(swapId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var landing = Landings().Single();
-            Assert.That(landing.MonsterId, Is.EqualTo(leftId));
-            Assert.That(landing.SkillName, Is.EqualTo("左能量体"));
-            Assert.That(landing.Base, Is.EqualTo(2));
-            Assert.That(landing.Multiplier, Is.EqualTo(1));
-            Assert.That(landing.Energy, Is.EqualTo(2));
+            var landings = Landings();
+            Assert.That(landings.Count, Is.EqualTo(2));
+            Assert.That(landings.All(landing => landing.MonsterId == leftId && landing.SkillName == "左能量体"), Is.True);
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 0 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 0 }));
             AssertCells(swapId, leftId, null, null, null);
         }
 
@@ -70,7 +70,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 没有左侧目标时换位不发生也不获得不动()
+        public void 没有左侧目标时换位不发生但获得不动()
         {
             Begin(null, new ScriptedLevelCatalog(50), "换位手", "换位手");
             var alone = Ids("换位手")[0];
@@ -79,11 +79,11 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(neighbor, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertCells(neighbor, alone, null, null, null);
+            AssertCells(alone, neighbor, null, null, null);
         }
 
         [Test]
-        public void 目标带有不动时换位不发生也不获得不动()
+        public void 目标带有不动时换位不发生且使用者获得不动()
         {
             var intents = new ClockIntents();
             Begin(intents, new ScriptedLevelCatalog(50), "能量体", "换位手", "换位手");
@@ -96,11 +96,11 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(follower, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertCells(anchored, follower, blocked, null, null);
+            AssertCells(anchored, blocked, follower, null, null);
         }
 
         [Test]
-        public void 换位成功后获得的不动让后面的换位失败()
+        public void 换位手按即时顺序依次与左邻交换()
         {
             Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量体", "换位手", "换位手");
             var first = Ids("换位手")[0];
@@ -113,7 +113,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(third, OperationArea.Extraction, 3));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertCells(first, left, third, second, null);
+            AssertCells(first, second, third, left, null);
         }
 
         [Test]
@@ -144,14 +144,14 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(first, OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(second, OperationArea.Extraction, 2));
             App.SendCommand(new ConfirmSettlementCommand());
-            AssertCells(first, left, second, null, null);
+            AssertCells(first, second, left, null, null);
 
             App.SendCommand(new LeaveShopCommand());
-            App.SendCommand(new PlaceMonsterCommand(first, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(left, OperationArea.Extraction, 0));
             App.SendCommand(new PlaceMonsterCommand(second, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            AssertCells(second, first, null, null, null);
+            AssertCells(second, left, null, null, null);
         }
 
         [Test]
@@ -189,8 +189,8 @@ namespace TheCall.Tests
 
             AssertCells(swapper, null, null, null, null);
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(victim));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
-            Assert.That(Landings().Single().Energy, Is.EqualTo(5));
+            Assert.That(Landings().Sum(landing => landing.Energy), Is.EqualTo(10));
+            Assert.That(Landings().Count, Is.EqualTo(2));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
         }

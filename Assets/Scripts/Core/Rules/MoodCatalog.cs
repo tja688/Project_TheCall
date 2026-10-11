@@ -29,6 +29,7 @@ namespace TheCall
         string TierName(int tier);
         string UpgradeMood(string currentMood);
         string CalculateBaseMood(int consecutiveWorkDays, int consecutiveRestDays);
+        string CalculateDailyMood(string personality, int consecutiveWorkDays, int consecutiveRestDays, bool hasSoundproofCotton);
     }
 
     internal sealed class MoodCatalog : IMoodCatalog
@@ -81,6 +82,54 @@ namespace TheCall
             if (consecutiveRestDays >= 2)
                 return "热情";
             return "普通";
+        }
+
+        public string CalculateDailyMood(Monster monster, bool hasSoundproofCotton) =>
+            monster == null ? "普通" : CalculateDailyMood(monster.Personality, monster.ConsecutiveWorkDays, monster.ConsecutiveRestDays, hasSoundproofCotton);
+
+        public string CalculateDailyMood(string personality, int consecutiveWorkDays, int consecutiveRestDays, bool hasSoundproofCotton)
+        {
+            string mood;
+            if (personality == "热爱工作")
+            {
+                if (consecutiveWorkDays >= 4)
+                    mood = "热爱";
+                else if (consecutiveWorkDays >= 2)
+                    mood = "热情";
+                else if (consecutiveRestDays >= 4)
+                    mood = "热爱";
+                else if (consecutiveRestDays >= 2)
+                    mood = "热情";
+                else
+                    mood = "普通";
+            }
+            else if (personality == "厌恶工作")
+            {
+                if (consecutiveWorkDays >= 2)
+                    mood = hasSoundproofCotton ? "普通" : "倦怠";
+                else
+                    mood = CalculateBaseMood(consecutiveWorkDays, consecutiveRestDays);
+            }
+            else
+            {
+                mood = CalculateBaseMood(consecutiveWorkDays, consecutiveRestDays);
+                if (hasSoundproofCotton && (mood == "疲倦" || mood == "倦怠"))
+                    mood = "普通";
+            }
+
+            switch (personality)
+            {
+                case "稳定":
+                    return "普通";
+                case "乐天派":
+                    return "热情";
+                case "摸鱼派":
+                    return "疲倦";
+                case "厌世":
+                    return "倦怠";
+                default:
+                    return mood;
+            }
         }
     }
 }

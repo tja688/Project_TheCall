@@ -27,8 +27,12 @@ namespace TheCall
             RegisterUtility<IToolCatalog>(new ToolCatalog(book));
             RegisterUtility(new TechCatalog(book));
             RegisterUtility(new PersonalityCatalog(book));
-            RegisterUtility(new RaceCatalog(book));
-            RegisterUtility(new MoodCatalog(book));
+            var raceCatalog = new RaceCatalog(book);
+            RegisterUtility<IRaceCatalog>(raceCatalog);
+            RegisterUtility(raceCatalog);
+            var moodCatalog = new MoodCatalog(book);
+            RegisterUtility<IMoodCatalog>(moodCatalog);
+            RegisterUtility(moodCatalog);
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterModel(new SettlementSight());

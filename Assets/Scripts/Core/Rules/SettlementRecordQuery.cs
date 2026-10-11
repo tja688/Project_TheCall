@@ -237,7 +237,8 @@ namespace TheCall
             if (Factors.Count == 0)
                 expectedMultiplier = 1;
 
-            if (Base != expectedBase || Multiplier != expectedMultiplier || Energy != Base * Multiplier)
+            var expectedEnergy = System.Math.Max(0, Base * Multiplier);
+            if (Base != expectedBase || Multiplier != expectedMultiplier || Energy != expectedEnergy)
                 throw new System.InvalidOperationException(SkillName + " 的结算记录和算术不一致");
         }
     }

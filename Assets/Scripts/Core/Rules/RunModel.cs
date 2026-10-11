@@ -72,10 +72,34 @@ namespace TheCall
 
         public List<SkillInstance> Skills { get; }
 
-        public int Modifier { get; }
+        public bool HasSkill(string skillName)
+        {
+            for (var i = 0; i < Skills.Count; i++)
+            {
+                if (Skills[i].Name == skillName)
+                    return true;
+            }
+            return false;
+        }
+
+        public int Modifier { get; private set; }
+        public void AddModifier(int amount) => Modifier += amount;
         public MonsterAppearance Appearance { get; }
 
         public bool Immovable { get; private set; }
+
+        public bool HasClockedInToday { get; private set; }
+
+        public bool TryClockIn()
+        {
+            if (HasClockedInToday)
+                return false;
+
+            HasClockedInToday = true;
+            return true;
+        }
+
+        public void ResetDailyClockIn() => HasClockedInToday = false;
 
         public string Personality { get; private set; }
 
@@ -90,7 +114,40 @@ namespace TheCall
         public void ChangePersonality(string personality)
         {
             if (!string.IsNullOrEmpty(personality))
+            {
                 Personality = personality;
+                if (personality == "安于现状" && Skills.Count > 2)
+                    TrimSkillsToTwoEnsuringPermanent();
+            }
+        }
+
+        void TrimSkillsToTwoEnsuringPermanent()
+        {
+            var permanent = new List<SkillInstance>();
+            var temporary = new List<SkillInstance>();
+            for (var i = 0; i < Skills.Count; i++)
+            {
+                if (Skills[i].IsTemporary)
+                    temporary.Add(Skills[i]);
+                else
+                    permanent.Add(Skills[i]);
+            }
+
+            var kept = new List<SkillInstance>();
+            if (permanent.Count > 0)
+            {
+                kept.Add(permanent[0]);
+                permanent.RemoveAt(0);
+            }
+
+            var pool = new List<SkillInstance>();
+            pool.AddRange(permanent);
+            pool.AddRange(temporary);
+            if (pool.Count > 0 && kept.Count < 2)
+                kept.Add(pool[0]);
+
+            Skills.Clear();
+            Skills.AddRange(kept);
         }
 
         public void ChangeRace(string race)
@@ -182,6 +239,7 @@ namespace TheCall
         readonly List<Monster> _cage = new List<Monster>();
         readonly Dictionary<string, Monster> _byId = new Dictionary<string, Monster>();
         readonly List<string> _tools = new List<string>();
+        readonly HashSet<string> _workedToday = new HashSet<string>();
         readonly List<string> _shelfMonsters = new List<string>();
         readonly List<string> _shelfTools = new List<string>();
         readonly List<string> _skillSlots = new List<string>();
@@ -198,6 +256,27 @@ namespace TheCall
         public int TechPoints { get; private set; }
 
         public IReadOnlyList<string> Tools => _tools;
+
+        public bool HasTool(string name) => _tools.Contains(name);
+
+        public IReadOnlyCollection<Monster> LivingMonsters => _byId.Values;
+
+        public void MarkWorkedToday(string monsterId)
+        {
+            if (!string.IsNullOrEmpty(monsterId))
+                _workedToday.Add(monsterId);
+        }
+
+        public bool DidWorkToday(string monsterId) =>
+            !string.IsNullOrEmpty(monsterId) && _workedToday.Contains(monsterId);
+
+        public void ClearWorkedToday() => _workedToday.Clear();
+
+        public void ResetDailyClockIn()
+        {
+            foreach (var monster in _byId.Values)
+                monster.ResetDailyClockIn();
+        }
 
         public IReadOnlyList<string> SkillSlots => _skillSlots;
 
@@ -282,6 +361,7 @@ namespace TheCall
             TechPoints = 0;
             RetainedEnergy = 0;
             _tools.Clear();
+            _workedToday.Clear();
             _skillSlots.Clear();
             _unlockedTech.Clear();
             _cage.Clear();
@@ -296,6 +376,7 @@ namespace TheCall
             TechPoints = 0;
             RetainedEnergy = 0;
             _tools.Clear();
+            _workedToday.Clear();
             _skillSlots.Clear();
             _unlockedTech.Clear();
             _cage.Clear();
@@ -463,13 +544,20 @@ namespace TheCall
         public bool TryGainSkill(string monsterId, string skillName, bool isTemporary = false)
         {
             var monster = Find(monsterId);
-            if (monster == null || monster.Skills.Count >= 4)
+            if (monster == null)
                 return false;
 
-            for (var index = 0; index < monster.Skills.Count; index++)
+            var maxSkills = monster.Personality == "安于现状" ? 2 : 4;
+            if (monster.Skills.Count >= maxSkills)
+                return false;
+
+            if (!HasTool("复读腺"))
             {
-                if (monster.Skills[index].Name == skillName)
-                    return false;
+                for (var index = 0; index < monster.Skills.Count; index++)
+                {
+                    if (monster.Skills[index].Name == skillName)
+                        return false;
+                }
             }
 
             monster.Skills.Add(MakeSkill(skillName, isTemporary));

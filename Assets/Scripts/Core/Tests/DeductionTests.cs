@@ -18,7 +18,7 @@ namespace TheCall.Tests
 
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(50));
             Assert.That(App.SendQuery(new LevelShortfallQuery()), Is.EqualTo(45));
-            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
+            Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(0));
         }
@@ -50,7 +50,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(10));
-            Assert.That(Payment().Deducted, Is.EqualTo(5));
+            Assert.That(Payment().Deducted, Is.EqualTo(10));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
@@ -166,7 +166,7 @@ namespace TheCall.Tests
             PayWithTwoBreaths(10, 11);
 
             Assert.That(Payment().Excess, Is.False);
-            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
+            Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(0));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Shop));
         }
@@ -174,7 +174,7 @@ namespace TheCall.Tests
         [Test]
         public void 达标就获得一点科技点并且清掉剩余能量()
         {
-            PayWithTwoBreaths(5, 11);
+            PayWithTwoBreaths(5, 10);
 
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(60));
@@ -208,7 +208,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             Assert.That(App.SendQuery(new LevelTargetQuery()).EnergyDue, Is.EqualTo(10));
-            Assert.That(Payment().Deducted, Is.EqualTo(5));
+            Assert.That(Payment().Deducted, Is.EqualTo(10));
             Assert.That(App.SendQuery(new RunLedgerQuery()).TechPoints, Is.EqualTo(1));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(40));
             Assert.That(App.SendQuery(new LevelEnergyQuery()), Is.EqualTo(0));

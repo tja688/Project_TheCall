@@ -110,15 +110,15 @@ namespace TheCall.Tests
             KeepAndPay();
 
             var shelf = App.SendQuery(new ShelfQuery());
-            var toolLists = draw.Lists.Where(list => list.Contains("急急装置") || list.Contains("上级员工证")).ToArray();
+            var rarityLists = draw.Lists.Where(list => list.All(item => item == "White" || item == "Blue" || item == "Gold")).ToArray();
+            Assert.That(rarityLists[0].Count(r => r == "White"), Is.EqualTo(7));
+            Assert.That(rarityLists[0].Count(r => r == "Blue"), Is.EqualTo(2));
+            Assert.That(rarityLists[0].Count(r => r == "Gold"), Is.EqualTo(1));
+            // Second tool slot: White is out of stock, so White is 0 and pool renormalizes to Blue 2, Gold 1
+            Assert.That(rarityLists[1].Count(r => r == "White"), Is.EqualTo(0));
+            Assert.That(rarityLists[1].Count(r => r == "Blue"), Is.EqualTo(2));
+            Assert.That(rarityLists[1].Count(r => r == "Gold"), Is.EqualTo(1));
 
-            Assert.That(toolLists[0], Is.EqualTo(new[]
-            {
-                "急急装置", "急急装置", "急急装置", "急急装置", "急急装置", "急急装置", "急急装置",
-                "上级员工证", "上级员工证",
-                "劣胜装置",
-            }));
-            Assert.That(toolLists[1], Is.EqualTo(new[] { "上级员工证", "上级员工证", "劣胜装置" }));
             Assert.That(shelf.Tools.Select(tool => tool.Name).ToArray(), Is.EqualTo(new[] { "急急装置", "上级员工证" }));
             Assert.That(shelf.Tools.Select(tool => tool.Price).ToArray(), Is.EqualTo(new[] { 30, 50 }));
             Assert.That(shelf.Tools.Select(tool => tool.Rarity).ToArray(), Is.EqualTo(new[] { Rarity.White, Rarity.Blue }));
@@ -354,13 +354,40 @@ namespace TheCall.Tests
             if (_names.Count == 0)
                 throw new InvalidOperationException("没有更多预设抽取。");
 
-            var name = _names.Dequeue();
-            foreach (var option in options)
+            var name = _names.Peek();
+            for (var i = 0; i < options.Count; i++)
             {
+                var option = options[i];
                 if (option is string text && text == name)
+                {
+                    _names.Dequeue();
                     return option;
+                }
+
+                if (option is Rarity r && (r.ToString() == name || (name == "白" && r == Rarity.White) || (name == "蓝" && r == Rarity.Blue) || (name == "金" && r == Rarity.Gold)))
+                {
+                    _names.Dequeue();
+                    return option;
+                }
             }
 
+            if (ContentGate.Current != null)
+            {
+                var tool = ContentGate.Current.FindTool(name);
+                if (tool != null)
+                {
+                    for (var i = 0; i < options.Count; i++)
+                    {
+                        var option = options[i];
+                        if (option is Rarity r && r == tool.Rarity)
+                            return option;
+                        if (option is string s && (s == tool.Rarity.ToString() || (s == "白" && tool.Rarity == Rarity.White) || (s == "蓝" && tool.Rarity == Rarity.Blue) || (s == "金" && tool.Rarity == Rarity.Gold)))
+                            return option;
+                    }
+                }
+            }
+
+            name = _names.Dequeue();
             throw new InvalidOperationException("抽取名单里没有 " + name);
         }
 

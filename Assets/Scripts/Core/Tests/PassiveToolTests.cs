@@ -183,7 +183,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 同时带消灭和永久或者没有词条都不是单词条()
+        public void 单技能怪物受劣胜装置翻倍且多走一次()
         {
             OpenAndReachShop(
                 new FixedTools(new ToolDefinition("劣胜装置", 10, Rarity.Gold, ToolEffect.DoubleSingleAffix, 0)),
@@ -198,11 +198,11 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5 }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId, breathId }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体" }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 2, 2 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 10, 10 }));
         }
 
         [Test]
@@ -265,11 +265,11 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             var landings = Landings();
-            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, hostId, breaths[1].Id }));
-            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体", "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
-            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 4, 4, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 20, 20, 5 }));
+            Assert.That(landings.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { hostId, hostId, breaths[1].Id, breaths[1].Id }));
+            Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体", "能量体", "能量体", "能量体" }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 5, 5, 5 }));
+            Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 4, 4, 2, 2 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 20, 20, 10, 10 }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "劣胜装置" }));
         }
 

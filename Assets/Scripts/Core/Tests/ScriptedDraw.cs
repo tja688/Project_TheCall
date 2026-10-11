@@ -32,13 +32,40 @@ namespace TheCall.Tests
                 return options[0];
             }
 
-            var name = _names.Dequeue();
-            foreach (var option in options)
+            var name = _names.Peek();
+            for (var i = 0; i < options.Count; i++)
             {
+                var option = options[i];
                 if (option is string text && text == name)
+                {
+                    _names.Dequeue();
                     return option;
+                }
+
+                if (option is Rarity r && (r.ToString() == name || (name == "白" && r == Rarity.White) || (name == "蓝" && r == Rarity.Blue) || (name == "金" && r == Rarity.Gold)))
+                {
+                    _names.Dequeue();
+                    return option;
+                }
             }
 
+            if (ContentGate.Current != null)
+            {
+                var tool = ContentGate.Current.FindTool(name);
+                if (tool != null)
+                {
+                    for (var i = 0; i < options.Count; i++)
+                    {
+                        var option = options[i];
+                        if (option is Rarity r && r == tool.Rarity)
+                            return option;
+                        if (option is string s && (s == tool.Rarity.ToString() || (s == "白" && tool.Rarity == Rarity.White) || (s == "蓝" && tool.Rarity == Rarity.Blue) || (s == "金" && tool.Rarity == Rarity.Gold)))
+                            return option;
+                    }
+                }
+            }
+
+            name = _names.Dequeue();
             throw new InvalidOperationException("抽取名单里没有 " + name);
         }
 

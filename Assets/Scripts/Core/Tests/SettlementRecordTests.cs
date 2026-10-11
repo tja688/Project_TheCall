@@ -62,7 +62,8 @@ namespace TheCall.Tests
                 Is.EqualTo(new[] { swapperId, breathId, null, null, null }));
             Assert.That(record[0], Is.InstanceOf<SettlementLanding>());
             Assert.That(record[1], Is.InstanceOf<SettlementSwap>());
-            Assert.That(record[2], Is.InstanceOf<SettlementPayment>());
+            Assert.That(record[2], Is.InstanceOf<SettlementLanding>());
+            Assert.That(record[3], Is.InstanceOf<SettlementPayment>());
         }
 
         [Test]

@@ -205,14 +205,23 @@ namespace TheCall
             Dictionary<string, string> names,
             Func<string, string> nameOf)
         {
-            var who = string.IsNullOrEmpty(landing.MonsterName)
-                ? DisplayName(landing.MonsterId, names, nameOf)
-                : landing.MonsterName;
+            var who = string.IsNullOrEmpty(landing.MonsterId)
+                ? (string.IsNullOrEmpty(landing.MonsterName) ? string.Empty : landing.MonsterName)
+                : (string.IsNullOrEmpty(landing.MonsterName)
+                    ? DisplayName(landing.MonsterId, names, nameOf)
+                    : landing.MonsterName);
 
-            if (landing.Cell >= 0)
-                buffer.Append("左起第 ").Append(landing.Cell + 1).Append(" 格上的 ");
+            if (string.IsNullOrEmpty(landing.MonsterId))
+            {
+                buffer.Append("「").Append(landing.SkillName).Append("」触发。");
+            }
+            else
+            {
+                if (landing.Cell >= 0)
+                    buffer.Append("左起第 ").Append(landing.Cell + 1).Append(" 格上的 ");
 
-            buffer.Append(who).Append(" 的「").Append(landing.SkillName).Append("」触发。");
+                buffer.Append(who).Append(" 的「").Append(landing.SkillName).Append("」触发。");
+            }
 
             if (landing.SkillName == "毒跳伤")
             {
