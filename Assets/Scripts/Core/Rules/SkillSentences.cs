@@ -31,20 +31,15 @@ namespace TheCall
 
         public static SentencePiece Literal(string text) => new SentencePiece(text, 0, FigureKind.None);
 
-        // 这一下产出的能量。悬停时改成报价、加项、倍率算完的数。
         public static SentencePiece Points(int value) => new SentencePiece(null, value, FigureKind.Energy);
 
-        // 一侧每只的单价。写回和倍率改这个数；平加只在这一侧恰好一只时并进单价。
         public static SentencePiece PerHead(int value) => new SentencePiece(null, value, FigureKind.PerHead);
 
-        // 原文里的这段在目录句子里照字面留着，悬停时换成算出来的数。
         public static SentencePiece Named(string text, FigureKind kind) => new SentencePiece(text, 0, kind);
 
-        // 目录句子不出现这个数，悬停时补在句尾。
         public static SentencePiece Current(FigureKind kind) => new SentencePiece(null, 0, kind);
     }
 
-    // 技能句子只写在这里。新的效果组合补一条；已有组合只改 call-book.json 就会进怪物库和技能库。
     internal static class SkillSentences
     {
         public static string Format(SkillDef skill)
@@ -115,7 +110,7 @@ namespace TheCall
                 {
                     SentencePiece.Literal("产生"),
                     SentencePiece.Points(skill.Get(EffectKind.EnergyQuote).A),
-                    SentencePiece.Literal("点能量，下一个怪物产生的能量数值+" + skill.Get(EffectKind.NextEnergyBonus).A),
+                    SentencePiece.Literal("点能量，下一个怪物的能量值+" + skill.Get(EffectKind.NextEnergyBonus).A),
                 };
             }
 
@@ -129,7 +124,7 @@ namespace TheCall
             {
                 return new[]
                 {
-                    SentencePiece.Literal("产生等同于怪物技能数数值两倍的能量"),
+                    SentencePiece.Literal("产生等同于自身技能数两倍的能量"),
                     SentencePiece.Current(FigureKind.SkillMultiple),
                 };
             }
@@ -149,7 +144,7 @@ namespace TheCall
                 {
                     SentencePiece.Literal("产生"),
                     SentencePiece.Points(skill.Get(EffectKind.EnergyQuote).A),
-                    SentencePiece.Literal("点能量，每通过一次关卡本，本技能能量数值永久+" + skill.Get(EffectKind.GrowOnClear).A),
+                    SentencePiece.Literal("点能量，每个通关阶段后，该技能的能量值永久+" + skill.Get(EffectKind.GrowOnClear).A),
                 };
             }
 
@@ -177,7 +172,7 @@ namespace TheCall
             if (key == "SkillCountExtra")
                 return new[] { SentencePiece.Literal("当本怪物仅有" + CountWord(skill.Get(EffectKind.SkillCountExtra).A) + "个技能时，本怪物其他技能触发两次") };
             if (key == "LegacyOnDiscard")
-                return new[] { SentencePiece.Literal("遗赠获得一个随机单技能怪物（通过废弃槽消灭，不会获得该技能，即使怪物只有这一个技能也是）") };
+                return new[] { SentencePiece.Literal("遗赠将一个随机单技能怪物放入怪物笼") };
             if (key == "GainGold")
                 return new[] { SentencePiece.Literal("获得" + skill.Get(EffectKind.GainGold).A + "点金币") };
             if (key == "FillSkills")
@@ -201,6 +196,60 @@ namespace TheCall
 
             if (key == "RightRowOnLeftActive")
                 return new[] { SentencePiece.Literal("左侧相邻怪物每触发一个主动技能，右侧每一只怪物能量数值+" + skill.Get(EffectKind.RightRowOnLeftActive).A) };
+            if (key == "RightNeighborOnLeftActive")
+                return new[] { SentencePiece.Literal("左侧相邻怪物每触发一个主动技能，其右侧相邻怪物的能量值+" + skill.Get(EffectKind.RightNeighborOnLeftActive).A) };
+
+            if (key == "EnergyQuote+SelfDestruct")
+                return new[]
+                {
+                    SentencePiece.Literal("产生"),
+                    SentencePiece.Points(skill.Get(EffectKind.EnergyQuote).A),
+                    SentencePiece.Literal("点能量，消灭本怪物"),
+                };
+
+            if (key == "PersonalityCountMultiple")
+                return new[] { SentencePiece.Literal("产生等同于提取槽不同性格数量两倍的能量") };
+
+            if (key == "CorpseEnergyQuote")
+                return new[]
+                {
+                    SentencePiece.Literal("其他怪物被消灭时，本怪物产生"),
+                    SentencePiece.Points(skill.Get(EffectKind.CorpseEnergyQuote).A),
+                    SentencePiece.Literal("点能量"),
+                };
+
+            if (key == "DevourLeftNeighborSkillMultiple")
+                return new[] { SentencePiece.Literal("消灭左侧相邻怪物，产生等同于其技能数四倍的能量") };
+
+            if (key == "EnergyQuote+KillRandomOther")
+                return new[]
+                {
+                    SentencePiece.Literal("随机消灭提取槽中的一只其他怪物，产生"),
+                    SentencePiece.Points(skill.Get(EffectKind.EnergyQuote).A),
+                    SentencePiece.Literal("点能量"),
+                };
+
+            if (key == "LegacyAddToOthers")
+                return new[] { SentencePiece.Literal("遗赠其他怪物的能量值+" + skill.Get(EffectKind.LegacyAddToOthers).A) };
+
+            if (key == "StealSkillOnOtherDestroyed")
+                return new[] { SentencePiece.Literal("其他怪物被消灭时，获得它拥有的1个随机技能") };
+
+            if (key == "SacrificeNeighborsPerMonsterEnergy")
+                return new[]
+                {
+                    SentencePiece.Literal("消灭左右两侧的相邻怪物，每消灭1只，产生"),
+                    SentencePiece.PerHead(skill.Get(EffectKind.SacrificeNeighborsPerMonsterEnergy).A),
+                    SentencePiece.Literal("点能量"),
+                };
+
+            if (key == "CullUntilAlonePerMonsterEnergy")
+                return new[]
+                {
+                    SentencePiece.Literal("随机消灭提取槽中的一只其他怪物，之后重复此效果，直到提取槽中只剩本怪物为止；每消灭1只，产生"),
+                    SentencePiece.PerHead(skill.Get(EffectKind.CullUntilAlonePerMonsterEnergy).A),
+                    SentencePiece.Literal("点能量"),
+                };
 
             throw new ContentBookException(skill.Name + " 的效果组合没有句子");
         }

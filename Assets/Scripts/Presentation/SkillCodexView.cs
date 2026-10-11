@@ -212,6 +212,7 @@ namespace TheCall
                 case Rarity.White: return "白";
                 case Rarity.Blue: return "蓝";
                 case Rarity.Gold: return "金";
+                case Rarity.Negative: return "负面";
                 default: throw new ArgumentOutOfRangeException(nameof(rarity));
             }
         }
@@ -223,6 +224,7 @@ namespace TheCall
                 case Rarity.White: return WhiteInk;
                 case Rarity.Blue: return BlueInk;
                 case Rarity.Gold: return GoldInk;
+                case Rarity.Negative: return new Color(0.85f, 0.25f, 0.25f);
                 default: throw new ArgumentOutOfRangeException(nameof(rarity));
             }
         }

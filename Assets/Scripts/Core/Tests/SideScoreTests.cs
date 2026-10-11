@@ -94,89 +94,6 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 有相邻怪物时孤独心不翻倍()
-        {
-            Open(
-                "孤独心",
-                "双头能量体",
-                "蜜能量体",
-                "能量体",
-                "换位手",
-                "汲取鼻",
-                "左复制腺体",
-                "能量体",
-                "奇异香");
-
-            var hostId = IdOf("孤独心");
-            App.SendCommand(new DiscardMonsterCommand(FirstId("能量体")));
-            InstallFromSlot(hostId);
-            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 1));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("换位手"), OperationArea.Extraction, 2));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landing = Landings().Single(item => item.MonsterId == hostId);
-            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
-            Assert.That(landing.Base, Is.EqualTo(5));
-            Assert.That(landing.Multiplier, Is.EqualTo(1));
-            Assert.That(landing.Energy, Is.EqualTo(5));
-        }
-
-        [Test]
-        public void 没有相邻怪物时孤独心这次能量翻倍()
-        {
-            Open(
-                "孤独心",
-                "双头能量体",
-                "蜜能量体",
-                "能量体",
-                "换位手",
-                "汲取鼻",
-                "左复制腺体",
-                "能量体",
-                "奇异香");
-
-            var hostId = IdOf("孤独心");
-            App.SendCommand(new DiscardMonsterCommand(FirstId("能量体")));
-            InstallFromSlot(hostId);
-            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 2));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landing = Landings().Single(item => item.MonsterId == hostId);
-            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
-            Assert.That(landing.Base, Is.EqualTo(5));
-            Assert.That(landing.Multiplier, Is.EqualTo(2));
-            Assert.That(landing.Energy, Is.EqualTo(10));
-        }
-
-        [Test]
-        public void 相邻只算格子挨着的怪物()
-        {
-            Open(
-                "吞噬大嘴",
-                "双头能量体",
-                "蜜能量体",
-                "能量体",
-                "孤独心",
-                "换位手",
-                "汲取鼻",
-                "左复制腺体",
-                "能量体");
-
-            var hostId = FirstId("能量体");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
-            InstallFromSlot(hostId);
-            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(IdOf("换位手"), OperationArea.Extraction, 2));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landing = Landings().Single(item => item.MonsterId == hostId);
-            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
-            Assert.That(landing.Base, Is.EqualTo(5));
-            Assert.That(landing.Multiplier, Is.EqualTo(2));
-            Assert.That(landing.Energy, Is.EqualTo(10));
-        }
-
-        [Test]
         public void 奇异香给其他怪物的产能量计分加一且不加给自己() =>
             AssertAuraLeavesItsHostAtFive("奇异香", 6);
 
@@ -192,16 +109,15 @@ namespace TheCall.Tests
                 "汲取鼻",
                 "左复制腺体",
                 "能量体",
-                "孤独心",
+                "镜眼",
                 "奇异香",
                 "怪异香",
-                "吞噬大嘴",
+                "良好肉体",
                 "蜜能量体");
 
             var hostId = FirstId("能量体");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("孤独心")));
-            InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
+            App.SendCommand(new PlaceMonsterCommand(IdOf("镜眼"), OperationArea.Extraction, 1));
             App.SendCommand(new PlaceMonsterCommand(IdOf("奇异香"), OperationArea.Extraction, 2));
             App.SendCommand(new PlaceMonsterCommand(IdOf("怪异香"), OperationArea.Extraction, 4));
             App.SendCommand(new ConfirmSettlementCommand());
@@ -266,9 +182,9 @@ namespace TheCall.Tests
             Assert.That(
                 landings.Select(item => item.SkillName).ToArray(),
                 Is.EqualTo(new[] { "蜜能量体", "汲取鼻", "左能量体", "汲取鼻" }));
-            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 3, 2, 8, 2 }));
+            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 4, 2, 8, 2 }));
             Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1, 1 }));
-            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 3, 2, 8, 2 }));
+            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 4, 2, 8, 2 }));
             Assert.That(landings[2].MonsterId, Is.EqualTo(leftId));
         }
 
@@ -370,34 +286,6 @@ namespace TheCall.Tests
             Assert.That(landing.Base, Is.EqualTo(5));
             Assert.That(landing.Multiplier, Is.EqualTo(1));
             Assert.That(landing.Energy, Is.EqualTo(5));
-        }
-
-        [Test]
-        public void 孤独心翻倍只作用于这次计分()
-        {
-            Open(
-                "能量体",
-                "左能量体",
-                "右能量体",
-                "孤独心",
-                "奇异香",
-                "吞噬大嘴",
-                "双头能量体",
-                "汲取鼻",
-                "左复制腺体");
-
-            var cage = App.SendQuery(new MonsterCageQuery());
-            var hostId = cage[0].Id;
-            App.SendCommand(new DiscardMonsterCommand(cage[1].Id));
-            InstallFromSlot(hostId);
-            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 3));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landings = Landings();
-            Assert.That(landings.Select(item => item.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
-            Assert.That(landings.Select(item => item.Base).ToArray(), Is.EqualTo(new[] { 5 }));
-            Assert.That(landings.Select(item => item.Multiplier).ToArray(), Is.EqualTo(new[] { 2 }));
-            Assert.That(landings.Select(item => item.Energy).ToArray(), Is.EqualTo(new[] { 10 }));
         }
 
         void AssertAuraLeavesItsHostAtFive(string aura, int otherBase)

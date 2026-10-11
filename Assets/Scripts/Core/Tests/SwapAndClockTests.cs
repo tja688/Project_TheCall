@@ -100,28 +100,6 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 执行时目标已被立刻消灭则换位不发生也不获得不动()
-        {
-            Begin(null, new ScriptedLevelCatalog(50), "换位手", "吞噬大嘴", "能量体", "换位手");
-            var host = Ids("换位手")[0];
-            var victim = IdOf("能量体");
-            var right = Ids("换位手")[1];
-            App.SendCommand(new DiscardMonsterCommand(IdOf("吞噬大嘴")));
-            InstallFromSlot(host);
-            App.SendCommand(new PlaceMonsterCommand(victim, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Extraction, 1));
-            App.SendCommand(new PlaceMonsterCommand(right, OperationArea.Extraction, 2));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            AssertCells(null, right, host, null, null);
-            Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(victim));
-            Assert.That(App.SendQuery(new RunLedgerQuery()).SkillSlots, Is.Empty);
-            Assert.That(
-                Landings().Select(landing => landing.Energy).ToArray(),
-                Is.EqualTo(new[] { 5 }));
-        }
-
-        [Test]
         public void 换位成功后获得的不动让后面的换位失败()
         {
             Begin(null, new ScriptedLevelCatalog(50), "换位手", "能量体", "换位手", "换位手");
@@ -334,26 +312,26 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 能量体和孤独心的下一次计分读技能实例上的报价()
+        public void 能量体和外接胚胎的下一次计分读技能实例上的报价()
         {
             var intents = new ClockIntents();
-            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "孤独心");
+            Begin(intents, new ScriptedLevelCatalog(50), "能量体", "外接胚胎");
             var breathId = IdOf("能量体");
-            var lonelyId = Ids("孤独心")[0];
+            var passiveId = IdOf("外接胚胎");
             intents.WriteLater(breathId, "能量体", 4, 1);
-            intents.WriteLater(lonelyId, "孤独心", 3, 1);
+            intents.WriteLater(passiveId, "外接胚胎", 3, 1);
             intents.ForceTrigger(breathId, 0.5);
-            intents.ForceTrigger(lonelyId, 0.5);
+            intents.ForceTrigger(passiveId, 0.5);
             intents.ForceTrigger(breathId, 2);
-            intents.ForceTrigger(lonelyId, 2);
+            intents.ForceTrigger(passiveId, 2);
             App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(lonelyId, OperationArea.Extraction, 1));
+            App.SendCommand(new PlaceMonsterCommand(passiveId, OperationArea.Extraction, 1));
             App.SendCommand(new ConfirmSettlementCommand());
 
             var breath = Landings().Where(landing => landing.MonsterId == breathId).Select(landing => landing.Base).ToArray();
-            var lonely = Landings().Where(landing => landing.MonsterId == lonelyId).Select(landing => landing.Base).ToArray();
+            var passive = Landings().Where(landing => landing.MonsterId == passiveId).Select(landing => landing.Base).ToArray();
             Assert.That(breath, Is.EqualTo(new[] { 5, 5, 9 }));
-            Assert.That(lonely, Is.Empty);
+            Assert.That(passive, Is.Empty);
         }
 
         string PlacePair(ClockIntents intents, string leftSkill, string rightSkill)
@@ -366,6 +344,8 @@ namespace TheCall.Tests
             return leftId;
         }
 
+        static readonly string[] DefaultFillers = { "回响嗓", "镜眼", "收尸腺", "优秀能量体", "增生能量体", "自爆体" };
+
         void Begin(ClockIntents intents, ILevelCatalog levels, string kept, params string[] alsoInCage)
         {
             var names = new string[9];
@@ -373,7 +353,7 @@ namespace TheCall.Tests
             names[1] = "奇异香";
             names[2] = "怪异香";
             for (var i = 0; i < 6; i++)
-                names[3 + i] = i < alsoInCage.Length ? alsoInCage[i] : "孤独心";
+                names[3 + i] = i < alsoInCage.Length ? alsoInCage[i] : DefaultFillers[i];
 
             UseRules(new ScriptedDraw(names), levels, intents: intents);
             KeepOpened();

@@ -172,7 +172,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 蜜能量体落地两点且只给空档后的下一只后续产能量计分加三()
+        public void 蜜能量体落地三点且只给空档后的下一只后续产能量计分加三()
         {
             Open(
                 "蜜能量体",
@@ -181,8 +181,8 @@ namespace TheCall.Tests
                 "能量体",
                 "能量体",
                 "奇异香",
-                "孤独心",
-                "吞噬大嘴",
+                "回响嗓",
+                "良好肉体",
                 "双头能量体");
 
             var shareId = IdOf("蜜能量体");
@@ -201,9 +201,9 @@ namespace TheCall.Tests
             Assert.That(
                 landings.Select(landing => landing.SkillName).ToArray(),
                 Is.EqualTo(new[] { "蜜能量体", "能量体", "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 8, 5 }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 3, 8, 5 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 8, 5 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 3, 8, 5 }));
         }
 
         [Test]
@@ -215,8 +215,8 @@ namespace TheCall.Tests
                 "右能量体",
                 "蜜能量体",
                 "奇异香",
-                "孤独心",
-                "吞噬大嘴",
+                "回响嗓",
+                "良好肉体",
                 "双头能量体",
                 "汲取鼻");
 
@@ -233,9 +233,9 @@ namespace TheCall.Tests
             Assert.That(
                 landings.Select(landing => landing.SkillName).ToArray(),
                 Is.EqualTo(new[] { "能量体", "蜜能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 2 }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5, 3 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 2 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 3 }));
         }
 
         [Test]
@@ -247,8 +247,8 @@ namespace TheCall.Tests
                 "右能量体",
                 "能量体",
                 "奇异香",
-                "孤独心",
-                "吞噬大嘴",
+                "回响嗓",
+                "良好肉体",
                 "双头能量体",
                 "汲取鼻");
 
@@ -261,9 +261,9 @@ namespace TheCall.Tests
             var first = Landings();
             Assert.That(first.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { shareId, breathId }));
             Assert.That(first.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "蜜能量体", "能量体" }));
-            Assert.That(first.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 2, 8 }));
+            Assert.That(first.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 3, 8 }));
             Assert.That(first.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1, 1 }));
-            Assert.That(first.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 2, 8 }));
+            Assert.That(first.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 3, 8 }));
 
             App.SendCommand(new ReturnMonsterCommand(shareId));
             App.SendCommand(new ConfirmSettlementCommand());

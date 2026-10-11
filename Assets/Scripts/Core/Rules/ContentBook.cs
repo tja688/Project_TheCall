@@ -40,6 +40,16 @@ namespace TheCall
         KinExtra,
         SkillCountAdd,
         RightRowOnLeftActive,
+        SelfDestruct,
+        PersonalityCountMultiple,
+        CorpseEnergyQuote,
+        DevourLeftNeighborSkillMultiple,
+        KillRandomOther,
+        LegacyAddToOthers,
+        StealSkillOnOtherDestroyed,
+        SacrificeNeighborsPerMonsterEnergy,
+        CullUntilAlonePerMonsterEnergy,
+        RightNeighborOnLeftActive,
     }
 
     [Flags]
@@ -118,26 +128,33 @@ namespace TheCall
         }
     }
 
-    internal enum TechFlag
+    public enum TechFlag
     {
         BreedingSkill,
         ExtraBreedingSlot,
         ExtraSkill,
         ExtraParent,
         Modifier,
+        GeneStorage,
     }
 
-    internal sealed class TechDef
+    public sealed class TechDef
     {
-        public TechDef(string name, TechFlag flag)
+        public TechDef(string name, TechFlag flag, int cost = 1, string description = "")
         {
             Name = name;
             Flag = flag;
+            Cost = cost;
+            Description = description ?? "";
         }
 
         public string Name { get; }
 
         public TechFlag Flag { get; }
+
+        public int Cost { get; }
+
+        public string Description { get; }
     }
 
     internal sealed class Economy
@@ -151,7 +168,11 @@ namespace TheCall
             int baseBreedingSlots,
             int expandedBreedingSlots,
             int baseParents,
-            int expandedParents)
+            int expandedParents,
+            int personalityWhiteWeight = 5,
+            int personalityBlueWeight = 2,
+            int personalityNegativeWeight = 2,
+            int personalityGoldWeight = 1)
         {
             Wage = wage;
             OvertimeWage = overtimeWage;
@@ -162,6 +183,10 @@ namespace TheCall
             ExpandedBreedingSlots = expandedBreedingSlots;
             BaseParents = baseParents;
             ExpandedParents = expandedParents;
+            PersonalityWhiteWeight = personalityWhiteWeight;
+            PersonalityBlueWeight = personalityBlueWeight;
+            PersonalityNegativeWeight = personalityNegativeWeight;
+            PersonalityGoldWeight = personalityGoldWeight;
         }
 
         public int Wage { get; }
@@ -181,6 +206,14 @@ namespace TheCall
         public int BaseParents { get; }
 
         public int ExpandedParents { get; }
+
+        public int PersonalityWhiteWeight { get; }
+
+        public int PersonalityBlueWeight { get; }
+
+        public int PersonalityNegativeWeight { get; }
+
+        public int PersonalityGoldWeight { get; }
     }
 
     internal readonly struct LevelBand
@@ -204,6 +237,9 @@ namespace TheCall
             ToolDefinition[] tools,
             TechDef[] techs,
             SkillDef[] skills,
+            PersonalityDef[] personalities,
+            RaceDef[] races,
+            MoodDef[] moods,
             int whitePrice,
             int bluePrice,
             int goldPrice,
@@ -216,6 +252,9 @@ namespace TheCall
             Tools = tools;
             Techs = techs;
             Skills = skills;
+            Personalities = personalities;
+            Races = races;
+            Moods = moods;
             _whitePrice = whitePrice;
             _bluePrice = bluePrice;
             _goldPrice = goldPrice;
@@ -235,11 +274,17 @@ namespace TheCall
 
         internal IReadOnlyList<LevelBand> Levels { get; }
 
-        internal IReadOnlyList<ToolDefinition> Tools { get; }
+        public IReadOnlyList<ToolDefinition> Tools { get; }
 
-        internal IReadOnlyList<TechDef> Techs { get; }
+        public IReadOnlyList<TechDef> Techs { get; }
 
         internal IReadOnlyList<SkillDef> Skills { get; }
+
+        public IReadOnlyList<PersonalityDef> Personalities { get; }
+
+        public IReadOnlyList<RaceDef> Races { get; }
+
+        public IReadOnlyList<MoodDef> Moods { get; }
 
         public static ContentBook Parse(string json)
         {
@@ -272,6 +317,18 @@ namespace TheCall
             return _whiteWeight;
         }
 
+        public int PersonalityWeight(Rarity rarity)
+        {
+            if (rarity == Rarity.Blue)
+                return Economy.PersonalityBlueWeight;
+            if (rarity == Rarity.Negative)
+                return Economy.PersonalityNegativeWeight;
+            if (rarity == Rarity.Gold)
+                return Economy.PersonalityGoldWeight;
+
+            return Economy.PersonalityWhiteWeight;
+        }
+
         internal SkillDef FindSkill(string name)
         {
             for (var i = 0; i < Skills.Count; i++)
@@ -283,12 +340,80 @@ namespace TheCall
             return null;
         }
 
+        public PersonalityDef FindPersonality(string name)
+        {
+            for (var i = 0; i < Personalities.Count; i++)
+            {
+                if (Personalities[i].Name == name)
+                    return Personalities[i];
+            }
+
+            return null;
+        }
+
+        public RaceDef FindRace(string name)
+        {
+            for (var i = 0; i < Races.Count; i++)
+            {
+                if (Races[i].Name == name)
+                    return Races[i];
+            }
+
+            return null;
+        }
+
+        public MoodDef FindMood(string name)
+        {
+            for (var i = 0; i < Moods.Count; i++)
+            {
+                if (Moods[i].Name == name)
+                    return Moods[i];
+            }
+
+            return null;
+        }
+
+        public ToolDefinition FindTool(string name)
+        {
+            for (var i = 0; i < Tools.Count; i++)
+            {
+                if (Tools[i].Name == name)
+                    return Tools[i];
+            }
+
+            return null;
+        }
+
+        public TechDef FindTech(string name)
+        {
+            for (var i = 0; i < Techs.Count; i++)
+            {
+                if (Techs[i].Name == name)
+                    return Techs[i];
+            }
+
+            return null;
+        }
+
         static ContentBook Map(JsonObject root)
         {
             var economyNode = Required(root, "economy", "$");
             var economyObject = AsObject(economyNode, "$.economy");
             var price = AsObject(Required(economyObject, "price", "$.economy"), "$.economy.price");
             var weight = AsObject(Required(economyObject, "weight", "$.economy"), "$.economy.weight");
+
+            var pWhite = 5;
+            var pBlue = 2;
+            var pNegative = 2;
+            var pGold = 1;
+            if (economyObject.Map.TryGetValue("personalityWeight", out var pWeightNode) && pWeightNode is JsonObject pWeightObj)
+            {
+                if (pWeightObj.Map.TryGetValue("White", out var wNode) && wNode is JsonNumber wNum) pWhite = wNum.Value;
+                if (pWeightObj.Map.TryGetValue("Blue", out var bNode) && bNode is JsonNumber bNum) pBlue = bNum.Value;
+                if (pWeightObj.Map.TryGetValue("Negative", out var nNode) && nNode is JsonNumber nNum) pNegative = nNum.Value;
+                if (pWeightObj.Map.TryGetValue("Gold", out var gNode) && gNode is JsonNumber gNum) pGold = gNum.Value;
+            }
+
             var economy = new Economy(
                 Int(economyObject, "wage", "$.economy"),
                 Int(economyObject, "overtimeWage", "$.economy"),
@@ -298,18 +423,44 @@ namespace TheCall
                 Int(economyObject, "baseBreedingSlots", "$.economy"),
                 Int(economyObject, "expandedBreedingSlots", "$.economy"),
                 Int(economyObject, "baseParents", "$.economy"),
-                Int(economyObject, "expandedParents", "$.economy"));
+                Int(economyObject, "expandedParents", "$.economy"),
+                pWhite,
+                pBlue,
+                pNegative,
+                pGold);
 
             var levels = MapLevels(AsArray(Required(root, "levels", "$"), "$.levels"));
             var tools = MapTools(AsArray(Required(root, "tools", "$"), "$.tools"));
             var techs = MapTechs(AsArray(Required(root, "techs", "$"), "$.techs"));
             var skills = MapSkills(AsArray(Required(root, "skills", "$"), "$.skills"));
+
+            PersonalityDef[] personalities;
+            if (root.Map.ContainsKey("personalities"))
+                personalities = MapPersonalities(AsArray(Required(root, "personalities", "$"), "$.personalities"));
+            else
+                personalities = Array.Empty<PersonalityDef>();
+
+            RaceDef[] races;
+            if (root.Map.ContainsKey("races"))
+                races = MapRaces(AsArray(Required(root, "races", "$"), "$.races"));
+            else
+                races = Array.Empty<RaceDef>();
+
+            MoodDef[] moods;
+            if (root.Map.ContainsKey("moods"))
+                moods = MapMoods(AsArray(Required(root, "moods", "$"), "$.moods"));
+            else
+                moods = Array.Empty<MoodDef>();
+
             return new ContentBook(
                 economy,
                 levels,
                 tools,
                 techs,
                 skills,
+                personalities,
+                races,
+                moods,
                 Int(price, "White", "$.economy.price"),
                 Int(price, "Blue", "$.economy.price"),
                 Int(price, "Gold", "$.economy.price"),
@@ -359,7 +510,9 @@ namespace TheCall
                 if (effect == ToolEffect.ExtractionCells)
                     cells = Int(tool, "cells", path);
 
-                tools[i] = new ToolDefinition(name, Int(tool, "price", path), RarityOf(Text(tool, "rarity", path), path), effect, cells);
+                var description = tool.Map.ContainsKey("description") ? Text(tool, "description", path) : "";
+
+                tools[i] = new ToolDefinition(name, Int(tool, "price", path), RarityOf(Text(tool, "rarity", path), path), effect, cells, description);
             }
 
             return tools;
@@ -381,10 +534,75 @@ namespace TheCall
                 if (!Enum.TryParse(Text(tech, "flag", path), out flag))
                     throw new ContentBookException(path + ".flag 未知");
 
-                techs[i] = new TechDef(name, flag);
+                var cost = tech.Map.ContainsKey("cost") ? Int(tech, "cost", path) : 1;
+                var description = tech.Map.ContainsKey("description") ? Text(tech, "description", path) : "";
+
+                techs[i] = new TechDef(name, flag, cost, description);
             }
 
             return techs;
+        }
+
+        static PersonalityDef[] MapPersonalities(JsonArray array)
+        {
+            var personalities = new PersonalityDef[array.Items.Count];
+            var seen = new HashSet<string>();
+            for (var i = 0; i < array.Items.Count; i++)
+            {
+                var path = "$.personalities[" + i + "]";
+                var obj = AsObject(array.Items[i], path);
+                var name = Text(obj, "name", path);
+                if (!seen.Add(name))
+                    throw new ContentBookException(path + ".name 重复");
+
+                var rarity = RarityOf(Text(obj, "rarity", path), path);
+                var kind = Text(obj, "kind", path);
+                var description = Text(obj, "description", path);
+                personalities[i] = new PersonalityDef(name, rarity, kind, description);
+            }
+
+            return personalities;
+        }
+
+        static RaceDef[] MapRaces(JsonArray array)
+        {
+            var races = new RaceDef[array.Items.Count];
+            var seen = new HashSet<string>();
+            for (var i = 0; i < array.Items.Count; i++)
+            {
+                var path = "$.races[" + i + "]";
+                var obj = AsObject(array.Items[i], path);
+                var name = Text(obj, "name", path);
+                if (!seen.Add(name))
+                    throw new ContentBookException(path + ".name 重复");
+
+                var element = Text(obj, "element", path);
+                var generates = Text(obj, "generates", path);
+                var overcomes = Text(obj, "overcomes", path);
+                races[i] = new RaceDef(name, element, generates, overcomes);
+            }
+
+            return races;
+        }
+
+        static MoodDef[] MapMoods(JsonArray array)
+        {
+            var moods = new MoodDef[array.Items.Count];
+            var seen = new HashSet<string>();
+            for (var i = 0; i < array.Items.Count; i++)
+            {
+                var path = "$.moods[" + i + "]";
+                var obj = AsObject(array.Items[i], path);
+                var name = Text(obj, "name", path);
+                if (!seen.Add(name))
+                    throw new ContentBookException(path + ".name 重复");
+
+                var delta = Int(obj, "energyDelta", path);
+                var tier = Int(obj, "tier", path);
+                moods[i] = new MoodDef(name, delta, tier);
+            }
+
+            return moods;
         }
 
         static SkillDef[] MapSkills(JsonArray array)
@@ -423,14 +641,8 @@ namespace TheCall
 
         static void CheckAffix(SkillDef skill, string path)
         {
-            if (skill.Has(EffectKind.SwapWithLeft) && skill.Affix != SkillAffix.Immovable)
+            if (skill.Has(EffectKind.SwapWithLeft) && (skill.Affix & SkillAffix.Immovable) == 0)
                 throw new ContentBookException(path + " 换位必须带不动");
-            if (skill.Has(EffectKind.Devour) && skill.Affix != (SkillAffix.Destroy | SkillAffix.Permanent))
-                throw new ContentBookException(path + " 吞噬必须带消灭和永久");
-            if (skill.Has(EffectKind.GainCapacity) && skill.Affix != SkillAffix.Capacity)
-                throw new ContentBookException(path + " 产能必须带产能词条");
-            if (!skill.Has(EffectKind.SwapWithLeft) && !skill.Has(EffectKind.Devour) && !skill.Has(EffectKind.GainCapacity) && skill.Affix != SkillAffix.None)
-                throw new ContentBookException(path + " 词条必须为空");
         }
 
         static Effect[] Effects(JsonArray array, string path)
@@ -457,9 +669,9 @@ namespace TheCall
 
         static Effect EffectOf(EffectKind kind, JsonObject item, string path)
         {
-            if (kind == EffectKind.EnergyQuote || kind == EffectKind.LandingResponse)
+            if (kind == EffectKind.EnergyQuote || kind == EffectKind.LandingResponse || kind == EffectKind.CorpseEnergyQuote)
                 return new Effect(kind, Int(item, "quote", path), 0);
-            if (kind == EffectKind.AddToOthers || kind == EffectKind.NextEnergyBonus)
+            if (kind == EffectKind.AddToOthers || kind == EffectKind.NextEnergyBonus || kind == EffectKind.LegacyAddToOthers)
                 return new Effect(kind, Int(item, "amount", path), 0);
             if (kind == EffectKind.SideCount)
             {
@@ -489,9 +701,9 @@ namespace TheCall
                 return new Effect(kind, Int(item, "layers", path), 0);
             if (kind == EffectKind.ExtraWalksForRightNeighbor)
                 return new Effect(kind, Int(item, "walks", path), 0);
-            if (kind == EffectKind.OwnSkillMultiple)
+            if (kind == EffectKind.OwnSkillMultiple || kind == EffectKind.PersonalityCountMultiple || kind == EffectKind.DevourLeftNeighborSkillMultiple)
                 return new Effect(kind, Int(item, "factor", path), 0);
-            if (kind == EffectKind.GrowOnClear || kind == EffectKind.GainGold || kind == EffectKind.RightRowOnLeftActive)
+            if (kind == EffectKind.GrowOnClear || kind == EffectKind.GainGold || kind == EffectKind.RightRowOnLeftActive || kind == EffectKind.RightNeighborOnLeftActive)
                 return new Effect(kind, Int(item, "amount", path), 0);
             if (kind == EffectKind.ChanceQuote)
                 return new Effect(kind, Int(item, "quote", path), Int(item, "percent", path));
@@ -507,6 +719,8 @@ namespace TheCall
 
                 return new Effect(kind, Int(item, "amount", path), (int)side);
             }
+            if (kind == EffectKind.SacrificeNeighborsPerMonsterEnergy || kind == EffectKind.CullUntilAlonePerMonsterEnergy)
+                return new Effect(kind, Int(item, "perMonster", path), 0);
 
             return new Effect(kind, 0, 0);
         }

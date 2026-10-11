@@ -23,8 +23,8 @@ namespace TheCall.Tests
                     "奇异香",
                     "怪异香",
                     "汲取鼻",
-                    "吞噬大嘴",
-                    "孤独心",
+                    "优质肉体",
+                    "良好肉体",
                     "双头能量体"));
             App = TheCallApp.Interface;
         }

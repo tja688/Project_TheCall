@@ -9,14 +9,15 @@ namespace TheCall.Tests
         public void 上级员工证使提取槽多一格且第六格参与结算()
         {
             OpenAndReachShop(
+                new FixedTools(new ToolDefinition("上级员工证", 50, Rarity.Blue, ToolEffect.ExtractionCells, 6)),
                 "能量体",
                 "左能量体",
                 "右能量体",
                 "能量体",
                 "奇异香",
                 "汲取鼻",
-                "孤独心",
-                "吞噬大嘴",
+                "良好肉体",
+                "优质肉体",
                 "双头能量体");
 
             Assert.That(App.SendQuery(new ExtractionSlotsQuery()).Count, Is.EqualTo(5));
@@ -215,13 +216,13 @@ namespace TheCall.Tests
                 "换位手",
                 "换位手",
                 "奇异香",
-                "孤独心",
-                "吞噬大嘴",
+                "良好肉体",
+                "优质肉体",
                 "双头能量体");
             App.SendCommand(new BuyToolCommand("劣胜装置"));
             App.SendCommand(new LeaveShopCommand());
 
-            var hostId = IdOf("吞噬大嘴");
+            var hostId = IdOf("良好肉体");
             App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
             InstallFromSlot(hostId);
             App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
@@ -229,9 +230,9 @@ namespace TheCall.Tests
 
             var landings = Landings();
             Assert.That(landings.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
-            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 7 }));
+            Assert.That(landings.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 8 }));
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
-            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 7 }));
+            Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 8 }));
         }
 
         [Test]
@@ -247,8 +248,8 @@ namespace TheCall.Tests
                 "换位手",
                 "能量体",
                 "奇异香",
-                "孤独心",
-                "吞噬大嘴",
+                "良好肉体",
+                "优质肉体",
                 "双头能量体");
             App.SendCommand(new BuyToolCommand("急急装置"));
             App.SendCommand(new BuyToolCommand("劣胜装置"));
@@ -270,36 +271,6 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 4, 4, 1 }));
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 20, 20, 5 }));
             Assert.That(App.SendQuery(new RunLedgerQuery()).Tools, Is.EqualTo(new[] { "急急装置", "劣胜装置" }));
-        }
-
-        [Test]
-        public void 急急装置的翻倍乘进孤独心已有的倍率()
-        {
-            OpenAndReachShop(
-                "孤独心",
-                "能量体",
-                "左能量体",
-                "右能量体",
-                "能量体",
-                "奇异香",
-                "汲取鼻",
-                "换位手",
-                "双头能量体");
-            App.SendCommand(new BuyToolCommand("急急装置"));
-            App.SendCommand(new LeaveShopCommand());
-
-            var hostId = IdOf("孤独心");
-            App.SendCommand(new DiscardMonsterCommand(IdOf("能量体")));
-            InstallFromSlot(hostId);
-            App.SendCommand(new PlaceMonsterCommand(hostId, OperationArea.Extraction, 0));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landing = Landings().Single();
-            Assert.That(landing.MonsterId, Is.EqualTo(hostId));
-            Assert.That(landing.SkillName, Is.EqualTo("能量体"));
-            Assert.That(landing.Base, Is.EqualTo(5));
-            Assert.That(landing.Multiplier, Is.EqualTo(4));
-            Assert.That(landing.Energy, Is.EqualTo(20));
         }
 
         static readonly string[] TwoBreaths =

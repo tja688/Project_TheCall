@@ -43,7 +43,20 @@ namespace TheCall
                 skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans);
             }
 
-            return new MonsterDetails(view.Id, view.DisplayName, skills, view.Modifier, view.Immovable, view.Capacity, view.Appearance);
+            return new MonsterDetails(
+                view.Id,
+                view.DisplayName,
+                skills,
+                view.Modifier,
+                view.Immovable,
+                view.Capacity,
+                view.Appearance,
+                view.Personality,
+                view.Race,
+                view.Mood,
+                view.MoodEnergyDelta,
+                view.ConsecutiveWorkDays,
+                view.ConsecutiveRestDays);
         }
 
         MonsterView ViewOf(RunModel run, SettlementSight sight)

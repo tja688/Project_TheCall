@@ -5,5 +5,6 @@ namespace TheCall
         White,
         Blue,
         Gold,
+        Negative,
     }
 }

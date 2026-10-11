@@ -12,6 +12,7 @@ namespace TheCall
         Permanent = 2,
         Capacity = 4,
         Immovable = 8,
+        Legacy = 16,
     }
 
     internal enum CountedSide
@@ -187,6 +188,12 @@ namespace TheCall
                 return skill.Get(EffectKind.LandingResponse).A;
             if (skill.Has(EffectKind.ChanceQuote))
                 return skill.Get(EffectKind.ChanceQuote).A;
+            if (skill.Has(EffectKind.CorpseEnergyQuote))
+                return skill.Get(EffectKind.CorpseEnergyQuote).A;
+            if (skill.Has(EffectKind.SacrificeNeighborsPerMonsterEnergy))
+                return skill.Get(EffectKind.SacrificeNeighborsPerMonsterEnergy).A;
+            if (skill.Has(EffectKind.CullUntilAlonePerMonsterEnergy))
+                return skill.Get(EffectKind.CullUntilAlonePerMonsterEnergy).A;
 
             return 0;
         }
@@ -237,7 +244,12 @@ namespace TheCall
                    skill.Has(EffectKind.NextEnergyBonus) ||
                    skill.Has(EffectKind.ChanceQuote) ||
                    skill.Has(EffectKind.OwnSkillMultiple) ||
-                   skill.Has(EffectKind.PopulationQuote);
+                   skill.Has(EffectKind.PopulationQuote) ||
+                   skill.Has(EffectKind.PersonalityCountMultiple) ||
+                   skill.Has(EffectKind.CorpseEnergyQuote) ||
+                   skill.Has(EffectKind.DevourLeftNeighborSkillMultiple) ||
+                   skill.Has(EffectKind.SacrificeNeighborsPerMonsterEnergy) ||
+                   skill.Has(EffectKind.CullUntilAlonePerMonsterEnergy);
         }
 
         public SkillAffix Affixes(string skillName)
@@ -385,6 +397,92 @@ namespace TheCall
             amount = 0;
             return false;
         }
+
+        public bool TrySelfDestruct(string skillName) => Has(skillName, EffectKind.SelfDestruct);
+
+        public bool TryPersonalityCountMultiple(string skillName, out int factor)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.PersonalityCountMultiple))
+            {
+                factor = skill.Get(EffectKind.PersonalityCountMultiple).A;
+                return true;
+            }
+
+            factor = 0;
+            return false;
+        }
+
+        public bool TryCorpseEnergyQuote(string skillName, out int quote)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.CorpseEnergyQuote))
+            {
+                quote = skill.Get(EffectKind.CorpseEnergyQuote).A;
+                return true;
+            }
+
+            quote = 0;
+            return false;
+        }
+
+        public bool TryDevourLeftNeighbor(string skillName, out int factor)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.DevourLeftNeighborSkillMultiple))
+            {
+                factor = skill.Get(EffectKind.DevourLeftNeighborSkillMultiple).A;
+                return true;
+            }
+
+            factor = 0;
+            return false;
+        }
+
+        public bool TryKillRandomOther(string skillName) => Has(skillName, EffectKind.KillRandomOther);
+
+        public bool TryLegacyAddToOthers(string skillName, out int amount)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.LegacyAddToOthers))
+            {
+                amount = skill.Get(EffectKind.LegacyAddToOthers).A;
+                return true;
+            }
+
+            amount = 0;
+            return false;
+        }
+
+        public bool TryStealSkillOnOtherDestroyed(string skillName) => Has(skillName, EffectKind.StealSkillOnOtherDestroyed);
+
+        public bool TrySacrificeNeighbors(string skillName, out int perMonster)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.SacrificeNeighborsPerMonsterEnergy))
+            {
+                perMonster = skill.Get(EffectKind.SacrificeNeighborsPerMonsterEnergy).A;
+                return true;
+            }
+
+            perMonster = 0;
+            return false;
+        }
+
+        public bool TryCullUntilAlone(string skillName, out int perMonster)
+        {
+            var skill = _book.FindSkill(skillName);
+            if (skill != null && skill.Has(EffectKind.CullUntilAlonePerMonsterEnergy))
+            {
+                perMonster = skill.Get(EffectKind.CullUntilAlonePerMonsterEnergy).A;
+                return true;
+            }
+
+            perMonster = 0;
+            return false;
+        }
+
+        public int RightNeighborBonus(string skillName) => Amount(skillName, EffectKind.RightNeighborOnLeftActive);
 
         static bool InPool(SkillDef skill, DrawnPool pool)
         {

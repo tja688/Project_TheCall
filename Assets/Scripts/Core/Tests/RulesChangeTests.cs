@@ -7,9 +7,9 @@ namespace TheCall.Tests
     {
         static readonly string[] Opening =
         {
-            "吞噬大嘴", "奇异香",
+            "良好肉体", "外接胚胎",
             "良好肉体", "产金管道",
-            "优质肉体", "产金管道",
+            "优质肉体", "外接胚胎",
             "能量体", "能量体", "左能量体", "右能量体",
             "奇异香", "怪异香", "汲取鼻", "换位手",
         };
@@ -144,7 +144,7 @@ namespace TheCall.Tests
             App.SendCommand(new ConfirmSettlementCommand());
 
             var rarities = draw.Lists.Where(list => list.Length > 0 && list.All(item => item == "白" || item == "蓝" || item == "金")).ToArray();
-            Assert.That(rarities[0], Is.EqualTo(new[] { "白", "白", "白", "白", "白", "白", "白", "蓝", "蓝" }));
+            Assert.That(rarities[0], Is.EqualTo(new[] { "白", "白", "白", "白", "白", "白", "白" }));
             Assert.That(rarities[0], Does.Not.Contain("金"));
         }
 
@@ -152,7 +152,7 @@ namespace TheCall.Tests
         {
             var shop = new[]
             {
-                "幅", "白", "吞噬大嘴", "白", "能量体",
+                "幅", "白", "良好肉体", "白", "能量体",
                 "单", "白", "左能量体",
                 "单", "白", "右能量体",
                 "单", "白", "双头能量体",

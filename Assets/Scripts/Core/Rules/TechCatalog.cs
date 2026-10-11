@@ -9,7 +9,17 @@ namespace TheCall
 
         public TechCatalog(ContentBook book) => _book = book;
 
+        public IReadOnlyList<TechDef> Techs => _book.Techs;
+
+        public TechDef Find(string name) => _book.FindTech(name);
+
         public bool Contains(string name) => Flag(name) != null;
+
+        public int Cost(string name)
+        {
+            var tech = Find(name);
+            return tech == null ? 1 : tech.Cost;
+        }
 
         public int SlotCount(IReadOnlyList<string> unlocked) =>
             Has(unlocked, TechFlag.ExtraBreedingSlot) ? _book.Economy.ExpandedBreedingSlots : _book.Economy.BaseBreedingSlots;
@@ -23,7 +33,10 @@ namespace TheCall
 
         public bool GrantsModifier(IReadOnlyList<string> unlocked) => Has(unlocked, TechFlag.Modifier);
 
-        bool Has(IReadOnlyList<string> unlocked, TechFlag flag)
+        public int GeneCapacity(IReadOnlyList<string> unlocked) =>
+            3 + (Has(unlocked, TechFlag.GeneStorage) ? 1 : 0);
+
+        public bool Has(IReadOnlyList<string> unlocked, TechFlag flag)
         {
             if (unlocked == null)
                 return false;

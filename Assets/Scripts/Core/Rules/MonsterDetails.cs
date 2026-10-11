@@ -87,7 +87,13 @@ namespace TheCall
             int modifier,
             bool immovable,
             int capacity,
-            MonsterAppearance appearance)
+            MonsterAppearance appearance,
+            string personality = "稳定",
+            string race = "森林",
+            string mood = "普通",
+            int moodEnergyDelta = 0,
+            int consecutiveWorkDays = 0,
+            int consecutiveRestDays = 0)
         {
             if (skills == null || skills.Count == 0 || skills.Count > 4)
                 throw new ArgumentException("A monster needs 1 to 4 skills.", nameof(skills));
@@ -109,6 +115,12 @@ namespace TheCall
             Immovable = immovable;
             Capacity = capacity;
             Appearance = appearance;
+            Personality = string.IsNullOrEmpty(personality) ? "稳定" : personality;
+            Race = string.IsNullOrEmpty(race) ? "森林" : race;
+            Mood = string.IsNullOrEmpty(mood) ? "普通" : mood;
+            MoodEnergyDelta = moodEnergyDelta;
+            ConsecutiveWorkDays = consecutiveWorkDays;
+            ConsecutiveRestDays = consecutiveRestDays;
         }
 
         public string Id { get; }
@@ -123,5 +135,17 @@ namespace TheCall
         public MonsterAppearance Appearance { get; }
 
         public int Capacity { get; }
+
+        public string Personality { get; }
+
+        public string Race { get; }
+
+        public string Mood { get; }
+
+        public int MoodEnergyDelta { get; }
+
+        public int ConsecutiveWorkDays { get; }
+
+        public int ConsecutiveRestDays { get; }
     }
 }

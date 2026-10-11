@@ -175,31 +175,7 @@ namespace TheCall.Tests
             Assert.That(landings.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5, 5, 5 }));
         }
 
-        [Test]
-        public void 再走是新的主动执行并重新报价且停留开始时记下的次数不因来源消失而取消()
-        {
-            Open(
-                "吞噬大嘴",
-                "左能量体",
-                "右能量体",
-                "回响嗓",
-                "能量体",
-                "奇异香",
-                "怪异香",
-                "汲取鼻",
-                "孤独心");
 
-            var devourerId = IdOf("吞噬大嘴");
-            var headId = IdOf("回响嗓");
-            App.SendCommand(new PlaceMonsterCommand(headId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 1));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var landings = Landings();
-            Assert.That(landings, Is.Empty);
-            Assert.That(App.SendQuery(new ExtractionSlotsQuery())[0].MonsterId, Is.Null);
-            Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(headId));
-        }
 
         [Test]
         public void 没有永久的产能离开关卡时清掉()

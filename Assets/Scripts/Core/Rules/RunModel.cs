@@ -5,16 +5,19 @@ namespace TheCall
 {
     internal sealed class SkillInstance
     {
-        public SkillInstance(string name, int quote)
+        public SkillInstance(string name, int quote, bool isTemporary = false)
         {
             Name = name;
             Quote = quote;
             _permanentQuote = quote;
+            IsTemporary = isTemporary;
         }
 
         public string Name { get; }
 
         public int Quote { get; private set; }
+
+        public bool IsTemporary { get; }
 
         int _permanentQuote;
 
@@ -35,7 +38,18 @@ namespace TheCall
         {
         }
 
-        public Monster(string id, string displayName, IReadOnlyList<SkillInstance> skills, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
+        public Monster(
+            string id,
+            string displayName,
+            IReadOnlyList<SkillInstance> skills,
+            int modifier = 0,
+            MonsterAppearance? appearance = null,
+            IReadOnlyList<string> parentIds = null,
+            string personality = "稳定",
+            string race = "森林",
+            string mood = "普通",
+            int consecutiveWorkDays = 0,
+            int consecutiveRestDays = 0)
         {
             Id = id;
             DisplayName = displayName;
@@ -43,6 +57,11 @@ namespace TheCall
             Modifier = modifier;
             Appearance = appearance ?? MonsterAppearance.FromSeed(StableSeed(id));
             ParentIds = parentIds == null ? System.Array.Empty<string>() : CopyParents(parentIds);
+            Personality = string.IsNullOrEmpty(personality) ? "稳定" : personality;
+            Race = string.IsNullOrEmpty(race) ? "森林" : race;
+            Mood = string.IsNullOrEmpty(mood) ? "普通" : mood;
+            ConsecutiveWorkDays = consecutiveWorkDays;
+            ConsecutiveRestDays = consecutiveRestDays;
         }
 
         public IReadOnlyList<string> ParentIds { get; }
@@ -57,6 +76,51 @@ namespace TheCall
         public MonsterAppearance Appearance { get; }
 
         public bool Immovable { get; private set; }
+
+        public string Personality { get; private set; }
+
+        public string Race { get; private set; }
+
+        public string Mood { get; private set; }
+
+        public int ConsecutiveWorkDays { get; private set; }
+
+        public int ConsecutiveRestDays { get; private set; }
+
+        public void ChangePersonality(string personality)
+        {
+            if (!string.IsNullOrEmpty(personality))
+                Personality = personality;
+        }
+
+        public void ChangeRace(string race)
+        {
+            if (!string.IsNullOrEmpty(race))
+                Race = race;
+        }
+
+        public void SetMood(string mood)
+        {
+            if (!string.IsNullOrEmpty(mood))
+                Mood = mood;
+        }
+
+        public void RecordWorkDay()
+        {
+            ConsecutiveWorkDays++;
+            ConsecutiveRestDays = 0;
+        }
+
+        public void RecordRestDay()
+        {
+            ConsecutiveRestDays++;
+            ConsecutiveWorkDays = 0;
+        }
+
+        public void ClearTemporarySkills()
+        {
+            Skills.RemoveAll(skill => skill.IsTemporary);
+        }
 
         public int Capacity { get; private set; }
 
@@ -207,11 +271,16 @@ namespace TheCall
             LevelNumber = levelNumber;
         }
 
+        public int RetainedEnergy { get; private set; }
+
+        public void SetRetainedEnergy(int amount) => RetainedEnergy = System.Math.Max(0, amount);
+
         public void Win()
         {
             Phase = RunPhase.Victory;
             Gold = 0;
             TechPoints = 0;
+            RetainedEnergy = 0;
             _tools.Clear();
             _skillSlots.Clear();
             _unlockedTech.Clear();
@@ -225,6 +294,7 @@ namespace TheCall
             Phase = RunPhase.Failed;
             Gold = 0;
             TechPoints = 0;
+            RetainedEnergy = 0;
             _tools.Clear();
             _skillSlots.Clear();
             _unlockedTech.Clear();
@@ -261,9 +331,12 @@ namespace TheCall
 
         public void AddUnlockedTech(string name) => _unlockedTech.Add(name);
 
-        public Monster AddCandidate(IReadOnlyList<string> skillNames)
+        public Monster AddCandidate(
+            IReadOnlyList<string> skillNames,
+            string personality = null,
+            string race = null)
         {
-            var monster = Create(skillNames, 0, null);
+            var monster = Create(skillNames, 0, null, null, personality, race);
             _candidates.Add(monster);
             return monster;
         }
@@ -375,10 +448,19 @@ namespace TheCall
             return true;
         }
 
-        public Monster CreateMonster(IReadOnlyList<string> skillNames, int modifier = 0, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null) =>
-            Create(skillNames, modifier, appearance, parentIds);
+        public Monster CreateMonster(
+            IReadOnlyList<string> skillNames,
+            int modifier = 0,
+            MonsterAppearance? appearance = null,
+            IReadOnlyList<string> parentIds = null,
+            string personality = null,
+            string race = null,
+            string mood = null,
+            int consecutiveWorkDays = 0,
+            int consecutiveRestDays = 0) =>
+            Create(skillNames, modifier, appearance, parentIds, personality, race, mood, consecutiveWorkDays, consecutiveRestDays);
 
-        public bool TryGainSkill(string monsterId, string skillName)
+        public bool TryGainSkill(string monsterId, string skillName, bool isTemporary = false)
         {
             var monster = Find(monsterId);
             if (monster == null || monster.Skills.Count >= 4)
@@ -390,7 +472,7 @@ namespace TheCall
                     return false;
             }
 
-            monster.Skills.Add(MakeSkill(skillName));
+            monster.Skills.Add(MakeSkill(skillName, isTemporary));
             return true;
         }
 
@@ -416,6 +498,12 @@ namespace TheCall
             }
         }
 
+        public void ClearTemporarySkills()
+        {
+            foreach (var monster in _byId.Values)
+                monster.ClearTemporarySkills();
+        }
+
         public void ClearTemporaryImmovable()
         {
             foreach (var monster in _byId.Values)
@@ -437,7 +525,7 @@ namespace TheCall
         }
 
         public MonsterView ToView(Monster monster) =>
-            MonsterViews.From(monster, this.GetUtility<SkillCatalog>());
+            MonsterViews.From(monster, this.GetUtility<SkillCatalog>(), this.GetUtility<MoodCatalog>());
 
         public MonsterView FindView(string monsterId)
         {
@@ -449,12 +537,21 @@ namespace TheCall
         {
         }
 
-        SkillInstance MakeSkill(string name) =>
-            new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name));
+        SkillInstance MakeSkill(string name, bool isTemporary = false) =>
+            new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name), isTemporary);
 
         Monster Create(string skillName) => Create(new[] { skillName }, 0, null);
 
-        Monster Create(IReadOnlyList<string> skillNames, int modifier, MonsterAppearance? appearance = null, IReadOnlyList<string> parentIds = null)
+        Monster Create(
+            IReadOnlyList<string> skillNames,
+            int modifier,
+            MonsterAppearance? appearance = null,
+            IReadOnlyList<string> parentIds = null,
+            string personality = null,
+            string race = null,
+            string mood = null,
+            int consecutiveWorkDays = 0,
+            int consecutiveRestDays = 0)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
@@ -462,7 +559,18 @@ namespace TheCall
 
             var serial = _nextId++;
             var id = "m" + serial;
-            var monster = new Monster(id, MonsterCodenames.ForSerial(serial), skills, modifier, appearance, parentIds);
+            var monster = new Monster(
+                id,
+                MonsterCodenames.ForSerial(serial),
+                skills,
+                modifier,
+                appearance,
+                parentIds,
+                personality ?? "稳定",
+                race ?? "森林",
+                mood ?? "普通",
+                consecutiveWorkDays,
+                consecutiveRestDays);
             _byId.Add(monster.Id, monster);
             return monster;
         }

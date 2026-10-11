@@ -9,23 +9,23 @@ namespace TheCall.Tests
         public void 摆上提取槽后怪物笼里没有它但查询仍返回技能报价和稀有度()
         {
             KeepOpened();
-            var devourerId = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => Holds(monster, "吞噬大嘴")).Id;
-            App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
+            var breathId = App.SendQuery(new MonsterCageQuery())
+                .First(monster => Holds(monster, "能量体")).Id;
+            App.SendCommand(new PlaceMonsterCommand(breathId, OperationArea.Extraction, 2));
 
-            Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(devourerId));
-            var placed = App.SendQuery(new MonsterQuery(devourerId));
-            Assert.That(placed.SkillNames, Is.EqualTo(new[] { "吞噬大嘴" }));
-            var devour = placed.Skills.Single(skill => skill.Name == "吞噬大嘴");
-            Assert.That(devour.Quote, Is.EqualTo(0));
-            Assert.That(devour.Rarity, Is.EqualTo(Rarity.White));
+            Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(breathId));
+            var placed = App.SendQuery(new MonsterQuery(breathId));
+            Assert.That(placed.SkillNames, Is.EqualTo(new[] { "能量体" }));
+            var breath = placed.Skills.Single(skill => skill.Name == "能量体");
+            Assert.That(breath.Quote, Is.EqualTo(5));
+            Assert.That(breath.Rarity, Is.EqualTo(Rarity.White));
             Assert.That(placed.Immovable, Is.False);
             Assert.That(placed.Capacity, Is.EqualTo(0));
 
             App.SendCommand(new ConfirmSettlementCommand());
 
-            var after = App.SendQuery(new MonsterQuery(devourerId));
-            Assert.That(after.Skills.Single(skill => skill.Name == "吞噬大嘴").Quote, Is.EqualTo(0));
+            var after = App.SendQuery(new MonsterQuery(breathId));
+            Assert.That(after.Skills.Single(skill => skill.Name == "能量体").Quote, Is.EqualTo(5));
             Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
         }
 
@@ -41,7 +41,7 @@ namespace TheCall.Tests
                 "能量体",
                 "奇异香",
                 "怪异香",
-                "孤独心",
+                "回响嗓",
                 "双头能量体");
 
             KeepOpened();

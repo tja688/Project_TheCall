@@ -55,6 +55,7 @@ namespace TheCall
                 case EffectKind.SideCount:
                 case EffectKind.RepeatQuote:
                 case EffectKind.OwnSkillMultiple:
+                case EffectKind.PersonalityCountMultiple:
                 case EffectKind.PopulationQuote:
                 case EffectKind.GainCapacity:
                     return new BeatSpec(BeatSite.Pop, false, BeatProof.None);
@@ -64,6 +65,7 @@ namespace TheCall
                     return new BeatSpec(BeatSite.Mark, false, BeatProof.None);
                 case EffectKind.FillSkills:
                 case EffectKind.CopyBreeding:
+                case EffectKind.StealSkillOnOtherDestroyed:
                     return new BeatSpec(BeatSite.Mark, true, BeatProof.None);
                 case EffectKind.SkillCountAdd:
                 case EffectKind.EdgeBonus:
@@ -71,11 +73,14 @@ namespace TheCall
                 case EffectKind.AddToOthers:
                 case EffectKind.NextEnergyBonus:
                 case EffectKind.RightRowOnLeftActive:
+                case EffectKind.RightNeighborOnLeftActive:
+                case EffectKind.LegacyAddToOthers:
                     return new BeatSpec(BeatSite.Carry, true, BeatProof.AddFromSelf);
                 case EffectKind.DoubleAdjacentEnergy:
                 case EffectKind.DoubleWhenIsolated:
                     return new BeatSpec(BeatSite.Carry, true, BeatProof.FactorFromSelf);
                 case EffectKind.LandingResponse:
+                case EffectKind.CorpseEnergyQuote:
                     return new BeatSpec(BeatSite.Carry, true, BeatProof.OwnLanding);
                 case EffectKind.CapacityExtraForLeftNeighbor:
                 case EffectKind.CapacityExtraForRightNeighbor:
@@ -86,6 +91,11 @@ namespace TheCall
                     return new BeatSpec(BeatSite.Cause, true, BeatProof.Cause);
                 case EffectKind.Devour:
                 case EffectKind.SwapWithLeft:
+                case EffectKind.SelfDestruct:
+                case EffectKind.DevourLeftNeighborSkillMultiple:
+                case EffectKind.KillRandomOther:
+                case EffectKind.SacrificeNeighborsPerMonsterEnergy:
+                case EffectKind.CullUntilAlonePerMonsterEnergy:
                     return new BeatSpec(BeatSite.Existing, false, BeatProof.None);
                 case EffectKind.GrowOnClear:
                 case EffectKind.LegacyOnDiscard:

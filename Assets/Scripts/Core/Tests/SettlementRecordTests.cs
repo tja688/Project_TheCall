@@ -6,44 +6,6 @@ namespace TheCall.Tests
     public sealed class SettlementRecordTests : RulesFixture
     {
         [Test]
-        public void 没有相邻时吞噬大嘴的记录按落地消灭和支付的顺序写下写回与未发生的消灭()
-        {
-            UseDraw(
-                "吞噬大嘴",
-                "左能量体",
-                "右能量体",
-                "奇异香",
-                "怪异香",
-                "汲取鼻",
-                "孤独心",
-                "双头能量体",
-                "蜜能量体");
-
-            KeepOpened();
-            var devourerId = IdOf("吞噬大嘴");
-            App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 2));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var record = App.SendQuery(new SettlementRecordQuery());
-            Assert.That(record.Select(entry => entry.GetType().Name).ToArray(), Is.EqualTo(new[]
-            {
-                "SettlementRemoval",
-                "SettlementPayment",
-            }));
-            var removal = (SettlementRemoval)record[0];
-            Assert.That(removal.MonsterId, Is.Null);
-            Assert.That(removal.Happened, Is.False);
-            Assert.That(removal.SourceId, Is.EqualTo(devourerId));
-            var payment = (SettlementPayment)record[1];
-            Assert.That(payment.Deducted, Is.EqualTo(0));
-            Assert.That(payment.Shortfall, Is.EqualTo(50));
-            Assert.That(payment.Overtime, Is.True);
-            Assert.That(payment.Failed, Is.False);
-            Assert.That(payment.Excess, Is.False);
-            Assert.That(payment.Wage, Is.EqualTo(0));
-        }
-
-        [Test]
         public void 没有左侧目标时换位记录为没有发生()
         {
             UseDraw(
@@ -53,7 +15,7 @@ namespace TheCall.Tests
                 "能量体",
                 "奇异香",
                 "怪异香",
-                "孤独心",
+                "良好肉体",
                 "双头能量体",
                 "蜜能量体");
 
@@ -79,7 +41,7 @@ namespace TheCall.Tests
                 "换位手",
                 "奇异香",
                 "怪异香",
-                "孤独心",
+                "良好肉体",
                 "双头能量体",
                 "蜜能量体");
 
@@ -104,37 +66,6 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 立刻消灭写在该次落地之后并记下被拿走的怪物()
-        {
-            UseDraw(
-                "吞噬大嘴",
-                "左能量体",
-                "右能量体",
-                "能量体",
-                "奇异香",
-                "怪异香",
-                "孤独心",
-                "双头能量体",
-                "蜜能量体");
-
-            KeepOpened();
-            var devourerId = IdOf("吞噬大嘴");
-            var victimId = IdOf("能量体");
-            App.SendCommand(new PlaceMonsterCommand(victimId, OperationArea.Extraction, 0));
-            App.SendCommand(new PlaceMonsterCommand(devourerId, OperationArea.Extraction, 1));
-            App.SendCommand(new ConfirmSettlementCommand());
-
-            var record = App.SendQuery(new SettlementRecordQuery());
-            Assert.That(record[0], Is.InstanceOf<SettlementLanding>());
-            Assert.That(((SettlementLanding)record[0]).MonsterId, Is.EqualTo(victimId));
-            Assert.That(record[1], Is.InstanceOf<SettlementRemoval>());
-            var removal = (SettlementRemoval)record[1];
-            Assert.That(removal.MonsterId, Is.EqualTo(victimId));
-            Assert.That(removal.Happened, Is.True);
-            Assert.That(removal.SourceId, Is.Null);
-        }
-
-        [Test]
         public void 加班失败的支付记录留下欠额和失败且命令返回后仍能读到()
         {
             UseLevel(
@@ -145,8 +76,8 @@ namespace TheCall.Tests
                 "奇异香",
                 "怪异香",
                 "汲取鼻",
-                "孤独心",
-                "吞噬大嘴",
+                "良好肉体",
+                "优质肉体",
                 "双头能量体");
 
             KeepOpened();
@@ -187,8 +118,8 @@ namespace TheCall.Tests
                 "能量体",
                 "奇异香",
                 "怪异香",
-                "孤独心",
-                "吞噬大嘴",
+                "良好肉体",
+                "优质肉体",
                 "双头能量体");
 
             KeepOpened();

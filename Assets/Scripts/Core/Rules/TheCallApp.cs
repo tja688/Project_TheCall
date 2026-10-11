@@ -26,6 +26,9 @@ namespace TheCall
             RegisterUtility<ILevelCatalog>(new LevelCatalog(book));
             RegisterUtility<IToolCatalog>(new ToolCatalog(book));
             RegisterUtility(new TechCatalog(book));
+            RegisterUtility(new PersonalityCatalog(book));
+            RegisterUtility(new RaceCatalog(book));
+            RegisterUtility(new MoodCatalog(book));
             RegisterModel(new RunModel());
             RegisterModel(new LevelModel());
             RegisterModel(new SettlementSight());

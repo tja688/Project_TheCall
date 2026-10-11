@@ -988,18 +988,17 @@ namespace TheCall
             var skills = neighbor.Skills;
             for (var skillIndex = 0; skillIndex < skills.Count; skillIndex++)
             {
-                var amount = catalog.RightRowBonus(skills[skillIndex].Name);
+                var amount = catalog.RightNeighborBonus(skills[skillIndex].Name);
+                if (amount == 0)
+                    amount = catalog.RightRowBonus(skills[skillIndex].Name);
                 if (amount == 0)
                     continue;
 
                 var add = LandingAdd.Of(skills[skillIndex].Name, amount, neighbor.Id, skillIndex, neighbor.DisplayName);
-                for (var index = ear + 1; index < cells.Count; index++)
+                var target = ear + 1;
+                if (target < cells.Count && cells[target] != null)
                 {
-                    var id = cells[index];
-                    if (id == null)
-                        continue;
-
-                    Remember(_rowAdds, id, add);
+                    Remember(_rowAdds, cells[target], add);
                 }
             }
         }

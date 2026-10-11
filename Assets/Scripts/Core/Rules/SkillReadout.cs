@@ -217,7 +217,11 @@ namespace TheCall
                 var bonus = 0;
                 var earSkills = earMonster.Skills;
                 for (var index = 0; index < earSkills.Count; index++)
+                {
                     bonus += catalog.RightRowBonus(earSkills[index].Name);
+                    if (ear == cell - 1)
+                        bonus += catalog.RightNeighborBonus(earSkills[index].Name);
+                }
                 if (bonus == 0)
                     continue;
 
@@ -329,6 +333,10 @@ namespace TheCall
                 IsSingleAffix(catalog, run, monsterId))
                 mult *= 2;
 
+            if (ToolRules.HeldName(tools, run.Tools, ToolEffect.SingleSkillBonus) != null &&
+                IsSingleSkill(run, monsterId))
+                mult *= 2;
+
             string hasteMonster;
             string hasteSkill;
             if (ToolRules.HeldName(tools, run.Tools, ToolEffect.DoubleFirstEnergy) != null &&
@@ -373,6 +381,12 @@ namespace TheCall
             }
 
             return false;
+        }
+
+        static bool IsSingleSkill(RunModel run, string monsterId)
+        {
+            var monster = FindMonster(run, monsterId);
+            return monster != null && monster.Skills.Count == 1;
         }
 
         static bool IsSingleAffix(SkillCatalog catalog, RunModel run, string monsterId)

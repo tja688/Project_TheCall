@@ -7,7 +7,7 @@ namespace TheCall.Tests
     {
         static readonly HashSet<string> Amplify = new HashSet<string>
         {
-            "吞噬大嘴", "良好肉体", "优质肉体", "争锋基因", "潜藏基因", "重血脉心", "孤独心",
+            "良好肉体", "优质肉体",
         };
 
         public static string[] PendingCage { get; private set; }
@@ -16,9 +16,9 @@ namespace TheCall.Tests
 
         static readonly string[] FixedOpening =
         {
-            "吞噬大嘴", "能量体",
-            "良好肉体", "左能量体",
-            "优质肉体", "右能量体",
+            "良好肉体", "能量体",
+            "优质肉体", "左能量体",
+            "良好肉体", "右能量体",
             "能量体", "左能量体", "右能量体", "双头能量体",
             "奇异香", "怪异香", "回响嗓", "镜眼",
         };

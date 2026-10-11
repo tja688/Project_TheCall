@@ -44,7 +44,7 @@ namespace TheCall.Tests
             Assert.That(function, Is.EqualTo("产能"));
             Assert.That(copy.TryDescribe("蜜能量体", out _, out _, out var both), Is.True);
             Assert.That(both, Is.EqualTo("产能，辅助"));
-            Assert.That(copy.TryDescribe("吞噬大嘴", out _, out _, out var amplify), Is.True);
+            Assert.That(copy.TryDescribe("良好肉体", out _, out _, out var amplify), Is.True);
             Assert.That(amplify, Is.EqualTo("增幅"));
             Assert.That(copy.TryDescribe("外接胚胎", out _, out _, out var economy), Is.True);
             Assert.That(economy, Is.EqualTo("经济"));
@@ -67,7 +67,7 @@ namespace TheCall.Tests
             Assert.That(small.Any(piece => piece.IsEnergy), Is.False);
 
             var share = SkillSentences.Pieces(ContentGate.Current.FindSkill("蜜能量体"));
-            Assert.That(share.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(2));
+            Assert.That(share.Single(piece => piece.IsEnergy).Energy, Is.EqualTo(3));
             Assert.That(
                 SkillSentences.Format(ContentGate.Current.FindSkill("左复制腺体")),
                 Is.EqualTo("左侧相邻怪物，产生能量的触发次数+1"));
@@ -77,17 +77,17 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 吞噬大嘴的句子没有星号()
+        public void 良好肉体的句子没有星号()
         {
             KeepOpened();
-            var devourer = App.SendQuery(new MonsterCageQuery())
-                .Single(monster => Holds(monster, "吞噬大嘴"));
+            var amplify = App.SendQuery(new MonsterCageQuery())
+                .Single(monster => Holds(monster, "良好肉体"));
 
-            var details = App.SendQuery(new MonsterDetailsQuery(devourer.Id));
+            var details = App.SendQuery(new MonsterDetailsQuery(amplify.Id));
 
             Assert.That(
                 details.Skills[0].Sentence,
-                Is.EqualTo("消灭随机一只相邻怪物，本怪物产能类型的技能数值永久+2"));
+                Does.Not.Contain("*"));
         }
 
         [Test]
@@ -108,11 +108,11 @@ namespace TheCall.Tests
 
             var skill = Skill(id, "生长能量体");
 
-            Assert.That(skill.Sentence, Is.EqualTo("产生5点能量，每通过一次关卡本，本技能能量数值永久+3"));
+            Assert.That(skill.Sentence, Is.EqualTo("产生5点能量，每个通关阶段后，该技能的能量值永久+3"));
             Assert.That(Colored(skill), Is.EqualTo("5"));
             Assert.That(
                 skill.DisplaySentence,
-                Is.EqualTo("产生<color=#FF8C1A>5</color>点能量，每通过一次关卡本，本技能能量数值永久+3"));
+                Is.EqualTo("产生<color=#FF8C1A>5</color>点能量，每个通关阶段后，该技能的能量值永久+3"));
         }
 
         [Test]
@@ -200,13 +200,13 @@ namespace TheCall.Tests
             var host = Fresh("优秀能量体");
             var scent = Fresh("奇异香");
 
-            Assert.That(Skill(host, "优秀能量体").Sentence, Is.EqualTo("产生等同于怪物技能数数值两倍的能量（2）"));
+            Assert.That(Skill(host, "优秀能量体").Sentence, Is.EqualTo("产生等同于自身技能数两倍的能量（2）"));
             Assert.That(Colored(Skill(host, "优秀能量体")), Is.Empty);
 
             Place(host, 0);
             Place(scent, 1);
             var boosted = Skill(host, "优秀能量体");
-            Assert.That(boosted.Sentence, Is.EqualTo("产生等同于怪物技能数数值两倍的能量（3）"));
+            Assert.That(boosted.Sentence, Is.EqualTo("产生等同于自身技能数两倍的能量（3）"));
             Assert.That(Colored(boosted), Is.EqualTo("3"));
         }
 
@@ -236,27 +236,6 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 贴边基因只在对应边上加()
-        {
-            KeepOpened();
-            var left = Fresh("能量体", "争锋基因");
-            var right = Fresh("能量体", "潜藏基因");
-            var blocker = Fresh("能量体");
-            Place(blocker, 0);
-            Place(left, 2);
-            Place(right, 4);
-
-            Assert.That(Skill(left, "能量体").Sentence, Is.EqualTo("产生5点能量"));
-            Assert.That(Skill(right, "能量体").Sentence, Is.EqualTo("产生10点能量"));
-
-            App.SendCommand(new ReturnMonsterCommand(blocker));
-
-            Assert.That(Skill(left, "能量体").Sentence, Is.EqualTo("产生10点能量"));
-            Assert.That(Colored(Skill(left, "能量体")), Is.EqualTo("10"));
-            Assert.That(Skill(right, "能量体").Sentence, Is.EqualTo("产生10点能量"));
-        }
-
-        [Test]
         public void 蜜能量体把加值写进下一个怪物而不是自己的赠送数字()
         {
             KeepOpened();
@@ -268,7 +247,7 @@ namespace TheCall.Tests
             var gift = Skill(honey, "蜜能量体");
             var next = Skill(breath, "能量体");
 
-            Assert.That(gift.Sentence, Is.EqualTo("产生2点能量，下一个怪物产生的能量数值+3"));
+            Assert.That(gift.Sentence, Is.EqualTo("产生3点能量，下一个怪物的能量值+3"));
             Assert.That(Colored(gift), Is.Empty);
             Assert.That(next.Sentence, Is.EqualTo("产生8点能量"));
             Assert.That(Colored(next), Is.EqualTo("8"));
@@ -286,7 +265,7 @@ namespace TheCall.Tests
             Place(right, 2);
 
             Assert.That(Skill(left, "能量体").Sentence, Is.EqualTo("产生5点能量"));
-            Assert.That(Skill(ear, "传能耳").Sentence, Is.EqualTo("左侧相邻怪物每触发一个主动技能，右侧每一只怪物能量数值+2"));
+            Assert.That(Skill(ear, "传能耳").Sentence, Is.EqualTo("左侧相邻怪物每触发一个主动技能，其右侧相邻怪物的能量值+2"));
             Assert.That(Colored(Skill(ear, "传能耳")), Is.Empty);
             Assert.That(Skill(right, "能量体").Sentence, Is.EqualTo("产生7点能量"));
             Assert.That(Colored(Skill(right, "能量体")), Is.EqualTo("7"));
@@ -307,25 +286,6 @@ namespace TheCall.Tests
 
             Assert.That(Skill(right, "能量体").Sentence, Is.EqualTo("产生9点能量"));
             Assert.That(Colored(Skill(right, "能量体")), Is.EqualTo("9"));
-        }
-
-        [Test]
-        public void 孤独心在不相邻时连同加项一起翻倍且和镜眼不叠两次()
-        {
-            KeepOpened();
-            var lonely = Fresh("能量体", "孤独心");
-            var scent = Fresh("奇异香");
-            Place(lonely, 0);
-            Place(scent, 2);
-
-            Assert.That(Skill(lonely, "能量体").Sentence, Is.EqualTo("产生12点能量"));
-
-            App.SendCommand(new ReturnMonsterCommand(scent));
-            var eye = Fresh("镜眼");
-            Place(eye, 1);
-
-            Assert.That(Skill(lonely, "能量体").Sentence, Is.EqualTo("产生10点能量"));
-            Assert.That(Colored(Skill(lonely, "能量体")), Is.EqualTo("10"));
         }
 
         [Test]
@@ -411,10 +371,10 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 劣胜装置在提取槽里翻倍单词条怪物()
+        public void 劣胜装置在提取槽里翻倍单技能怪物()
         {
             KeepOpened();
-            var id = Fresh("能量体", "换位手");
+            var id = Fresh("能量体");
             Place(id, 0);
 
             Assert.That(Skill(id, "能量体").Sentence, Is.EqualTo("产生5点能量"));

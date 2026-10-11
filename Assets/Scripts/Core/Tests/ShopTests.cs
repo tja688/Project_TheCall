@@ -9,7 +9,7 @@ namespace TheCall.Tests
     {
         static readonly string[] OpeningDraws =
         {
-            "吞噬大嘴", "外接胚胎",
+            "良好肉体", "外接胚胎",
             "良好肉体", "产金管道",
             "优质肉体", "外接胚胎",
             "能量体", "能量体", "左能量体", "右能量体",
@@ -101,8 +101,12 @@ namespace TheCall.Tests
         [Test]
         public void 货架最多两件不同名工具并按稀有度权重和标价抽取()
         {
+            var tools = new FixedTools(
+                new ToolDefinition("急急装置", 30, Rarity.White),
+                new ToolDefinition("上级员工证", 50, Rarity.Blue),
+                new ToolDefinition("劣胜装置", 80, Rarity.Gold));
             var draw = new RecordingDraw(Draws(And(FourSingles, "急急装置", "上级员工证")));
-            UseRules(draw, new ScriptedLevelCatalog(5));
+            UseRules(draw, new ScriptedLevelCatalog(5), tools);
             KeepAndPay();
 
             var shelf = App.SendQuery(new ShelfQuery());
@@ -116,7 +120,7 @@ namespace TheCall.Tests
             }));
             Assert.That(toolLists[1], Is.EqualTo(new[] { "上级员工证", "上级员工证", "劣胜装置" }));
             Assert.That(shelf.Tools.Select(tool => tool.Name).ToArray(), Is.EqualTo(new[] { "急急装置", "上级员工证" }));
-            Assert.That(shelf.Tools.Select(tool => tool.Price).ToArray(), Is.EqualTo(new[] { 30, 40 }));
+            Assert.That(shelf.Tools.Select(tool => tool.Price).ToArray(), Is.EqualTo(new[] { 30, 50 }));
             Assert.That(shelf.Tools.Select(tool => tool.Rarity).ToArray(), Is.EqualTo(new[] { Rarity.White, Rarity.Blue }));
             Assert.That(shelf.Tools.Select(tool => tool.Name), Does.Not.Contain("劣胜装置"));
         }
@@ -124,11 +128,11 @@ namespace TheCall.Tests
         [Test]
         public void 工具种类不足两件时货架少开位数()
         {
-            ReachShop(new FixedTools(new ToolDefinition("上级员工证", 40, Rarity.Blue)), And(FourSingles, "上级员工证"));
+            ReachShop(new FixedTools(new ToolDefinition("上级员工证", 50, Rarity.Blue)), And(FourSingles, "上级员工证"));
 
             var tools = App.SendQuery(new ShelfQuery()).Tools;
             Assert.That(tools.Select(tool => tool.Name).ToArray(), Is.EqualTo(new[] { "上级员工证" }));
-            Assert.That(tools[0].Price, Is.EqualTo(40));
+            Assert.That(tools[0].Price, Is.EqualTo(50));
         }
 
         [Test]
