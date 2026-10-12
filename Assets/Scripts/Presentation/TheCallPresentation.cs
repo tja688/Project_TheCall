@@ -65,7 +65,7 @@ namespace TheCall
                 _spriteCatalog = Resources.Load<PresentationSpriteCatalog>("PresentationSpriteCatalog");
         }
 
-        void StartSession()
+        public void StartSession()
         {
             _back = BackTarget.None;
             _sellTab = false;
@@ -214,7 +214,7 @@ namespace TheCall
             _settings.ShowLog(LogText());
         }
 
-        void ToggleLog()
+        public void ToggleLog()
         {
             if (_log == null)
                 return;
@@ -234,7 +234,7 @@ namespace TheCall
                     return monster?.DisplayName;
                 });
 
-        internal void Refresh()
+        public void Refresh()
         {
             if (_opening == null)
                 return;
@@ -747,6 +747,8 @@ namespace TheCall
 
             return applied;
         }
+
+        public void TriggerSettle() => OnSettle();
 
         void OnSettle()
         {

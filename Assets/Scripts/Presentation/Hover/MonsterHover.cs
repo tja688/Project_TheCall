@@ -68,6 +68,23 @@ namespace TheCall
             _window.gameObject.SetActive(false);
         }
 
+        public void HideManual() => Hide();
+
+        public void ShowManual(MonsterDetails details)
+        {
+            if (details == null || details.Skills.Count == 0)
+                return;
+
+            var metrics = ReadMetrics();
+            var placement = HoverLayout.Place(
+                new Rect(0f, 0f, 160f, 160f),
+                300f,
+                Screen.width > 0 ? Screen.width : 1920f,
+                Mathf.Clamp(details.Skills.Count, 1, 4),
+                metrics);
+            Show(details, placement);
+        }
+
         void Show(MonsterDetails details, in HoverPlacement placement)
         {
             transform.SetAsLastSibling();

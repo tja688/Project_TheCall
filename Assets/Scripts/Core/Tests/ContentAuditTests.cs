@@ -258,5 +258,43 @@ namespace TheCall.Tests
             Assert.That(level.RefreshPrice, Is.EqualTo(5));
             Assert.That(level.Energy, Is.EqualTo(0));
         }
+
+        [Test]
+        public void 全量三十四个技能均能正确生成文案描述且效果非空()
+        {
+            Assert.That(_book.Skills.Count, Is.EqualTo(34));
+            foreach (var skill in _book.Skills)
+            {
+                Assert.That(skill.Name, Is.Not.Null.And.Not.Empty);
+                Assert.That(skill.Effects.Count, Is.GreaterThan(0), $"{skill.Name} 效果列表不应为空");
+                var sentence = SkillSentences.Format(skill);
+                Assert.That(sentence, Is.Not.Null.And.Not.Empty, $"{skill.Name} 应该能生成完整文案描述");
+            }
+        }
+
+        [Test]
+        public void 全量二十五个性格名称与文案均非空且稀有度有效()
+        {
+            Assert.That(_book.Personalities.Count, Is.EqualTo(25));
+            foreach (var p in _book.Personalities)
+            {
+                Assert.That(p.Name, Is.Not.Null.And.Not.Empty);
+                Assert.That(p.Description, Is.Not.Null.And.Not.Empty, $"{p.Name} 描述不应为空");
+                Assert.That(p.Kind, Is.EqualTo("Aura").Or.EqualTo("Trigger"), $"{p.Name} 类型必须为 Aura 或 Trigger");
+            }
+        }
+
+        [Test]
+        public void 全量十八个工具效果与文案均非空()
+        {
+            Assert.That(_book.Tools.Count, Is.EqualTo(18));
+            foreach (var t in _book.Tools)
+            {
+                Assert.That(t.Name, Is.Not.Null.And.Not.Empty);
+                Assert.That(t.Description, Is.Not.Null.And.Not.Empty, $"{t.Name} 描述不应为空");
+                Assert.That(t.Effect, Is.Not.EqualTo(ToolEffect.None), $"{t.Name} 必须有明确被动效果");
+            }
+        }
     }
 }
+

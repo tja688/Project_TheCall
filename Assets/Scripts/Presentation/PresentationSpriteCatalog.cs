@@ -70,13 +70,35 @@ namespace TheCall
         public Sprite GetRaceIcon(string race)
         {
             Init();
-            return _raceMap.TryGetValue(race ?? "", out var s) ? s : null;
+            if (string.IsNullOrEmpty(race)) return null;
+            if (_raceMap.TryGetValue(race, out var s)) return s;
+            var element = race switch
+            {
+                "森林" => "木",
+                "天空" => "火",
+                "沙漠" => "土",
+                "山脉" => "金",
+                "海生" => "水",
+                _ => null
+            };
+            return element != null && _raceMap.TryGetValue(element, out s) ? s : null;
         }
 
         public Sprite GetMoodIcon(string mood)
         {
             Init();
-            return _moodMap.TryGetValue(mood ?? "", out var s) ? s : null;
+            if (string.IsNullOrEmpty(mood)) return null;
+            if (_moodMap.TryGetValue(mood, out var s)) return s;
+            var alias = mood switch
+            {
+                "热爱" => "极好",
+                "热情" => "良好",
+                "普通" => "普通",
+                "疲倦" => "糟糕",
+                "倦怠" => "崩溃",
+                _ => null
+            };
+            return alias != null && _moodMap.TryGetValue(alias, out s) ? s : null;
         }
 
         public Sprite GetPersonalityIcon(string personality)
