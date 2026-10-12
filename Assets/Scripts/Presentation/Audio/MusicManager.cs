@@ -55,8 +55,8 @@ namespace TheCall
             _second = CreateTrack("BGM B");
             if (_catalog == null)
                 Debug.LogError("[MusicManager] Missing Resources/GameAudioCatalog.asset. BGM stays silent.");
-            // Old AudioKit MusicPlayer must not coexist with the sole BGM owner.
-            AudioKit.StopMusic();
+            // Never touch AudioKit here: BeforeSceneLoad initialization order is undefined.
+            // The first session reset (after scene Awake) safely retires any legacy player.
         }
 
         AudioSource CreateTrack(string label)
@@ -220,20 +220,20 @@ namespace TheCall
             source.volume = 0f;
         }
 
-        void StopEverything()
+        void StopEverything(bool stopLegacyAudioKit = true)
         {
             StopAllCoroutines();
             _transition = null;
             _target = MusicState.Silent;
             if (_first != null) Clear(_first);
             if (_second != null) Clear(_second);
-            AudioKit.StopMusic();
+            if (stopLegacyAudioKit) AudioKit.StopMusic();
         }
 
         void OnApplicationQuit()
         {
             _quitting = true;
-            StopEverything();
+            StopEverything(false);
             GameSfx.StopAll();
             GameAudioSettings.Save();
         }
@@ -241,7 +241,8 @@ namespace TheCall
         void OnDestroy()
         {
             if (_instance != this) return;
-            StopEverything();
+            // Never recreate QFramework singletons while Unity is destroying objects.
+            StopEverything(false);
             _instance = null;
         }
     }

@@ -11,6 +11,13 @@ namespace QFramework
 {
     internal static class StopMusicCommand
     {
-        internal static void Execute() => AudioKit.MusicPlayer.Stop();
+        internal static void Execute()
+        {
+            // Otherwise AudioManager's music-on observer can resurrect a previously stopped
+            // clip when users toggle Music after changing screens.
+            var manager = AudioManager.Instance;
+            manager.CurrentMusicName = null;
+            manager.MusicPlayer.Stop();
+        }
     }
 }
