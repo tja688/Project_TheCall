@@ -153,6 +153,8 @@ namespace TheCall.Scoring
                     var cue = _tape.Cues[i];
                     if (cue is PayCue)
                     {
+                        // Pay presentation is the first actual settlement screen, not Confirm().
+                        MusicManager.EnterSettlement();
                         _cutToPay = false;
                         _pace = Mathf.Min(_pace, PayPaceCeiling);
                         _paying = true;

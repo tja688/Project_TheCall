@@ -37,6 +37,7 @@ namespace TheCall
         bool _sellTab;
         bool _wired;
         bool _busy;
+        bool _sessionStarted;
         ProductionLogView _log;
         PresentationSpriteCatalog _spriteCatalog;
         string _selectedTech = "基因实验";
@@ -49,7 +50,7 @@ namespace TheCall
         static void BeginPlaySession()
         {
             var presentation = FindAnyObjectByType<TheCallPresentation>();
-            if (presentation != null)
+            if (presentation != null && !presentation._sessionStarted)
                 presentation.StartSession();
         }
 
@@ -68,6 +69,10 @@ namespace TheCall
 
         public void StartSession()
         {
+            _sessionStarted = true;
+            // Session resets stop pooled effects and both BGM tracks before reopening the menu.
+            GameSfx.StopAll();
+            MusicManager.HardStop();
             _back = BackTarget.None;
             _lastTrimNotice = null;
             _sellTab = false;
@@ -1022,6 +1027,15 @@ namespace TheCall
             Activate(_result, screen == _result);
             if (_workspace != null)
                 _workspace.SetActive(screen == _operation);
+
+            // Music follows the *visible* screen, never an early core RunPhase mutation.
+            if (screen == _opening) MusicManager.Request(MusicState.Menu);
+            else if (screen == _shop) MusicManager.Request(MusicState.Shop);
+            else if (screen == _operation || screen == _levelStart)
+                MusicManager.Request(MusicState.Level);
+            else if (screen == _research)
+                MusicManager.Request(_back == BackTarget.Shop ? MusicState.Shop : MusicState.Level);
+            else if (screen == _result) MusicManager.Request(MusicState.Silent);
         }
 
         static void Activate(MonoBehaviour view, bool active)

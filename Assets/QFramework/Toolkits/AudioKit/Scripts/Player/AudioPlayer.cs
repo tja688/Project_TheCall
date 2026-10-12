@@ -7,6 +7,8 @@
  * AudioKit v1.0: use QFramework.cs architecture
  ****************************************************************************/
 
+using UnityEngine.Audio;
+
 namespace QFramework
 {
     /// <summary>
@@ -14,6 +16,16 @@ namespace QFramework
     /// </summary>
     public class AudioPlayer : AbstractAudioPlayer, IPoolable, IPoolType
     {
+        /// <summary>Set output bus for a pooled sound; use GameSfx as the public entry point.</summary>
+        public AudioMixerGroup OutputMixerGroup
+        {
+            set
+            {
+                if (AudioSourceProxy.AudioSource != null)
+                    AudioSourceProxy.AudioSource.outputAudioMixerGroup = value;
+            }
+        }
+
         internal AudioKit.PlaySoundModes PlaySoundMode { get; private set; } = AudioKit.PlaySoundModes.EveryOne;
 
         internal AudioPlayer SetPlaySoundMode(AudioKit.PlaySoundModes? playSoundMode)
