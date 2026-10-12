@@ -38,6 +38,7 @@ namespace TheCall
         bool _wired;
         bool _busy;
         ProductionLogView _log;
+        PresentationSpriteCatalog _spriteCatalog;
         string _selectedTech = "基因实验";
         float _noticeUntil;
 
@@ -53,8 +54,15 @@ namespace TheCall
 
         void Awake()
         {
+            EnsureSpriteCatalog();
             Wire();
             StartSession();
+        }
+
+        void EnsureSpriteCatalog()
+        {
+            if (_spriteCatalog == null)
+                _spriteCatalog = Resources.Load<PresentationSpriteCatalog>("PresentationSpriteCatalog");
         }
 
         void StartSession()
@@ -126,8 +134,10 @@ namespace TheCall
             Listen(_levelStart != null ? _levelStart.beginButton : null, OnBegin);
             Listen(_operation != null ? _operation.shopButton : null, OnShopLocked);
             Listen(_operation != null ? _operation.researchButton : null, () => OpenResearch(BackTarget.Operation));
+            Listen(_operation != null ? _operation.settingsButton : null, ToggleSettings);
             Listen(_operation != null ? _operation.titleButton : null, OnTitle);
             Listen(_operation != null ? _operation.nextDayButton : null, OnSettle);
+            Listen(_operation != null ? _operation.addGeneSlotButton : null, OnAddGeneSlot);
             if (_operation != null && _operation.pointer != null)
                 _operation.pointer.Attach(this);
             Listen(_research != null ? _research.researchButton : null, OnResearch);
@@ -296,6 +306,13 @@ namespace TheCall
             SetLabel(_operation.transform, "TargetCaption", "目标");
             _operation.targetLabel.text = goal.ToString();
             _operation.energyLabel.text = "获得 " + energy;
+            if (_operation.dayLabel != null)
+                _operation.dayLabel.text = "第 " + target.LevelNumber + " 天";
+            if (_operation.excessLabel != null)
+                _operation.excessLabel.text = target.ExcessEnergy + "+";
+            if (_operation.overtimeLabel != null)
+                _operation.overtimeLabel.text = target.InOvertime ? "加班中" : "正常工时";
+
             if (!_busy)
             {
                 var current = _operation.currentNumber;
@@ -318,8 +335,11 @@ namespace TheCall
             FillList(_operation.cageSlots, cage, ArmedMonsterId());
             FillCells(_operation.extractionSlots, this.SendQuery(new ExtractionSlotsQuery()));
             FillParents(_operation.breedingSlots, this.SendQuery(new BreedingSlotsQuery()));
-            FillSkills(_operation.skillChips, run.SkillSlots);
+            FillGeneSlots(_operation.skillChips, run.GeneCapacity);
+            if (_operation.addGeneSlotButton != null)
+                _operation.addGeneSlotButton.gameObject.SetActive(run.GeneCapacity < 4);
             FillBreedingSkills(_operation.breedingSkills, this.SendQuery(new BreedingPlansQuery()));
+            FillOwnedTools(run.Tools);
         }
 
         void DrawShop()
@@ -337,19 +357,16 @@ namespace TheCall
             if (_shop.sellPage != null)
                 _shop.sellPage.SetActive(_sellTab);
 
-            var monsterCursor = 0;
-            var toolCursor = 0;
+            var cardIndex = 0;
             var cards = _shop.cards;
-            for (var i = 0; i < cards.Length; i++)
+            if (cards != null)
             {
-                var card = cards[i];
-                var toolSlot = i == 2 || i == 5;
-                if (!toolSlot && monsterCursor < shelf.Monsters.Count)
-                    FillMonsterCard(card, shelf.Monsters[monsterCursor++], run.Gold);
-                else if (toolSlot && toolCursor < shelf.Tools.Count)
-                    FillToolCard(card, shelf.Tools[toolCursor++], run.Gold);
-                else
-                    card.gameObject.SetActive(false);
+                for (var i = 0; i < shelf.Monsters.Count && cardIndex < cards.Length; i++)
+                    FillMonsterCard(cards[cardIndex++], shelf.Monsters[i], run.Gold);
+                for (var i = 0; i < shelf.Tools.Count && cardIndex < cards.Length; i++)
+                    FillToolCard(cards[cardIndex++], shelf.Tools[i], run.Gold);
+                for (; cardIndex < cards.Length; cardIndex++)
+                    cards[cardIndex].gameObject.SetActive(false);
             }
 
             var cage = this.SendQuery(new MonsterCageQuery());
@@ -462,18 +479,109 @@ namespace TheCall
             }
         }
 
-        void FillSkills(SkillChipView[] chips, IReadOnlyList<string> skills)
+        void FillGeneSlots(SkillChipView[] chips, int capacity)
         {
+            if (chips == null)
+                return;
+
+            var geneSlots = this.SendQuery(new GeneSlotsQuery());
             for (var i = 0; i < chips.Length; i++)
             {
-                var has = skills != null && i < skills.Count;
-                chips[i].index = i;
-                chips[i].label.text = has ? skills[i] : "空";
-                if (chips[i].selection != null)
-                    chips[i].selection.SetActive(has && IsArmed(DropPayload.SkillChip(i)));
-                if (chips[i].button != null)
-                    chips[i].button.interactable = has;
+                var chip = chips[i];
+                if (chip == null)
+                    continue;
+
+                var active = i < capacity;
+                chip.gameObject.SetActive(active);
+                if (!active)
+                    continue;
+
+                chip.index = i;
+                var hasGene = geneSlots != null && i < geneSlots.Count;
+                if (hasGene)
+                {
+                    var slot = geneSlots[i];
+                    chip.label.text = slot.SkillName;
+                    if (chip.reservedLabel != null)
+                    {
+                        chip.reservedLabel.text = slot.IsReserved
+                            ? (slot.ReservedBreedingSlot.HasValue ? $"[已预约 培育{slot.ReservedBreedingSlot.Value + 1}]" : "[已预约]")
+                            : "";
+                    }
+                    if (chip.reservedMark != null)
+                        chip.reservedMark.SetActive(slot.IsReserved);
+                    if (chip.button != null)
+                        chip.button.interactable = true;
+                    if (chip.selection != null)
+                        chip.selection.SetActive(IsArmed(DropPayload.SkillChip(i)));
+                }
+                else
+                {
+                    chip.label.text = "空";
+                    if (chip.reservedLabel != null)
+                        chip.reservedLabel.text = "";
+                    if (chip.reservedMark != null)
+                        chip.reservedMark.SetActive(false);
+                    if (chip.button != null)
+                        chip.button.interactable = false;
+                    if (chip.selection != null)
+                        chip.selection.SetActive(false);
+                }
             }
+        }
+
+        void FillOwnedTools(IReadOnlyList<string> tools)
+        {
+            var views = _operation != null ? _operation.ownedToolViews : null;
+            if (views == null)
+                return;
+
+            EnsureSpriteCatalog();
+            for (var i = 0; i < views.Length; i++)
+            {
+                var view = views[i];
+                if (view == null)
+                    continue;
+
+                var owned = tools != null && i < tools.Count;
+                view.gameObject.SetActive(owned);
+                if (!owned)
+                    continue;
+
+                var toolName = tools[i];
+                view.toolName = toolName;
+                var def = _spriteCatalog != null ? _spriteCatalog.FindTool(toolName) : null;
+                if (def != null)
+                {
+                    view.icon = def.icon;
+                    view.description = def.description;
+                }
+                if (view.iconImage != null && view.icon != null)
+                {
+                    view.iconImage.sprite = view.icon;
+                    view.iconImage.preserveAspect = true;
+                }
+                if (view.nameLabel != null)
+                    view.nameLabel.text = toolName;
+            }
+        }
+
+        void OnAddGeneSlot()
+        {
+            var run = this.SendQuery(new RunLedgerQuery());
+            if (run.GeneCapacity >= 4)
+            {
+                Notice("基因仓储已解锁，已达容量上限。");
+                return;
+            }
+            if (run.TechPoints < 1)
+            {
+                Notice("科技点不足。解锁基因仓储需要 1 科技点。");
+                return;
+            }
+            this.SendCommand(new UnlockTechCommand("基因仓储"));
+            Notice("基因仓储解锁成功，基因槽上限扩展为 4。");
+            Refresh();
         }
 
         void FillBreedingSkills(SkillChipView[] chips, IReadOnlyList<BreedingPlanView> plans)
@@ -509,9 +617,9 @@ namespace TheCall
             if (slot.emptyMark != null)
                 slot.emptyMark.SetActive(!occupied);
             if (slot.title != null)
-                slot.title.text = occupied ? monster.DisplayName : "";
+                slot.title.text = occupied ? $"{monster.DisplayName} [{monster.Race}]" : "";
             if (slot.subtitle != null)
-                slot.subtitle.text = occupied ? SkillLine(monster) : "";
+                slot.subtitle.text = occupied ? $"{monster.Personality} · {monster.Mood} | {SkillLine(monster)}" : "";
             if (slot.selection != null)
                 slot.selection.SetActive(selected);
         }
@@ -556,20 +664,26 @@ namespace TheCall
             card.toolName = item.Name;
             if (card.portrait != null)
                 card.portrait.gameObject.SetActive(false);
+            EnsureSpriteCatalog();
+            var art = _spriteCatalog != null ? _spriteCatalog.FindTool(item.Name) : null;
             if (card.icon != null)
             {
                 card.icon.enabled = true;
                 card.icon.type = UnityEngine.UI.Image.Type.Simple;
                 card.icon.preserveAspect = true;
                 card.icon.color = Color.white;
-                var art = FindArt(item.Name);
                 if (art != null && art.icon != null)
                     card.icon.sprite = art.icon;
+                else
+                {
+                    var fallback = FindArt(item.Name);
+                    if (fallback != null && fallback.icon != null)
+                        card.icon.sprite = fallback.icon;
+                }
             }
 
-            var artEntry = FindArt(item.Name);
             card.title.text = item.Name;
-            card.body.text = artEntry != null ? artEntry.description : "";
+            card.body.text = art != null ? art.description : (FindArt(item.Name)?.description ?? "");
             card.price.text = item.Price + " 金币";
             card.stock.text = "本轮剩余 1 件";
             var affordable = gold >= item.Price;

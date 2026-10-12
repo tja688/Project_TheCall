@@ -6,22 +6,29 @@ namespace TheCall
 {
     public sealed class OperationScreenView : MonoBehaviour
     {
+        public TMP_Text dayLabel;
         public TMP_Text targetLabel;
         public TMP_Text energyLabel;
+        public TMP_Text excessLabel;
+        public TMP_Text overtimeLabel;
         public TMP_Text currentNumber;
         public TMP_Text goldLabel;
         public TMP_Text nextDayLabel;
         public Button shopButton;
         public Button researchButton;
+        public Button settingsButton;
         public Button titleButton;
         public Button nextDayButton;
         public Button discardButton;
         public Button equipButton;
+        public Button addGeneSlotButton;
         public MonsterSlotView[] cageSlots;
         public MonsterSlotView[] extractionSlots;
         public MonsterSlotView[] breedingSlots;
         public SkillChipView[] breedingSkills;
         public SkillChipView[] skillChips;
+        public RectTransform toolsBar;
+        public ToolArtView[] ownedToolViews;
         public RectTransform dragLayer;
         public OperationPointer pointer;
     }

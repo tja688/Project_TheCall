@@ -74,6 +74,19 @@ namespace TheCall
             _window.gameObject.SetActive(true);
             _window.anchoredPosition = placement.WindowAnchoredPosition;
 
+            var header = _window.Find("Header");
+            if (header != null)
+            {
+                var headerText = header.GetComponentInChildren<TMP_Text>();
+                if (headerText != null)
+                {
+                    var delta = details.MoodEnergyDelta != 0 ? (details.MoodEnergyDelta > 0 ? "(+" + details.MoodEnergyDelta + ")" : "(" + details.MoodEnergyDelta + ")") : "";
+                    var trim = details.Personality == "安于现状" ? " · <color=#FF8C1A>[安于现状:技能上限2]</color>" : "";
+                    var mod = details.Modifier != 0 ? " · 修正:" + (details.Modifier > 0 ? "+" : "") + details.Modifier : "";
+                    headerText.text = $"{details.DisplayName} · 种族:{details.Race} · 性格:{details.Personality} · 心情:{details.Mood}{delta} · 工作:{details.ConsecutiveWorkDays}天{trim}{mod}";
+                }
+            }
+
             for (var i = 0; i < _subpanels.Length; i++)
             {
                 var open = i < details.Skills.Count;
@@ -84,7 +97,7 @@ namespace TheCall
                 _subpanels[i].anchoredPosition = SubpanelLocal(placement, i);
                 var skill = details.Skills[i];
                 _subNames[i].text = skill.Name;
-                _subUses[i].text = UseText(skill.Kind);
+                _subUses[i].text = UseText(skill.Kind) + (skill.IsTemporary ? " · 临时" : " · 常驻");
                 _subRarities[i].text = RarityText(skill.Rarity);
                 _subRarities[i].color = RarityInk(skill.Rarity);
                 _subFunctions[i].text = skill.Function;

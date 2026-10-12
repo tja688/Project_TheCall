@@ -30,7 +30,7 @@ namespace TheCall
 
     public sealed class MonsterSkillDetail
     {
-        public MonsterSkillDetail(string name, SkillUse kind, Rarity rarity, string function, IReadOnlyList<SentenceSpan> spans)
+        public MonsterSkillDetail(string name, SkillUse kind, Rarity rarity, string function, IReadOnlyList<SentenceSpan> spans, bool isTemporary = false)
         {
             if (string.IsNullOrEmpty(function))
                 throw new ArgumentException("A skill needs a function.", nameof(function));
@@ -61,6 +61,7 @@ namespace TheCall
             Spans = copy;
             Sentence = plain.ToString();
             DisplaySentence = display.ToString();
+            IsTemporary = isTemporary;
         }
 
         public string Name { get; }
@@ -76,6 +77,8 @@ namespace TheCall
         public Rarity Rarity { get; }
 
         public string Function { get; }
+
+        public bool IsTemporary { get; }
     }
 
     public sealed class MonsterDetails

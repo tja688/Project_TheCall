@@ -13,16 +13,28 @@ MonoBehaviour:
   m_Name: MonsterMotionProfile
   m_EditorClassIdentifier: TheCall.Hover::TheCall.MonsterMotionProfile
   _defaultsApplied: 1
+  gripResponse: 16
+  gripDamping: 0.75
+  dragSpeedReference: 360
+  blendInSeconds: 0.08
+  blendOutSeconds: 0.3
+  driverSmoothing: 0.05
+  rootTiltResponse: 9
+  rootTiltDamping: 0.35
+  jointResponse: 11
+  jointDamping: 0.3
+  reactionResponse: 14
+  reactionDamping: 0.5
+  idleEnabled: 1
+  idleBodyLift: 1.2
+  idleCyclesPerSecond: 0.42
   headDragDegrees: 7
   feetDragDegrees: 5
   tailDragDegrees: 9
   bodyDragDegrees: 2.5
   springStiffness: 90
   springDamping: 18
-  idleEnabled: 1
   idleHeadDegrees: 1.35
   idleFeetDegrees: 0.35
   idleTailDegrees: 1.8
   idleBodyDegrees: 0.45
-  idleBodyLift: 1.2
-  idleCyclesPerSecond: 0.42

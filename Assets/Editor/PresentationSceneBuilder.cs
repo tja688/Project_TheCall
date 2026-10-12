@@ -93,6 +93,8 @@ namespace TheCall.Editor
             if (EditorApplication.isPlaying)
                 throw new InvalidOperationException("Exit play mode before building the hover window.");
 
+            M3PresentationSetup.EnsureHoverPrefabHeader();
+
             const string path = "Assets/Prefabs/UI/MonsterHoverPanel.prefab";
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if (prefab == null)
@@ -262,16 +264,24 @@ namespace TheCall.Editor
             dragLayerObject.transform.SetParent(screen.transform, false);
             Stretch(dragLayerObject.GetComponent<RectTransform>());
             pointer.dragLayer = dragLayerObject.GetComponent<RectTransform>();
-            var title = Label(screen.transform, "Title", "怪物育成公司", 28, Ink, TextAlignmentOptions.Left);
-            At(title, 64, 18, 360, 40);
+            var dayLabel = Label(screen.transform, "DayLabel", "第 1 天", 24, Ink, TextAlignmentOptions.Left);
+            At(dayLabel, 64, 18, 120, 40);
+            var title = Label(screen.transform, "Title", "怪物育成公司", 24, Ink, TextAlignmentOptions.Left);
+            At(title, 190, 18, 170, 40);
             var targetCaption = Label(screen.transform, "TargetCaption", "次日目标", 18, Muted, TextAlignmentOptions.Left);
-            At(targetCaption, 64, 58, 110, 28);
+            At(targetCaption, 64, 58, 80, 28);
             var target = Label(screen.transform, "TargetNumber", "0", 20, Ink, TextAlignmentOptions.Left);
-            At(target, 176, 56, 80, 30);
+            At(target, 146, 56, 80, 30);
             var energyWord = Label(screen.transform, "EnergyWord", "能量", 18, Muted, TextAlignmentOptions.Left);
-            At(energyWord, 250, 58, 60, 28);
+            At(energyWord, 230, 58, 50, 28);
             var energy = Label(screen.transform, "CurrentEnergy", "当前 0", 18, Mint, TextAlignmentOptions.Left);
-            At(energy, 320, 58, 180, 28);
+            At(energy, 284, 58, 110, 28);
+            var excessCaption = Label(screen.transform, "ExcessCaption", "超额门槛", 18, Muted, TextAlignmentOptions.Left);
+            At(excessCaption, 400, 58, 80, 28);
+            var excess = Label(screen.transform, "ExcessNumber", "0+", 18, Gold, TextAlignmentOptions.Left);
+            At(excess, 482, 58, 70, 28);
+            var overtime = Label(screen.transform, "OvertimeStatus", "正常工时", 18, Mint, TextAlignmentOptions.Left);
+            At(overtime, 560, 58, 110, 28);
             var currentNumber = Label(screen.transform, "CurrentNumber", "0", 51.5f, Ink, TextAlignmentOptions.Left);
             At(currentNumber, 1265.6f, 538f, 240.4f, 113.35f);
             var goldCaption = Label(screen.transform, "GoldCaption", "金币", 18, Gold, TextAlignmentOptions.Right);
@@ -280,11 +290,13 @@ namespace TheCall.Editor
             At(gold, 1196, 24, 120, 36);
 
             var shop = Click(screen.transform, "ShopButton", "商店", ButtonFace, Ink, 18, out _);
-            At(shop, 1340, 20, 150, 48);
+            At(shop, 1340, 20, 110, 48);
             var research = Click(screen.transform, "ResearchButton", "科研", ButtonFace, Ink, 18, out _);
-            At(research, 1506, 20, 150, 48);
+            At(research, 1460, 20, 110, 48);
+            var settings = Click(screen.transform, "SettingsButton", "设置", ButtonFace, Ink, 18, out _);
+            At(settings, 1580, 20, 110, 48);
             var back = Click(screen.transform, "TitleButton", "返回标题", ButtonFace, Ink, 18, out _);
-            At(back, 1672, 20, 180, 48);
+            At(back, 1700, 20, 150, 48);
 
             var rail = Box(screen.transform, "FloorRail", PanelDeep);
             At(rail, 16, 108, 40, 944);
@@ -339,6 +351,33 @@ namespace TheCall.Editor
                 Drag(extracts[i].gameObject, PayloadKind.Monster, pointer);
             }
 
+            var toolsPanel = Box(production.transform, "ToolsBar", PanelDeep);
+            At(toolsPanel, 24, 412, 1312, 74);
+            var toolsCaption = Label(toolsPanel.transform, "ToolsCaption", "持有工具", 14, Muted, TextAlignmentOptions.Center);
+            At(toolsCaption, 8, 6, 70, 62);
+
+            var ownedTools = new ToolArtView[18];
+            for (var i = 0; i < 18; i++)
+            {
+                var toolItem = new GameObject("OwnedTool_" + i, typeof(RectTransform));
+                toolItem.transform.SetParent(toolsPanel.transform, false);
+                At(toolItem, 82 + i * 68, 6, 64, 62);
+
+                var iconImg = toolItem.AddComponent<Image>();
+                iconImg.raycastTarget = false;
+                iconImg.preserveAspect = true;
+                At(iconImg, 8, 4, 48, 38);
+
+                var nameLbl = Label(toolItem.transform, "Name", "", 11, Ink, TextAlignmentOptions.Center);
+                At(nameLbl, 0, 44, 64, 18);
+
+                var toolView = toolItem.AddComponent<ToolArtView>();
+                toolView.iconImage = iconImg;
+                toolView.nameLabel = nameLbl;
+                ownedTools[i] = toolView;
+                toolItem.SetActive(false);
+            }
+
             var cagePanel = Box(screen.transform, "收容笼", Panel);
             At(cagePanel, 1440, 108, 456, 430);
             var cageTitle = Label(cagePanel.transform, "Caption", "收容笼", 24, Ink, TextAlignmentOptions.Left);
@@ -371,17 +410,15 @@ namespace TheCall.Editor
             Zone(skills.gameObject, LandingPlace.SkillSlot, null, null);
             var skillTitle = Label(skills.transform, "Caption", "技能槽", 22, Ink, TextAlignmentOptions.Left);
             At(skillTitle, 16, 12, 160, 32);
-            var chips = new[]
+            var chips = new SkillChipView[4];
+            for (var i = 0; i < 4; i++)
             {
-                Chip(skills.transform, "SkillChip_0", 16, 56, 136, 72),
-                Chip(skills.transform, "SkillChip_1", 160, 56, 136, 72),
-                Chip(skills.transform, "SkillChip_2", 304, 56, 136, 72),
-            };
-            for (var i = 0; i < chips.Length; i++)
-            {
+                chips[i] = Chip(skills.transform, "SkillChip_" + i, 16 + i * 82, 56, 76, 72);
                 Zone(chips[i].gameObject, LandingPlace.SkillSlot, null, chips[i]);
                 Drag(chips[i].gameObject, PayloadKind.SkillChip, pointer);
             }
+            var addSlot = Click(skills.transform, "AddGeneSlotButton", "+", ButtonFace, Mint, 24, out _);
+            At(addSlot, 352, 56, 88, 72);
             var equip = Click(skills.transform, "EquipButton", "装入", Mint, MintInk, 18, out _);
             At(equip, 16, 148, 424, 64);
             equip.gameObject.SetActive(false);
@@ -390,24 +427,33 @@ namespace TheCall.Editor
             At(next, 1440, 968, 456, 72);
 
             var view = screen.AddComponent<OperationScreenView>();
+            view.dayLabel = dayLabel;
             view.targetLabel = target;
             view.energyLabel = energy;
+            view.excessLabel = excess;
+            view.overtimeLabel = overtime;
             view.currentNumber = currentNumber;
             view.goldLabel = gold;
             view.nextDayLabel = nextLabel;
             view.shopButton = shop;
             view.researchButton = research;
+            view.settingsButton = settings;
             view.titleButton = back;
             view.nextDayButton = next;
             view.discardButton = discard;
             view.equipButton = equip;
+            view.addGeneSlotButton = addSlot;
             view.cageSlots = cage;
             view.extractionSlots = extracts;
             view.breedingSlots = seats;
             view.breedingSkills = breedSkills;
             view.skillChips = chips;
+            view.toolsBar = toolsPanel.GetComponent<RectTransform>();
+            view.ownedToolViews = ownedTools;
             view.dragLayer = pointer.dragLayer;
             view.pointer = pointer;
+            dragLayerObject.transform.SetAsLastSibling();
+            return view;
             dragLayerObject.transform.SetAsLastSibling();
             return view;
         }
@@ -510,12 +556,12 @@ namespace TheCall.Editor
             var buyPage = new GameObject("购入商品页", typeof(RectTransform));
             buyPage.transform.SetParent(screen.transform, false);
             At(buyPage, 0, 0, 1920, 1080);
-            var cards = new ShopCardView[6];
+            var cards = new ShopCardView[8];
             for (var i = 0; i < cards.Length; i++)
             {
-                var column = i % 3;
-                var row = i / 3;
-                cards[i] = ShopCard(buyPage.transform, "ShelfCard_" + i, 32 + column * 466, 220 + row * 300, 450, 284);
+                var column = i % 4;
+                var row = i / 4;
+                cards[i] = ShopCard(buyPage.transform, "ShelfCard_" + i, 32 + column * 350, 220 + row * 300, 338, 284);
             }
 
             var sellPage = new GameObject("出售库存页", typeof(RectTransform));
@@ -557,12 +603,18 @@ namespace TheCall.Editor
 
             var artRoot = new GameObject("工具图标", typeof(RectTransform));
             artRoot.transform.SetParent(screen.transform, false);
-            var art = new[]
+            var catalog = AssetDatabase.LoadAssetAtPath<PresentationSpriteCatalog>("Assets/Resources/PresentationSpriteCatalog.asset");
+            if (catalog == null)
+                catalog = M3PresentationSetup.CreateSpriteCatalog();
+            var art = new List<ToolArtView>();
+            if (catalog != null)
             {
-                ToolArt(artRoot.transform, "急急装置", "最先触发的产能技能再执行一次。", Icons.GetValueOrDefault("急急装置")),
-                ToolArt(artRoot.transform, "上级员工证", "提取轨增加一格。", Icons.GetValueOrDefault("上级员工证")),
-                ToolArt(artRoot.transform, "劣胜装置", "单词条怪物的能量数值加倍。", Icons.GetValueOrDefault("劣胜装置")),
-            };
+                foreach (var t in catalog.tools)
+                {
+                    if (t != null && !string.IsNullOrEmpty(t.name))
+                        art.Add(ToolArt(artRoot.transform, t.name, t.description, t.icon));
+                }
+            }
             artRoot.SetActive(false);
 
             var view = screen.AddComponent<ShopScreenView>();
@@ -579,7 +631,7 @@ namespace TheCall.Editor
             view.sellPage = sellPage;
             view.cards = cards;
             view.sellSlots = sellSlots;
-            view.toolArt = art;
+            view.toolArt = art.ToArray();
             sellPage.SetActive(false);
             return view;
         }
@@ -807,15 +859,19 @@ namespace TheCall.Editor
 
         static SkillChipView Chip(Transform parent, string name, float x, float y, float w, float h)
         {
-            var button = Click(parent, name, "空", ButtonFace, Ink, 16, out var label);
+            var button = Click(parent, name, "空", ButtonFace, Ink, 14, out var label);
             At(button, x, y, w, h);
             var selection = StretchChild(button.transform, "Selection", new Color(1f, 0.82f, 0.35f, 0.35f));
             selection.raycastTarget = false;
             selection.transform.SetAsFirstSibling();
             selection.gameObject.SetActive(false);
+            var reservedLabel = Label(button.transform, "ReservedLabel", "", 10, Gold, TextAlignmentOptions.Center);
+            At(reservedLabel, 2, h - 20, w - 4, 18);
+            reservedLabel.raycastTarget = false;
             var view = button.gameObject.AddComponent<SkillChipView>();
             view.button = button;
             view.label = label;
+            view.reservedLabel = reservedLabel;
             view.selection = selection.gameObject;
             return view;
         }
@@ -1318,8 +1374,21 @@ namespace TheCall.Editor
             Icons["变异学说"] = LoadSprite("IconMutant.png");
             Icons["大乱炖"] = LoadSprite("IconStew.png");
             Icons["科学培育"] = LoadSprite("IconFlask.png");
+            Icons["基因仓储"] = LoadSprite("IconSlot.png");
             Icons["recycle"] = LoadSprite("IconRecycle.png");
             Icons["trash"] = LoadSprite("IconTrash.png");
+
+            var catalog = AssetDatabase.LoadAssetAtPath<PresentationSpriteCatalog>("Assets/Resources/PresentationSpriteCatalog.asset");
+            if (catalog == null)
+                catalog = M3PresentationSetup.CreateSpriteCatalog();
+            if (catalog != null)
+            {
+                foreach (var t in catalog.tools)
+                {
+                    if (t != null && !string.IsNullOrEmpty(t.name) && t.icon != null)
+                        Icons[t.name] = t.icon;
+                }
+            }
         }
 
         static Sprite LoadSprite(string file)

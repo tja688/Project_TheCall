@@ -40,7 +40,7 @@ namespace TheCall
                     catalog,
                     tools,
                     sight.Showing ? sight : null);
-                skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans);
+                skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans, skill.IsTemporary);
             }
 
             return new MonsterDetails(

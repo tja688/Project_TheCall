@@ -11,13 +11,15 @@ namespace TheCall
             int techPoints,
             IReadOnlyList<string> tools,
             IReadOnlyList<string> skillSlots,
-            IReadOnlyList<string> unlockedTech)
+            IReadOnlyList<string> unlockedTech,
+            int geneCapacity = 3)
         {
             Gold = gold;
             TechPoints = techPoints;
             Tools = tools;
             SkillSlots = skillSlots;
             UnlockedTech = unlockedTech;
+            GeneCapacity = geneCapacity;
         }
 
         public int Gold { get; }
@@ -29,6 +31,8 @@ namespace TheCall
         public IReadOnlyList<string> SkillSlots { get; }
 
         public IReadOnlyList<string> UnlockedTech { get; }
+
+        public int GeneCapacity { get; }
     }
 
     public sealed class RunLedgerQuery : AbstractQuery<RunLedger>
@@ -41,7 +45,8 @@ namespace TheCall
                 run.TechPoints,
                 run.Tools.ToArray(),
                 run.SkillSlots.ToArray(),
-                run.UnlockedTech.ToArray());
+                run.UnlockedTech.ToArray(),
+                run.GeneCapacity);
         }
     }
 }

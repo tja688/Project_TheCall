@@ -4,11 +4,12 @@ namespace TheCall
 {
     public sealed class LevelTarget
     {
-        public LevelTarget(int levelNumber, int energyDue, int excessEnergy)
+        public LevelTarget(int levelNumber, int energyDue, int excessEnergy, bool inOvertime = false)
         {
             LevelNumber = levelNumber;
             EnergyDue = energyDue;
             ExcessEnergy = excessEnergy;
+            InOvertime = inOvertime;
         }
 
         public int LevelNumber { get; }
@@ -16,6 +17,8 @@ namespace TheCall
         public int EnergyDue { get; }
 
         public int ExcessEnergy { get; }
+
+        public bool InOvertime { get; }
     }
 
     public sealed class LevelTargetQuery : AbstractQuery<LevelTarget>
@@ -41,7 +44,7 @@ namespace TheCall
 
             var run = this.GetModel<RunModel>();
             var level = this.GetModel<LevelModel>();
-            return new LevelTarget(run.LevelNumber, level.EnergyDue, level.ExcessEnergy);
+            return new LevelTarget(run.LevelNumber, level.EnergyDue, level.ExcessEnergy, level.InOvertime);
         }
     }
 }
