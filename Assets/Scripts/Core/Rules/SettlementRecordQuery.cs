@@ -75,7 +75,7 @@ namespace TheCall
 
     public sealed class SettlementMark : SettlementEntry
     {
-        SettlementMark(string monsterId, string label, MarkMotion motion, MarkTone tone)
+        SettlementMark(string monsterId, string label, MarkMotion motion, MarkTone tone, int amount = 0, string skillName = null)
         {
             if (!Fits(label, motion, tone))
                 throw new InvalidOperationException("结算头顶字不成立");
@@ -84,6 +84,8 @@ namespace TheCall
             Label = label;
             Motion = motion;
             Tone = tone;
+            Amount = amount;
+            SkillName = skillName;
         }
 
         public static SettlementMark Miss(string monsterId) =>
@@ -94,17 +96,19 @@ namespace TheCall
                 monsterId,
                 (string.IsNullOrEmpty(skillName) ? "技能" : skillName) + "触发+1",
                 MarkMotion.Shake,
-                MarkTone.Again);
+                MarkTone.Again,
+                1,
+                string.IsNullOrEmpty(skillName) ? "技能" : skillName);
 
         public static SettlementMark Gold(string monsterId, int amount) =>
-            new SettlementMark(monsterId, "+" + amount + "金", MarkMotion.Spring, MarkTone.Gold);
+            new SettlementMark(monsterId, "+" + amount + "金", MarkMotion.Spring, MarkTone.Gold, amount);
 
         public static SettlementMark Skills(string monsterId, int count)
         {
             if (count <= 0)
                 throw new InvalidOperationException("技能个数为 0 时用未中");
 
-            return new SettlementMark(monsterId, "技能+" + count, MarkMotion.Spring, MarkTone.Skills);
+            return new SettlementMark(monsterId, "技能+" + count, MarkMotion.Spring, MarkTone.Skills, count);
         }
 
         public string MonsterId { get; }
@@ -114,6 +118,10 @@ namespace TheCall
         public MarkMotion Motion { get; }
 
         public MarkTone Tone { get; }
+
+        public int Amount { get; }
+
+        public string SkillName { get; }
 
         static bool Fits(string label, MarkMotion motion, MarkTone tone)
         {
@@ -282,7 +290,7 @@ namespace TheCall
 
     public sealed class SettlementPayment : SettlementEntry
     {
-        public SettlementPayment(int deducted, int shortfall, bool overtime, bool failed, bool excess, int wage)
+        public SettlementPayment(int deducted, int shortfall, bool overtime, bool failed, bool excess, int wage, int retainedEnergy = 0)
         {
             Deducted = deducted;
             Shortfall = shortfall;
@@ -290,6 +298,7 @@ namespace TheCall
             Failed = failed;
             Excess = excess;
             Wage = wage;
+            RetainedEnergy = retainedEnergy;
         }
 
         public int Deducted { get; }
@@ -303,6 +312,8 @@ namespace TheCall
         public bool Excess { get; }
 
         public int Wage { get; }
+
+        public int RetainedEnergy { get; }
     }
 
     public sealed class SettlementRecordQuery : AbstractQuery<IReadOnlyList<SettlementEntry>>

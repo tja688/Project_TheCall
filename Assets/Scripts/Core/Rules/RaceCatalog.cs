@@ -30,6 +30,7 @@ namespace TheCall
         IReadOnlyList<string> Names();
         bool IsGenerating(string raceA, string raceB);
         bool IsOvercoming(string raceA, string raceB);
+        string Draw(IDraw draw);
     }
 
     internal sealed class RaceCatalog : IRaceCatalog
@@ -49,6 +50,8 @@ namespace TheCall
                 names[i] = _book.Races[i].Name;
             return names;
         }
+
+        public string Draw(IDraw draw) => draw.Choose(Names());
 
         public bool IsGenerating(string raceA, string raceB)
         {

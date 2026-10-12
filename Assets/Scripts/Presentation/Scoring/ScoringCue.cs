@@ -72,18 +72,22 @@ namespace TheCall.Scoring
 
     public sealed class MarkCue : ScoringCue
     {
-        internal MarkCue(int slotIndex, string label, MarkTone tone, MarkMotion motion)
+        internal MarkCue(int slotIndex, string label, MarkTone tone, MarkMotion motion, int amount = 0, string skillName = null)
         {
             SlotIndex = slotIndex;
             Label = label;
             Tone = tone;
             Motion = motion;
+            Amount = amount;
+            SkillName = skillName;
         }
 
         public int SlotIndex { get; }
         public string Label { get; }
         public MarkTone Tone { get; }
         public MarkMotion Motion { get; }
+        public int Amount { get; }
+        public string SkillName { get; }
 
         internal override IEnumerator Accept(ICueSink sink) => sink.Mark(this);
     }
@@ -190,7 +194,8 @@ namespace TheCall.Scoring
             int shortfall,
             int wage,
             bool excess,
-            string line)
+            string line,
+            int retainedEnergy = 0)
         {
             Kind = kind;
             Produced = produced;
@@ -199,6 +204,7 @@ namespace TheCall.Scoring
             Wage = wage;
             Excess = excess;
             Line = line;
+            RetainedEnergy = retainedEnergy;
         }
 
         public PayKind Kind { get; }
@@ -208,6 +214,7 @@ namespace TheCall.Scoring
         public int Wage { get; }
         public bool Excess { get; }
         public string Line { get; }
+        public int RetainedEnergy { get; }
 
         internal override IEnumerator Accept(ICueSink sink) => sink.Pay(this);
     }

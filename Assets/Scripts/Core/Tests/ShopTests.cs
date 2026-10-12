@@ -387,6 +387,20 @@ namespace TheCall.Tests
                 }
             }
 
+            if (options.Count > 0 && options[0] is Rarity)
+                return options[0];
+
+            if (options.Count > 0 && (options[0] is RaceDef || options[0] is PersonalityDef))
+                return options[0];
+
+            if (ContentGate.Current != null && options.Count > 0 && options[0] is string optName)
+            {
+                if (ContentGate.Current.FindRace(optName) != null && ContentGate.Current.FindRace(name) == null)
+                    return options[0];
+                if (ContentGate.Current.FindPersonality(optName) != null && ContentGate.Current.FindPersonality(name) == null)
+                    return options[0];
+            }
+
             name = _names.Dequeue();
             throw new InvalidOperationException("抽取名单里没有 " + name);
         }

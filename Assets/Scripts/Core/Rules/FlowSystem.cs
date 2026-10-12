@@ -10,9 +10,15 @@ namespace TheCall
             var run = this.GetModel<RunModel>();
             var catalog = this.GetUtility<SkillCatalog>();
             var draw = this.GetUtility<IDraw>();
+            var personalities = this.GetUtility<IPersonalityCatalog>();
+            var races = this.GetUtility<IRaceCatalog>();
             var pairs = StockDraw.OpeningCandidates(catalog, draw);
             for (var i = 0; i < pairs.Length; i++)
-                run.AddCandidate(pairs[i]);
+            {
+                var p = personalities.Draw(draw);
+                var r = races.Draw(draw);
+                run.AddCandidate(pairs[i], p, r);
+            }
         }
 
         public void Keep(string monsterId)
@@ -24,9 +30,15 @@ namespace TheCall
             run.AddToCage(kept);
             var catalog = this.GetUtility<SkillCatalog>();
             var draw = this.GetUtility<IDraw>();
+            var personalities = this.GetUtility<IPersonalityCatalog>();
+            var races = this.GetUtility<IRaceCatalog>();
             var fillers = StockDraw.OpeningFillers(catalog, draw);
             for (var i = 0; i < fillers.Length; i++)
-                run.AddNewToCage(fillers[i]);
+            {
+                var p = personalities.Draw(draw);
+                var r = races.Draw(draw);
+                run.AddToCage(run.CreateMonster(new[] { fillers[i] }, personality: p, race: r, mood: "普通"));
+            }
 
             run.EnterOperation(1);
             var levels = this.GetUtility<ILevelCatalog>();
@@ -105,30 +117,8 @@ namespace TheCall
             if (monster == null)
                 return;
 
-            var catalog = this.GetUtility<SkillCatalog>();
-            var legacy = false;
-            for (var index = 0; index < monster.Skills.Count; index++)
-            {
-                if (catalog.HasLegacy(monster.Skills[index].Name))
-                    legacy = true;
-            }
-
-            if (!legacy && run.SkillSlots.Count >= 3)
+            if (run.GeneSlots.Count >= run.GeneCapacity)
                 return;
-
-            if (legacy)
-            {
-                this.GetModel<LevelModel>().TryRemove(monsterId);
-                if (!run.TryDestroy(monsterId))
-                    return;
-
-                var names = catalog.Names();
-                if (names.Count == 0)
-                    return;
-
-                run.AddToCage(run.CreateMonster(new[] { this.GetUtility<IDraw>().Choose(names) }));
-                return;
-            }
 
             var owned = new string[monster.Skills.Count];
             for (var i = 0; i < owned.Length; i++)
@@ -142,6 +132,47 @@ namespace TheCall
             run.PutSkillInSlot(skillName);
             if (run.HasTool("研磨机"))
                 run.AddGold(5);
+        }
+
+        public bool InstallGene(string monsterId, int geneSlotIndex)
+        {
+            var run = this.GetModel<RunModel>();
+            if (!EnterOperation(run))
+                return false;
+
+            var monster = run.Find(monsterId);
+            if (monster == null || monster.Personality != "迷恋死亡")
+                return false;
+
+            if (geneSlotIndex < 0 || geneSlotIndex >= run.GeneSlots.Count)
+                return false;
+
+            var slot = run.GeneSlots[geneSlotIndex];
+            if (slot.IsReserved)
+                return false;
+
+            var skillName = slot.SkillName;
+            if (string.IsNullOrEmpty(skillName))
+                return false;
+
+            var maxSkills = monster.Personality == "安于现状" ? 2 : 4;
+            if (monster.Skills.Count >= maxSkills)
+                return false;
+
+            var allowsDup = run.HasTool("复读腺");
+            if (!allowsDup)
+            {
+                for (var i = 0; i < monster.Skills.Count; i++)
+                {
+                    if (monster.Skills[i].Name == skillName)
+                        return false;
+                }
+            }
+
+            if (!run.TryTakeSkillAt(geneSlotIndex, out var taken))
+                return false;
+
+            return run.TryGainSkill(monsterId, taken, false);
         }
 
         public void Unlock(string name)
@@ -165,21 +196,28 @@ namespace TheCall
             var level = this.GetModel<LevelModel>();
             if (slot < 0 || slot >= level.BreedingSlotCount || level.SkillAt(slot) != null)
                 return;
-            if (!run.TryTakeSkillAt(skillSlotIndex, out var skillName))
+            if (skillSlotIndex < 0 || skillSlotIndex >= run.GeneSlots.Count)
                 return;
-            if (!level.TryPutSkill(slot, skillName))
-                run.PutSkillInSlot(skillName);
+
+            var gene = run.GeneSlots[skillSlotIndex];
+            if (gene.IsReserved)
+                return;
+
+            if (!level.TryPutSkill(slot, gene.SkillName))
+                return;
+
+            run.TryReserveGeneSlot(skillSlotIndex, slot);
         }
 
         public void ReturnBreedingSkill(int slot)
         {
             var run = this.GetModel<RunModel>();
-            if (!EnterOperation(run) || run.SkillSlots.Count >= 3)
+            if (!EnterOperation(run))
                 return;
-            if (!this.GetModel<LevelModel>().TryTakeSkill(slot, out var skillName))
+            if (!this.GetModel<LevelModel>().TryTakeSkill(slot, out _))
                 return;
 
-            run.PutSkillInSlot(skillName);
+            run.UnreserveGene(slot);
         }
 
         public void Confirm()
@@ -251,7 +289,8 @@ namespace TheCall
                 if (board.Row[cell] == null)
                     continue;
 
-                var monster = run.CreateMonster(board.Row[cell].Value.SkillNames);
+                var bm = board.Row[cell].Value;
+                var monster = run.CreateMonster(bm.SkillNames, personality: bm.Personality, mood: bm.Mood, race: bm.Race);
                 level.Put(OperationArea.Extraction, cell, monster.Id);
             }
         }
@@ -286,14 +325,14 @@ namespace TheCall
 
             // 笼、技能槽、提取格、培育位分属两个模型。写入中途失败时写回这四份副本。
             var cage = run.CaptureCage();
-            var skillSlots = run.CaptureSkillSlots();
+            var geneSlots = run.CaptureGeneSlots();
             var extraction = level.CaptureExtraction();
             var breeding = level.CaptureBreeding();
 
             void Restore()
             {
                 run.RestoreCage(cage);
-                run.RestoreSkillSlots(skillSlots);
+                run.RestoreGeneSlots(geneSlots);
                 level.RestoreExtraction(extraction);
                 level.RestoreBreeding(breeding);
             }
@@ -361,15 +400,18 @@ namespace TheCall
                         run.AddGold(5);
                     return true;
                 case TransitionEffect.Invest:
-                    if (!run.TryTakeSkillAt(plan.SkillSlotIndex, out var invested))
+                    if (plan.SkillSlotIndex < 0 || plan.SkillSlotIndex >= run.GeneSlots.Count)
                         return false;
-
-                    return level.TryPutSkill(plan.BreedingSlot, invested);
+                    var gene = run.GeneSlots[plan.SkillSlotIndex];
+                    if (gene.IsReserved)
+                        return false;
+                    if (!level.TryPutSkill(plan.BreedingSlot, gene.SkillName))
+                        return false;
+                    return run.TryReserveGeneSlot(plan.SkillSlotIndex, plan.BreedingSlot);
                 case TransitionEffect.ReturnBreedingSkill:
-                    if (!level.TryTakeSkill(plan.BreedingSlot, out var returned))
+                    if (!level.TryTakeSkill(plan.BreedingSlot, out _))
                         return false;
-
-                    run.PutSkillInSlot(returned);
+                    run.UnreserveGene(plan.BreedingSlot);
                     return true;
                 default:
                     return false;
@@ -378,7 +420,15 @@ namespace TheCall
 
         TransitionFacts Facts(RunModel run, LevelModel level)
         {
-            var skillNames = run.CaptureSkillSlots();
+            var geneSlots = run.GeneSlots;
+            var skillNames = new string[geneSlots.Count];
+            var geneReserved = new bool[geneSlots.Count];
+            for (var i = 0; i < geneSlots.Count; i++)
+            {
+                skillNames[i] = geneSlots[i].SkillName;
+                geneReserved[i] = geneSlots[i].IsReserved;
+            }
+
             var extraction = level.CaptureExtraction();
             var breedingCells = level.Breeding;
             var breeding = new string[breedingCells.Count];
@@ -421,7 +471,8 @@ namespace TheCall
                 extraction,
                 breeding,
                 breedingSkills,
-                monsters.ToArray());
+                monsters.ToArray(),
+                geneReserved);
         }
 
         static MonsterFact Fact(Monster monster, MonsterWhere where, OperationArea area, int cell)

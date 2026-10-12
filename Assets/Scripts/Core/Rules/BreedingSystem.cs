@@ -10,40 +10,84 @@ namespace TheCall
             var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
             var draw = this.GetUtility<IDraw>();
+            var personalities = this.GetUtility<IPersonalityCatalog>();
+            var races = this.GetUtility<IRaceCatalog>();
             for (var slot = 0; slot < level.LockedSlotCount; slot++)
             {
                 var parents = Parents(level, run, slot);
                 var skill = level.LockedSkill(slot);
-                if (parents.Count == 0)
+                if (parents.Count < 2)
                 {
-                    ReturnSkill(run, skill);
+                    run.UnreserveGene(slot);
                     continue;
                 }
 
-                var firstAppearance = parents[slot % parents.Count].Appearance;
                 var firstParent = parents[slot % parents.Count];
                 var secondParent = parents[(slot + 1) % parents.Count];
-                var secondAppearance = secondParent.Appearance;
                 var appearance = MonsterAppearance.Breed(
-                    firstAppearance,
-                    secondAppearance,
+                    firstParent.Appearance,
+                    secondParent.Appearance,
                     AppearanceSeed(firstParent.Id, secondParent.Id, slot));
-                var names = Inherit(parents, draw);
-                var tech = this.GetUtility<TechCatalog>();
-                if (!string.IsNullOrEmpty(skill))
+
+                string personality;
+                if (draw.Chance(40))
                 {
-                    if (!names.Contains(skill) && names.Count < 4)
-                        names.Add(skill);
-                    else
-                        ReturnSkill(run, skill);
+                    var parentWithPersonality = draw.Choose(parents);
+                    personality = parentWithPersonality.Personality ?? personalities.Draw(draw);
+                }
+                else
+                {
+                    personality = personalities.Draw(draw);
                 }
 
+                var parentWithRace = draw.Choose(parents);
+                var race = parentWithRace.Race ?? races.Draw(draw);
+
+                var maxSkills = personality == "安于现状" ? 2 : 4;
+                var names = Inherit(parents, draw);
+
+                var geneAdded = false;
+                if (!string.IsNullOrEmpty(skill))
+                {
+                    if (run.HasTool("复读腺") || !names.Contains(skill))
+                    {
+                        names.Add(skill);
+                        geneAdded = true;
+                    }
+                }
+
+                var tech = this.GetUtility<TechCatalog>();
                 if (tech.GrantsExtraSkill(run.UnlockedTech))
                 {
                     var pool = Addable(this.GetUtility<SkillCatalog>(), names);
                     if (pool.Count > 0 && draw.Chance(ContentGate.Current.Economy.TechPercent))
                         names.Add(draw.Choose(pool));
                 }
+
+                var geneRetained = geneAdded;
+                if (names.Count > maxSkills)
+                {
+                    while (names.Count > maxSkills)
+                    {
+                        var toRemove = draw.Choose(names);
+                        var removeIdx = names.IndexOf(toRemove);
+                        if (removeIdx >= 0)
+                        {
+                            if (geneAdded && names[removeIdx] == skill)
+                                geneRetained = false;
+                            names.RemoveAt(removeIdx);
+                        }
+                        else
+                        {
+                            names.RemoveAt(names.Count - 1);
+                        }
+                    }
+                }
+
+                if (geneRetained)
+                    run.ConsumeReservedGene(slot);
+                else
+                    run.UnreserveGene(slot);
 
                 var modifier = 0;
                 if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(ContentGate.Current.Economy.TechPercent))
@@ -53,7 +97,7 @@ namespace TheCall
                 for (var parent = 0; parent < parents.Count; parent++)
                     parentIds[parent] = parents[parent].Id;
 
-                run.AddToCage(run.CreateMonster(names, modifier, appearance, parentIds));
+                run.AddToCage(run.CreateMonster(names, modifier, appearance, parentIds, personality: personality, race: race, mood: "普通"));
             }
         }
 

@@ -26,7 +26,9 @@ namespace TheCall
             RegisterUtility<ILevelCatalog>(new LevelCatalog(book));
             RegisterUtility<IToolCatalog>(new ToolCatalog(book));
             RegisterUtility(new TechCatalog(book));
-            RegisterUtility(new PersonalityCatalog(book));
+            var personalityCatalog = new PersonalityCatalog(book);
+            RegisterUtility<IPersonalityCatalog>(personalityCatalog);
+            RegisterUtility(personalityCatalog);
             var raceCatalog = new RaceCatalog(book);
             RegisterUtility<IRaceCatalog>(raceCatalog);
             RegisterUtility(raceCatalog);

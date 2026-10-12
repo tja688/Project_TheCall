@@ -8,7 +8,7 @@ namespace TheCall.Tests
     public sealed class BreedingTests : RulesFixture
     {
         [Test]
-        public void 一只亲本在下一关开始生成带有该技能的后代亲本仍留在怪物笼()
+        public void 一只亲本在下一关开始不生育亲本仍留在怪物笼()
         {
             UseLevel(
                 new ScriptedLevelCatalog(0),
@@ -36,8 +36,7 @@ namespace TheCall.Tests
             var cage = App.SendQuery(new MonsterCageQuery()).ToArray();
             Assert.That(cage.Select(monster => monster.Id), Does.Contain(parent.Id));
             var offspring = cage.Where(monster => !before.Contains(monster.Id)).ToArray();
-            Assert.That(offspring.Length, Is.EqualTo(1));
-            Assert.That(offspring[0].SkillNames, Is.EqualTo(new[] { "奇异香" }));
+            Assert.That(offspring.Length, Is.EqualTo(0));
         }
 
         [Test]
@@ -94,13 +93,15 @@ namespace TheCall.Tests
             var host = Parent("能量体");
             App.SendCommand(new DiscardMonsterCommand(Parent("奇异香")));
             InstallFromSlot(host);
+            var mate = Parent("怪异香");
             var before = CageIds();
 
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(mate, OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "怪异香" }));
         }
 
         [Test]
@@ -240,9 +241,10 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(dropped, OperationArea.Breeding, 0));
             App.SendCommand(new ConfirmSettlementCommand());
 
-            Assert.That(App.SendQuery(new RunPhaseQuery()), Is.EqualTo(RunPhase.Operation));
+            var nose = Parent("汲取鼻");
             App.SendCommand(new ReturnMonsterCommand(dropped));
             App.SendCommand(new PlaceMonsterCommand(kept, OperationArea.Breeding, 0));
+            App.SendCommand(new PlaceMonsterCommand(nose, OperationArea.Breeding, 1));
             Assert.That(App.SendQuery(new BreedingSlotsQuery())[0].MonsterId, Is.EqualTo(kept));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Contain(dropped));
 
@@ -258,9 +260,9 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(wage + 5));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Not.Contain(dropped));
 
-            var known = CageIds().Concat(new[] { kept, breath }).ToArray();
+            var known = CageIds().Concat(new[] { kept, nose, breath }).ToArray();
             App.SendCommand(new LeaveShopCommand());
-            Assert.That(Offspring(known).SkillNames, Is.EqualTo(new[] { "怪异香" }));
+            Assert.That(Offspring(known).SkillNames, Is.EqualTo(new[] { "怪异香", "汲取鼻" }));
             Assert.That(App.SendQuery(new MonsterCageQuery()).Select(monster => monster.Id), Does.Contain(kept));
             Assert.That(App.SendQuery(new BreedingSlotsQuery()).All(slot => slot.MonsterId == null), Is.True);
         }

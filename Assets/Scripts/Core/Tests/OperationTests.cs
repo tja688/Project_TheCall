@@ -189,7 +189,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 技能槽已满时培育技能不能拿回()
+        public void 预约基因计入容量且拿回时不丢技能()
         {
             UseLevel(
                 new ScriptedLevelCatalog(0, 0),
@@ -226,16 +226,17 @@ namespace TheCall.Tests
             App.SendCommand(new DiscardMonsterCommand(IdOf("奇异香")));
             App.SendCommand(new DiscardMonsterCommand(IdOf("怪异香")));
             App.SendCommand(new DiscardMonsterCommand(IdOf("汲取鼻")));
+            Assert.That(App.SendQuery(new MonsterCageQuery()).Select(m => m.Id), Does.Contain(IdOf("汲取鼻")));
 
             var applied = App.SendCommand(new CommitOperationDropCommand(new OperationDrop(
                 DropPayload.BreedingSkill(0),
                 new DropLanding(LandingPlace.SkillSlot, 0, null))));
 
-            Assert.That(applied, Is.False);
-            Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.EqualTo("孤独心"));
+            Assert.That(applied, Is.True);
+            Assert.That(App.SendQuery(new BreedingPlansQuery())[0].SkillName, Is.Null);
             Assert.That(
                 App.SendQuery(new RunLedgerQuery()).SkillSlots,
-                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻" }));
+                Is.EqualTo(new[] { "孤独心", "奇异香", "怪异香" }));
         }
 
         [Test]

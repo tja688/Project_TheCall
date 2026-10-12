@@ -16,10 +16,11 @@ namespace TheCall.Scoring
 
         public static ScoringTape Arrange(
             IReadOnlyList<SettlementEntry> entries,
-            IReadOnlyList<string> slotIds)
+            IReadOnlyList<string> slotIds,
+            int initialEnergy = 0)
         {
             if (entries == null || slotIds == null)
-                return new ScoringTape(Array.Empty<ScoringCue>(), 0);
+                return new ScoringTape(Array.Empty<ScoringCue>(), initialEnergy);
 
             var ids = new List<string>(slotIds.Count);
             for (var i = 0; i < slotIds.Count; i++)
@@ -27,7 +28,7 @@ namespace TheCall.Scoring
 
             var cues = new List<ScoringCue>();
             var head = -1;
-            var produced = 0;
+            var produced = initialEnergy;
             for (var i = 0; i < entries.Count; i++)
                 Append(entries[i], ids, cues, ref head, ref produced);
 
@@ -50,7 +51,7 @@ namespace TheCall.Scoring
                     head = slot;
                 }
 
-                cues.Add(new MarkCue(slot, mark.Label, mark.Tone, mark.Motion));
+                cues.Add(new MarkCue(slot, mark.Label, mark.Tone, mark.Motion, mark.Amount, mark.SkillName));
                 return;
             }
 
@@ -127,7 +128,8 @@ namespace TheCall.Scoring
                     payment.Shortfall,
                     payment.Wage,
                     payment.Excess,
-                    PaymentLine(payment, produced)));
+                    PaymentLine(payment, produced),
+                    payment.RetainedEnergy));
                 return;
             }
 
@@ -249,9 +251,10 @@ namespace TheCall.Scoring
             var gained = "获得 " + produced + " 能量";
             if (payment.Failed || (payment.Deducted == 0 && payment.Shortfall > 0))
                 return gained;
+            var suffix = payment.RetainedEnergy > 0 ? "，熔炉保留 " + payment.RetainedEnergy + " 能量" : "";
             if (payment.Excess)
-                return gained + "，超额，获得 1 科技点";
-            return gained + "，获得 1 科技点";
+                return gained + "，超额，获得 1 科技点" + suffix;
+            return gained + "，获得 1 科技点" + suffix;
         }
 
         static int IndexOf(List<string> ids, string id)

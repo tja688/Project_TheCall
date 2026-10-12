@@ -108,7 +108,10 @@ namespace TheCall
                 gained += "超额。";
 
             var wage = submission.Overtime ? "本段工资 " : "工资 ";
-            return gained + "获得 1 科技点。" + wage + payment.Wage + " 金币。";
+            var result = gained + "获得 1 科技点。" + wage + payment.Wage + " 金币。";
+            if (payment.RetainedEnergy > 0)
+                result += "蓄热熔炉保留 " + payment.RetainedEnergy + " 点能量到下一关。";
+            return result;
         }
 
         static Dictionary<string, string> CollectNames(IReadOnlyList<SettlementEntry> entries)
@@ -179,7 +182,7 @@ namespace TheCall
             switch (mark.Tone)
             {
                 case MarkTone.Again:
-                    var skill = AgainSkillName(mark.Label);
+                    var skill = !string.IsNullOrEmpty(mark.SkillName) ? mark.SkillName : AgainSkillName(mark.Label);
                     buffer.Append(who).Append(" 的「").Append(skill)
                         .Append("」生效，让前面已经走过的一条产能技能重新再触发一次。");
                     break;
@@ -187,12 +190,12 @@ namespace TheCall
                     buffer.Append(who).Append(" 有一条效果在本轮结算，但没有带来能量、加成、倍率、金币或新技能。");
                     break;
                 case MarkTone.Gold:
-                    var gold = ParseGold(mark.Label);
+                    var gold = mark.Amount > 0 ? mark.Amount : ParseGold(mark.Label);
                     buffer.Append(who).Append(" 的产金生效，获得 ").Append(gold)
                         .Append(" 金币（金币不计入右侧能量合计）。");
                     break;
                 case MarkTone.Skills:
-                    var count = ParseSkillCount(mark.Label);
+                    var count = mark.Amount > 0 ? mark.Amount : ParseSkillCount(mark.Label);
                     buffer.Append(who).Append(" 获得了 ").Append(count)
                         .Append(" 个新技能（不计入右侧能量合计）。");
                     break;

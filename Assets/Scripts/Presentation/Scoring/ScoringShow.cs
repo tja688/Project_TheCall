@@ -19,7 +19,8 @@ namespace TheCall.Scoring
             TMP_Text goldLabel,
             TMP_Text currentNumber,
             Action<string> say,
-            Action completed)
+            Action completed,
+            int initialEnergy = 0)
         {
             Architecture = architecture;
             ExtractionSlots = extractionSlots;
@@ -29,6 +30,7 @@ namespace TheCall.Scoring
             CurrentNumber = currentNumber;
             Say = say;
             Completed = completed;
+            InitialEnergy = initialEnergy;
         }
 
         public IArchitecture Architecture { get; }
@@ -39,6 +41,7 @@ namespace TheCall.Scoring
         public TMP_Text CurrentNumber { get; }
         public Action<string> Say { get; }
         public Action Completed { get; }
+        public int InitialEnergy { get; }
     }
 
     public sealed class ScoringShow : MonoBehaviour, ICueSink

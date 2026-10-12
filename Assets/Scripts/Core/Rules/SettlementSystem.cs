@@ -68,16 +68,16 @@ namespace TheCall
                     run.AddTechPoint();
 
                 level.Pay(due);
+                var retained = 0;
                 if (run.HasTool("蓄热熔炉"))
-                    run.SetRetainedEnergy((int)Math.Floor(level.Energy * 0.2));
-                else
-                    run.SetRetainedEnergy(0);
+                    retained = (int)Math.Floor(level.Energy * 0.2);
+                run.SetRetainedEnergy(retained);
 
                 level.ClearEnergy();
                 var wage = ContentGate.Current.Wage(wasOvertime);
                 run.AddGold(wage);
                 level.ClearDebt();
-                payment = new SettlementPayment(due, 0, wasOvertime, false, excess, wage);
+                payment = new SettlementPayment(due, 0, wasOvertime, false, excess, wage, retained);
                 result = PaymentResult.Paid;
             }
 
@@ -1667,12 +1667,10 @@ namespace TheCall
                     var other = run.Find(otherId);
                     if (other == null) continue;
 
-                    if (HasParent(monster, otherId) && other.HasSkill(skillName))
+                    if (HasParent(other, monster.Id) && other.HasSkill(skillName))
                     {
-                        if (monster.Personality == "重视血脉")
-                            into.Add(new ExtraGrant(monster.Id, -1, true));
-                        if (other.Personality == "重视血脉")
-                            into.Add(new ExtraGrant(other.Id, -1, true));
+                        if (monster.Personality == "重视血脉" || other.Personality == "重视血脉")
+                            into.Add(new ExtraGrant(other.Personality == "重视血脉" ? other.Id : monster.Id, -1, true));
                     }
                 }
             }

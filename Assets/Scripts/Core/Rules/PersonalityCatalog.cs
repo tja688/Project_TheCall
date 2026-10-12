@@ -33,6 +33,7 @@ namespace TheCall
         PersonalityDef Find(string name);
         IReadOnlyList<string> Names();
         IReadOnlyList<string> NamesOf(Rarity rarity);
+        string Draw(IDraw draw);
     }
 
     internal sealed class PersonalityCatalog : IPersonalityCatalog
@@ -62,6 +63,22 @@ namespace TheCall
                     list.Add(_book.Personalities[i].Name);
             }
             return list;
+        }
+
+        public string Draw(IDraw draw)
+        {
+            var rarities = new[]
+            {
+                Rarity.White, Rarity.White, Rarity.White, Rarity.White, Rarity.White,
+                Rarity.Blue, Rarity.Blue,
+                Rarity.Negative, Rarity.Negative,
+                Rarity.Gold
+            };
+            var chosenRarity = draw.Choose(rarities);
+            var names = NamesOf(chosenRarity);
+            if (names.Count == 0)
+                names = Names();
+            return draw.Choose(names);
         }
     }
 }

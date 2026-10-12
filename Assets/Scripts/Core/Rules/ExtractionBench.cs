@@ -6,9 +6,21 @@ namespace TheCall
 {
     internal readonly struct BenchMonster
     {
-        public BenchMonster(IReadOnlyList<string> skillNames) => SkillNames = skillNames;
+        public BenchMonster(IReadOnlyList<string> skillNames, string personality = null, string mood = null, string race = null)
+        {
+            SkillNames = skillNames;
+            Personality = personality;
+            Mood = mood;
+            Race = race;
+        }
 
         public IReadOnlyList<string> SkillNames { get; }
+
+        public string Personality { get; }
+
+        public string Mood { get; }
+
+        public string Race { get; }
     }
 
     internal sealed class BenchBoard
@@ -103,7 +115,8 @@ namespace TheCall
                 if (board.Row[cell] == null)
                     continue;
 
-                var names = board.Row[cell].Value.SkillNames;
+                var bm = board.Row[cell].Value;
+                var names = bm.SkillNames;
                 if (names == null || names.Count < 1 || names.Count > 4)
                     throw new BenchRejectedException("每只怪物要有 1 到 4 个技能。");
 
@@ -113,6 +126,13 @@ namespace TheCall
                     if (!seen.Add(names[i]) || !Known(skills, names[i]))
                         throw new BenchRejectedException("技能不在目录里或重复：" + names[i]);
                 }
+
+                if (!string.IsNullOrEmpty(bm.Personality) && !KnownPersonality(bm.Personality))
+                    throw new BenchRejectedException("性格不在目录里：" + bm.Personality);
+                if (!string.IsNullOrEmpty(bm.Race) && !KnownRace(bm.Race))
+                    throw new BenchRejectedException("种族不在目录里：" + bm.Race);
+                if (!string.IsNullOrEmpty(bm.Mood) && !KnownMood(bm.Mood))
+                    throw new BenchRejectedException("心情不在目录里：" + bm.Mood);
             }
         }
 
@@ -159,6 +179,33 @@ namespace TheCall
             }
 
             return null;
+        }
+
+        static bool KnownPersonality(string name)
+        {
+            var book = ContentGate.Current;
+            if (book == null || book.Personalities == null) return false;
+            for (var i = 0; i < book.Personalities.Count; i++)
+                if (book.Personalities[i].Name == name) return true;
+            return false;
+        }
+
+        static bool KnownRace(string name)
+        {
+            var book = ContentGate.Current;
+            if (book == null || book.Races == null) return false;
+            for (var i = 0; i < book.Races.Count; i++)
+                if (book.Races[i].Name == name) return true;
+            return false;
+        }
+
+        static bool KnownMood(string name)
+        {
+            var book = ContentGate.Current;
+            if (book == null || book.Moods == null) return false;
+            for (var i = 0; i < book.Moods.Count; i++)
+                if (book.Moods[i].Name == name) return true;
+            return false;
         }
 
         sealed class FirstDraw : IDraw

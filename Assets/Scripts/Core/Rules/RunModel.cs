@@ -233,6 +233,34 @@ namespace TheCall
         public Monster[] Living { get; }
     }
 
+    internal sealed class GeneSlot
+    {
+        public GeneSlot(string skillName, int? reservedBreedingSlot = null)
+        {
+            SkillName = skillName;
+            ReservedBreedingSlot = reservedBreedingSlot;
+        }
+
+        public string SkillName { get; }
+
+        public int? ReservedBreedingSlot { get; set; }
+
+        public bool IsReserved => ReservedBreedingSlot.HasValue;
+    }
+
+    internal readonly struct GeneSlotCapture
+    {
+        public GeneSlotCapture(string skillName, int? reservedBreedingSlot)
+        {
+            SkillName = skillName;
+            ReservedBreedingSlot = reservedBreedingSlot;
+        }
+
+        public string SkillName { get; }
+
+        public int? ReservedBreedingSlot { get; }
+    }
+
     internal sealed class RunModel : AbstractModel
     {
         readonly List<Monster> _candidates = new List<Monster>();
@@ -242,7 +270,7 @@ namespace TheCall
         readonly HashSet<string> _workedToday = new HashSet<string>();
         readonly List<string> _shelfMonsters = new List<string>();
         readonly List<string> _shelfTools = new List<string>();
-        readonly List<string> _skillSlots = new List<string>();
+        readonly List<GeneSlot> _geneSlots = new List<GeneSlot>();
         readonly List<string> _unlockedTech = new List<string>();
         readonly List<ProductionSubmission> _productionLog = new List<ProductionSubmission>();
         int _nextId = 1;
@@ -278,7 +306,18 @@ namespace TheCall
                 monster.ResetDailyClockIn();
         }
 
-        public IReadOnlyList<string> SkillSlots => _skillSlots;
+        public IReadOnlyList<GeneSlot> GeneSlots => _geneSlots;
+
+        public IReadOnlyList<string> SkillSlots
+        {
+            get
+            {
+                var names = new string[_geneSlots.Count];
+                for (var i = 0; i < names.Length; i++)
+                    names[i] = _geneSlots[i].SkillName;
+                return names;
+            }
+        }
 
         public IReadOnlyList<string> UnlockedTech => _unlockedTech;
 
@@ -362,7 +401,7 @@ namespace TheCall
             RetainedEnergy = 0;
             _tools.Clear();
             _workedToday.Clear();
-            _skillSlots.Clear();
+            _geneSlots.Clear();
             _unlockedTech.Clear();
             _cage.Clear();
             _candidates.Clear();
@@ -377,7 +416,7 @@ namespace TheCall
             RetainedEnergy = 0;
             _tools.Clear();
             _workedToday.Clear();
-            _skillSlots.Clear();
+            _geneSlots.Clear();
             _unlockedTech.Clear();
             _cage.Clear();
             _candidates.Clear();
@@ -473,20 +512,69 @@ namespace TheCall
             }
         }
 
+        public int GeneCapacity => HasTech("GeneStorage") || HasTech("基因仓储") ? 4 : 3;
+
+        public bool TryReserveGeneSlot(int geneSlotIndex, int breedingSlot)
+        {
+            if (geneSlotIndex < 0 || geneSlotIndex >= _geneSlots.Count)
+                return false;
+            if (_geneSlots[geneSlotIndex].IsReserved)
+                return false;
+            _geneSlots[geneSlotIndex].ReservedBreedingSlot = breedingSlot;
+            return true;
+        }
+
+        public void UnreserveGene(int breedingSlot)
+        {
+            for (var i = 0; i < _geneSlots.Count; i++)
+            {
+                if (_geneSlots[i].ReservedBreedingSlot == breedingSlot)
+                    _geneSlots[i].ReservedBreedingSlot = null;
+            }
+        }
+
+        public void ConsumeReservedGene(int breedingSlot)
+        {
+            for (var i = 0; i < _geneSlots.Count; i++)
+            {
+                if (_geneSlots[i].ReservedBreedingSlot == breedingSlot)
+                {
+                    _geneSlots.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        internal GeneSlotCapture[] CaptureGeneSlots()
+        {
+            var copy = new GeneSlotCapture[_geneSlots.Count];
+            for (var i = 0; i < copy.Length; i++)
+                copy[i] = new GeneSlotCapture(_geneSlots[i].SkillName, _geneSlots[i].ReservedBreedingSlot);
+
+            return copy;
+        }
+
+        internal void RestoreGeneSlots(GeneSlotCapture[] slots)
+        {
+            _geneSlots.Clear();
+            for (var i = 0; i < slots.Length; i++)
+                _geneSlots.Add(new GeneSlot(slots[i].SkillName, slots[i].ReservedBreedingSlot));
+        }
+
         internal string[] CaptureSkillSlots()
         {
-            var copy = new string[_skillSlots.Count];
+            var copy = new string[_geneSlots.Count];
             for (var i = 0; i < copy.Length; i++)
-                copy[i] = _skillSlots[i];
+                copy[i] = _geneSlots[i].SkillName;
 
             return copy;
         }
 
         internal void RestoreSkillSlots(string[] slots)
         {
-            _skillSlots.Clear();
+            _geneSlots.Clear();
             for (var i = 0; i < slots.Length; i++)
-                _skillSlots.Add(slots[i]);
+                _geneSlots.Add(new GeneSlot(slots[i]));
         }
 
         public void AddNewToCage(string skillName) => _cage.Add(Create(skillName));
@@ -516,16 +604,16 @@ namespace TheCall
             return true;
         }
 
-        public void PutSkillInSlot(string skillName) => _skillSlots.Add(skillName);
+        public void PutSkillInSlot(string skillName) => _geneSlots.Add(new GeneSlot(skillName));
 
         public bool TryTakeSkillAt(int index, out string skillName)
         {
             skillName = null;
-            if (index < 0 || index >= _skillSlots.Count)
+            if (index < 0 || index >= _geneSlots.Count)
                 return false;
 
-            skillName = _skillSlots[index];
-            _skillSlots.RemoveAt(index);
+            skillName = _geneSlots[index].SkillName;
+            _geneSlots.RemoveAt(index);
             return true;
         }
 

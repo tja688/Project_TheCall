@@ -41,6 +41,7 @@ namespace TheCall
     {
         readonly MonsterFact[] _monsters;
         readonly string[] _skillNames;
+        readonly bool[] _geneReserved;
 
         public TransitionFacts(
             bool inOperation,
@@ -49,7 +50,8 @@ namespace TheCall
             string[] extraction,
             string[] breeding,
             string[] breedingSkills,
-            MonsterFact[] monsters)
+            MonsterFact[] monsters,
+            bool[] geneReserved = null)
         {
             InOperation = inOperation;
             BreedingSkillUnlocked = breedingSkillUnlocked;
@@ -59,6 +61,7 @@ namespace TheCall
             Breeding = breeding;
             BreedingSkills = breedingSkills;
             _monsters = monsters;
+            _geneReserved = geneReserved ?? new bool[skillNames.Length];
         }
 
         public bool InOperation { get; }
@@ -66,6 +69,9 @@ namespace TheCall
         public bool BreedingSkillUnlocked { get; }
 
         public int SkillSlotCount { get; }
+
+        public bool IsGeneReserved(int index) =>
+            _geneReserved != null && index >= 0 && index < _geneReserved.Length && _geneReserved[index];
 
         public IReadOnlyList<string> Extraction { get; }
 
@@ -350,6 +356,8 @@ namespace TheCall
                 return false;
             if (facts.BreedingSkills[slot] != null)
                 return false;
+            if (facts.IsGeneReserved(drop.Payload.Index))
+                return false;
             if (!facts.TrySkillName(drop.Payload.Index, out _))
                 return false;
 
@@ -363,7 +371,7 @@ namespace TheCall
             var slot = drop.Payload.Index;
             if (slot < 0 || slot >= facts.BreedingSkills.Count || facts.BreedingSkills[slot] == null)
                 return false;
-            if (drop.Landing.Place != LandingPlace.SkillSlot || facts.SkillSlotCount >= 3)
+            if (drop.Landing.Place != LandingPlace.SkillSlot)
                 return false;
 
             plan = TransitionPlan.ReturnBreedingSkill(slot);

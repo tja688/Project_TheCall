@@ -71,6 +71,21 @@ namespace TheCall
 
             run.TryRemoveShelfTool(toolName);
             run.AddTool(tool.Name);
+
+            if (tool.Name == "招工海报")
+            {
+                var draw = this.GetUtility<IDraw>();
+                var catalog = this.GetUtility<SkillCatalog>();
+                var personalities = this.GetUtility<IPersonalityCatalog>();
+                var races = this.GetUtility<IRaceCatalog>();
+                var p = personalities.Draw(draw);
+                var r = races.Draw(draw);
+                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw), personality: p, race: r, mood: "普通").Id);
+            }
+            else if (tool.Name == "验货单")
+            {
+                StockTools(run);
+            }
         }
 
         public void SellMonster(string monsterId)
@@ -105,9 +120,15 @@ namespace TheCall
         {
             var draw = this.GetUtility<IDraw>();
             var catalog = this.GetUtility<SkillCatalog>();
+            var personalities = this.GetUtility<IPersonalityCatalog>();
+            var races = this.GetUtility<IRaceCatalog>();
             var count = 4 + (run.HasTool("招工海报") ? 1 : 0);
             for (var i = 0; i < count; i++)
-                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw)).Id);
+            {
+                var p = personalities.Draw(draw);
+                var r = races.Draw(draw);
+                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw), personality: p, race: r, mood: "普通").Id);
+            }
         }
 
         void StockTools(RunModel run)
