@@ -1,0 +1,36 @@
+{"name":"baseline","data":[{"SkillName":"能量体","Energy":5}]}
+{"name":"new-active-exec","data":{"landings":[{"SkillName":"能量体","Energy":5},{"SkillName":"左能量体","Energy":0},{"SkillName":"右能量体","Energy":2}],"skills":[{"Name":"无穷肌肉","IsTemporary":false},{"Name":"能量体","IsTemporary":false},{"Name":"左能量体","IsTemporary":false},{"Name":"右能量体","IsTemporary":false}]}}
+{"name":"muscle-after-clear","data":["无穷肌肉","能量体","左能量体","右能量体"]}
+{"name":"corpse-echo","data":[{"SkillName":"自爆体","Energy":10},{"SkillName":"收尸腺","Energy":3}]}
+{"name":"honey-gap","data":[{"SkillName":"蜜能量体","Energy":3},{"SkillName":"能量体","Energy":8}]}
+{"name":"mind-negative","data":[{"SkillName":"能量体","Energy":3}]}
+{"name":"kin-positive","data":[{"MonsterId":"m4","SkillName":"能量体","Energy":5},{"MonsterId":"m4","SkillName":"能量体","Energy":5},{"MonsterId":"m5","SkillName":"能量体","Energy":5}]}
+{"name":"kin-negative","data":[{"MonsterId":"m4","SkillName":"能量体","Energy":5},{"MonsterId":"m5","SkillName":"能量体","Energy":2}]}
+{"name":"single-tool","data":[{"SkillName":"能量体","Energy":10},{"SkillName":"能量体","Energy":10}]}
+{"name":"breeding-duplicate","data":["能量体"]}
+{"name":"initial-fixed-mood","data":{"Personality":"乐天派","Mood":"普通"}}
+{"name":"preview-isolated","data":{"preview":"产生5点能量","actual":[{"SkillName":"能量体","Energy":10}]}}
+{"name":"per-skill-lock","data":[{"SkillName":"能量体","Energy":5},{"SkillName":"自爆体","Energy":10}]}
+{"name":"expanded-discard-drag","data":{"capacity":4,"accepted":false,"slots":3,"alive":true}}
+{"name":"expanded-discard-direct","data":{"slots":4,"alive":false}}
+{"name":"install-drag","data":{"accepted":false,"skills":1,"genes":1}}
+{"name":"install-command","data":{"accepted":true,"skills":[{"Name":"能量体","IsTemporary":false},{"Name":"左能量体","IsTemporary":false}],"genes":0}}
+{"name":"gene-provenance-trim","data":{"child":["左能量体","能量体"],"geneCount":1}}
+{"name":"opening-fixed-mood","data":{"Personality":"乐天派","Mood":"普通"}}
+{"name":"preview-impatient","data":{"preview":"产生5点能量","actual":[{"SkillName":"能量体","Energy":8}]}}
+{"name":"preview-mood","data":{"preview":"产生5点能量","actual":[{"SkillName":"能量体","Energy":7}]}}
+{"name":"sacrifice-per-target","data":[{"SkillName":"收尸腺","Energy":7},{"SkillName":"血祭体","Energy":20}]}
+{"name":"devour-no-target-buff","data":[{"SkillName":"啃食体","Energy":3}]}
+{"name":"honey-round1","data":[{"SkillName":"蜜能量体","Energy":3},{"SkillName":"能量体","Energy":8}]}
+{"name":"honey-round2","data":[{"SkillName":"能量体","Energy":5}]}
+{"name":"echo-active-order","data":[{"MonsterId":"m5","SkillName":"蜜能量体","Energy":3},{"MonsterId":"m5","SkillName":"能量体","Energy":5},{"MonsterId":"m5","SkillName":"蜜能量体","Energy":3},{"MonsterId":"m5","SkillName":"能量体","Energy":5},{"MonsterId":"m6","SkillName":"能量体","Energy":11}]}
+{"name":"duplicate-mirror","data":[{"SkillName":"能量体","Energy":10}]}
+{"name":"duplicate-extra","data":[{"MonsterId":"m4","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1},{"MonsterId":"m5","SkillName":"增生能量体","Energy":1}]}
+{"name":"opening-aura-target","data":[{"MonsterId":"m4","SkillName":"能量体","Energy":5},{"MonsterId":"m4","SkillName":"能量体","Energy":10},{"MonsterId":"m5","SkillName":"能量体","Energy":5}]}
+{"name":"opening-skillcount","data":[{"SkillName":"能量体","Energy":5}]}
+{"name":"death-listener-position","data":[{"SkillName":"收尸腺","Energy":7},{"SkillName":"抽杀体","Energy":14}]}
+{"name":"log-no-excess","data":{"tech":0,"text":"—— 第 1 关 · 结算 ——\n本关获得 50 点能量，目标 50 点。获得 1 科技点。工资 60 金币。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +45 点。合计底数 50 点。因此这次计入本关总能量 50 点。\n+50\n<b>合计  50</b>"}}
+{"name":"log-cumulative","data":{"text":"—— 第 1 关 · 结算 ——\n本关获得 35 点能量，目标 50 点。进入加班。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +20 点。合计底数 25 点。因此这次计入本关总能量 25 点。\n+25\n<b>合计  25</b>\n（说明：过程里加总的 25 点与系统记录的产出 35 点不一致，请以产出为准。）\n\n—— 第 1 关 · 加班 ——\n加班获得 60 点能量，目标 50 点。超额。获得 1 科技点。本段工资 40 金币。蓄热熔炉保留 2 点能量到下一关。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +20 点。合计底数 25 点。因此这次计入本关总能量 25 点。\n+25\n<b>合计  25</b>\n（说明：过程里加总的 25 点与系统记录的产出 60 点不一致，请以产出为准。）"}}
+{"name":"monster-scope-global-tool","data":[{"SkillName":"电化能机","Energy":11}]}
+{"name":"legacy-first-event-global-tool","data":[{"SkillName":"电化能机","Energy":10},{"SkillName":"血祭体","Energy":12}]}
+{"name":"copy-with-duplicate-tool","data":[{"Name":"不稳定肉体","IsTemporary":false},{"Name":"能量体","IsTemporary":false}]}

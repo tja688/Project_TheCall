@@ -1,0 +1,165 @@
+{
+  "success": true,
+  "command": "command eval",
+  "data": {
+    "command": "eval",
+    "parameters": {
+      "code": "var op=UnityEngine.Object.FindAnyObjectByType<TheCall.OperationScreenView>(UnityEngine.FindObjectsInactive.Include);var catalog=UnityEditor.AssetDatabase.LoadAssetAtPath<TheCall.PresentationSpriteCatalog>(\"Assets/Resources/PresentationSpriteCatalog.asset\");var book=TheCall.ContentBook.Parse(System.IO.File.ReadAllText(\"Assets/StreamingAssets/call-book.json\"));var c=TheCall.MonsterAssemblyCatalog.Runtime;return new{playing=UnityEditor.EditorApplication.isPlaying,dirty=UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty,compiling=UnityEditor.EditorApplication.isCompiling,tools=op.ownedToolViews.Select(t=>new{t.name,position=(t.transform as UnityEngine.RectTransform).anchoredPosition.ToString(),size=(t.transform as UnityEngine.RectTransform).sizeDelta.ToString()}).ToArray(),techNodes=UnityEngine.Object.FindAnyObjectByType<TheCall.ResearchScreenView>(UnityEngine.FindObjectsInactive.Include).nodes.Select(n=>new{n.techName,n.summary}).ToArray(),missingPersonalitySprites=book.Personalities.Where(p=>catalog.GetPersonalityIcon(p.Name)==null).Select(p=>p.Name).ToArray(),nullToolIcons=catalog.tools.Where(t=>t.icon==null).Select(t=>t.name).ToArray(),assemblyRuntime=new{parts=c.parts.Count,missing=c.parts.Where(p=>p.sprite==null).Select(p=>p.id).ToArray(),templates=c.templates.Count},assemblySavedAssetReadable=UnityEditor.AssetDatabase.LoadAssetAtPath<TheCall.MonsterAssemblyCatalog>(\"Assets/Resources/MonsterAssemblyCatalog.asset\")!=null};"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "playing": false,
+        "dirty": false,
+        "compiling": false,
+        "tools": [
+          {
+            "name": "OwnedTool_0",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_1",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_2",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_3",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_4",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_5",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_6",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_7",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_8",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_9",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_10",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_11",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_12",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_13",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_14",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_15",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_16",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          },
+          {
+            "name": "OwnedTool_17",
+            "position": "(8.00, -4.00)",
+            "size": "(48.00, 38.00)"
+          }
+        ],
+        "techNodes": [
+          {
+            "techName": "基因实验",
+            "summary": "培育方案可以放入一条技能。"
+          },
+          {
+            "techName": "槽位扩容",
+            "summary": "培育槽从 1 个变成 2 个。"
+          },
+          {
+            "techName": "变异学说",
+            "summary": "后代有机会多获得一条技能。"
+          },
+          {
+            "techName": "大乱炖",
+            "summary": "每个培育槽可以放 3 只亲本。"
+          },
+          {
+            "techName": "科学培育",
+            "summary": "培育后代获得产能修正。"
+          }
+        ],
+        "missingPersonalitySprites": [
+          "合群",
+          "恋爱脑",
+          "急躁",
+          "稳重",
+          "乐天派",
+          "热爱工作",
+          "乐于助人",
+          "好学",
+          "摸鱼派",
+          "厌恶工作",
+          "厌世",
+          "仇恨血脉",
+          "好奇",
+          "上进心",
+          "迷恋死亡"
+        ],
+        "nullToolIcons": [],
+        "assemblyRuntime": {
+          "parts": 39,
+          "missing": [],
+          "templates": 6
+        },
+        "assemblySavedAssetReadable": false
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

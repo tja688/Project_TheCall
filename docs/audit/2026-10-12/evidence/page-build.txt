@@ -1,0 +1,9 @@
+  TheCall.QfSubset -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.QfSubset\bin\Debug\net10.0\TheCall.QfSubset.dll
+  TheCall.Rules -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules\bin\Debug\net10.0\TheCall.Rules.dll
+  TheCall.Page -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Page\bin\Debug\net10.0\browser-wasm\TheCall.Page.dll
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:02.11

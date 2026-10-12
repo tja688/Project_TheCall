@@ -1,0 +1,74 @@
+{
+  "success": true,
+  "command": "command eval",
+  "data": {
+    "command": "eval",
+    "parameters": {
+      "code": "var results=new System.Collections.Generic.List<object>();foreach(var guid in UnityEditor.AssetDatabase.FindAssets(\"t:Prefab\",new[]{\"Assets/Prefabs/UI\",\"Assets/Prefabs/MonsterSlotCard\"})){var path=UnityEditor.AssetDatabase.GUIDToAssetPath(guid);var root=UnityEditor.PrefabUtility.LoadPrefabContents(path);try{results.Add(new{path,missingScripts=root.GetComponentsInChildren<UnityEngine.Transform>(true).Sum(t=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(t.gameObject)),portraits=root.GetComponentsInChildren<TheCall.MonsterPortrait>(true).Length});}finally{UnityEditor.PrefabUtility.UnloadPrefabContents(root);}}var r=TheCall.MonsterRigRuntime.Catalog();return new{prefabs=results,rigParts=r.Count,missingRigPieces=r.Where(p=>p.Missing).Select(p=>p.Data).ToArray(),dirty=UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty};"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "prefabs": [
+          {
+            "path": "Assets/Prefabs/UI/Button.prefab",
+            "missingScripts": 0,
+            "portraits": 0
+          },
+          {
+            "path": "Assets/Prefabs/UI/MonsterHoverPanel.prefab",
+            "missingScripts": 0,
+            "portraits": 0
+          },
+          {
+            "path": "Assets/Prefabs/UI/MonsterPortrait.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Action.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Compact.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_GlassyBreeding.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_GlassyExtraction.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Strip.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          },
+          {
+            "path": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_WideAction.prefab",
+            "missingScripts": 0,
+            "portraits": 1
+          }
+        ],
+        "rigParts": 39,
+        "missingRigPieces": [],
+        "dirty": false
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

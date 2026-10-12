@@ -1,0 +1,7 @@
+  TheCall.QfSubset -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.QfSubset\bin\Debug\net10.0\TheCall.QfSubset.dll
+  TheCall.Rules -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules\bin\Debug\net10.0\TheCall.Rules.dll
+  TheCall.Rules.Tests -> C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll
+C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll (.NETCoreApp,Version=v10.0)的测试运行
+总共 1 个测试文件与指定模式相匹配。
+
+已通过! - 失败:     0，通过:   245，已跳过:     0，总计:   245，持续时间: 554 ms - TheCall.Rules.Tests.dll (net10.0)
