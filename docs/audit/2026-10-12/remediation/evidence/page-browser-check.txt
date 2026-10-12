@@ -1,0 +1,33 @@
+### Result
+{"initial":"带入 0 · 本轮 8 · 累计 8 · 应交 50 · 未达应交","summary":"带入 40 · 本轮 20 · 累计 60 · 应交 50 · 达到应交","timeline":"1\n\n1号怪物 触发了技能 能量体\n\n报价\n5\n加项\n性格「急躁」+3\n底数\n5 + 3 = 8\n倍率\n没有额外倍率，按 ×1\n能量\n8 × 1 = 8\n写回\n没有写回\n累计\n到这一步，产出合计 48\n2\n\n1号怪物 触发了技能 能量体\n\n报价\n9\n加项\n性格「急躁」+3\n底数\n9 + 3 = 12\n倍率\n没有额外倍率，按 ×1\n能量\n12 × 1 = 12\n写回\n没有写回\n累计\n到这一步，产出合计 60\n3\n\n交款\n\n扣除应交 50，已经付清。产出达到超额线 60。这次得到金币 60。"}
+### Ran Playwright code
+```js
+await (async page => {
+  await page.locator('#monster-grid [data-skill="能量体"]').click();
+  await page.locator('#cells [data-zone="bench"][data-index="0"]').click();
+  await page.getByLabel('1号怪物性格').selectOption('急躁');
+  await page.getByLabel('1号怪物种族').selectOption('天空');
+  await page.getByLabel('1号怪物心情').selectOption('普通');
+  await page.getByRole('button', {name:'结算', exact:true}).click();
+  const initial = await page.locator('#report').innerText();
+  if (!initial.includes('本轮 8')) throw new Error(initial);
+  await page.locator('#skill-grid [data-skill="能量体"]').click();
+  await page.locator('#cells [data-payload="monster"]').click();
+  if ((await page.locator('#cells .line').count()) !== 1) throw new Error('Duplicate accepted without tool');
+  await page.getByRole('button', {name:'复读腺',exact:true}).click();
+  await page.locator('#skill-grid [data-skill="能量体"]').click();
+  await page.locator('#cells [data-payload="monster"] .head').click();
+  if ((await page.locator('#cells .line').count()) !== 2) throw new Error('Duplicate rejected with tool');
+  await page.getByLabel('1号怪物技能2成长').fill('4');
+  await page.getByLabel('1号怪物技能2成长').press('Tab');
+  await page.getByLabel('1号怪物技能2当天临时').check();
+  await page.locator('#initial-energy').fill('40'); await page.locator('#initial-energy').press('Tab');
+  await page.getByRole('button', {name:'结算', exact:true}).click();
+  const summary = await page.locator('#report').innerText();
+  if (!summary.includes('本轮 20') || !summary.includes('累计 60')) throw new Error(summary);
+  const timeline = await page.locator('#ledger-body').innerText();
+  if (!timeline.includes('性格「急躁」+3')) throw new Error(timeline);
+  return {initial,summary,timeline};
+}
+)(page);
+```

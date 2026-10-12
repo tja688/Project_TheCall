@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="13ee8689-67ec-4cec-afc3-b3acd319414e" name="jinji@JT 2026-10-12 13:53:38" runUser="JT\jinji" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-12T13:53:38.1755694+08:00" queuing="2026-10-12T13:53:38.1755695+08:00" start="2026-10-12T13:53:37.5026307+08:00" finish="2026-10-12T13:53:38.2144330+08:00" />
+  <TestSettings name="default" id="c1907f64-9389-4cb9-951a-8a8660c63768">
+    <Deployment runDeploymentRoot="jinji_JT_2026-10-12_13_53_38" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="39891221-3e18-4de0-b5e9-8eb22064dc8e" testId="0b8b03aa-99d7-25f3-8491-160cc5d061d7" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;优质肉体&quot;)" computerName="JT" duration="00:00:00.0027370" startTime="2026-10-12T13:53:38.1462616+08:00" endTime="2026-10-12T13:53:38.1489981+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39891221-3e18-4de0-b5e9-8eb22064dc8e" />
+    <UnitTestResult executionId="ec065654-3afe-484c-808b-3d56f924d3c0" testId="59175cf6-f2bd-dcd3-84fb-55db069bd12d" testName="EachRaceHasActualGeneratingNeighborBonus(&quot;森林&quot;,&quot;天空&quot;)" computerName="JT" duration="00:00:00.0046250" startTime="2026-10-12T13:53:38.0901240+08:00" endTime="2026-10-12T13:53:38.0947485+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec065654-3afe-484c-808b-3d56f924d3c0" />
+    <UnitTestResult executionId="d52bf1b9-9706-4f31-9223-a089c1d34c5c" testId="f4aabfe5-4466-5e95-ce9f-2afd2b8e0006" testName="SkillAuraHasIndependentBasicFixture(&quot;镜眼&quot;,10)" computerName="JT" duration="00:00:00.0013580" startTime="2026-10-12T13:53:38.1180347+08:00" endTime="2026-10-12T13:53:38.1193922+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d52bf1b9-9706-4f31-9223-a089c1d34c5c" />
+    <UnitTestResult executionId="dc56d8a9-65cf-491d-bbc5-51e66f8605ad" testId="59988ce2-5598-9c2b-ce96-501a63a6d2f8" testName="SkillAuraHasIndependentBasicFixture(&quot;怪异香&quot;,7)" computerName="JT" duration="00:00:00.0011340" startTime="2026-10-12T13:53:38.1168892+08:00" endTime="2026-10-12T13:53:38.1180234+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc56d8a9-65cf-491d-bbc5-51e66f8605ad" />
+    <UnitTestResult executionId="86416b1d-f2e6-4818-a012-88aa82df31a8" testId="987950f0-7e47-735c-30c4-c873c9d10525" testName="EachMoodChangesProductionByItsActualTier(&quot;热爱&quot;,7)" computerName="JT" duration="00:00:00.0007970" startTime="2026-10-12T13:53:38.0870539+08:00" endTime="2026-10-12T13:53:38.0878510+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86416b1d-f2e6-4818-a012-88aa82df31a8" />
+    <UnitTestResult executionId="77df3be0-9879-4a84-8f72-a992be9541b3" testId="b691afd7-d098-d5e1-cdcc-dc9933ebd4ee" testName="EachMoodChangesProductionByItsActualTier(&quot;热情&quot;,6)" computerName="JT" duration="00:00:00.0018830" startTime="2026-10-12T13:53:38.0851544+08:00" endTime="2026-10-12T13:53:38.0870373+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77df3be0-9879-4a84-8f72-a992be9541b3" />
+    <UnitTestResult executionId="e68eb321-f4f0-43e3-8354-9f5bf2652a6f" testId="3a5e190d-5fe2-5c40-f6bd-71b654017752" testName="EachMoodChangesProductionByItsActualTier(&quot;普通&quot;,5)" computerName="JT" duration="00:00:00.0419130" startTime="2026-10-12T13:53:38.0422137+08:00" endTime="2026-10-12T13:53:38.0840733+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e68eb321-f4f0-43e3-8354-9f5bf2652a6f" />
+    <UnitTestResult executionId="82c2a1ad-2390-4513-99b8-afbef16511ab" testId="310d4838-0df7-4102-aa88-959c7da2afd1" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;传能耳&quot;)" computerName="JT" duration="00:00:00.0025940" startTime="2026-10-12T13:53:38.1436537+08:00" endTime="2026-10-12T13:53:38.1462474+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82c2a1ad-2390-4513-99b8-afbef16511ab" />
+    <UnitTestResult executionId="3f5d9525-57ae-4aaf-926e-52196dc6b5dc" testId="b8bedd04-f682-60f0-1c4c-292efa044b90" testName="SkillProductionHasIndependentBasicFixture(&quot;不稳定能量体&quot;,20)" computerName="JT" duration="00:00:00.0011130" startTime="2026-10-12T13:53:38.1387437+08:00" endTime="2026-10-12T13:53:38.1398570+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f5d9525-57ae-4aaf-926e-52196dc6b5dc" />
+    <UnitTestResult executionId="19d301b3-56e4-4737-9d72-ab33c5c880cb" testId="363e672a-8f39-0c9a-2e8c-751357d666ec" testName="EachRaceHasActualGeneratingNeighborBonus(&quot;天空&quot;,&quot;沙漠&quot;)" computerName="JT" duration="00:00:00.0010140" startTime="2026-10-12T13:53:38.0947666+08:00" endTime="2026-10-12T13:53:38.0957806+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19d301b3-56e4-4737-9d72-ab33c5c880cb" />
+    <UnitTestResult executionId="0e4db204-5a6a-4bc1-a9f1-5cee6c969aa4" testId="fa6fee44-4373-44a8-29b8-a92d4b0d41b1" testName="EachMoodChangesProductionByItsActualTier(&quot;疲倦&quot;,4)" computerName="JT" duration="00:00:00.0006650" startTime="2026-10-12T13:53:38.0878604+08:00" endTime="2026-10-12T13:53:38.0885257+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e4db204-5a6a-4bc1-a9f1-5cee6c969aa4" />
+    <UnitTestResult executionId="b962fec8-571c-4490-8512-abaad3792cb0" testId="9d732fd0-1336-75e0-1d04-45aaab185fd5" testName="SkillProductionHasIndependentBasicFixture(&quot;抽杀体&quot;,10)" computerName="JT" duration="00:00:00.0007850" startTime="2026-10-12T13:53:38.1358357+08:00" endTime="2026-10-12T13:53:38.1366205+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b962fec8-571c-4490-8512-abaad3792cb0" />
+    <UnitTestResult executionId="f4aa8a14-55ce-4b2a-82e1-b7e7101f8ab8" testId="9ca8d967-adfe-658c-3b3b-e19cb398f118" testName="EachRaceHasActualGeneratingNeighborBonus(&quot;火山&quot;,&quot;海洋&quot;)" computerName="JT" duration="00:00:00.0010500" startTime="2026-10-12T13:53:38.1127273+08:00" endTime="2026-10-12T13:53:38.1137775+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4aa8a14-55ce-4b2a-82e1-b7e7101f8ab8">
+      <Output>
+        <ErrorInfo>
+          <Message>  Expected is &lt;System.Int32[2]&gt;, actual is &lt;System.Linq.Enumerable+ArraySelectIterator`2[TheCall.SettlementLanding,System.Int32]&gt;&#xD;
+  Values differ at index [0]&#xD;
+  Expected: 8&#xD;
+  But was:  5&#xD;
+</Message>
+          <StackTrace>   at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+1)    at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b837deb-ce3c-4766-8541-16f1de8b5abb" testId="73c90a7b-eae4-6e0f-8214-0824ef840362" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;良好肉体&quot;)" computerName="JT" duration="00:00:00.0010720" startTime="2026-10-12T13:53:38.1490124+08:00" endTime="2026-10-12T13:53:38.1500843+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b837deb-ce3c-4766-8541-16f1de8b5abb" />
+    <UnitTestResult executionId="b83e4149-0ae5-4dfd-85b6-6980e88a753d" testId="5f7f8096-fc58-0bfc-e8fc-7b085649570c" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;移植胚胎&quot;)" computerName="JT" duration="00:00:00.0006620" startTime="2026-10-12T13:53:38.1606163+08:00" endTime="2026-10-12T13:53:38.1612778+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b83e4149-0ae5-4dfd-85b6-6980e88a753d" />
+    <UnitTestResult executionId="da0b542d-1895-49f7-a0c7-7b26d7de33e0" testId="c2dd3c55-7cf9-8df6-b096-fd8a7d5d187f" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;换位手&quot;)" computerName="JT" duration="00:00:00.0011999" startTime="2026-10-12T13:53:38.1536210+08:00" endTime="2026-10-12T13:53:38.1548205+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da0b542d-1895-49f7-a0c7-7b26d7de33e0" />
+    <UnitTestResult executionId="65a4044b-e872-456f-b038-59b93e5d38e2" testId="e6abd1b9-814a-0cd3-4fb9-a1dca6d6cfdd" testName="SkillProductionHasIndependentBasicFixture(&quot;蜜能量体&quot;,3)" computerName="JT" duration="00:00:00.0014859" startTime="2026-10-12T13:53:38.1244688+08:00" endTime="2026-10-12T13:53:38.1259552+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65a4044b-e872-456f-b038-59b93e5d38e2" />
+    <UnitTestResult executionId="3d976cdb-83b5-4f87-92ec-a14b02ebf4bf" testId="088332bc-6db0-49ef-c947-e31ffb0749ee" testName="EachMoodChangesProductionByItsActualTier(&quot;倦怠&quot;,3)" computerName="JT" duration="00:00:00.0006470" startTime="2026-10-12T13:53:38.0885324+08:00" endTime="2026-10-12T13:53:38.0891796+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d976cdb-83b5-4f87-92ec-a14b02ebf4bf" />
+    <UnitTestResult executionId="ea8a3519-6aeb-4be5-a30b-24223fd62394" testId="a3f96f36-ea68-4c5b-231d-f42b309507c5" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;产金管道&quot;)" computerName="JT" duration="00:00:00.0013840" startTime="2026-10-12T13:53:38.1567837+08:00" endTime="2026-10-12T13:53:38.1581670+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea8a3519-6aeb-4be5-a30b-24223fd62394" />
+    <UnitTestResult executionId="c392d0fd-0395-495e-aeb1-15f0a5ae2884" testId="fa2cefd0-3a69-ec01-fbb2-3f2a39bf59d8" testName="SkillProductionHasIndependentBasicFixture(&quot;左能量体&quot;,2)" computerName="JT" duration="00:00:00.0010280" startTime="2026-10-12T13:53:38.1209839+08:00" endTime="2026-10-12T13:53:38.1220122+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c392d0fd-0395-495e-aeb1-15f0a5ae2884" />
+    <UnitTestResult executionId="399f8b9f-bada-4478-a578-778fba0729a0" testId="a795adb5-5eca-79c4-6df4-1dd30edb0ddb" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;回响嗓&quot;)" computerName="JT" duration="00:00:00.0006500" startTime="2026-10-12T13:53:38.1612907+08:00" endTime="2026-10-12T13:53:38.1619403+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="399f8b9f-bada-4478-a578-778fba0729a0" />
+    <UnitTestResult executionId="b78b4000-9ed7-420f-8f18-4485096a6700" testId="ecd08f12-7d3a-179a-1ffd-77dd18f4bf34" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;外接胚胎&quot;)" computerName="JT" duration="00:00:00.0010810" startTime="2026-10-12T13:53:38.1556874+08:00" endTime="2026-10-12T13:53:38.1567683+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b78b4000-9ed7-420f-8f18-4485096a6700" />
+    <UnitTestResult executionId="e3ac7d81-24e1-4bd0-8a82-16db2869aa52" testId="a6e4f518-6a22-2090-be98-8f088a4184f1" testName="SkillProductionHasIndependentBasicFixture(&quot;生长能量体&quot;,2)" computerName="JT" duration="00:00:00.0010600" startTime="2026-10-12T13:53:38.1376698+08:00" endTime="2026-10-12T13:53:38.1387292+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3ac7d81-24e1-4bd0-8a82-16db2869aa52" />
+    <UnitTestResult executionId="b8e09c86-31e3-4727-83bb-36048199629a" testId="70123ed8-addc-b481-1cdc-83d3d44a4647" testName="SkillProductionHasIndependentBasicFixture(&quot;双头能量体&quot;,4)" computerName="JT" duration="00:00:00.0015490" startTime="2026-10-12T13:53:38.1227716+08:00" endTime="2026-10-12T13:53:38.1243203+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8e09c86-31e3-4727-83bb-36048199629a" />
+    <UnitTestResult executionId="6e4f04bd-e2d7-4704-8cd0-250bea25673a" testId="27e55586-a996-8d17-850e-97d8f8e65a1d" testName="SkillProductionHasIndependentBasicFixture(&quot;自爆体&quot;,10)" computerName="JT" duration="00:00:00.0022160" startTime="2026-10-12T13:53:38.1321797+08:00" endTime="2026-10-12T13:53:38.1343957+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e4f04bd-e2d7-4704-8cd0-250bea25673a" />
+    <UnitTestResult executionId="bdab62df-4b52-4b7c-8bf5-224b290a9c6f" testId="4152cb4b-a829-9725-8683-04a013bdbad3" testName="SkillProductionHasIndependentBasicFixture(&quot;增生能量体&quot;,1)" computerName="JT" duration="00:00:00.0052130" startTime="2026-10-12T13:53:38.1269496+08:00" endTime="2026-10-12T13:53:38.1321621+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdab62df-4b52-4b7c-8bf5-224b290a9c6f" />
+    <UnitTestResult executionId="4c5adc94-1740-4542-bd50-1438e1fd37f0" testId="9f1adf6c-9820-05e6-4511-8b9e29b3cf2b" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;无穷肌肉&quot;)" computerName="JT" duration="00:00:00.0009960" startTime="2026-10-12T13:53:38.1619508+08:00" endTime="2026-10-12T13:53:38.1629462+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c5adc94-1740-4542-bd50-1438e1fd37f0" />
+    <UnitTestResult executionId="6c9f3b1a-a174-43d5-8bfe-37693dadaa22" testId="5d3cec6a-cd04-98b5-6019-2d079e531763" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;左复制腺体&quot;)" computerName="JT" duration="00:00:00.0009410" startTime="2026-10-12T13:53:38.1520039+08:00" endTime="2026-10-12T13:53:38.1529443+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6c9f3b1a-a174-43d5-8bfe-37693dadaa22" />
+    <UnitTestResult executionId="5ff2423b-24c4-4520-83af-da95cfd9b76c" testId="edd5bdcf-32bc-51d5-023a-329e2c7f7ce2" testName="EachRaceHasActualGeneratingNeighborBonus(&quot;沙漠&quot;,&quot;火山&quot;)" computerName="JT" duration="00:00:00.0168470" startTime="2026-10-12T13:53:38.0957955+08:00" endTime="2026-10-12T13:53:38.1126420+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ff2423b-24c4-4520-83af-da95cfd9b76c">
+      <Output>
+        <ErrorInfo>
+          <Message>  Expected is &lt;System.Int32[2]&gt;, actual is &lt;System.Linq.Enumerable+ArraySelectIterator`2[TheCall.SettlementLanding,System.Int32]&gt;&#xD;
+  Values differ at index [0]&#xD;
+  Expected: 8&#xD;
+  But was:  5&#xD;
+</Message>
+          <StackTrace>   at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+1)    at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="76bebbe5-6c40-49aa-bc87-8bc766ab2f5d" testId="3f0583ea-e9a1-ab54-976e-32d9f282fefa" testName="SkillProductionHasIndependentBasicFixture(&quot;啃食体&quot;,4)" computerName="JT" duration="00:00:00.0006550" startTime="2026-10-12T13:53:38.1351711+08:00" endTime="2026-10-12T13:53:38.1358255+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76bebbe5-6c40-49aa-bc87-8bc766ab2f5d" />
+    <UnitTestResult executionId="551994ab-c8eb-4e99-a09b-1d1e0f506ce9" testId="5cf960f2-13dc-7830-cc55-74c0a212ac15" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;收尸腺&quot;)" computerName="JT" duration="00:00:00.0018980" startTime="2026-10-12T13:53:38.1500929+08:00" endTime="2026-10-12T13:53:38.1519903+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="551994ab-c8eb-4e99-a09b-1d1e0f506ce9" />
+    <UnitTestResult executionId="6856358e-9674-4203-9adf-a05aa931ae64" testId="e27cc6e0-3ffc-9ed5-6f99-1117a24fdddf" testName="SkillProductionHasIndependentBasicFixture(&quot;能量体&quot;,5)" computerName="JT" duration="00:00:00.0015460" startTime="2026-10-12T13:53:38.1194279+08:00" endTime="2026-10-12T13:53:38.1209737+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6856358e-9674-4203-9adf-a05aa931ae64" />
+    <UnitTestResult executionId="ea4a3ae4-5b5a-45f4-bd0e-70b1e929d29d" testId="de2f840c-a216-bce2-98d8-8df4fadf64a2" testName="SkillAuraHasIndependentBasicFixture(&quot;奇异香&quot;,6)" computerName="JT" duration="00:00:00.0022039" startTime="2026-10-12T13:53:38.1146737+08:00" endTime="2026-10-12T13:53:38.1168777+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea4a3ae4-5b5a-45f4-bd0e-70b1e929d29d" />
+    <UnitTestResult executionId="03dd35c6-df60-4066-b91a-0c87f5a00ff3" testId="b08bbb9c-e874-1abe-af40-8d6b3859d8c6" testName="SkillProductionHasIndependentBasicFixture(&quot;右能量体&quot;,2)" computerName="JT" duration="00:00:00.0007400" startTime="2026-10-12T13:53:38.1220219+08:00" endTime="2026-10-12T13:53:38.1227617+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03dd35c6-df60-4066-b91a-0c87f5a00ff3" />
+    <UnitTestResult executionId="b8bdd2f1-9f21-4cf6-b0dd-4fa6e818e124" testId="cac93578-46b3-ef36-3686-07bf53a1b3ce" testName="SkillProductionHasIndependentBasicFixture(&quot;血祭体&quot;,16)" computerName="JT" duration="00:00:00.0016540" startTime="2026-10-12T13:53:38.1398684+08:00" endTime="2026-10-12T13:53:38.1415222+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8bdd2f1-9f21-4cf6-b0dd-4fa6e818e124" />
+    <UnitTestResult executionId="8154a60c-a737-4b13-bc92-9c8c81dbe0b1" testId="01685bd1-53d0-77c0-eefb-28233315fa6c" testName="SkillProductionHasIndependentBasicFixture(&quot;优秀能量体&quot;,2)" computerName="JT" duration="00:00:00.0009700" startTime="2026-10-12T13:53:38.1259690+08:00" endTime="2026-10-12T13:53:38.1269387+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8154a60c-a737-4b13-bc92-9c8c81dbe0b1" />
+    <UnitTestResult executionId="b4201879-edc4-44db-9f0c-509effd8a922" testId="09d99b84-db24-12bb-d148-4a8dece382c6" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;祭品腺&quot;)" computerName="JT" duration="00:00:00.0008510" startTime="2026-10-12T13:53:38.1597513+08:00" endTime="2026-10-12T13:53:38.1606023+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4201879-edc4-44db-9f0c-509effd8a922" />
+    <UnitTestResult executionId="204a9dbc-1d17-4cab-bd21-58cc25677843" testId="93d7dbfe-24a0-91c4-0d6d-59585d1eb48f" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;右复制腺体&quot;)" computerName="JT" duration="00:00:00.0006579" startTime="2026-10-12T13:53:38.1529550+08:00" endTime="2026-10-12T13:53:38.1536134+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="204a9dbc-1d17-4cab-bd21-58cc25677843" />
+    <UnitTestResult executionId="0f32131a-65e5-4730-a988-b0e782bce98f" testId="5d27557b-1a4f-e6d7-31dd-bc5568ca66c3" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;不稳定肉体&quot;)" computerName="JT" duration="00:00:00.0015550" startTime="2026-10-12T13:53:38.1581817+08:00" endTime="2026-10-12T13:53:38.1597364+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f32131a-65e5-4730-a988-b0e782bce98f" />
+    <UnitTestResult executionId="1f90ddd4-b2f9-417f-86c9-559c089ce7b7" testId="0ec8d97f-4f33-b6c5-92b4-5b4489d6f204" testName="SkillProductionHasIndependentBasicFixture(&quot;情绪收集器&quot;,2)" computerName="JT" duration="00:00:00.0007460" startTime="2026-10-12T13:53:38.1344149+08:00" endTime="2026-10-12T13:53:38.1351606+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f90ddd4-b2f9-417f-86c9-559c089ce7b7" />
+    <UnitTestResult executionId="2c0e508c-ac91-400b-addf-41f837c72db5" testId="96e74df6-4370-38ef-68ed-8258405f4e55" testName="EachRaceHasActualGeneratingNeighborBonus(&quot;海洋&quot;,&quot;森林&quot;)" computerName="JT" duration="00:00:00.0008400" startTime="2026-10-12T13:53:38.1137890+08:00" endTime="2026-10-12T13:53:38.1146293+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c0e508c-ac91-400b-addf-41f837c72db5">
+      <Output>
+        <ErrorInfo>
+          <Message>  Expected is &lt;System.Int32[2]&gt;, actual is &lt;System.Linq.Enumerable+ArraySelectIterator`2[TheCall.SettlementLanding,System.Int32]&gt;&#xD;
+  Values differ at index [0]&#xD;
+  Expected: 8&#xD;
+  But was:  5&#xD;
+</Message>
+          <StackTrace>   at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+1)    at TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(String race, String neighbor) in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Scripts\Core\Tests\ContentMechanismRemediationTests.cs:line 91&#xD;
+   at InvokeStub_ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(Object, Span`1)&#xD;
+
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b8896ce6-fbe0-4bfd-a83b-de8e0eac24da" testId="08ba4345-00ea-9210-a388-c14c004c2ef2" testName="SkillProductionHasIndependentBasicFixture(&quot;群能量体&quot;,3)" computerName="JT" duration="00:00:00.0010110" startTime="2026-10-12T13:53:38.1366441+08:00" endTime="2026-10-12T13:53:38.1376553+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8896ce6-fbe0-4bfd-a83b-de8e0eac24da" />
+    <UnitTestResult executionId="806cc6ee-48d8-4970-993b-261b5e1f8f9c" testId="7119e065-8a0d-0d88-4c73-edca9dfa6ce5" testName="SkillSupportAndReactionHasIndependentBasicFixture(&quot;汲取鼻&quot;)" computerName="JT" duration="00:00:00.0008320" startTime="2026-10-12T13:53:38.1548409+08:00" endTime="2026-10-12T13:53:38.1556728+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="806cc6ee-48d8-4970-993b-261b5e1f8f9c" />
+    <UnitTestResult executionId="235aec86-e20d-4bbe-9627-efc58ab84005" testId="fe8dc3db-3e89-8b85-3551-dec7550a0559" testName="SkillProductionHasIndependentBasicFixture(&quot;血崩体&quot;,20)" computerName="JT" duration="00:00:00.0013840" startTime="2026-10-12T13:53:38.1422188+08:00" endTime="2026-10-12T13:53:38.1436023+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="235aec86-e20d-4bbe-9627-efc58ab84005" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;不稳定肉体&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="5d27557b-1a4f-e6d7-31dd-bc5568ca66c3">
+      <Execution id="0f32131a-65e5-4730-a988-b0e782bce98f" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;不稳定肉体&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;血祭体&quot;,16)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="cac93578-46b3-ef36-3686-07bf53a1b3ce">
+      <Execution id="b8bdd2f1-9f21-4cf6-b0dd-4fa6e818e124" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;血祭体&quot;,16)" />
+    </UnitTest>
+    <UnitTest name="EachMoodChangesProductionByItsActualTier(&quot;倦怠&quot;,3)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="088332bc-6db0-49ef-c947-e31ffb0749ee">
+      <Execution id="3d976cdb-83b5-4f87-92ec-a14b02ebf4bf" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachMoodChangesProductionByItsActualTier(&quot;倦怠&quot;,3)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;无穷肌肉&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="9f1adf6c-9820-05e6-4511-8b9e29b3cf2b">
+      <Execution id="4c5adc94-1740-4542-bd50-1438e1fd37f0" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;无穷肌肉&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;产金管道&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="a3f96f36-ea68-4c5b-231d-f42b309507c5">
+      <Execution id="ea8a3519-6aeb-4be5-a30b-24223fd62394" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;产金管道&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;左能量体&quot;,2)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="fa2cefd0-3a69-ec01-fbb2-3f2a39bf59d8">
+      <Execution id="c392d0fd-0395-495e-aeb1-15f0a5ae2884" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;左能量体&quot;,2)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;啃食体&quot;,4)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="3f0583ea-e9a1-ab54-976e-32d9f282fefa">
+      <Execution id="76bebbe5-6c40-49aa-bc87-8bc766ab2f5d" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;啃食体&quot;,4)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;外接胚胎&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="ecd08f12-7d3a-179a-1ffd-77dd18f4bf34">
+      <Execution id="b78b4000-9ed7-420f-8f18-4485096a6700" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;外接胚胎&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;优秀能量体&quot;,2)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="01685bd1-53d0-77c0-eefb-28233315fa6c">
+      <Execution id="8154a60c-a737-4b13-bc92-9c8c81dbe0b1" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;优秀能量体&quot;,2)" />
+    </UnitTest>
+    <UnitTest name="EachMoodChangesProductionByItsActualTier(&quot;疲倦&quot;,4)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="fa6fee44-4373-44a8-29b8-a92d4b0d41b1">
+      <Execution id="0e4db204-5a6a-4bc1-a9f1-5cee6c969aa4" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachMoodChangesProductionByItsActualTier(&quot;疲倦&quot;,4)" />
+    </UnitTest>
+    <UnitTest name="EachMoodChangesProductionByItsActualTier(&quot;热爱&quot;,7)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="987950f0-7e47-735c-30c4-c873c9d10525">
+      <Execution id="86416b1d-f2e6-4818-a012-88aa82df31a8" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachMoodChangesProductionByItsActualTier(&quot;热爱&quot;,7)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;抽杀体&quot;,10)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="9d732fd0-1336-75e0-1d04-45aaab185fd5">
+      <Execution id="b962fec8-571c-4490-8512-abaad3792cb0" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;抽杀体&quot;,10)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;换位手&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="c2dd3c55-7cf9-8df6-b096-fd8a7d5d187f">
+      <Execution id="da0b542d-1895-49f7-a0c7-7b26d7de33e0" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;换位手&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachMoodChangesProductionByItsActualTier(&quot;热情&quot;,6)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="b691afd7-d098-d5e1-cdcc-dc9933ebd4ee">
+      <Execution id="77df3be0-9879-4a84-8f72-a992be9541b3" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachMoodChangesProductionByItsActualTier(&quot;热情&quot;,6)" />
+    </UnitTest>
+    <UnitTest name="SkillAuraHasIndependentBasicFixture(&quot;奇异香&quot;,6)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="de2f840c-a216-bce2-98d8-8df4fadf64a2">
+      <Execution id="ea4a3ae4-5b5a-45f4-bd0e-70b1e929d29d" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillAuraHasIndependentBasicFixture(&quot;奇异香&quot;,6)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;传能耳&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="310d4838-0df7-4102-aa88-959c7da2afd1">
+      <Execution id="82c2a1ad-2390-4513-99b8-afbef16511ab" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;传能耳&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachRaceHasActualGeneratingNeighborBonus(&quot;海洋&quot;,&quot;森林&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="96e74df6-4370-38ef-68ed-8258405f4e55">
+      <Execution id="2c0e508c-ac91-400b-addf-41f837c72db5" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachRaceHasActualGeneratingNeighborBonus(&quot;海洋&quot;,&quot;森林&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachRaceHasActualGeneratingNeighborBonus(&quot;天空&quot;,&quot;沙漠&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="363e672a-8f39-0c9a-2e8c-751357d666ec">
+      <Execution id="19d301b3-56e4-4737-9d72-ab33c5c880cb" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachRaceHasActualGeneratingNeighborBonus(&quot;天空&quot;,&quot;沙漠&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillAuraHasIndependentBasicFixture(&quot;怪异香&quot;,7)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="59988ce2-5598-9c2b-ce96-501a63a6d2f8">
+      <Execution id="dc56d8a9-65cf-491d-bbc5-51e66f8605ad" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillAuraHasIndependentBasicFixture(&quot;怪异香&quot;,7)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;左复制腺体&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="5d3cec6a-cd04-98b5-6019-2d079e531763">
+      <Execution id="6c9f3b1a-a174-43d5-8bfe-37693dadaa22" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;左复制腺体&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;优质肉体&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="0b8b03aa-99d7-25f3-8491-160cc5d061d7">
+      <Execution id="39891221-3e18-4de0-b5e9-8eb22064dc8e" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;优质肉体&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachRaceHasActualGeneratingNeighborBonus(&quot;沙漠&quot;,&quot;火山&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="edd5bdcf-32bc-51d5-023a-329e2c7f7ce2">
+      <Execution id="5ff2423b-24c4-4520-83af-da95cfd9b76c" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachRaceHasActualGeneratingNeighborBonus(&quot;沙漠&quot;,&quot;火山&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;情绪收集器&quot;,2)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="0ec8d97f-4f33-b6c5-92b4-5b4489d6f204">
+      <Execution id="1f90ddd4-b2f9-417f-86c9-559c089ce7b7" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;情绪收集器&quot;,2)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;血崩体&quot;,20)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="fe8dc3db-3e89-8b85-3551-dec7550a0559">
+      <Execution id="235aec86-e20d-4bbe-9627-efc58ab84005" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;血崩体&quot;,20)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;良好肉体&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="73c90a7b-eae4-6e0f-8214-0824ef840362">
+      <Execution id="0b837deb-ce3c-4766-8541-16f1de8b5abb" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;良好肉体&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachMoodChangesProductionByItsActualTier(&quot;普通&quot;,5)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="3a5e190d-5fe2-5c40-f6bd-71b654017752">
+      <Execution id="e68eb321-f4f0-43e3-8354-9f5bf2652a6f" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachMoodChangesProductionByItsActualTier(&quot;普通&quot;,5)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;回响嗓&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="a795adb5-5eca-79c4-6df4-1dd30edb0ddb">
+      <Execution id="399f8b9f-bada-4478-a578-778fba0729a0" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;回响嗓&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;移植胚胎&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="5f7f8096-fc58-0bfc-e8fc-7b085649570c">
+      <Execution id="b83e4149-0ae5-4dfd-85b6-6980e88a753d" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;移植胚胎&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;右复制腺体&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="93d7dbfe-24a0-91c4-0d6d-59585d1eb48f">
+      <Execution id="204a9dbc-1d17-4cab-bd21-58cc25677843" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;右复制腺体&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;祭品腺&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="09d99b84-db24-12bb-d148-4a8dece382c6">
+      <Execution id="b4201879-edc4-44db-9f0c-509effd8a922" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;祭品腺&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;增生能量体&quot;,1)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="4152cb4b-a829-9725-8683-04a013bdbad3">
+      <Execution id="bdab62df-4b52-4b7c-8bf5-224b290a9c6f" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;增生能量体&quot;,1)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;收尸腺&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="5cf960f2-13dc-7830-cc55-74c0a212ac15">
+      <Execution id="551994ab-c8eb-4e99-a09b-1d1e0f506ce9" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;收尸腺&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;能量体&quot;,5)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="e27cc6e0-3ffc-9ed5-6f99-1117a24fdddf">
+      <Execution id="6856358e-9674-4203-9adf-a05aa931ae64" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;能量体&quot;,5)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;双头能量体&quot;,4)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="70123ed8-addc-b481-1cdc-83d3d44a4647">
+      <Execution id="b8e09c86-31e3-4727-83bb-36048199629a" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;双头能量体&quot;,4)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;生长能量体&quot;,2)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="a6e4f518-6a22-2090-be98-8f088a4184f1">
+      <Execution id="e3ac7d81-24e1-4bd0-8a82-16db2869aa52" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;生长能量体&quot;,2)" />
+    </UnitTest>
+    <UnitTest name="SkillAuraHasIndependentBasicFixture(&quot;镜眼&quot;,10)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="f4aabfe5-4466-5e95-ce9f-2afd2b8e0006">
+      <Execution id="d52bf1b9-9706-4f31-9223-a089c1d34c5c" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillAuraHasIndependentBasicFixture(&quot;镜眼&quot;,10)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;右能量体&quot;,2)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="b08bbb9c-e874-1abe-af40-8d6b3859d8c6">
+      <Execution id="03dd35c6-df60-4066-b91a-0c87f5a00ff3" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;右能量体&quot;,2)" />
+    </UnitTest>
+    <UnitTest name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;汲取鼻&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="7119e065-8a0d-0d88-4c73-edca9dfa6ce5">
+      <Execution id="806cc6ee-48d8-4970-993b-261b5e1f8f9c" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillSupportAndReactionHasIndependentBasicFixture(&quot;汲取鼻&quot;)" />
+    </UnitTest>
+    <UnitTest name="EachRaceHasActualGeneratingNeighborBonus(&quot;森林&quot;,&quot;天空&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="59175cf6-f2bd-dcd3-84fb-55db069bd12d">
+      <Execution id="ec065654-3afe-484c-808b-3d56f924d3c0" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachRaceHasActualGeneratingNeighborBonus(&quot;森林&quot;,&quot;天空&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;群能量体&quot;,3)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="08ba4345-00ea-9210-a388-c14c004c2ef2">
+      <Execution id="b8896ce6-fbe0-4bfd-a83b-de8e0eac24da" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;群能量体&quot;,3)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;自爆体&quot;,10)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="27e55586-a996-8d17-850e-97d8f8e65a1d">
+      <Execution id="6e4f04bd-e2d7-4704-8cd0-250bea25673a" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;自爆体&quot;,10)" />
+    </UnitTest>
+    <UnitTest name="EachRaceHasActualGeneratingNeighborBonus(&quot;火山&quot;,&quot;海洋&quot;)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="9ca8d967-adfe-658c-3b3b-e19cb398f118">
+      <Execution id="f4aa8a14-55ce-4b2a-82e1-b7e7101f8ab8" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="EachRaceHasActualGeneratingNeighborBonus(&quot;火山&quot;,&quot;海洋&quot;)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;不稳定能量体&quot;,20)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="b8bedd04-f682-60f0-1c4c-292efa044b90">
+      <Execution id="3f5d9525-57ae-4aaf-926e-52196dc6b5dc" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;不稳定能量体&quot;,20)" />
+    </UnitTest>
+    <UnitTest name="SkillProductionHasIndependentBasicFixture(&quot;蜜能量体&quot;,3)" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="e6abd1b9-814a-0cd3-4fb9-a1dca6d6cfdd">
+      <Execution id="65a4044b-e872-456f-b038-59b93e5d38e2" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.ContentMechanismRemediationTests" name="SkillProductionHasIndependentBasicFixture(&quot;蜜能量体&quot;,3)" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="0b8b03aa-99d7-25f3-8491-160cc5d061d7" executionId="39891221-3e18-4de0-b5e9-8eb22064dc8e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59175cf6-f2bd-dcd3-84fb-55db069bd12d" executionId="ec065654-3afe-484c-808b-3d56f924d3c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f4aabfe5-4466-5e95-ce9f-2afd2b8e0006" executionId="d52bf1b9-9706-4f31-9223-a089c1d34c5c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59988ce2-5598-9c2b-ce96-501a63a6d2f8" executionId="dc56d8a9-65cf-491d-bbc5-51e66f8605ad" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="987950f0-7e47-735c-30c4-c873c9d10525" executionId="86416b1d-f2e6-4818-a012-88aa82df31a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b691afd7-d098-d5e1-cdcc-dc9933ebd4ee" executionId="77df3be0-9879-4a84-8f72-a992be9541b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3a5e190d-5fe2-5c40-f6bd-71b654017752" executionId="e68eb321-f4f0-43e3-8354-9f5bf2652a6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="310d4838-0df7-4102-aa88-959c7da2afd1" executionId="82c2a1ad-2390-4513-99b8-afbef16511ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b8bedd04-f682-60f0-1c4c-292efa044b90" executionId="3f5d9525-57ae-4aaf-926e-52196dc6b5dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="363e672a-8f39-0c9a-2e8c-751357d666ec" executionId="19d301b3-56e4-4737-9d72-ab33c5c880cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa6fee44-4373-44a8-29b8-a92d4b0d41b1" executionId="0e4db204-5a6a-4bc1-a9f1-5cee6c969aa4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d732fd0-1336-75e0-1d04-45aaab185fd5" executionId="b962fec8-571c-4490-8512-abaad3792cb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ca8d967-adfe-658c-3b3b-e19cb398f118" executionId="f4aa8a14-55ce-4b2a-82e1-b7e7101f8ab8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73c90a7b-eae4-6e0f-8214-0824ef840362" executionId="0b837deb-ce3c-4766-8541-16f1de8b5abb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5f7f8096-fc58-0bfc-e8fc-7b085649570c" executionId="b83e4149-0ae5-4dfd-85b6-6980e88a753d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2dd3c55-7cf9-8df6-b096-fd8a7d5d187f" executionId="da0b542d-1895-49f7-a0c7-7b26d7de33e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6abd1b9-814a-0cd3-4fb9-a1dca6d6cfdd" executionId="65a4044b-e872-456f-b038-59b93e5d38e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="088332bc-6db0-49ef-c947-e31ffb0749ee" executionId="3d976cdb-83b5-4f87-92ec-a14b02ebf4bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a3f96f36-ea68-4c5b-231d-f42b309507c5" executionId="ea8a3519-6aeb-4be5-a30b-24223fd62394" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa2cefd0-3a69-ec01-fbb2-3f2a39bf59d8" executionId="c392d0fd-0395-495e-aeb1-15f0a5ae2884" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a795adb5-5eca-79c4-6df4-1dd30edb0ddb" executionId="399f8b9f-bada-4478-a578-778fba0729a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ecd08f12-7d3a-179a-1ffd-77dd18f4bf34" executionId="b78b4000-9ed7-420f-8f18-4485096a6700" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6e4f518-6a22-2090-be98-8f088a4184f1" executionId="e3ac7d81-24e1-4bd0-8a82-16db2869aa52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="70123ed8-addc-b481-1cdc-83d3d44a4647" executionId="b8e09c86-31e3-4727-83bb-36048199629a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="27e55586-a996-8d17-850e-97d8f8e65a1d" executionId="6e4f04bd-e2d7-4704-8cd0-250bea25673a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4152cb4b-a829-9725-8683-04a013bdbad3" executionId="bdab62df-4b52-4b7c-8bf5-224b290a9c6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f1adf6c-9820-05e6-4511-8b9e29b3cf2b" executionId="4c5adc94-1740-4542-bd50-1438e1fd37f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d3cec6a-cd04-98b5-6019-2d079e531763" executionId="6c9f3b1a-a174-43d5-8bfe-37693dadaa22" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="edd5bdcf-32bc-51d5-023a-329e2c7f7ce2" executionId="5ff2423b-24c4-4520-83af-da95cfd9b76c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f0583ea-e9a1-ab54-976e-32d9f282fefa" executionId="76bebbe5-6c40-49aa-bc87-8bc766ab2f5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5cf960f2-13dc-7830-cc55-74c0a212ac15" executionId="551994ab-c8eb-4e99-a09b-1d1e0f506ce9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e27cc6e0-3ffc-9ed5-6f99-1117a24fdddf" executionId="6856358e-9674-4203-9adf-a05aa931ae64" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de2f840c-a216-bce2-98d8-8df4fadf64a2" executionId="ea4a3ae4-5b5a-45f4-bd0e-70b1e929d29d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b08bbb9c-e874-1abe-af40-8d6b3859d8c6" executionId="03dd35c6-df60-4066-b91a-0c87f5a00ff3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cac93578-46b3-ef36-3686-07bf53a1b3ce" executionId="b8bdd2f1-9f21-4cf6-b0dd-4fa6e818e124" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="01685bd1-53d0-77c0-eefb-28233315fa6c" executionId="8154a60c-a737-4b13-bc92-9c8c81dbe0b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09d99b84-db24-12bb-d148-4a8dece382c6" executionId="b4201879-edc4-44db-9f0c-509effd8a922" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93d7dbfe-24a0-91c4-0d6d-59585d1eb48f" executionId="204a9dbc-1d17-4cab-bd21-58cc25677843" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d27557b-1a4f-e6d7-31dd-bc5568ca66c3" executionId="0f32131a-65e5-4730-a988-b0e782bce98f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ec8d97f-4f33-b6c5-92b4-5b4489d6f204" executionId="1f90ddd4-b2f9-417f-86c9-559c089ce7b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="96e74df6-4370-38ef-68ed-8258405f4e55" executionId="2c0e508c-ac91-400b-addf-41f837c72db5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08ba4345-00ea-9210-a388-c14c004c2ef2" executionId="b8896ce6-fbe0-4bfd-a83b-de8e0eac24da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7119e065-8a0d-0d88-4c73-edca9dfa6ce5" executionId="806cc6ee-48d8-4970-993b-261b5e1f8f9c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe8dc3db-3e89-8b85-3551-dec7550a0559" executionId="235aec86-e20d-4bbe-9627-efc58ab84005" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有已加载的结果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="44" executed="44" passed="41" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.6.0.0: Test execution started&#xD;
+Running selected tests in C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 44 of 44 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 4.6.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

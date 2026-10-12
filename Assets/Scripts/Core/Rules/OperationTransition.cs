@@ -17,14 +17,17 @@ namespace TheCall
             MonsterWhere where,
             OperationArea area,
             int cell,
-            IReadOnlyList<string> skillNames)
+            IReadOnlyList<string> skillNames, string personality = null)
         {
             Id = id;
             Where = where;
             Area = area;
             Cell = cell;
             SkillNames = skillNames;
+            Personality = personality;
         }
+
+        public string Personality { get; }
 
         public string Id { get; }
 
@@ -51,8 +54,10 @@ namespace TheCall
             string[] breeding,
             string[] breedingSkills,
             MonsterFact[] monsters,
-            bool[] geneReserved = null)
+            bool[] geneReserved = null, int geneCapacity = 3, bool allowsDuplicate = false)
         {
+            GeneCapacity = geneCapacity;
+            AllowsDuplicate = allowsDuplicate;
             InOperation = inOperation;
             BreedingSkillUnlocked = breedingSkillUnlocked;
             _skillNames = skillNames;
@@ -64,6 +69,8 @@ namespace TheCall
             _geneReserved = geneReserved ?? new bool[skillNames.Length];
         }
 
+        public int GeneCapacity { get; }
+        public bool AllowsDuplicate { get; }
         public bool InOperation { get; }
 
         public bool BreedingSkillUnlocked { get; }
@@ -116,6 +123,7 @@ namespace TheCall
         Return,
         Discard,
         Invest,
+        Install,
         ReturnBreedingSkill,
     }
 
@@ -296,7 +304,7 @@ namespace TheCall
                 case LandingPlace.BreedingSeat:
                     return TryBoard(facts, source, drop.Landing, out plan);
                 case LandingPlace.Discard:
-                    if (facts.SkillSlotCount >= 3 || source.SkillNames.Count == 0)
+                    if (facts.SkillSlotCount >= facts.GeneCapacity || source.SkillNames.Count == 0)
                         return false;
 
                     plan = TransitionPlan.Discard(source);
@@ -346,7 +354,23 @@ namespace TheCall
             plan = default;
             var place = drop.Landing.Place;
             if (place == LandingPlace.Cage || place == LandingPlace.Extraction || place == LandingPlace.BreedingSeat)
-                return false;
+            {
+                var targetId = drop.Landing.MonsterId;
+                if (string.IsNullOrEmpty(targetId))
+                {
+                    var cells = place == LandingPlace.Extraction ? facts.Extraction : facts.Breeding;
+                    if (place != LandingPlace.Cage && drop.Landing.Index >= 0 && drop.Landing.Index < cells.Count)
+                        targetId = cells[drop.Landing.Index];
+                }
+                if (!facts.TryMonster(targetId, out var target) || target.Personality != "迷恋死亡" || target.SkillNames.Count >= 4)
+                    return false;
+                if (facts.IsGeneReserved(drop.Payload.Index) || !facts.TrySkillName(drop.Payload.Index, out var name)) return false;
+                if (!facts.AllowsDuplicate)
+                    for (var i = 0; i < target.SkillNames.Count; i++) if (target.SkillNames[i] == name) return false;
+                plan = new TransitionPlan(TransitionEffect.Install, target.Where, target.Id, null,
+                    target.Area, target.Cell, target.Area, target.Cell, drop.Payload.Index, 0);
+                return true;
+            }
 
             if (place != LandingPlace.BreedingSocket)
                 return false;

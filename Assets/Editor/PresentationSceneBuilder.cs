@@ -76,6 +76,8 @@ namespace TheCall.Editor
         {
             if (EditorApplication.isPlaying)
                 return "请先退出播放模式。";
+            if (UnityEngine.Object.FindAnyObjectByType<TheCallPresentation>(FindObjectsInactive.Include) != null)
+                return PresentationRemediation.Apply();
 
             EditorApplication.LockReloadAssemblies();
             try
@@ -93,6 +95,14 @@ namespace TheCall.Editor
             if (EditorApplication.isPlaying)
                 throw new InvalidOperationException("Exit play mode before building the hover window.");
 
+            var existing = UnityEngine.Object.FindAnyObjectByType<MonsterHover>(FindObjectsInactive.Include);
+            if (existing != null)
+            {
+                PresentationRemediation.MigrateHover(existing);
+                EditorSceneManager.MarkSceneDirty(existing.gameObject.scene);
+                EditorSceneManager.SaveScene(existing.gameObject.scene);
+                return;
+            }
             M3PresentationSetup.EnsureHoverPrefabHeader();
 
             const string path = "Assets/Prefabs/UI/MonsterHoverPanel.prefab";
@@ -363,8 +373,10 @@ namespace TheCall.Editor
                 toolItem.transform.SetParent(toolsPanel.transform, false);
                 At(toolItem, 82 + i * 68, 6, 64, 62);
 
-                var iconImg = toolItem.AddComponent<Image>();
-                iconImg.raycastTarget = false;
+                var iconObject = new GameObject("Icon", typeof(RectTransform));
+                iconObject.transform.SetParent(toolItem.transform, false);
+                var iconImg = iconObject.AddComponent<Image>();
+                iconImg.raycastTarget = true;
                 iconImg.preserveAspect = true;
                 At(iconImg, 8, 4, 48, 38);
 

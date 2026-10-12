@@ -39,8 +39,8 @@ namespace TheCall
                     level,
                     catalog,
                     tools,
-                    sight.Showing ? sight : null);
-                skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans, skill.IsTemporary);
+                    sight.Showing ? sight : null, skill.InstanceId);
+                skills[i] = new MonsterSkillDetail(skill.Name, kind, skill.Rarity, function, spans, skill.IsTemporary, skill.InstanceId, skill.SourceKind, skill.SourceId, skill.SourceMonsterId);
             }
 
             return new MonsterDetails(
@@ -56,7 +56,7 @@ namespace TheCall
                 view.Mood,
                 view.MoodEnergyDelta,
                 view.ConsecutiveWorkDays,
-                view.ConsecutiveRestDays);
+                view.ConsecutiveRestDays, this.GetArchitecture().GetUtility<IPersonalityCatalog>().Find(view.Personality)?.Description ?? "");
         }
 
         MonsterView ViewOf(RunModel run, SettlementSight sight)

@@ -67,17 +67,15 @@ namespace TheCall
 
         public string Draw(IDraw draw)
         {
-            var rarities = new[]
-            {
-                Rarity.White, Rarity.White, Rarity.White, Rarity.White, Rarity.White,
-                Rarity.Blue, Rarity.Blue,
-                Rarity.Negative, Rarity.Negative,
-                Rarity.Gold
-            };
+            var rarities = new List<Rarity>();
+            var kinds = new[] { Rarity.White, Rarity.Blue, Rarity.Negative, Rarity.Gold };
+            var weights = new[] { 50, 20, 20, 10 };
+            for (var i = 0; i < kinds.Length; i++)
+                if (NamesOf(kinds[i]).Count > 0)
+                    for (var n = 0; n < weights[i]; n++) rarities.Add(kinds[i]);
+            if (rarities.Count == 0) throw new InvalidOperationException("性格池为空");
             var chosenRarity = draw.Choose(rarities);
             var names = NamesOf(chosenRarity);
-            if (names.Count == 0)
-                names = Names();
             return draw.Choose(names);
         }
     }

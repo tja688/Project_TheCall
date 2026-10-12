@@ -13,49 +13,48 @@ namespace TheCall
         public static string[][] OpeningCandidates(SkillCatalog catalog, IDraw draw)
         {
             var pairs = new string[3][];
-            for (var i = 0; i < pairs.Length; i++)
-            {
-                var first = Choose(draw, catalog.Names(DrawnPool.HasAmplify), nameof(DrawnPool.HasAmplify));
-                var secondPool = Except(catalog.Names(DrawnPool.NotAmplifyOnly), first);
-                var second = Choose(draw, secondPool, nameof(DrawnPool.NotAmplifyOnly));
-                pairs[i] = new[] { first, second };
-            }
-
+            for (var i = 0; i < pairs.Length; i++) pairs[i] = OpeningPair(catalog, draw);
             return pairs;
+        }
+
+        internal static string[] OpeningPair(SkillCatalog catalog, IDraw draw)
+        {
+            var first = One(catalog, draw, DrawnPool.HasAmplify, null);
+            return new[] { first, One(catalog, draw, DrawnPool.NotAmplifyOnly, first) };
         }
 
         public static string[] OpeningFillers(SkillCatalog catalog, IDraw draw)
         {
             var names = new string[8];
             for (var i = 0; i < 4; i++)
-                names[i] = Choose(draw, catalog.Names(DrawnPool.Produce), nameof(DrawnPool.Produce));
+                names[i] = One(catalog, draw, DrawnPool.Produce, null);
 
             for (var i = 4; i < 8; i++)
-                names[i] = Choose(draw, catalog.Names(DrawnPool.Support), nameof(DrawnPool.Support));
+                names[i] = One(catalog, draw, DrawnPool.Support, null);
 
             return names;
         }
 
-        public static string[] ShopOffer(SkillCatalog catalog, IDraw draw)
+        public static string[] ShopOffer(SkillCatalog catalog, IDraw draw, bool allowsDuplicates = false)
         {
             var shape = Choose(draw, Shapes, "形状");
             if (shape == "双")
-                return Pair(catalog, draw, DrawnPool.NotAmplifyOnly, DrawnPool.NotAmplifyOnly);
+                return Pair(catalog, draw, DrawnPool.NotAmplifyOnly, DrawnPool.NotAmplifyOnly, allowsDuplicates);
 
             if (shape == "幅")
-                return Pair(catalog, draw, DrawnPool.AmplifyOnly, DrawnPool.NotAmplifyOnly);
+                return Pair(catalog, draw, DrawnPool.AmplifyOnly, DrawnPool.NotAmplifyOnly, allowsDuplicates);
 
             return new[] { One(catalog, draw, DrawnPool.NoAmplifyBit, null) };
         }
 
-        static string[] Pair(SkillCatalog catalog, IDraw draw, DrawnPool firstPool, DrawnPool secondPool)
+        static string[] Pair(SkillCatalog catalog, IDraw draw, DrawnPool firstPool, DrawnPool secondPool, bool allowsDuplicates)
         {
             var first = One(catalog, draw, firstPool, null);
-            var second = One(catalog, draw, secondPool, first);
+            var second = One(catalog, draw, secondPool, allowsDuplicates ? null : first);
             return new[] { first, second };
         }
 
-        static string One(SkillCatalog catalog, IDraw draw, DrawnPool pool, string taken)
+        internal static string One(SkillCatalog catalog, IDraw draw, DrawnPool pool, string taken)
         {
             var words = RarityWords(catalog, pool, taken);
             var word = Choose(draw, words, pool.ToString());

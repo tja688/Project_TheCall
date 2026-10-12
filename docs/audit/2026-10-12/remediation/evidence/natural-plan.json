@@ -1,0 +1,630 @@
+{
+  "seed": 90,
+  "actions": [
+    {
+      "Action": "opening",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m4",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m10",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m7",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m6",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m12",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m8",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m9",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m12",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m5",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m8",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m9",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m11",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m8",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m9",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m16",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m11",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "\u7535\u5316\u80FD\u673A",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m21",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m23",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m21",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m8",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m5",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m21",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m8",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m21",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m8",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m23",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m26",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m25",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m27",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m9",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m26",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m16",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m9",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m26",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m21",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m23",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m26",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m31",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m23",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m31",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m23",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m31",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m16",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m23",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m31",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m35",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m34",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "begin",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m35",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m31",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m35",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m16",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m3",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m31",
+      "Index": 0
+    },
+    {
+      "Action": "cage",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m18",
+      "Index": 0
+    },
+    {
+      "Action": "extraction",
+      "Value": "m16",
+      "Index": 1
+    },
+    {
+      "Action": "extraction",
+      "Value": "m35",
+      "Index": 2
+    },
+    {
+      "Action": "extraction",
+      "Value": "m3",
+      "Index": 3
+    },
+    {
+      "Action": "extraction",
+      "Value": "m5",
+      "Index": 4
+    },
+    {
+      "Action": "settle",
+      "Value": "",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m36",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m38",
+      "Index": 0
+    },
+    {
+      "Action": "buy",
+      "Value": "m37",
+      "Index": 0
+    },
+    {
+      "Action": "leave",
+      "Value": "",
+      "Index": 0
+    }
+  ]
+}

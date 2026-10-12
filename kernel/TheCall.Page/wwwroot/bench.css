@@ -446,3 +446,18 @@ h1, h2 {
 .event-line {
   margin: 0;
 }
+
+.attributes {display:flex;flex-wrap:wrap;gap:6px;padding:8px 0;}
+.attributes label {font-size:12px;display:flex;gap:4px;align-items:center;}
+.attributes select {max-width:100px;color:inherit;background:var(--panel, #222);border:1px solid #555;border-radius:4px;}
+.attribute-note {width:100%;line-height:1.5;opacity:.8;}
+
+#bar input {width:80px;} .instance-controls {display:flex;gap:4px;align-items:center;margin-top:5px;} .instance-controls input[type=number], .advanced input[type=number] {width:50px;} .advanced {width:100%;} .advanced label {display:flex;margin-top:5px;}
+
+/* Attribute and instance editors remain readable at laptop viewport sizes. */
+html, body {height:auto;min-height:100%;overflow:auto;}
+#app {height:auto;min-height:100dvh;max-height:none;overflow:visible;grid-template-rows:auto minmax(430px,auto) 350px 420px;}
+#bar {max-height:none;overflow:visible;}
+#cells {align-items:flex-start;}
+#cells .card {min-height:0;}
+.slot {min-height:410px;}

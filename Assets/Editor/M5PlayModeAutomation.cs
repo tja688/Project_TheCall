@@ -1,479 +1,254 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using QFramework;
-using TheCall;
 using TheCall.Scoring;
-using TMPro;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace TheCall.Editor
 {
+    // Acceptance driver: each call performs one real player input and returns.
+    // The CLI waits for advancing frames / completed presentation between calls.
+    // Local stress fixtures are deliberately separate from this natural-run driver.
     public static class M5PlayModeAutomation
     {
         public sealed class SeededDraw : IDraw
         {
             readonly System.Random _random;
-
-            public SeededDraw(int seed)
-            {
-                _random = new System.Random(seed);
-            }
-
+            public int Cursor { get; private set; }
+            public SeededDraw(int seed) { _random = new System.Random(seed); }
             public T Choose<T>(IReadOnlyList<T> options)
             {
-                if (options == null || options.Count == 0) return default;
+                if (options == null || options.Count == 0) throw new InvalidOperationException("Empty random pool");
+                Cursor++;
                 return options[_random.Next(options.Count)];
             }
-
-            public bool Chance(int percent)
-            {
-                return _random.Next(100) < percent;
-            }
+            public bool Chance(int percent) { Cursor++; return _random.Next(100) < percent; }
         }
 
-        [MenuItem("TheCall/Testing/Run M5 Play Mode Automation", false, 300)]
-        public static void RunAllMenu()
+        static readonly StringBuilder Trace = new StringBuilder();
+        static SeededDraw _draw;
+        public static bool Playing => Object.FindAnyObjectByType<ScoringShow>() != null;
+        static string _evidenceName = "natural-normal";
+        public static string EvidenceRoot => Path.GetFullPath(Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/evidence", _evidenceName));
+
+        public static string Begin(int seed)
         {
-            var log = RunAll();
-            Debug.Log(log);
-        }
-
-        public static string RunAll()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("================================================================================");
-            sb.AppendLine("           M5 Play Mode Full-Loop Verification & Screenshot Suite               ");
-            sb.AppendLine("================================================================================");
-            sb.AppendLine($"Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-
-            var screenshotDir = Path.GetFullPath(Path.Combine(Application.dataPath, "../Screenshots/M5"));
-            if (!Directory.Exists(screenshotDir))
-            {
-                Directory.CreateDirectory(screenshotDir);
-            }
-
-            var bookPath = Path.Combine(Application.streamingAssetsPath, "call-book.json");
-            if (!File.Exists(bookPath))
-            {
-                throw new FileNotFoundException("StreamingAssets/call-book.json not found", bookPath);
-            }
-
-            var presentation = Object.FindAnyObjectByType<TheCallPresentation>();
-            if (presentation == null)
-            {
-                throw new InvalidOperationException("TheCallPresentation not found in active scene.");
-            }
-
-            var screenshotsTaken = new List<string>();
-
-            // -------------------------------------------------------------------------
-            // SCENARIO 1: Full 7-Day Victory Run
-            // -------------------------------------------------------------------------
-            sb.AppendLine("\n--- [Scenario 1] Full 7-Day Victory Run (Deterministic Seed) ---");
-            ResetAndInitSession(bookPath, 12345, presentation);
-
-            var app = TheCallApp.Interface;
-            var runModel = app.GetModel<RunModel>();
-
-            var metricsHeader = string.Format("{0,-6} | {1,-6} | {2,-6} | {3,-8} | {4,-6} | {5,-6} | {6,-6} | {7,-6}",
-                "Day", "Due", "Excess", "Achieved", "Gold", "Tech", "Tools", "Cage");
-            sb.AppendLine(metricsHeader);
-            sb.AppendLine(new string('-', metricsHeader.Length));
-
-            for (int day = 1; day <= 7; day++)
-            {
-                if (day == 1)
-                {
-                    var phase = app.SendQuery(new RunPhaseQuery());
-                    if (phase != RunPhase.Opening)
-                        throw new InvalidOperationException($"Expected Opening phase on Day 1, got {phase}");
-
-                    // Screenshot 1: Opening Screen
-                    var shot1 = CaptureScreenshot("01_Opening_Screen.png");
-                    screenshotsTaken.Add(shot1);
-
-                    var candidates = app.SendQuery(new OpeningCandidatesQuery());
-                    if (candidates.Count == 0)
-                        throw new InvalidOperationException("No opening candidates found.");
-
-                    app.SendCommand(new KeepOpeningMonsterCommand(candidates[0].Id));
-                    presentation.Refresh();
-
-                    var curCage = app.SendQuery(new MonsterCageQuery());
-                    // Place 3 monsters
-                    for (int i = 0; i < 3 && i < curCage.Count; i++)
-                    {
-                        app.SendCommand(new PlaceMonsterCommand(curCage[i].Id, OperationArea.Extraction, i));
-                    }
-                    presentation.Refresh();
-
-                    // Screenshot 2: Operation Screen with Monster Details Hover
-                    var hover = Object.FindAnyObjectByType<MonsterHover>(FindObjectsInactive.Include);
-                    if (hover != null)
-                    {
-                        hover.enabled = false;
-                        var details = app.SendQuery(new MonsterDetailsQuery(curCage[0].Id));
-                        hover.ShowManual(details);
-                        presentation.Refresh();
-                    }
-
-                    var shot2 = CaptureScreenshot("02_Operation_Monster_Details.png");
-                    screenshotsTaken.Add(shot2);
-
-                    if (hover != null)
-                    {
-                        hover.HideManual();
-                        hover.enabled = true;
-                        presentation.Refresh();
-                    }
-                }
-                else
-                {
-                    // Day >= 2 begins in LevelStart
-                    var phase = app.SendQuery(new RunPhaseQuery());
-                    if (phase != RunPhase.LevelStart)
-                        throw new InvalidOperationException($"Expected LevelStart phase on Day {day}, got {phase}");
-
-                    app.SendCommand(new BeginLevelCommand());
-                    presentation.Refresh();
-
-                    var phaseAfterBegin = app.SendQuery(new RunPhaseQuery());
-                    if (phaseAfterBegin != RunPhase.Operation)
-                        throw new InvalidOperationException($"Expected Operation phase on Day {day}, got {phaseAfterBegin}");
-
-                    // On Day 2: Test Tech expansion and Gene reservation
-                    if (day == 2)
-                    {
-                        // Ensure 2 tech points for unlocking "基因仓储" and "基因实验"
-                        while (runModel.TechPoints < 2)
-                        {
-                            runModel.AddTechPoint();
-                        }
-
-                        app.SendCommand(new UnlockTechCommand("基因仓储"));
-                        app.SendCommand(new UnlockTechCommand("基因实验"));
-
-                        // Discard one extra monster to generate a gene chip if cage has enough
-                        var cageForGene = app.SendQuery(new MonsterCageQuery());
-                        if (cageForGene.Count > 3)
-                        {
-                            app.SendCommand(new DiscardMonsterCommand(cageForGene[cageForGene.Count - 1].Id));
-                        }
-
-                        // Reserve gene slot 0 into breeding slot 0
-                        app.SendCommand(new PlaceBreedingSkillCommand(0, 0));
-                        presentation.Refresh();
-
-                        // Screenshot 3: Expansion & Gene Reservation
-                        var shot3 = CaptureScreenshot("03_Expansion_And_Gene_Reservation.png");
-                        screenshotsTaken.Add(shot3);
-                    }
-
-                    // Place extraction slots
-                    var curCage = app.SendQuery(new MonsterCageQuery());
-                    var extraction = app.SendQuery(new ExtractionSlotsQuery());
-                    for (int i = 0; i < 3 && i < curCage.Count; i++)
-                    {
-                        if (string.IsNullOrEmpty(extraction[i].MonsterId))
-                        {
-                            app.SendCommand(new PlaceMonsterCommand(curCage[i].Id, OperationArea.Extraction, i));
-                        }
-                    }
-                    presentation.Refresh();
-                }
-
-                // Ensure all monsters have an active energy-producing skill and scaled modifiers to exceed Due and Excess
-                foreach (var monster in runModel.LivingMonsters)
-                {
-                    if (!monster.HasSkill("能量体"))
-                    {
-                        runModel.TryGainSkill(monster.Id, "能量体");
-                    }
-                    monster.AddModifier(20 + day * 15);
-                }
-
-                var target = app.SendQuery(new LevelTargetQuery());
-                int due = target.EnergyDue;
-                int excess = target.ExcessEnergy;
-
-                // Settle
-                presentation.TriggerSettle();
-                FastForwardScoringShow(presentation);
-
-                var prodLog = app.SendQuery(new ProductionLogQuery());
-                int achieved = prodLog.Count > 0 ? prodLog[prodLog.Count - 1].Produced : 0;
-                var ledger = app.SendQuery(new RunLedgerQuery());
-                var cageNow = app.SendQuery(new MonsterCageQuery());
-
-                sb.AppendLine(string.Format("{0,-6} | {1,-6} | {2,-6} | {3,-8} | {4,-6} | {5,-6} | {6,-6} | {7,-6}",
-                    day, due, excess, achieved, ledger.Gold, ledger.TechPoints, ledger.Tools.Count, cageNow.Count));
-
-                if (achieved < due)
-                {
-                    throw new InvalidOperationException($"Day {day} failed to achieve Due energy {due}; produced {achieved}");
-                }
-                if (achieved < excess)
-                {
-                    throw new InvalidOperationException($"Day {day} failed to achieve Excess energy {excess}; produced {achieved}");
-                }
-
-                if (day == 1)
-                {
-                    // Screenshot 4: Settlement Breakdown
-                    presentation.ToggleLog();
-                    presentation.Refresh();
-                    var shot4 = CaptureScreenshot("04_Settlement_Breakdown.png");
-                    screenshotsTaken.Add(shot4);
-                    presentation.ToggleLog();
-                    presentation.Refresh();
-
-                    // Screenshot 5: Shop Tools & Cards
-                    var shot5 = CaptureScreenshot("05_Shop_Tools_Cards.png");
-                    screenshotsTaken.Add(shot5);
-                }
-
-                // In Shop: purchase if available
-                var shelf = app.SendQuery(new ShelfQuery());
-                if (shelf.Tools.Count > 0 && ledger.Gold >= shelf.Tools[0].Price)
-                {
-                    app.SendCommand(new BuyToolCommand(shelf.Tools[0].Name));
-                }
-
-                // Advance to next day / finish
-                app.SendCommand(new LeaveShopCommand());
-                presentation.Refresh();
-            }
-
-            // Verify Victory
-            var finalPhase = app.SendQuery(new RunPhaseQuery());
-            if (finalPhase != RunPhase.Victory)
-            {
-                throw new InvalidOperationException($"Expected Victory phase after Day 7, got {finalPhase}");
-            }
-
-            // Screenshot 7: Victory Screen
-            var shot7 = CaptureScreenshot("07_Victory_Screen.png");
-            screenshotsTaken.Add(shot7);
-            sb.AppendLine("=> Scenario 1 PASS: Full 7-Day Victory Run completed successfully with RunPhase.Victory!");
-
-            // -------------------------------------------------------------------------
-            // SCENARIO 2: Overtime Pass
-            // -------------------------------------------------------------------------
-            sb.AppendLine("\n--- [Scenario 2] Overtime Pass ---");
-            ResetAndInitSession(bookPath, 54321, presentation);
-
-            app = TheCallApp.Interface;
-            runModel = app.GetModel<RunModel>();
-
-            var s2Candidates = app.SendQuery(new OpeningCandidatesQuery());
-            app.SendCommand(new KeepOpeningMonsterCommand(s2Candidates[0].Id));
-            presentation.Refresh();
-
-            // Normal worktime: place 0 monsters -> energy is 0 < Due (50)
-            presentation.TriggerSettle();
-            FastForwardScoringShow(presentation);
-
-            var s2Target = app.SendQuery(new LevelTargetQuery());
-            var s2Shortfall = app.SendQuery(new LevelShortfallQuery());
-            if (!s2Target.InOvertime)
-                throw new InvalidOperationException("Expected InOvertime == true after normal work shortfall.");
-            if (s2Shortfall <= 0)
-                throw new InvalidOperationException($"Expected shortfall > 0, got {s2Shortfall}.");
-
-            sb.AppendLine($"[Overtime Entered] Shortfall={s2Shortfall}, InOvertime={s2Target.InOvertime}");
-
-            // Screenshot 6: Overtime State
-            var shot6 = CaptureScreenshot("06_Overtime_State.png");
-            screenshotsTaken.Add(shot6);
-
-            // Overtime worktime: place monsters and boost to pass
-            var s2Cage = app.SendQuery(new MonsterCageQuery());
-            foreach (var m in runModel.LivingMonsters)
-            {
-                if (!m.HasSkill("能量体"))
-                {
-                    runModel.TryGainSkill(m.Id, "能量体");
-                }
-                m.AddModifier(40);
-            }
-            for (int i = 0; i < 3 && i < s2Cage.Count; i++)
-            {
-                app.SendCommand(new PlaceMonsterCommand(s2Cage[i].Id, OperationArea.Extraction, i));
-            }
-            presentation.Refresh();
-
-            // Settle in overtime
-            presentation.TriggerSettle();
-            FastForwardScoringShow(presentation);
-
-            var s2TargetAfter = app.SendQuery(new LevelTargetQuery());
-            var s2ShortfallAfter = app.SendQuery(new LevelShortfallQuery());
-            var s2PhaseAfter = app.SendQuery(new RunPhaseQuery());
-
-            if (s2TargetAfter.InOvertime)
-                throw new InvalidOperationException("Expected InOvertime == false after passing overtime work.");
-            if (s2ShortfallAfter != 0)
-                throw new InvalidOperationException($"Expected shortfall == 0, got {s2ShortfallAfter}.");
-            if (s2PhaseAfter != RunPhase.Shop)
-                throw new InvalidOperationException($"Expected Shop phase after clearing overtime, got {s2PhaseAfter}.");
-
-            sb.AppendLine("=> Scenario 2 PASS: Overtime passed and advanced to Shop!");
-
-            // -------------------------------------------------------------------------
-            // SCENARIO 3: Two-Round Defeat
-            // -------------------------------------------------------------------------
-            sb.AppendLine("\n--- [Scenario 3] Two-Round Defeat ---");
-            ResetAndInitSession(bookPath, 99999, presentation);
-
-            app = TheCallApp.Interface;
-            var s3Candidates = app.SendQuery(new OpeningCandidatesQuery());
-            app.SendCommand(new KeepOpeningMonsterCommand(s3Candidates[0].Id));
-            presentation.Refresh();
-
-            // Round 1: normal worktime fails
-            presentation.TriggerSettle();
-            FastForwardScoringShow(presentation);
-
-            var s3Target1 = app.SendQuery(new LevelTargetQuery());
-            if (!s3Target1.InOvertime)
-                throw new InvalidOperationException("Round 1 failed to enter overtime.");
-
-            // Round 2: overtime fails again
-            presentation.TriggerSettle();
-            FastForwardScoringShow(presentation);
-
-            var s3Phase = app.SendQuery(new RunPhaseQuery());
-            if (s3Phase != RunPhase.Failed)
-                throw new InvalidOperationException($"Expected Failed phase after two failed rounds, got {s3Phase}.");
-
-            // Screenshot 8: Defeat Screen
-            var shot8 = CaptureScreenshot("08_Defeat_Screen.png");
-            screenshotsTaken.Add(shot8);
-            sb.AppendLine("=> Scenario 3 PASS: Two-round failure correctly triggered RunPhase.Failed!");
-
-            // -------------------------------------------------------------------------
-            // SCENARIO 4: New Run Reset
-            // -------------------------------------------------------------------------
-            sb.AppendLine("\n--- [Scenario 4] New Run Reset ---");
-            ResetAndInitSession(bookPath, 77777, presentation);
-
-            app = TheCallApp.Interface;
-            var s4Phase = app.SendQuery(new RunPhaseQuery());
-            var s4Ledger = app.SendQuery(new RunLedgerQuery());
-            var s4Candidates = app.SendQuery(new OpeningCandidatesQuery());
-
-            if (s4Phase != RunPhase.Opening)
-                throw new InvalidOperationException($"Expected Opening phase after reset, got {s4Phase}.");
-            if (s4Ledger.Gold != 0)
-                throw new InvalidOperationException($"Expected Gold == 0 after reset, got {s4Ledger.Gold}.");
-            if (s4Ledger.TechPoints != 0)
-                throw new InvalidOperationException($"Expected TechPoints == 0 after reset, got {s4Ledger.TechPoints}.");
-            if (s4Ledger.Tools.Count != 0)
-                throw new InvalidOperationException($"Expected 0 tools after reset, got {s4Ledger.Tools.Count}.");
-            if (s4Ledger.UnlockedTech.Count != 0)
-                throw new InvalidOperationException($"Expected 0 unlocked techs after reset, got {s4Ledger.UnlockedTech.Count}.");
-            if (s4Candidates.Count == 0)
-                throw new InvalidOperationException("Expected candidate monsters after reset.");
-
-            // Screenshot 9: New Run Reset
-            var shot9 = CaptureScreenshot("09_New_Run_Reset.png");
-            screenshotsTaken.Add(shot9);
-            sb.AppendLine("=> Scenario 4 PASS: New run successfully reset to clean initial state!");
-
-            // -------------------------------------------------------------------------
-            // Artifacts Summary
-            // -------------------------------------------------------------------------
-            sb.AppendLine("\n================================================================================");
-            sb.AppendLine("                             Captured Screenshots                               ");
-            sb.AppendLine("================================================================================");
-            foreach (var path in screenshotsTaken)
-            {
-                var fileInfo = new FileInfo(path);
-                sb.AppendLine(string.Format("{0,-35} | {1,10} bytes | {2}",
-                    fileInfo.Name, fileInfo.Length, fileInfo.FullName));
-            }
-
-            sb.AppendLine("\n================================================================================");
-            sb.AppendLine("             ALL 4 SCENARIOS & 9 SCREENSHOTS VERIFIED SUCCESSFULLY!             ");
-            sb.AppendLine("================================================================================");
-
-            return sb.ToString();
-        }
-
-        static void ResetAndInitSession(string bookPath, int seed, TheCallPresentation presentation)
-        {
+            if (!Application.isPlaying || Playing) throw new InvalidOperationException("Enter Play Mode and wait for the prior presentation first.");
+            Application.runInBackground = true;
+            var gameType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
+            if (gameType != null) EditorWindow.GetWindow(gameType).Focus();
             TheCallApp.Reset();
-            ContentGate.Use(ContentBook.Parse(File.ReadAllText(bookPath)));
-            TheCallApp.OnRegisterPatch = a => a.RegisterUtility<IDraw>(new SeededDraw(seed));
-            presentation.StartSession();
-            presentation.Refresh();
+            ContentGate.Use(ContentBook.Parse(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json"))));
+            _draw = new SeededDraw(seed);
+            TheCallApp.OnRegisterPatch = app => app.RegisterUtility<IDraw>(_draw);
+            Trace.Clear();
+            Trace.AppendLine("natural-player-run seed=" + seed + " unity=" + Application.unityVersion);
+            Presentation().StartSession();
+            Presentation().Refresh();
+            return Snapshot("begin");
         }
 
-        static void FastForwardScoringShow(TheCallPresentation presentation)
+        public static string Click(string action, string value = "")
         {
-            var scoringShow = Object.FindAnyObjectByType<ScoringShow>();
-            if (scoringShow != null)
+            if (Playing && action != "playback") throw new InvalidOperationException("Wait for presentation to finish.");
+            Button button = null;
+            switch (action)
             {
-                scoringShow.StopAllCoroutines();
-                Object.DestroyImmediate(scoringShow.gameObject);
+                case "opening":
+                    var opening = Object.FindAnyObjectByType<OpeningScreenView>(FindObjectsInactive.Include);
+                    foreach (var slot in opening.candidates) if (slot.monsterId == value) button = slot.button;
+                    break;
+                case "begin": button = Object.FindAnyObjectByType<LevelStartScreenView>(FindObjectsInactive.Include).beginButton; break;
+                case "settle": button = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include).nextDayButton; break;
+                case "leave": button = Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).leaveButton; break;
+                case "refresh": button = Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).refreshButton; break;
+                case "buy":
+                    foreach (var card in Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).cards)
+                        if (card.monsterId == value || card.toolName == value) button = card.buyButton;
+                    break;
+                case "restart": button = Object.FindAnyObjectByType<ResultScreenView>(FindObjectsInactive.Include).restartButton; break;
+                case "research-open":
+                    button = TheCallApp.Interface.SendQuery(new RunPhaseQuery()) == RunPhase.Shop
+                        ? Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).researchButton
+                        : Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include).researchButton;
+                    break;
+                case "research-back": button = Object.FindAnyObjectByType<ResearchScreenView>(FindObjectsInactive.Include).backButton; break;
+                default: throw new ArgumentException("Unknown input: " + action);
             }
-            if (presentation != null)
-            {
-                presentation.Refresh();
-            }
+            if (button == null || !button.gameObject.activeInHierarchy || !button.interactable)
+                throw new InvalidOperationException("Unavailable player button: " + action + " " + value);
+            button.onClick.Invoke();
+            return Snapshot(action + " " + value);
         }
 
+        public static string Drag(string monsterId, string area, int index)
+        {
+            if (Playing) throw new InvalidOperationException("Presentation still playing");
+            var operation = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
+            MonsterSlotView source = null;
+            foreach (var slot in Object.FindObjectsByType<MonsterSlotView>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+                if (slot.monsterId == monsterId && slot.GetComponent<OperationPayloadDrag>() != null) { source = slot; break; }
+            if (source == null) throw new InvalidOperationException("Visible drag source missing: " + monsterId);
+            var targets = area == "extraction" ? operation.extractionSlots : area == "breeding" ? operation.breedingSlots : operation.cageSlots;
+            var target = targets[index];
+            if (!target.gameObject.activeInHierarchy) throw new InvalidOperationException("Drop target hidden");
+            Canvas.ForceUpdateCanvases();
+            var canvas = target.GetComponentInParent<Canvas>();
+            var camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            var position = RectTransformUtility.WorldToScreenPoint(camera, target.GetComponent<RectTransform>().TransformPoint(target.GetComponent<RectTransform>().rect.center));
+            var data = new PointerEventData(EventSystem.current) { position = position, button = PointerEventData.InputButton.Left };
+            var payload = source.GetComponent<OperationPayloadDrag>();
+            payload.OnPointerDown(data);
+            payload.OnBeginDrag(data);
+            payload.OnDrag(data);
+            payload.OnEndDrag(data);
+            if (area != "cage" && target.monsterId != monsterId) throw new InvalidOperationException("Actual raycast drop failed: " + monsterId + " -> " + area + " " + index);
+            if (area == "cage" && !System.Linq.Enumerable.Any(TheCallApp.Interface.GetModel<RunModel>().Cage, m => m.Id == monsterId)) throw new InvalidOperationException("Actual return drop failed");
+            return Snapshot("drag " + monsterId + " " + area + " " + index);
+        }
+
+        public static string Snapshot(string input = "sample")
+        {
+            var app = TheCallApp.Interface;
+            var run = app.GetModel<RunModel>();
+            var level = app.GetModel<LevelModel>();
+            var text = "frame=" + Time.frameCount + " input=" + input + " phase=" + run.Phase + " day=" + run.LevelNumber
+                + " energy=" + level.Energy + " gold=" + run.Gold + " tech=" + run.TechPoints + " rng=" + (_draw?.Cursor ?? -1) + " playback=" + Playing;
+            Trace.AppendLine(text);
+            foreach (var monster in run.LivingMonsters)
+            {
+                Trace.Append("  monster=" + monster.Id + " personality=" + monster.Personality + " race=" + monster.Race + " mood=" + monster.Mood + " skills=");
+                foreach (var skill in monster.Skills) Trace.Append(skill.Name + ":" + skill.Quote + ":temporary=" + skill.IsTemporary + ";");
+                Trace.AppendLine();
+            }
+            Directory.CreateDirectory(EvidenceRoot);
+            File.WriteAllText(Path.Combine(EvidenceRoot, "player-trace.txt"), Trace.ToString());
+            File.WriteAllText(Path.Combine(EvidenceRoot, "production-log.txt"), ProductionLogText.Format(run.ProductionLog));
+            File.AppendAllText(Path.Combine(EvidenceRoot, "state-trace.txt"), input + "\n" + State() + "\n");
+            return text;
+        }
+
+        public static string State()
+        {
+            var app = TheCallApp.Interface; var run = app.GetModel<RunModel>(); var level = app.GetModel<LevelModel>();
+            var b = new StringBuilder();
+            b.AppendLine("phase=" + run.Phase + ";day=" + run.LevelNumber + ";energy=" + level.Energy + ";due=" + level.EnergyDue + ";overtime=" + level.InOvertime + ";gold=" + run.Gold + ";tech=" + run.TechPoints + ";retained=" + run.RetainedEnergy + ";rng=" + (_draw?.Cursor ?? -1));
+            b.AppendLine("tools=" + string.Join(",", run.Tools) + ";research=" + string.Join(",", run.UnlockedTech));
+            b.AppendLine("cage=" + string.Join(",", run.Cage.Select(m => m.Id)) + ";extraction=" + string.Join(",", level.Extraction) + ";breeding=" + string.Join(",", level.Breeding));
+            foreach (var gene in run.GeneSlots) b.AppendLine("gene=" + gene.Id + ";skill=" + gene.SkillName + ";reservation=" + gene.ReservedBreedingSlot);
+            foreach (var m in run.LivingMonsters.OrderBy(m => m.Id))
+            {
+                b.AppendLine("monster=" + m.Id + ";personality=" + m.Personality + ";race=" + m.Race + ";mood=" + m.Mood + ";baseMood=" + m.DayBaseMood + ";boost=" + m.DayMoodBoost + ";work=" + m.ConsecutiveWorkDays + ";rest=" + m.ConsecutiveRestDays + ";clocked=" + m.HasClockedInToday + ";worked=" + run.DidWorkToday(m.Id) + ";modifier=" + m.Modifier + ";immovable=" + m.Immovable + ";capacity=" + m.Capacity + ";parents=" + string.Join(",", m.ParentIds));
+                foreach (var skill in m.Skills) b.AppendLine("skill=" + skill.Id + ";name=" + skill.Name + ";quote=" + skill.Quote + ";permanent=" + skill.PermanentQuote + ";temporary=" + skill.IsTemporary + ";source=" + skill.SourceKind + ";sourceId=" + skill.SourceId + ";sourceMonster=" + skill.SourceMonsterId);
+            }
+            return b.ToString();
+        }
+
+        // Capture includes Overlay canvases. Its file is written after end-of-frame;
+        // the caller must wait for a later frame and visually inspect the result.
         public static string CaptureScreenshot(string filename)
         {
-            var dir = Path.GetFullPath(Path.Combine(Application.dataPath, "../Screenshots/M5"));
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            var path = Path.GetFullPath(Path.Combine(dir, filename));
-
-            var cam = Camera.main;
-            if (cam == null)
-            {
-                cam = Object.FindAnyObjectByType<Camera>();
-            }
-
-            var canvas = Object.FindAnyObjectByType<Canvas>();
-            if (canvas != null && canvas.worldCamera == null && cam != null)
-            {
-                canvas.worldCamera = cam;
-            }
-
-            Canvas.ForceUpdateCanvases();
-
-            var rt = new RenderTexture(1920, 1080, 24);
-            var prevTarget = cam.targetTexture;
-            var prevActive = RenderTexture.active;
-
-            cam.targetTexture = rt;
-            cam.Render();
-
-            RenderTexture.active = rt;
-            var tex = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
-            tex.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
-            tex.Apply();
-
-            cam.targetTexture = prevTarget;
-            RenderTexture.active = prevActive;
-            Object.DestroyImmediate(rt);
-
-            var bytes = tex.EncodeToPNG();
-            Object.DestroyImmediate(tex);
-
-            File.WriteAllBytes(path, bytes);
+            Directory.CreateDirectory(EvidenceRoot);
+            var path = Path.Combine(EvidenceRoot, Path.GetFileName(filename));
+            ScreenCapture.CaptureScreenshot(path);
+            Snapshot("capture " + filename);
             return path;
         }
+
+        [Serializable] sealed class PlannedInput { public string Action; public string Value; public int Index; }
+        [Serializable] sealed class PlayerPlan { public int seed; public PlannedInput[] actions; }
+        static PlayerPlan _plan;
+        static int _step;
+        static double _nextInput;
+        static bool _running;
+        static string _failure;
+        static int _playbackMode;
+        static ScoringShow _lastPlayback;
+        static int _clickCount;
+        public static string PlanStatus => _failure ?? (_running ? "running " + _step + "/" + _plan.actions.Length : "completed " + _step);
+
+        public static string BeginPlan(string path, int playbackMode = 0)
+        {
+            if (_running) throw new InvalidOperationException("Player replay already running.");
+            _plan = JsonUtility.FromJson<PlayerPlan>(File.ReadAllText(path));
+            _playbackMode = playbackMode; _lastPlayback = null; _clickCount = 0;
+            _evidenceName = playbackMode == 0 ? "natural-normal" : playbackMode == 1 ? "natural-fast" : "natural-skip";
+            Begin(_plan.seed);
+            _step = 0; _failure = null; _running = true;
+            CaptureScreenshot("01-opening.png");
+            _nextInput = EditorApplication.timeSinceStartup + 1;
+            EditorApplication.update -= AdvancePlan;
+            EditorApplication.update += AdvancePlan;
+            return PlanStatus;
+        }
+
+        static void AdvancePlan()
+        {
+            if (!_running || EditorApplication.timeSinceStartup < _nextInput) return;
+            if (Playing)
+            {
+                if (_playbackMode != 0)
+                {
+                    var show = Object.FindAnyObjectByType<ScoringShow>();
+                    if (_lastPlayback != show) { _lastPlayback = show; _clickCount = 0; }
+                    var blocker = show.transform.Find("ScoringBlocker");
+                    if (blocker != null && (_clickCount < (_playbackMode == 1 ? 1 : 2) || (_playbackMode == 2 && _clickCount == 2)))
+                    {
+                        ExecuteEvents.Execute(blocker.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+                        _clickCount++;
+                        _nextInput = EditorApplication.timeSinceStartup + 0.5;
+                    }
+                }
+                return;
+            }
+            try
+            {
+                if (_step >= _plan.actions.Length)
+                {
+                    _running = false;
+                    EditorApplication.update -= AdvancePlan;
+                    Snapshot("natural-plan-completed");
+                    if (TheCallApp.Interface.SendQuery(new RunPhaseQuery()) != RunPhase.Victory)
+                        throw new InvalidOperationException("Natural player replay did not end in Victory.");
+                    CaptureScreenshot("07-victory.png");
+                    File.WriteAllText(Path.Combine(EvidenceRoot, "final-state.txt"), State());
+                    return;
+                }
+                var input = _plan.actions[_step];
+                // Completion refresh is deferred by one frame. Wait for the actual
+                // player screen, not only the destruction of the playback host.
+                if ((input.Action == "buy" || input.Action == "leave" || input.Action == "refresh") && !Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).gameObject.activeInHierarchy) return;
+                if (input.Action == "begin" && !Object.FindAnyObjectByType<LevelStartScreenView>(FindObjectsInactive.Include).gameObject.activeInHierarchy) return;
+                if (input.Action == "extraction" || input.Action == "breeding") Drag(input.Value, input.Action, input.Index);
+                else if (input.Action == "cage")
+                {
+                    var operation = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
+                    Drag(input.Value, "cage", 0);
+                }
+                else Click(input.Action, input.Value);
+                _step++;
+                _nextInput = EditorApplication.timeSinceStartup + 0.65;
+                if (input.Action == "settle") CaptureScreenshot("settle-" + _step + ".png");
+                else if (input.Action == "leave") CaptureScreenshot("day-end-" + _step + ".png");
+                else if (input.Action == "buy") CaptureScreenshot("shop-" + _step + ".png");
+            }
+            catch (Exception error)
+            {
+                _running = false; _failure = error.ToString();
+                EditorApplication.update -= AdvancePlan;
+                Directory.CreateDirectory(EvidenceRoot);
+                File.WriteAllText(Path.Combine(EvidenceRoot, "player-replay-failure.txt"), _failure);
+                Debug.LogError(_failure);
+            }
+        }
+
+        static TheCallPresentation Presentation() => Object.FindAnyObjectByType<TheCallPresentation>() ?? throw new InvalidOperationException("Missing presentation");
     }
 }

@@ -1,0 +1,36 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - paragraph [ref=e4]: 正在装入规则。
+    - generic [ref=e5]:
+      - text: 关卡
+      - combobox "关卡" [ref=e6]
+    - button "结算" [ref=e7] [cursor=pointer]
+    - paragraph [ref=e8]: 尚未结算
+  - heading "能量产出台" [level=1] [ref=e10]
+  - generic [ref=e12]:
+    - generic [ref=e14]:
+      - heading "怪物库" [level=2] [ref=e15]
+      - paragraph [ref=e16]: 拖进格子后按出现顺序编号，例如 1号怪物、2号怪物。编号一直跟着这只怪物，不跟技能名走。
+    - generic [ref=e18]:
+      - heading "技能槽" [level=2] [ref=e20]
+      - heading "技能库" [level=2] [ref=e23]
+  - generic [ref=e25]:
+    - heading "结算" [level=2] [ref=e26]
+    - generic [ref=e27]:
+      - paragraph [ref=e28]:
+        - generic [ref=e29]: 本次产出
+        - strong [ref=e30]: —
+      - paragraph [ref=e31]:
+        - generic [ref=e32]: 本关应交
+        - strong [ref=e33]: —
+      - paragraph [ref=e34]:
+        - generic [ref=e35]: 交款
+        - strong [ref=e36]: 尚未结算
+      - paragraph [ref=e37]:
+        - generic [ref=e38]: 超额线
+        - strong [ref=e39]: —
+      - paragraph [ref=e40]:
+        - generic [ref=e41]: 超额
+        - strong [ref=e42]: 尚未结算
+    - paragraph [ref=e43]: 按时间顺序读。每一条是一只怪物触发的一次技能：先报价，再加项，得到底数；侧向技能还要乘那一侧的怪物数；能量等于底数乘倍率。
+    - paragraph [ref=e45]: 还没有结算。怪物放上格子后点结算，时间线会列在这里。

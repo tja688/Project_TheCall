@@ -157,6 +157,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(pCalm.Id, OperationArea.Breeding, 0));
             App.SendCommand(new PlaceMonsterCommand(pOther.Id, OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
+            App.RegisterUtility<IDraw>(ScriptedDraw.Exact("安于现状"));
             App.SendCommand(new LeaveShopCommand());
 
             // 亲本保留
@@ -166,10 +167,9 @@ namespace TheCall.Tests
             // 子代存在
             var child = run.LivingMonsters.Single(m => m.ParentIds.Contains(pCalm.Id) && m.ParentIds.Contains(pOther.Id));
             Assert.That(child, Is.Not.Null);
-            if (child.Personality == "安于现状")
-            {
-                Assert.That(child.Skills.Count, Is.AtMost(2));
-            }
+            Assert.That(child.Personality, Is.EqualTo("安于现状"));
+            Assert.That(child.Skills.Select(x => x.Name), Is.EqualTo(new[] { "奇异香", "优质肉体" }));
+            Assert.That(run.GeneSlots, Is.Empty);
         }
 
         [Test]

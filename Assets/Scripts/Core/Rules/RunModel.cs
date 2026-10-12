@@ -3,15 +3,37 @@ using QFramework;
 
 namespace TheCall
 {
+    internal enum SkillSourceKind { Opening, Purchase, Parent, Gene, Mutation, Personality, SkillEffect, Fixture }
+
+    internal readonly struct SkillAcquisitionResult
+    {
+        public SkillAcquisitionResult(SkillInstance instance, string failure = null) { Instance = instance; Failure = failure; }
+        public bool Success => Instance != null;
+        public SkillInstance Instance { get; }
+        public string Failure { get; }
+    }
+
     internal sealed class SkillInstance
     {
-        public SkillInstance(string name, int quote, bool isTemporary = false)
+        public SkillInstance(string name, int quote, bool isTemporary = false, string id = null, SkillSourceKind sourceKind = SkillSourceKind.Fixture, string sourceId = null, string sourceMonsterId = null)
         {
+            Id = id ?? System.Guid.NewGuid().ToString("N");
+            SourceKind = sourceKind;
+            SourceId = sourceId;
+            SourceMonsterId = sourceMonsterId;
             Name = name;
             Quote = quote;
             _permanentQuote = quote;
             IsTemporary = isTemporary;
         }
+
+        public string Id { get; }
+        public string ContentId => Name;
+        public SkillSourceKind SourceKind { get; }
+        public string SourceId { get; }
+        public string SourceMonsterId { get; }
+        public int PermanentQuote => _permanentQuote;
+        public string GrowthOwnerId => Id;
 
         public string Name { get; }
 
@@ -60,6 +82,7 @@ namespace TheCall
             Personality = string.IsNullOrEmpty(personality) ? "稳定" : personality;
             Race = string.IsNullOrEmpty(race) ? "森林" : race;
             Mood = string.IsNullOrEmpty(mood) ? "普通" : mood;
+            DayBaseMood = Mood;
             ConsecutiveWorkDays = consecutiveWorkDays;
             ConsecutiveRestDays = consecutiveRestDays;
         }
@@ -106,48 +129,35 @@ namespace TheCall
         public string Race { get; private set; }
 
         public string Mood { get; private set; }
+        public string DayBaseMood { get; private set; }
+        public int DayMoodBoost { get; private set; }
+        public void BeginDailyMood(string baseMood, string mood) { DayBaseMood = baseMood; DayMoodBoost = 0; Mood = mood; }
+        public void BoostDailyMood(string mood) { DayMoodBoost++; Mood = mood; }
 
         public int ConsecutiveWorkDays { get; private set; }
 
         public int ConsecutiveRestDays { get; private set; }
 
-        public void ChangePersonality(string personality)
+        public IReadOnlyList<SkillInstance> ChangePersonality(string personality, IDraw draw = null)
         {
-            if (!string.IsNullOrEmpty(personality))
-            {
-                Personality = personality;
-                if (personality == "安于现状" && Skills.Count > 2)
-                    TrimSkillsToTwoEnsuringPermanent();
-            }
-        }
-
-        void TrimSkillsToTwoEnsuringPermanent()
-        {
-            var permanent = new List<SkillInstance>();
-            var temporary = new List<SkillInstance>();
+            var removed = new List<SkillInstance>();
+            if (string.IsNullOrEmpty(personality)) return removed;
+            Personality = personality;
+            if (personality != "安于现状" || Skills.Count <= 2) return removed;
+            // Pick uniformly among valid pairs, rather than biasing toward the first permanent instance.
+            var pairs = new List<int[]>();
+            var hasPermanent = Skills.Exists(x => !x.IsTemporary);
             for (var i = 0; i < Skills.Count; i++)
-            {
-                if (Skills[i].IsTemporary)
-                    temporary.Add(Skills[i]);
-                else
-                    permanent.Add(Skills[i]);
-            }
-
-            var kept = new List<SkillInstance>();
-            if (permanent.Count > 0)
-            {
-                kept.Add(permanent[0]);
-                permanent.RemoveAt(0);
-            }
-
-            var pool = new List<SkillInstance>();
-            pool.AddRange(permanent);
-            pool.AddRange(temporary);
-            if (pool.Count > 0 && kept.Count < 2)
-                kept.Add(pool[0]);
-
+                for (var j = i + 1; j < Skills.Count; j++)
+                    if (!hasPermanent || !Skills[i].IsTemporary || !Skills[j].IsTemporary)
+                        pairs.Add(new[] { i, j });
+            var pair = (draw ?? new SystemDraw()).Choose(pairs);
+            var kept = new[] { Skills[pair[0]], Skills[pair[1]] };
+            for (var i = 0; i < Skills.Count; i++)
+                if (i != pair[0] && i != pair[1]) removed.Add(Skills[i]);
             Skills.Clear();
             Skills.AddRange(kept);
+            return removed;
         }
 
         public void ChangeRace(string race)
@@ -235,12 +245,14 @@ namespace TheCall
 
     internal sealed class GeneSlot
     {
-        public GeneSlot(string skillName, int? reservedBreedingSlot = null)
+        public GeneSlot(string skillName, int? reservedBreedingSlot = null, string id = null)
         {
             SkillName = skillName;
+            Id = id ?? System.Guid.NewGuid().ToString("N");
             ReservedBreedingSlot = reservedBreedingSlot;
         }
 
+        public string Id { get; }
         public string SkillName { get; }
 
         public int? ReservedBreedingSlot { get; set; }
@@ -250,12 +262,14 @@ namespace TheCall
 
     internal readonly struct GeneSlotCapture
     {
-        public GeneSlotCapture(string skillName, int? reservedBreedingSlot)
+        public GeneSlotCapture(string skillName, int? reservedBreedingSlot, string id = null)
         {
+            Id = id;
             SkillName = skillName;
             ReservedBreedingSlot = reservedBreedingSlot;
         }
 
+        public string Id { get; }
         public string SkillName { get; }
 
         public int? ReservedBreedingSlot { get; }
@@ -274,6 +288,25 @@ namespace TheCall
         readonly List<string> _unlockedTech = new List<string>();
         readonly List<ProductionSubmission> _productionLog = new List<ProductionSubmission>();
         int _nextId = 1;
+        int _nextSkillId = 1;
+        int _nextGeneId = 1;
+        readonly Dictionary<string, List<LandingAdd>> _dailyAdds = new Dictionary<string, List<LandingAdd>>();
+        readonly List<LandingAdd> _dailyLegacyAdds = new List<LandingAdd>();
+        public IReadOnlyList<LandingAdd> DailyLegacyAdds => _dailyLegacyAdds;
+        public void RememberDailyLegacy(LandingAdd add) => _dailyLegacyAdds.Add(add);
+        public void RememberDailyAdd(string targetId, LandingAdd add)
+        {
+            if (!_dailyAdds.TryGetValue(targetId, out var adds)) _dailyAdds[targetId] = adds = new List<LandingAdd>();
+            adds.Add(add);
+        }
+        public IReadOnlyList<LandingAdd> DailyAddsFor(string targetId) =>
+            _dailyAdds.TryGetValue(targetId, out var adds) ? adds : System.Array.Empty<LandingAdd>();
+        public void ClearDailyEffects() { _dailyAdds.Clear(); _dailyLegacyAdds.Clear(); }
+
+
+        public string LastOperationFailure { get; private set; }
+        public void SetOperationFailure(string reason) => LastOperationFailure = reason;
+        public IReadOnlyList<SkillInstance> LastRemovedSkills { get; private set; } = System.Array.Empty<SkillInstance>();
 
         public RunPhase Phase { get; private set; } = RunPhase.Opening;
 
@@ -406,6 +439,7 @@ namespace TheCall
             _cage.Clear();
             _candidates.Clear();
             _byId.Clear();
+            ClearDailyEffects();
         }
 
         public void Lose()
@@ -421,6 +455,7 @@ namespace TheCall
             _cage.Clear();
             _candidates.Clear();
             _byId.Clear();
+            ClearDailyEffects();
         }
 
         public void AddGold(int amount) => Gold += amount;
@@ -456,7 +491,7 @@ namespace TheCall
             string personality = null,
             string race = null)
         {
-            var monster = Create(skillNames, 0, null, null, personality, race);
+            var monster = Create(skillNames, 0, null, null, personality, race, sourceKind: SkillSourceKind.Opening);
             _candidates.Add(monster);
             return monster;
         }
@@ -549,7 +584,7 @@ namespace TheCall
         {
             var copy = new GeneSlotCapture[_geneSlots.Count];
             for (var i = 0; i < copy.Length; i++)
-                copy[i] = new GeneSlotCapture(_geneSlots[i].SkillName, _geneSlots[i].ReservedBreedingSlot);
+                copy[i] = new GeneSlotCapture(_geneSlots[i].SkillName, _geneSlots[i].ReservedBreedingSlot, _geneSlots[i].Id);
 
             return copy;
         }
@@ -558,7 +593,7 @@ namespace TheCall
         {
             _geneSlots.Clear();
             for (var i = 0; i < slots.Length; i++)
-                _geneSlots.Add(new GeneSlot(slots[i].SkillName, slots[i].ReservedBreedingSlot));
+                _geneSlots.Add(new GeneSlot(slots[i].SkillName, slots[i].ReservedBreedingSlot, slots[i].Id));
         }
 
         internal string[] CaptureSkillSlots()
@@ -604,7 +639,7 @@ namespace TheCall
             return true;
         }
 
-        public void PutSkillInSlot(string skillName) => _geneSlots.Add(new GeneSlot(skillName));
+        public void PutSkillInSlot(string skillName) => _geneSlots.Add(new GeneSlot(skillName, id: "g" + _nextGeneId++));
 
         public bool TryTakeSkillAt(int index, out string skillName)
         {
@@ -612,6 +647,7 @@ namespace TheCall
             if (index < 0 || index >= _geneSlots.Count)
                 return false;
 
+            if (_geneSlots[index].IsReserved) return false;
             skillName = _geneSlots[index].SkillName;
             _geneSlots.RemoveAt(index);
             return true;
@@ -626,30 +662,43 @@ namespace TheCall
             string race = null,
             string mood = null,
             int consecutiveWorkDays = 0,
-            int consecutiveRestDays = 0) =>
-            Create(skillNames, modifier, appearance, parentIds, personality, race, mood, consecutiveWorkDays, consecutiveRestDays);
+            int consecutiveRestDays = 0, SkillSourceKind sourceKind = SkillSourceKind.Fixture) =>
+            Create(skillNames, modifier, appearance, parentIds, personality, race, mood, consecutiveWorkDays, consecutiveRestDays, sourceKind);
 
-        public bool TryGainSkill(string monsterId, string skillName, bool isTemporary = false)
+        public string SkillGainFailure(string monsterId, string skillName)
         {
             var monster = Find(monsterId);
-            if (monster == null)
-                return false;
+            if (monster == null) return "怪物不存在";
+            if (string.IsNullOrEmpty(skillName) || !HasContentSkill(skillName)) return "技能不存在";
+            if (monster.Skills.Count >= (monster.Personality == "安于现状" ? 2 : 4)) return "技能已达上限";
+            if (!HasTool("复读腺") && monster.HasSkill(skillName)) return "重复技能需要复读腺";
+            return null;
+        }
 
-            var maxSkills = monster.Personality == "安于现状" ? 2 : 4;
-            if (monster.Skills.Count >= maxSkills)
-                return false;
+        public SkillAcquisitionResult GainSkill(string monsterId, string skillName, bool isTemporary = false,
+            SkillSourceKind sourceKind = SkillSourceKind.SkillEffect, string sourceId = null, string sourceMonsterId = null)
+        {
+            var failure = SkillGainFailure(monsterId, skillName);
+            if (failure != null) return new SkillAcquisitionResult(null, failure);
+            var instance = MakeSkill(skillName, isTemporary, sourceKind, sourceId, sourceMonsterId);
+            Find(monsterId).Skills.Add(instance);
+            return new SkillAcquisitionResult(instance);
+        }
 
-            if (!HasTool("复读腺"))
-            {
-                for (var index = 0; index < monster.Skills.Count; index++)
-                {
-                    if (monster.Skills[index].Name == skillName)
-                        return false;
-                }
-            }
+        public bool TryGainSkill(string monsterId, string skillName, bool isTemporary = false) =>
+            GainSkill(monsterId, skillName, isTemporary).Success;
 
-            monster.Skills.Add(MakeSkill(skillName, isTemporary));
-            return true;
+        public IReadOnlyList<SkillInstance> ChangePersonality(string monsterId, string personality)
+        {
+            var monster = Find(monsterId);
+            if (monster == null) return System.Array.Empty<SkillInstance>();
+            var removed = monster.ChangePersonality(personality, this.GetUtility<IDraw>());
+            LastRemovedSkills = removed;
+            var fixedMood = this.GetUtility<MoodCatalog>().FixedMood(personality);
+            var restored = monster.DayBaseMood;
+            for (var i = 0; i < monster.DayMoodBoost; i++) restored = this.GetUtility<MoodCatalog>().UpgradeMood(restored);
+            monster.SetMood(fixedMood ?? restored);
+            return removed;
         }
 
         public void GrowAfterClear(SkillCatalog catalog)
@@ -713,8 +762,16 @@ namespace TheCall
         {
         }
 
-        SkillInstance MakeSkill(string name, bool isTemporary = false) =>
-            new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name), isTemporary);
+        bool HasContentSkill(string name)
+        {
+            var names = this.GetUtility<SkillCatalog>().Names();
+            for (var i = 0; i < names.Count; i++) if (names[i] == name) return true;
+            return false;
+        }
+        internal SkillInstance MakeSkill(string name, bool isTemporary = false, SkillSourceKind sourceKind = SkillSourceKind.Fixture,
+            string sourceId = null, string sourceMonsterId = null) =>
+            new SkillInstance(name, this.GetUtility<SkillCatalog>().StartingQuote(name), isTemporary,
+                "s" + _nextSkillId++, sourceKind, sourceId, sourceMonsterId);
 
         Monster Create(string skillName) => Create(new[] { skillName }, 0, null);
 
@@ -727,11 +784,11 @@ namespace TheCall
             string race = null,
             string mood = null,
             int consecutiveWorkDays = 0,
-            int consecutiveRestDays = 0)
+            int consecutiveRestDays = 0, SkillSourceKind sourceKind = SkillSourceKind.Fixture)
         {
             var skills = new SkillInstance[skillNames.Count];
             for (var i = 0; i < skills.Length; i++)
-                skills[i] = MakeSkill(skillNames[i]);
+                skills[i] = MakeSkill(skillNames[i], false, sourceKind);
 
             var serial = _nextId++;
             var id = "m" + serial;
@@ -744,9 +801,10 @@ namespace TheCall
                 parentIds,
                 personality ?? "稳定",
                 race ?? "森林",
-                mood ?? "普通",
+                mood ?? this.GetUtility<MoodCatalog>().FixedMood(personality) ?? "普通",
                 consecutiveWorkDays,
                 consecutiveRestDays);
+            monster.BeginDailyMood(mood ?? "普通", mood ?? this.GetUtility<MoodCatalog>().FixedMood(personality) ?? "普通");
             _byId.Add(monster.Id, monster);
             return monster;
         }

@@ -28,7 +28,18 @@ namespace TheCall
 
                 var monster = run.Find(id);
                 if (monster != null)
-                    _cast[id] = monster;
+                {
+                    var skills = new List<SkillInstance>();
+                    foreach (var skill in monster.Skills)
+                    {
+                        var copy = new SkillInstance(skill.Name, skill.PermanentQuote, skill.IsTemporary, skill.Id, skill.SourceKind, skill.SourceId, skill.SourceMonsterId);
+                        copy.Add(skill.Quote - skill.PermanentQuote, false);
+                        skills.Add(copy);
+                    }
+                    var snapshot = new Monster(monster.Id, monster.DisplayName, skills, monster.Modifier, monster.Appearance, monster.ParentIds, monster.Personality, monster.Race, monster.Mood, monster.ConsecutiveWorkDays, monster.ConsecutiveRestDays);
+                    if (monster.Immovable) snapshot.MakeImmovable(false);
+                    _cast[id] = snapshot;
+                }
             }
 
             Showing = false;

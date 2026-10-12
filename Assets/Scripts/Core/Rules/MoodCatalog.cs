@@ -84,6 +84,11 @@ namespace TheCall
             return "普通";
         }
 
+        public string FixedMood(string personality)
+        {
+            switch (personality) { case "稳定": return "普通"; case "乐天派": return "热情"; case "摸鱼派": return "疲倦"; case "厌世": return "倦怠"; default: return null; }
+        }
+
         public string CalculateDailyMood(Monster monster, bool hasSoundproofCotton) =>
             monster == null ? "普通" : CalculateDailyMood(monster.Personality, monster.ConsecutiveWorkDays, monster.ConsecutiveRestDays, hasSoundproofCotton);
 

@@ -431,12 +431,13 @@ namespace TheCall.Tests
             // Left dies first -> grants +4 legacy
             // Right (still alive) responds to left's death: 收尸腺 produces 3 + 4 = 7!
             // Right dies next.
-            // Center produces 2 * 8 = 16 energy!
+            // Each victim grants base8 plus current legacy4: two separate12 landings.
             var rightLanding = Landings().Single(l => l.MonsterId == right.Id && l.SkillName == "收尸腺");
             Assert.That(rightLanding.Energy, Is.EqualTo(7));
 
-            var centerLanding = Landings().Single(l => l.MonsterId == center.Id && l.SkillName == "血祭体");
-            Assert.That(centerLanding.Base, Is.EqualTo(20)); // 16 quote + 4 legacy = 20
+            var centerLandings = Landings().Where(l => l.MonsterId == center.Id && l.SkillName == "血祭体").ToArray();
+            Assert.That(centerLandings.Select(l => l.Energy), Is.EqualTo(new[] { 12, 12 }));
+            Assert.That(Landings().Select(l => l.Energy), Is.EqualTo(new[] { 7, 12, 12 }));
 
             // Both left and right removed
             Assert.That(RemovedIds(), Is.EquivalentTo(new[] { left.Id, right.Id }));

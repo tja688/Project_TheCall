@@ -48,7 +48,10 @@ namespace TheCall
                     if (i > 0)
                         buffer.Append(',');
 
-                    buffer.Append("{\"name\":").Append(Quote(book.Tools[i].Name)).Append('}');
+                    buffer.Append("{\"name\":").Append(Quote(book.Tools[i].Name));
+                    buffer.Append(",\"description\":").Append(Quote(book.Tools[i].Description));
+                    buffer.Append(",\"price\":").Append(book.Tools[i].Price);
+                    buffer.Append(",\"rarity\":").Append(Quote(book.Tools[i].Rarity.ToString())).Append('}');
                 }
 
                 buffer.Append("],\"levels\":[");
@@ -63,7 +66,10 @@ namespace TheCall
                     buffer.Append('}');
                 }
 
-                buffer.Append("]}");
+                buffer.Append("],\"personalities\":").Append(JsonSerializer.Serialize(book.Personalities, PageJsonContext.Default.IReadOnlyListPersonalityDef));
+                buffer.Append(",\"races\":").Append(JsonSerializer.Serialize(book.Races, PageJsonContext.Default.IReadOnlyListRaceDef));
+                buffer.Append(",\"moods\":").Append(JsonSerializer.Serialize(book.Moods, PageJsonContext.Default.IReadOnlyListMoodDef));
+                buffer.Append('}');
                 return buffer.ToString();
             }
             catch (Exception ex)
@@ -89,6 +95,16 @@ namespace TheCall
             {
                 return Error(ex.Message);
             }
+        }
+
+        [JSExport]
+        public static string Preview(string boardJson)
+        {
+            try
+            {
+                return JsonSerializer.Serialize(ExtractionBench.Preview(ReadBoard(boardJson)), PageJsonContext.Default.IReadOnlyListMonsterDetails);
+            }
+            catch (Exception ex) { return Error(ex.Message); }
         }
 
         [JSExport]
@@ -127,13 +143,24 @@ namespace TheCall
                 }
 
                 var names = new List<string>();
+                var instances = new List<BenchSkill>();
                 foreach (var skill in cell.GetProperty("skills").EnumerateArray())
-                    names.Add(skill.GetString());
-
-                row[index++] = new BenchMonster(names);
+                {
+                    var name = skill.ValueKind == JsonValueKind.String ? skill.GetString() : skill.GetProperty("name").GetString();
+                    names.Add(name);
+                    var growth = skill.ValueKind == JsonValueKind.Object && skill.TryGetProperty("growth", out var g) ? g.GetInt32() : 0;
+                    var temporary = skill.ValueKind == JsonValueKind.Object && skill.TryGetProperty("temporary", out var t) && t.GetBoolean();
+                    instances.Add(new BenchSkill(name, growth, temporary));
+                }
+                string Optional(string key) => cell.TryGetProperty(key, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+                int Number(string key) => cell.TryGetProperty(key, out var value) ? value.GetInt32() : 0;
+                var parents = new List<int>();
+                if (cell.TryGetProperty("parentCells", out var parentArray)) foreach (var parent in parentArray.EnumerateArray()) parents.Add(parent.GetInt32());
+                row[index++] = new BenchMonster(names, Optional("personality"), Optional("mood"), Optional("race"), instances,
+                    Number("modifier"), Number("workDays"), Number("restDays"), parents);
             }
 
-            return new BenchBoard(level, tools, row);
+            return new BenchBoard(level, tools, row, root.TryGetProperty("initialEnergy", out var energy) ? energy.GetInt32() : 0, root.TryGetProperty("seed", out var seed) ? seed.GetInt32() : 1);
         }
 
         static List<string> ReadStrings(string json)
@@ -150,6 +177,8 @@ namespace TheCall
         {
             var buffer = new StringBuilder();
             buffer.Append("{\"produced\":").Append(report.Produced);
+            buffer.Append(",\"initialEnergy\":").Append(report.InitialEnergy);
+            buffer.Append(",\"accumulatedEnergy\":").Append(report.AccumulatedEnergy);
             buffer.Append(",\"due\":").Append(report.Due);
             buffer.Append(",\"excessAt\":").Append(report.ExcessAt);
             buffer.Append(",\"meetsDue\":").Append(report.MeetsDue ? "true" : "false");
@@ -185,7 +214,11 @@ namespace TheCall
                         buffer.Append(',');
 
                     buffer.Append("{\"label\":").Append(Quote(landing.Adds[i].Label));
-                    buffer.Append(",\"amount\":").Append(landing.Adds[i].Amount).Append('}');
+                    buffer.Append(",\"amount\":").Append(landing.Adds[i].Amount);
+                    buffer.Append(",\"sourceKind\":").Append(Quote(landing.Adds[i].SourceKind.ToString()));
+                    buffer.Append(",\"sourceMonsterId\":").Append(Quote(landing.Adds[i].SourceMonsterId));
+                    buffer.Append(",\"sourceSkillInstanceId\":").Append(Quote(landing.Adds[i].SourceSkillInstanceId));
+                    buffer.Append(",\"sourceToolId\":").Append(Quote(landing.Adds[i].SourceToolId)).Append('}');
                 }
 
                 buffer.Append("],\"factors\":[");
@@ -195,13 +228,25 @@ namespace TheCall
                         buffer.Append(',');
 
                     buffer.Append("{\"label\":").Append(Quote(landing.Factors[i].Label));
-                    buffer.Append(",\"factor\":").Append(landing.Factors[i].Factor).Append('}');
+                    buffer.Append(",\"factor\":").Append(landing.Factors[i].Factor);
+                    buffer.Append(",\"sourceKind\":").Append(Quote(landing.Factors[i].SourceKind.ToString()));
+                    buffer.Append(",\"sourceMonsterId\":").Append(Quote(landing.Factors[i].SourceMonsterId));
+                    buffer.Append(",\"sourceSkillInstanceId\":").Append(Quote(landing.Factors[i].SourceSkillInstanceId));
+                    buffer.Append(",\"sourceToolId\":").Append(Quote(landing.Factors[i].SourceToolId)).Append('}');
                 }
 
                 buffer.Append("],\"base\":").Append(landing.Base);
                 buffer.Append(",\"multiplier\":").Append(landing.Multiplier);
                 buffer.Append(",\"energy\":").Append(landing.Energy);
-                buffer.Append(",\"writeback\":").Append(landing.Writeback).Append('}');
+                buffer.Append(",\"writeback\":").Append(landing.Writeback);
+            buffer.Append(",\"eventId\":").Append(Quote(landing.EventId));
+            buffer.Append(",\"sequence\":").Append(landing.Sequence);
+            buffer.Append(",\"skillInstanceId\":").Append(Quote(landing.SkillInstanceId));
+            buffer.Append(",\"sourceKind\":").Append(Quote(landing.SourceKind.ToString()));
+            buffer.Append(",\"lockedTimes\":").Append(landing.LockedTimes);
+            buffer.Append(",\"probabilityPercent\":").Append(landing.ProbabilityPercent);
+            buffer.Append(",\"minimumEnergy\":").Append(landing.MinimumEnergy);
+            buffer.Append(",\"maximumEnergy\":").Append(landing.MaximumEnergy).Append('}');
                 landingIndex++;
             }));
             buffer.Append("],\"swaps\":[");
@@ -290,7 +335,11 @@ namespace TheCall
                     buffer.Append(',');
 
                 buffer.Append("{\"label\":").Append(Quote(landing.Adds[i].Label));
-                buffer.Append(",\"amount\":").Append(landing.Adds[i].Amount).Append('}');
+                buffer.Append(",\"amount\":").Append(landing.Adds[i].Amount);
+                    buffer.Append(",\"sourceKind\":").Append(Quote(landing.Adds[i].SourceKind.ToString()));
+                    buffer.Append(",\"sourceMonsterId\":").Append(Quote(landing.Adds[i].SourceMonsterId));
+                    buffer.Append(",\"sourceSkillInstanceId\":").Append(Quote(landing.Adds[i].SourceSkillInstanceId));
+                    buffer.Append(",\"sourceToolId\":").Append(Quote(landing.Adds[i].SourceToolId)).Append('}');
             }
 
             buffer.Append("],\"factors\":[");
@@ -300,13 +349,25 @@ namespace TheCall
                     buffer.Append(',');
 
                 buffer.Append("{\"label\":").Append(Quote(landing.Factors[i].Label));
-                buffer.Append(",\"factor\":").Append(landing.Factors[i].Factor).Append('}');
+                buffer.Append(",\"factor\":").Append(landing.Factors[i].Factor);
+                    buffer.Append(",\"sourceKind\":").Append(Quote(landing.Factors[i].SourceKind.ToString()));
+                    buffer.Append(",\"sourceMonsterId\":").Append(Quote(landing.Factors[i].SourceMonsterId));
+                    buffer.Append(",\"sourceSkillInstanceId\":").Append(Quote(landing.Factors[i].SourceSkillInstanceId));
+                    buffer.Append(",\"sourceToolId\":").Append(Quote(landing.Factors[i].SourceToolId)).Append('}');
             }
 
             buffer.Append("],\"base\":").Append(landing.Base);
             buffer.Append(",\"multiplier\":").Append(landing.Multiplier);
             buffer.Append(",\"energy\":").Append(landing.Energy);
-            buffer.Append(",\"writeback\":").Append(landing.Writeback).Append('}');
+            buffer.Append(",\"writeback\":").Append(landing.Writeback);
+            buffer.Append(",\"eventId\":").Append(Quote(landing.EventId));
+            buffer.Append(",\"sequence\":").Append(landing.Sequence);
+            buffer.Append(",\"skillInstanceId\":").Append(Quote(landing.SkillInstanceId));
+            buffer.Append(",\"sourceKind\":").Append(Quote(landing.SourceKind.ToString()));
+            buffer.Append(",\"lockedTimes\":").Append(landing.LockedTimes);
+            buffer.Append(",\"probabilityPercent\":").Append(landing.ProbabilityPercent);
+            buffer.Append(",\"minimumEnergy\":").Append(landing.MinimumEnergy);
+            buffer.Append(",\"maximumEnergy\":").Append(landing.MaximumEnergy).Append('}');
         }
 
         static void AppendSwapStep(StringBuilder buffer, SettlementSwap swap)

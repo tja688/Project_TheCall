@@ -1,13 +1,12 @@
 // 加基础怪物：在 Assets/StreamingAssets/call-book.json 增加一条技能。
 // 改句子：Assets/Scripts/Core/Rules/SkillSentences.cs。要跟着加成变的数写成 Energy 片段。
-// 改加成怎样改数字：wwwroot/board.js。改图案：wwwroot/glyphs.js。属性用词在下面三个表。
+// 数值和取得许可由同源 C# 规则计算。JS 只编辑输入和呈现结果。
 
 import { dotnet } from "./_framework/dotnet.js";
-import { auraFrom, energyAdjust, spanParts } from "./board.js";
+import { spanParts } from "./board.js";
 import { monsterSvg } from "./glyphs.js";
 
 const SKILL_SLOTS = 3;
-const SKILL_CAP = 4;
 const SLOP = 8;
 
 const USE = { Active: "主动", Passive: "被动" };
@@ -28,6 +27,7 @@ const monsters = new Map();
 let nextId = 1;
 let bench = [];
 const skillSlots = [null, null, null];
+const chipStates = [null, null, null];
 const toolsOn = new Set();
 let armed = null;
 let press = null;
@@ -53,7 +53,7 @@ if (catalog.error) {
 }
 
 for (const skill of catalog.skills)
-  skill.aura = auraFrom(skill.effects);
+
 
 byName = new Map(catalog.skills.map((skill) => [skill.name, skill]));
 status.textContent = "单击拿起再放下，或直接拖。格子上的怪物按出现顺序编号。怪物回库即撤下，技能上卡即装上，技能回库即卸下。";
@@ -138,7 +138,9 @@ function pressable(node, label) {
 
 function renderBench() {
   const cells = document.querySelector("#cells");
-  const adjusts = energyAdjust(bench, skillsOf, auraOf);
+  const preview = JSON.parse(api.Preview(JSON.stringify(boardInput())));
+  const details = Array.isArray(preview) ? preview : [];
+  if (preview.error) showReport(preview.error, false);
   cells.replaceChildren();
   bench.forEach((id, index) => {
     const slot = el("div", "slot");
@@ -147,7 +149,7 @@ function renderBench() {
     pressable(slot, "格子 " + (index + 1));
     slot.append(el("span", "slot-index", String(index + 1)));
     if (id)
-      slot.append(buildCard(monsters.get(id), adjusts[index], "monster"));
+      slot.append(buildCard(monsters.get(id), details[index], "monster"));
     else
       slot.append(el("span", "empty-mark", "?"));
 
@@ -237,13 +239,66 @@ function buildCard(monster, adjust, payload) {
     }
 
     const words = el("span", "words");
-    for (const part of spanParts(skill.spans, adjust))
+    for (const part of (adjust?.Skills?.[index]?.Spans?.map(span => ({ text: span.Text, live: span.Shifted })) || spanParts(skill.spans, null)))
       words.append(el("span", part.live ? "live" : "", part.text));
 
     line.append(words);
+    if (named) {
+      monster.growth ||= [];
+      monster.temporary ||= [];
+      const controls = el("span", "instance-controls");
+      const growth = document.createElement("input"); growth.type = "number"; growth.value = monster.growth[index] || 0;
+      growth.setAttribute("aria-label", monsterTitle(monster) + "技能" + (index + 1) + "成长");
+      growth.addEventListener("change", () => { monster.growth[index] = Number(growth.value); renderBoard(); });
+      const temporary = document.createElement("input"); temporary.type = "checkbox"; temporary.checked = monster.temporary[index] || false;
+      temporary.setAttribute("aria-label", monsterTitle(monster) + "技能" + (index + 1) + "当天临时");
+      temporary.addEventListener("change", () => { monster.temporary[index] = temporary.checked; renderBoard(); });
+      controls.append(el("small", "", "实例 " + (index + 1) + " · 成长"), growth, el("small", "", "当天临时"), temporary);
+      line.append(controls);
+    }
     lines.append(line);
   });
-  card.append(head, lines);
+  card.append(head);
+  if (named) {
+    const attributes = el("div", "attributes");
+    for (const [key, title, entries, fallback] of [
+      ["personality", "性格", catalog.personalities, "稳定"],
+      ["race", "种族", catalog.races, "森林"],
+      ["mood", "心情", catalog.moods, "普通"],
+    ]) {
+      const label = el("label", "", title);
+      const select = document.createElement("select");
+      select.setAttribute("aria-label", monsterTitle(monster) + title);
+      for (const entry of entries) {
+        const option = new Option(entry.Name, entry.Name);
+        option.title = entry.Description || entry.Element || "";
+        select.append(option);
+      }
+      select.value = monster[key] || fallback;
+      select.addEventListener("change", () => {
+        const old = monster[key];
+        monster[key] = select.value;
+        const checked = JSON.parse(api.Preview(JSON.stringify(boardInput())));
+        if (checked.error) { monster[key] = old; showReport(checked.error, false); }
+        renderBoard();
+      });
+      label.append(select);
+      attributes.append(label);
+    }
+    const personality = catalog.personalities.find(item => item.Name === (monster.personality || "稳定"));
+    attributes.append(el("small", "attribute-note", personality?.Description || ""));
+    const advanced = el("details", "advanced"); advanced.append(el("summary", "", "工作历史与亲缘"));
+    for (const [key, title] of [["modifier", "当天修正"], ["workDays", "连续工作"], ["restDays", "连续休息"]]) {
+      const label = el("label", "", title); const input = document.createElement("input"); input.type = "number";
+      input.value = monster[key] || 0; input.setAttribute("aria-label", monsterTitle(monster) + title);
+      input.addEventListener("change", () => { monster[key] = Number(input.value); renderBoard(); }); label.append(input); advanced.append(label);
+    }
+    const parentLabel = el("label", "", "亲本所在格（从1起，逗号分隔）"); const parentInput = document.createElement("input");
+    parentInput.value = (monster.parentCells || []).map(i => i + 1).join(","); parentInput.setAttribute("aria-label", monsterTitle(monster) + "亲本格");
+    parentInput.addEventListener("change", () => { monster.parentCells = parentInput.value.trim() ? parentInput.value.split(",").map(i => Number(i.trim()) - 1) : []; renderBoard(); });
+    parentLabel.append(parentInput); advanced.append(parentLabel); attributes.append(advanced); card.append(attributes);
+  }
+  card.append(lines);
   return card;
 }
 
@@ -277,9 +332,6 @@ function skillsOf(id) {
   return monsters.get(id).skills;
 }
 
-function auraOf(name) {
-  return byName.get(name).aura;
-}
 
 function onDown(event) {
   if (event.button !== 0 || event.target.closest("button, select, input, label"))
@@ -422,7 +474,7 @@ function createMonster(skill) {
   const number = nextId;
   nextId += 1;
   const id = String(number);
-  monsters.set(id, { id, number, skills: [skill] });
+  monsters.set(id, { id, number, skills: [skill], personality: "稳定", race: "森林", mood: "普通" });
   return id;
 }
 
@@ -432,10 +484,15 @@ function monsterTitle(monster) {
 
 function equipOnto(id, skill) {
   const monster = monsters.get(id);
-  if (!monster || monster.skills.length >= SKILL_CAP || monster.skills.includes(skill))
-    return false;
-
+  if (!monster) return false;
   monster.skills.push(skill);
+  (monster.growth ||= []).push(0); (monster.temporary ||= []).push(false);
+  const checked = JSON.parse(api.Preview(JSON.stringify(boardInput())));
+  if (checked.error) {
+    monster.skills.pop(); monster.growth.pop(); monster.temporary.pop();
+    showReport(checked.error, false);
+    return false;
+  }
   return true;
 }
 
@@ -444,7 +501,9 @@ function equipChip(index, monsterId) {
   if (!skill || !equipOnto(monsterId, skill))
     return monsterFlash(monsterId);
 
-  skillSlots[index] = null;
+  const monster = monsters.get(monsterId); const last = monster.skills.length - 1;
+  monster.growth[last] = chipStates[index]?.growth || 0; monster.temporary[last] = chipStates[index]?.temporary || false;
+  skillSlots[index] = null; chipStates[index] = null;
   return null;
 }
 
@@ -462,9 +521,9 @@ function moveChip(from, to) {
   if (from === to)
     return null;
 
-  const occupant = skillSlots[to];
-  skillSlots[to] = skillSlots[from];
-  skillSlots[from] = occupant;
+  const occupant = skillSlots[to]; const state = chipStates[to];
+  skillSlots[to] = skillSlots[from]; chipStates[to] = chipStates[from];
+  skillSlots[from] = occupant; chipStates[from] = state;
   return null;
 }
 
@@ -482,8 +541,11 @@ function moveWorn(payload, targetId) {
     return monsterFlash(payload.id);
   if (!equipOnto(targetId, skill))
     return monsterFlash(targetId);
+  const target = monsters.get(targetId); const last = target.skills.length - 1;
+  target.growth[last] = source.growth?.[payload.index] || 0; target.temporary[last] = source.temporary?.[payload.index] || false;
 
   source.skills.splice(payload.index, 1);
+  source.growth?.splice(payload.index, 1); source.temporary?.splice(payload.index, 1);
   return null;
 }
 
@@ -494,7 +556,9 @@ function parkWorn(payload, slotIndex) {
   if (slotIndex < 0 || skillSlots[slotIndex])
     return "#skill-slots";
 
+  chipStates[slotIndex] = {growth:source.growth?.[payload.index] || 0,temporary:source.temporary?.[payload.index] || false};
   skillSlots[slotIndex] = source.skills.splice(payload.index, 1)[0];
+  source.growth?.splice(payload.index, 1); source.temporary?.splice(payload.index, 1);
   return null;
 }
 
@@ -504,6 +568,7 @@ function dropWorn(payload) {
     return monsterFlash(payload.id);
 
   source.skills.splice(payload.index, 1);
+  source.growth?.splice(payload.index, 1); source.temporary?.splice(payload.index, 1);
   return null;
 }
 
@@ -664,13 +729,27 @@ function monsterFlash(id) {
   return "[data-payload='monster'][data-id='" + id + "']";
 }
 
-function settle() {
-  const row = bench.map((id) => id ? { skills: monsters.get(id).skills } : null);
-  const result = JSON.parse(api.Score(JSON.stringify({
+function boardInput() {
+  return {
     level: Number(levelSelect.value),
+    seed: Number(document.querySelector("#seed").value),
+    initialEnergy: Number(document.querySelector("#initial-energy").value),
     tools: [...toolsOn],
-    row,
-  })));
+    row: bench.map(id => id ? {
+      skills: monsters.get(id).skills.map((name, index) => ({ name, growth: monsters.get(id).growth?.[index] || 0, temporary: monsters.get(id).temporary?.[index] || false })),
+      modifier: monsters.get(id).modifier || 0,
+      workDays: monsters.get(id).workDays || 0,
+      restDays: monsters.get(id).restDays || 0,
+      parentCells: monsters.get(id).parentCells || [],
+      personality: monsters.get(id).personality,
+      race: monsters.get(id).race,
+      mood: monsters.get(id).mood,
+    } : null),
+  };
+}
+
+function settle() {
+  const result = JSON.parse(api.Score(JSON.stringify(boardInput())));
   if (result.error) {
     showReport(result.error, false);
     renderLedger(null, result.error);
@@ -682,7 +761,7 @@ function settle() {
 }
 
 function summaryText(result) {
-  return "产出 " + result.produced + " · 应交 " + result.due + " · " + (result.meetsDue ? "达到应交" : "未达应交");
+  return "带入 " + result.initialEnergy + " · 本轮 " + result.produced + " · 累计 " + result.accumulatedEnergy + " · 应交 " + result.due + " · " + (result.meetsDue ? "达到应交" : "未达应交");
 }
 
 function renderLedger(result, error) {
@@ -706,7 +785,7 @@ function renderLedger(result, error) {
   }
 
   const labels = engineLabels(result.placed);
-  let running = 0;
+  let running = result.initialEnergy || 0;
   steps.forEach((step, index) => {
     const order = index + 1;
     if (step.kind === "landing") {
@@ -877,7 +956,8 @@ function describeAdd(add) {
   if (add.label === "下家")
     return "上一只怪物留下的加项 " + amount;
 
-  return "其他怪物的技能「" + add.label + "」" + amount;
+  const kind = { Skill: "技能", Personality: "性格", Mood: "心情", Tool: "工具", Growth: "成长修正" }[add.sourceKind] || "来源";
+  return kind + "「" + add.label + "」" + amount;
 }
 
 function baseText(step) {
@@ -987,3 +1067,5 @@ function el(tag, className, text) {
 
   return node;
 }
+
+for (const input of document.querySelectorAll("#seed, #initial-energy")) input.addEventListener("change", renderBoard);

@@ -80,7 +80,7 @@ namespace TheCall
                 var races = this.GetUtility<IRaceCatalog>();
                 var p = personalities.Draw(draw);
                 var r = races.Draw(draw);
-                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw), personality: p, race: r, mood: "普通").Id);
+                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw, run.HasTool("复读腺")), personality: p, race: r, sourceKind: SkillSourceKind.Purchase).Id);
             }
             else if (tool.Name == "验货单")
             {
@@ -127,7 +127,7 @@ namespace TheCall
             {
                 var p = personalities.Draw(draw);
                 var r = races.Draw(draw);
-                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw), personality: p, race: r, mood: "普通").Id);
+                run.AddShelfMonster(run.CreateMonster(StockDraw.ShopOffer(catalog, draw, run.HasTool("复读腺")), personality: p, race: r, sourceKind: SkillSourceKind.Purchase).Id);
             }
         }
 

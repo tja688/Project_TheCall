@@ -5,14 +5,19 @@ namespace TheCall
 {
     public sealed class SkillView
     {
-        public SkillView(string name, int quote, Rarity rarity, bool isTemporary = false)
+        public SkillView(string name, int quote, Rarity rarity, bool isTemporary = false, string instanceId = "", string sourceKind = "", string sourceId = "", string sourceMonsterId = "")
         {
             Name = name;
             Quote = quote;
             Rarity = rarity;
             IsTemporary = isTemporary;
+            InstanceId = instanceId; SourceKind = sourceKind; SourceId = sourceId; SourceMonsterId = sourceMonsterId;
         }
 
+        public string InstanceId { get; }
+        public string SourceKind { get; }
+        public string SourceId { get; }
+        public string SourceMonsterId { get; }
         public string Name { get; }
 
         public int Quote { get; }
@@ -31,7 +36,7 @@ namespace TheCall
                 monster.Id,
                 monster.DisplayName,
                 monster.Skills
-                    .Select(skill => new SkillView(skill.Name, skill.Quote, catalog.RarityOf(skill.Name), skill.IsTemporary))
+                    .Select(skill => new SkillView(skill.Name, skill.Quote, catalog.RarityOf(skill.Name), skill.IsTemporary, skill.Id, skill.SourceKind.ToString(), skill.SourceId, skill.SourceMonsterId))
                     .ToArray(),
                 monster.Modifier,
                 monster.Immovable,

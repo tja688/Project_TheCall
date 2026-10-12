@@ -1,0 +1,12 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "migration-idempotency",
+            "passed": true,
+            "actual": "stableRootReference=TheCallPresentation;objects=2235;portrait authoring sentinel retained",
+            "frame": 6
+        }
+    ]
+}

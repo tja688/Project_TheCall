@@ -90,7 +90,7 @@ namespace TheCall.Tests
             App.SendQuery(new ShelfQuery());
 
             var counts = draw.Lists.Where(list => list.Length > 0 && list.All(item => item == "单" || item == "双" || item == "幅")).ToArray();
-            var rarities = draw.Lists.Where(list => list.All(item => item == "白" || item == "蓝" || item == "金")).ToArray();
+            var rarities = draw.Lists.Where(list => list.All(item => item == "白" || item == "蓝" || item == "金")).Reverse().Take(4).Reverse().ToArray();
 
             Assert.That(counts.Length, Is.EqualTo(4));
             Assert.That(counts[0], Is.EqualTo(new[] { "单", "单", "单", "单", "单", "单", "双", "幅", "幅", "幅" }));
@@ -355,6 +355,16 @@ namespace TheCall.Tests
                 throw new InvalidOperationException("没有更多预设抽取。");
 
             var name = _names.Peek();
+            if (ContentGate.Current != null && options.Count > 0 && options[0] is string rarityWord &&
+                (rarityWord == "白" || rarityWord == "蓝" || rarityWord == "金"))
+            {
+                var skillDef = ContentGate.Current.FindSkill(name);
+                if (skillDef != null)
+                {
+                    var word = skillDef.Rarity == Rarity.Gold ? "金" : skillDef.Rarity == Rarity.Blue ? "蓝" : "白";
+                    for (var i = 0; i < options.Count; i++) if (options[i] is string text && text == word) return options[i];
+                }
+            }
             for (var i = 0; i < options.Count; i++)
             {
                 var option = options[i];

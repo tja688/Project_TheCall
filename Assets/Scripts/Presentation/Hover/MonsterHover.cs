@@ -89,18 +89,29 @@ namespace TheCall
         {
             transform.SetAsLastSibling();
             _window.gameObject.SetActive(true);
-            _window.anchoredPosition = placement.WindowAnchoredPosition;
+            var position = placement.WindowAnchoredPosition;
+            var top = placement.Sub0.y + _subpanelSize.y * .5f + 140f;
+            var bottom = -((details.Skills.Count * _subpanelSize.y + (details.Skills.Count - 1) * _subpanelGap) * .5f);
+            position.y = Mathf.Clamp(position.y, Canvas.rect.yMin - bottom, Canvas.rect.yMax - top);
+            _window.anchoredPosition = position;
 
             var header = _window.Find("Header");
             if (header != null)
             {
+                var headerRect = header as RectTransform;
+                if (headerRect != null)
+                {
+                    headerRect.anchorMin = headerRect.anchorMax = new Vector2(.5f, .5f);
+                    headerRect.pivot = new Vector2(.5f, 1f);
+                    headerRect.anchoredPosition = new Vector2(0, top);
+                }
                 var headerText = header.GetComponentInChildren<TMP_Text>();
                 if (headerText != null)
                 {
                     var delta = details.MoodEnergyDelta != 0 ? (details.MoodEnergyDelta > 0 ? "(+" + details.MoodEnergyDelta + ")" : "(" + details.MoodEnergyDelta + ")") : "";
                     var trim = details.Personality == "安于现状" ? " · <color=#FF8C1A>[安于现状:技能上限2]</color>" : "";
                     var mod = details.Modifier != 0 ? " · 修正:" + (details.Modifier > 0 ? "+" : "") + details.Modifier : "";
-                    headerText.text = $"{details.DisplayName} · 种族:{details.Race} · 性格:{details.Personality} · 心情:{details.Mood}{delta} · 工作:{details.ConsecutiveWorkDays}天{trim}{mod}";
+                    headerText.text = $"<b>{details.DisplayName}</b>  {details.Race}\n{details.Personality}：{details.PersonalityDescription}\n心情 {details.Mood}{delta} · 连续工作 {details.ConsecutiveWorkDays}天 / 休息 {details.ConsecutiveRestDays}天{trim}{mod}";
                 }
             }
 
@@ -114,11 +125,11 @@ namespace TheCall
                 _subpanels[i].anchoredPosition = SubpanelLocal(placement, i);
                 var skill = details.Skills[i];
                 _subNames[i].text = skill.Name;
-                _subUses[i].text = UseText(skill.Kind) + (skill.IsTemporary ? " · 临时" : " · 常驻");
+                _subUses[i].text = UseText(skill.Kind) + (skill.IsTemporary ? " · 当天临时" : " · 常驻");
                 _subRarities[i].text = RarityText(skill.Rarity);
                 _subRarities[i].color = RarityInk(skill.Rarity);
                 _subFunctions[i].text = skill.Function;
-                _subSentences[i].text = skill.DisplaySentence;
+                _subSentences[i].text = skill.DisplaySentence + (string.IsNullOrEmpty(skill.SourceKind) ? "" : "\n<color=#9AB0BA>来源：" + SourceDescription(skill) + "</color>");
             }
 
             var graphics = _window.GetComponentsInChildren<Graphic>(true);
@@ -141,6 +152,18 @@ namespace TheCall
                 default: return placement.Sub3;
             }
         }
+
+        string SourceDescription(MonsterSkillDetail skill)
+        {
+            var origin = string.IsNullOrEmpty(skill.SourceMonsterId) ? null : this.SendQuery(new MonsterQuery(skill.SourceMonsterId));
+            return SourceLabel(skill.SourceKind) + (origin == null ? "" : " · " + origin.DisplayName);
+        }
+
+        static string SourceLabel(string kind) => kind switch
+        {
+            "Opening" => "开局选择", "Purchase" => "商店购买", "Parent" => "亲本遗传", "Gene" => "基因材料",
+            "Mutation" => "变异", "Personality" => "性格改造", "SkillEffect" => "技能效果", "Fixture" => "验证夹具", _ => kind
+        };
 
         static string UseText(SkillUse kind)
         {

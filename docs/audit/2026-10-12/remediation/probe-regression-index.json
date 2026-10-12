@@ -1,0 +1,620 @@
+{
+  "baseline_source": "../evidence/rule-probe-baseline.jsonl",
+  "entries": [
+    {
+      "name": "baseline",
+      "baseline_classification": "正确基线",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 5
+        }
+      ],
+      "expected": "5",
+      "formal_regression": "SkillProductionHasIndependentBasicFixture(能量体,5)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "new-active-exec",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "landings": [
+          {
+            "SkillName": "能量体",
+            "Energy": 5
+          },
+          {
+            "SkillName": "左能量体",
+            "Energy": 0
+          },
+          {
+            "SkillName": "右能量体",
+            "Energy": 2
+          }
+        ],
+        "skills": [
+          {
+            "Name": "无穷肌肉",
+            "IsTemporary": false
+          },
+          {
+            "Name": "能量体",
+            "IsTemporary": false
+          },
+          {
+            "Name": "左能量体",
+            "IsTemporary": false
+          },
+          {
+            "Name": "右能量体",
+            "IsTemporary": false
+          }
+        ]
+      },
+      "expected": "当前肌肉取得新主动后本次不执行，下一轮有效",
+      "formal_regression": "A11_NewActiveIsDeferredButNewAuraIsImmediate",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "muscle-after-clear",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        "无穷肌肉",
+        "能量体",
+        "左能量体",
+        "右能量体"
+      ],
+      "expected": "新得技能实际临时，日清后只留原常驻",
+      "formal_regression": "F01_取得实例身份来源成长及临时清理独立; SkillSupportAndReactionHasIndependentBasicFixture(无穷肌肉)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "corpse-echo",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "自爆体",
+          "Energy": 10
+        },
+        {
+          "SkillName": "收尸腺",
+          "Energy": 3
+        }
+      ],
+      "expected": "自爆10，收尸3、3",
+      "formal_regression": "F05_EchoRepeatsCorpseResponseForOneDeath",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "honey-gap",
+      "baseline_classification": "正确基线",
+      "baseline": [
+        {
+          "SkillName": "蜜能量体",
+          "Energy": 3
+        },
+        {
+          "SkillName": "能量体",
+          "Energy": 8
+        }
+      ],
+      "expected": "3、8",
+      "formal_regression": "蜜能量体落地三点且只给空档后的下一只后续产能量计分加三",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "mind-negative",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 3
+        }
+      ],
+      "expected": "自私-3经仪-2，目标4",
+      "formal_regression": "F14_MindControlCorrectsNegativePersonalityAmount",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "kin-positive",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "MonsterId": "m4",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m4",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "能量体",
+          "Energy": 5
+        }
+      ],
+      "expected": "父子各10，陌生5",
+      "formal_regression": "F10_KinAffectsBothEndpointsAndExcludesStranger(重视血脉,10)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "kin-negative",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "MonsterId": "m4",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "能量体",
+          "Energy": 2
+        }
+      ],
+      "expected": "父子各2，陌生5",
+      "formal_regression": "F10_KinAffectsBothEndpointsAndExcludesStranger(仇恨血脉,2)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "single-tool",
+      "baseline_classification": "正确基线",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 10
+        },
+        {
+          "SkillName": "能量体",
+          "Energy": 10
+        }
+      ],
+      "expected": "10、10",
+      "formal_regression": "SingleSkillDeviceAddsOneTriggerAndDoublesEachOutput",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "breeding-duplicate",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        "能量体"
+      ],
+      "expected": "复读两个亲本同名保留独立候选",
+      "formal_regression": "F07_同名亲本与基因裁切按候选身份决定消费",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "initial-fixed-mood",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "Personality": "乐天派",
+        "Mood": "普通"
+      },
+      "expected": "初生即热情",
+      "formal_regression": "F09_初生固定性格即时覆盖普通心情(乐天派,热情)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "preview-isolated",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "preview": "产生5点能量",
+        "actual": [
+          {
+            "SkillName": "能量体",
+            "Energy": 10
+          }
+        ]
+      },
+      "expected": "预览与执行10",
+      "formal_regression": "F17_PreviewAndExecutionSharePersonalityAndMoodFormula(孤僻,普通,10)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "per-skill-lock",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "SkillName": "自爆体",
+          "Energy": 10
+        }
+      ],
+      "expected": "5、5、10共20",
+      "formal_regression": "F02_ContentedLocksEachSkillBeforeSelfDestruct",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "expanded-discard-drag",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "capacity": 4,
+        "accepted": false,
+        "slots": 3,
+        "alive": true
+      },
+      "expected": "容量4第四次拖放成功；满含预约时拒绝不改变",
+      "formal_regression": "F08_仓储科技第四格可废弃满仓含预约原子拒绝",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "expanded-discard-direct",
+      "baseline_classification": "正确基线",
+      "baseline": {
+        "slots": 4,
+        "alive": false
+      },
+      "expected": "直接废弃有空间成功",
+      "formal_regression": "F08_仓储科技第四格可废弃满仓含预约原子拒绝",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "install-drag",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "accepted": false,
+        "skills": 1,
+        "genes": 1
+      },
+      "expected": "迷恋死亡合法拖放成功，普通拒绝",
+      "formal_regression": "F08_正式拖放安装遵循重复许可并只成功消费",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "install-command",
+      "baseline_classification": "正确基线",
+      "baseline": {
+        "accepted": true,
+        "skills": [
+          {
+            "Name": "能量体",
+            "IsTemporary": false
+          },
+          {
+            "Name": "左能量体",
+            "IsTemporary": false
+          }
+        ],
+        "genes": 0
+      },
+      "expected": "已合法的Command保持",
+      "formal_regression": "A17_基因安装只有迷恋死亡合法成功才消耗普通性格拒绝失败状态与材料不变",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "gene-provenance-trim",
+      "baseline_classification": "正确基线",
+      "baseline": {
+        "child": [
+          "左能量体",
+          "能量体"
+        ],
+        "geneCount": 1
+      },
+      "expected": "原基线仅打印名字/数量不能分辨同名来源；新回归强制分别保留亲本与基因，并按实例决定退还/消费",
+      "formal_regression": "F07_同名亲本与基因裁切按候选身份决定消费",
+      "note": "数字基线无矛盾，原probe来源信息不足；回归已增强，不将原打印输出当来源正确性证据。"
+    },
+    {
+      "name": "opening-fixed-mood",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "Personality": "乐天派",
+        "Mood": "普通"
+      },
+      "expected": "固定性格立即热情",
+      "formal_regression": "F09_初生固定性格即时覆盖普通心情; Content_好学经真实开工获得常驻技能并即时复制固定性格心情",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "preview-impatient",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "preview": "产生5点能量",
+        "actual": [
+          {
+            "SkillName": "能量体",
+            "Energy": 8
+          }
+        ]
+      },
+      "expected": "预览与执行8",
+      "formal_regression": "F17_PreviewAndExecutionSharePersonalityAndMoodFormula(急躁,普通,8)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "preview-mood",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "preview": "产生5点能量",
+        "actual": [
+          {
+            "SkillName": "能量体",
+            "Energy": 7
+          }
+        ]
+      },
+      "expected": "预览与执行7",
+      "formal_regression": "F17_PreviewAndExecutionSharePersonalityAndMoodFormula(稳定,热爱,7)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "sacrifice-per-target",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "收尸腺",
+          "Energy": 7
+        },
+        {
+          "SkillName": "血祭体",
+          "Energy": 20
+        }
+      ],
+      "expected": "收尸7，血祭12、12共31",
+      "formal_regression": "A15_左祭品中央血祭右收尸按序死亡且遗赠即时生效且光环撤销",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "devour-no-target-buff",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "啃食体",
+          "Energy": 3
+        }
+      ],
+      "expected": "无目标即0，急躁不能凭空加3",
+      "formal_regression": "F15_NoTargetDoesNotProducePersonalityEnergy",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "honey-round1",
+      "baseline_classification": "正确基线",
+      "baseline": [
+        {
+          "SkillName": "蜜能量体",
+          "Energy": 3
+        },
+        {
+          "SkillName": "能量体",
+          "Energy": 8
+        }
+      ],
+      "expected": "首轮3、8",
+      "formal_regression": "蜜能量体的加三不写进技能报价且加班当天保留",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "honey-round2",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 5
+        }
+      ],
+      "expected": "收回蜜后加班仍8",
+      "formal_regression": "蜜能量体的加三不写进技能报价且加班当天保留",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "echo-active-order",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "MonsterId": "m5",
+          "SkillName": "蜜能量体",
+          "Energy": 3
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "蜜能量体",
+          "Energy": 3
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m6",
+          "SkillName": "能量体",
+          "Energy": 11
+        }
+      ],
+      "expected": "蜜、蜜、能量、能量",
+      "formal_regression": "F02_EchoExecutesEachActiveInstanceCompletely",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "duplicate-mirror",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 10
+        }
+      ],
+      "expected": "两源实例×2×2=20",
+      "formal_regression": "F06_DuplicateMirrorInstancesMultiplyIndependently",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "duplicate-extra",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "MonsterId": "m4",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "增生能量体",
+          "Energy": 1
+        }
+      ],
+      "expected": "每增生实例两次，总四次",
+      "formal_regression": "F06_DuplicateProliferationReceivesOneGrantPerInstance",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "opening-aura-target",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "MonsterId": "m4",
+          "SkillName": "能量体",
+          "Energy": 5
+        },
+        {
+          "MonsterId": "m4",
+          "SkillName": "能量体",
+          "Energy": 10
+        },
+        {
+          "MonsterId": "m5",
+          "SkillName": "能量体",
+          "Energy": 5
+        }
+      ],
+      "expected": "镜眼保留开场目标，不追改换位后邻居",
+      "formal_regression": "F03_MirrorRetainsOpeningTargetAfterSwap",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "opening-skillcount",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "能量体",
+          "Energy": 5
+        }
+      ],
+      "expected": "第四技能取得后开场三技能资格保持，原能量两次",
+      "formal_regression": "F03_QualityEligibilityUsesOpeningInstanceCountAfterCopy",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "death-listener-position",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "收尸腺",
+          "Energy": 7
+        },
+        {
+          "SkillName": "抽杀体",
+          "Energy": 14
+        }
+      ],
+      "expected": "左收尸先3，右遗赠后抽杀14",
+      "formal_regression": "F04_DeathDispatchCombinesLeftListenerAndRightLegacyByPosition",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "log-no-excess",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "tech": 0,
+        "text": "—— 第 1 关 · 结算 ——\n本关获得 50 点能量，目标 50 点。获得 1 科技点。工资 60 金币。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +45 点。合计底数 50 点。因此这次计入本关总能量 50 点。\n+50\n<b>合计  50</b>"
+      },
+      "expected": "50科技0，日志0",
+      "formal_regression": "F17_NoExcessProducesZeroTechLogAndStableEventIds",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "log-cumulative",
+      "baseline_classification": "错误反例",
+      "baseline": {
+        "text": "—— 第 1 关 · 结算 ——\n本关获得 35 点能量，目标 50 点。进入加班。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +20 点。合计底数 25 点。因此这次计入本关总能量 25 点。\n+25\n<b>合计  25</b>\n（说明：过程里加总的 25 点与系统记录的产出 35 点不一致，请以产出为准。）\n\n—— 第 1 关 · 加班 ——\n加班获得 60 点能量，目标 50 点。超额。获得 1 科技点。本段工资 40 金币。蓄热熔炉保留 2 点能量到下一关。\n\n下面按结算时的实际触发顺序写过程。每一条末尾的数字是计入本关总能量的点数。\n\n左起第 1 格上的 SCP-999 的「能量体」触发。这条技能的基础报价是 5 点。「怪物修正」加成 +20 点。合计底数 25 点。因此这次计入本关总能量 25 点。\n+25\n<b>合计  25</b>\n（说明：过程里加总的 25 点与系统记录的产出 60 点不一致，请以产出为准。）"
+      },
+      "expected": "每轮25，带入10/35，累计35/60，支付50，工资40，带2",
+      "formal_regression": "F17_OvertimeLedgerSeparatesInitialNetAndCumulative",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "monster-scope-global-tool",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "SkillName": "电化能机",
+          "Energy": 11
+        }
+      ],
+      "expected": "香不加无归属电化，仍10",
+      "formal_regression": "F11_MonsterTargetAuraDoesNotAddToUnownedTool",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "legacy-first-event-global-tool",
+      "baseline_classification": "正确基线",
+      "baseline": [
+        {
+          "SkillName": "电化能机",
+          "Energy": 10
+        },
+        {
+          "SkillName": "血祭体",
+          "Energy": 12
+        }
+      ],
+      "expected": "电化先10；血祭灭祭品后12；原基线此输入已正确，不能据它证明后续无归属工具范围",
+      "formal_regression": "MachineProducesUnownedEnergyInItsOwnEntry; SkillSupportAndReactionHasIndependentBasicFixture(祭品腺)",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    },
+    {
+      "name": "copy-with-duplicate-tool",
+      "baseline_classification": "错误反例",
+      "baseline": [
+        {
+          "Name": "不稳定肉体",
+          "IsTemporary": false
+        },
+        {
+          "Name": "能量体",
+          "IsTemporary": false
+        }
+      ],
+      "expected": "实际复制路径已使用复读许可与临时取得；不同反例分别覆盖独立实例、取得上限和来源",
+      "formal_regression": "F06_DuplicateProliferationReceivesOneGrantPerInstance; F01_取得实例身份来源成长及临时清理独立; F07_同名亲本与基因裁切按候选身份决定消费",
+      "note": "此文件不把打印probe或exit0计为测试通过；真正断言见正式NUnit/TRX。"
+    }
+  ]
+}

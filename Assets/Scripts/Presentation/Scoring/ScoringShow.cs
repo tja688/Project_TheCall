@@ -20,7 +20,7 @@ namespace TheCall.Scoring
             TMP_Text currentNumber,
             Action<string> say,
             Action completed,
-            int initialEnergy = 0)
+            int initialEnergy = 0, int initialGold = 0)
         {
             Architecture = architecture;
             ExtractionSlots = extractionSlots;
@@ -31,6 +31,7 @@ namespace TheCall.Scoring
             Say = say;
             Completed = completed;
             InitialEnergy = initialEnergy;
+            InitialGold = initialGold;
         }
 
         public IArchitecture Architecture { get; }
@@ -42,6 +43,7 @@ namespace TheCall.Scoring
         public Action<string> Say { get; }
         public Action Completed { get; }
         public int InitialEnergy { get; }
+        public int InitialGold { get; }
     }
 
     public sealed class ScoringShow : MonoBehaviour, ICueSink
@@ -91,6 +93,7 @@ namespace TheCall.Scoring
         Vector2 _restBoardPosition;
         bool _boardHeld;
         int _shown;
+        int _shownGold;
         float _pace = 1f;
         bool _boosted;
         bool _cutToPay;
@@ -128,6 +131,7 @@ namespace TheCall.Scoring
         void Begin(ScoringStage stage)
         {
             _stage = stage;
+            _shownGold = stage.InitialGold;
             StartCoroutine(Run());
         }
 
@@ -137,7 +141,7 @@ namespace TheCall.Scoring
             {
                 var ids = ReadIds(_stage.ExtractionSlots);
                 var entries = _stage.Architecture.SendQuery(new SettlementRecordQuery());
-                _tape = ScoringTape.Arrange(entries, ids);
+                _tape = ScoringTape.Arrange(entries, ids, _stage.InitialEnergy);
                 Capture(ids);
                 _stage.Architecture.SendCommand(new ShowSettlementSightCommand());
                 _restBoardPosition = _stage.BoardRoot.anchoredPosition;
@@ -347,7 +351,7 @@ namespace TheCall.Scoring
 
         IEnumerator PlayBeat(int subject, ScoreBeat beat)
         {
-            var actor = ActorOf(subject, beat.SourceName);
+            var actor = string.IsNullOrEmpty(beat.SourceToolId) ? ActorOf(subject, beat.SourceMonsterId) : -1;
             if (actor == subject)
             {
                 yield return Bloom(subject, beat);
@@ -363,6 +367,15 @@ namespace TheCall.Scoring
             var origin = actor >= 0
                 ? OriginOf(actor) + new Vector2(0f, FigureLift)
                 : OriginOf(subject) + new Vector2(0f, FigureLift + 110f);
+            if (!string.IsNullOrEmpty(beat.SourceToolId))
+            {
+                foreach (var tool in _stage.BoardRoot.GetComponentsInChildren<ToolArtView>())
+                    if (tool.toolName == beat.SourceToolId)
+                    {
+                        origin = (Vector2)_stage.DragLayer.InverseTransformPoint(tool.transform.position);
+                        break;
+                    }
+            }
             var label = SpawnMark(beat, origin);
             label.rectTransform.localScale = Vector3.one * 0.35f;
             var grow = Live(label.rectTransform.DOScale(1.05f, Span(BeatGrowSeconds)).SetEase(Ease.OutBack));
@@ -448,6 +461,7 @@ namespace TheCall.Scoring
 
         IEnumerator Mark(MarkCue cue)
         {
+            if (cue.Tone == MarkTone.Gold && cue.Amount != 0) yield return RollGold(cue.Amount);
             var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
             var label = Spawn(cue.Label, head + new Vector2(0f, -22f));
             label.fontSize = cue.Label.Length > 6 ? 40f : 52f;
@@ -536,15 +550,14 @@ namespace TheCall.Scoring
                 portrait.RestoreMotion();
         }
 
-        int ActorOf(int subject, string sourceName)
+        int ActorOf(int subject, string sourceMonsterId)
         {
-            if (string.IsNullOrEmpty(sourceName) || _slots == null)
+            if (string.IsNullOrEmpty(sourceMonsterId) || _slots == null)
                 return subject;
 
             for (var i = 0; i < _slots.Length; i++)
             {
-                var title = _slots[i].View != null ? _slots[i].View.title : null;
-                if (title == null || title.text != sourceName)
+                if (_slots[i].MonsterId != sourceMonsterId)
                     continue;
 
                 if (i == subject)
@@ -725,7 +738,7 @@ namespace TheCall.Scoring
             if (cue.Kind == PayKind.Paid && cue.Excess)
                 label = Spawn("超额", BesideTotal());
             else if (cue.Kind == PayKind.Paid || cue.Kind == PayKind.Short)
-                label = Spawn("获得 " + cue.Produced, BesideTotal());
+                label = Spawn("累计 " + cue.Produced, BesideTotal());
 
             if (cue.Wage > 0)
                 yield return RollGold(cue.Wage);
@@ -1020,8 +1033,8 @@ namespace TheCall.Scoring
             var rect = _current.rectTransform;
             _currentRestScale = rect.localScale;
             _currentRestColor = _current.color;
-            _shown = 0;
-            _current.text = "0";
+            _shown = _stage.InitialEnergy;
+            _current.text = _shown.ToString();
         }
 
         void RestoreCurrent()
@@ -1037,10 +1050,10 @@ namespace TheCall.Scoring
         IEnumerator RollGold(int wage)
         {
             var label = _stage.GoldLabel;
-            if (label == null || !int.TryParse(label.text, out var gold))
-                yield break;
-
+            var gold = _shownGold;
             var end = gold + wage;
+            _shownGold = end;
+            if (label == null) yield break;
             if (SkipWait())
             {
                 label.text = end.ToString();

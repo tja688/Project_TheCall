@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>能量产出台</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./bench.css">
 </head>
 <body>
@@ -10,6 +11,8 @@
     <header id="bar">
       <p id="status">正在装入规则。</p>
       <label>关卡 <select id="level"></select></label>
+      <label>随机种子 <input id="seed" type="number" value="1"></label>
+      <label>带入能量 <input id="initial-energy" type="number" value="0" min="0"></label>
       <div id="tools"></div>
       <button id="settle" type="button">结算</button>
       <p id="report" class="pending">尚未结算</p>

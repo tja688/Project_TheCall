@@ -1,0 +1,2698 @@
+{
+  "schemaVersion": 5,
+  "parts": [
+    {
+      "id": "body_01",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "body_02",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "body_03",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "body_04",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "body_05",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "body_06",
+      "kind": 0,
+      "colorRole": 1,
+      "connectionType": "body.core",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 10,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "head_01",
+      "kind": 1,
+      "colorRole": 1,
+      "connectionType": "neck.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 40,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "head_02",
+      "kind": 1,
+      "colorRole": 1,
+      "connectionType": "neck.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 40,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "head_03",
+      "kind": 1,
+      "colorRole": 1,
+      "connectionType": "neck.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 40,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "head_04",
+      "kind": 1,
+      "colorRole": 1,
+      "connectionType": "neck.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 40,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "eye_01",
+      "kind": 2,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 50,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "eye_02",
+      "kind": 2,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 50,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "eye_03",
+      "kind": 2,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 50,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "eye_04",
+      "kind": 2,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 50,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "eye_05",
+      "kind": 2,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 50,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_01",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_02",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_03",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_04",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_05",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "mouth_06",
+      "kind": 3,
+      "colorRole": 0,
+      "connectionType": "face.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 60,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hand_01",
+      "kind": 4,
+      "colorRole": 1,
+      "connectionType": "arm.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 20,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hand_02",
+      "kind": 4,
+      "colorRole": 1,
+      "connectionType": "arm.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 20,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hand_03",
+      "kind": 4,
+      "colorRole": 1,
+      "connectionType": "arm.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 20,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hand_04",
+      "kind": 4,
+      "colorRole": 1,
+      "connectionType": "arm.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 20,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hand_05",
+      "kind": 4,
+      "colorRole": 1,
+      "connectionType": "arm.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 20,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "foot_01",
+      "kind": 5,
+      "colorRole": 1,
+      "connectionType": "leg.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 30,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "foot_02",
+      "kind": 5,
+      "colorRole": 1,
+      "connectionType": "leg.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 30,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "foot_03",
+      "kind": 5,
+      "colorRole": 1,
+      "connectionType": "leg.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": false,
+      "sortOrder": 30,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "tail_01",
+      "kind": 6,
+      "colorRole": 1,
+      "connectionType": "tail.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 0,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "tail_02",
+      "kind": 6,
+      "colorRole": 1,
+      "connectionType": "tail.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 0,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "tail_03",
+      "kind": 6,
+      "colorRole": 1,
+      "connectionType": "tail.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 0,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hat_01",
+      "kind": 7,
+      "colorRole": 0,
+      "connectionType": "crown.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 70,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hat_02",
+      "kind": 7,
+      "colorRole": 0,
+      "connectionType": "crown.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 70,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hat_03",
+      "kind": 7,
+      "colorRole": 0,
+      "connectionType": "crown.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 70,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "hat_04",
+      "kind": 7,
+      "colorRole": 0,
+      "connectionType": "crown.standard",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 70,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "accessory_01",
+      "kind": 8,
+      "colorRole": 2,
+      "connectionType": "body.attach",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 35,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "accessory_02",
+      "kind": 8,
+      "colorRole": 2,
+      "connectionType": "body.attach",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 35,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    },
+    {
+      "id": "accessory_03",
+      "kind": 8,
+      "colorRole": 2,
+      "connectionType": "body.attach",
+      "attachmentPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "defaultPivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "faceAnchor": {
+        "x": 0,
+        "y": 0
+      },
+      "eyeOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "mouthOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "optional": true,
+      "sortOrder": 35,
+      "defaultScale": {
+        "x": 1,
+        "y": 1
+      },
+      "defaultRotation": 0
+    }
+  ],
+  "templates": [
+    {
+      "id": "template_01",
+      "displayName": "直立·脑袋",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_01",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_01",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_01",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_01",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_01",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_01",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": null,
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": "hat_01",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": null,
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "body.attach"
+      }
+    },
+    {
+      "id": "template_02",
+      "displayName": "曲身·绷带",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_02",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_02",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_02",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_02",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_02",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_02",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": null,
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": null,
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": "accessory_02",
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.attach"
+      }
+    },
+    {
+      "id": "template_03",
+      "displayName": "刺团·宽脸",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_03",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_03",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_03",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_03",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_03",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_03",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": "tail_03",
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": null,
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": null,
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "body.attach"
+      }
+    },
+    {
+      "id": "template_04",
+      "displayName": "双团·补丁",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_04",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_04",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_04",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_04",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_04",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_01",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": null,
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": "hat_04",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": null,
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "body.attach"
+      }
+    },
+    {
+      "id": "template_05",
+      "displayName": "短身·脑袋",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_05",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_01",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_05",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_05",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_05",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_02",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": null,
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": null,
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": "accessory_02",
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.attach"
+      }
+    },
+    {
+      "id": "template_06",
+      "displayName": "高身·绷带",
+      "anchors": {
+        "neck": {
+          "x": 0,
+          "y": 0
+        },
+        "face": {
+          "x": 0,
+          "y": 0
+        },
+        "hand": {
+          "x": 0,
+          "y": 0
+        },
+        "foot": {
+          "x": 0,
+          "y": 0
+        },
+        "tail": {
+          "x": 0,
+          "y": 0
+        },
+        "body": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "body": {
+        "partId": "body_06",
+        "anchor": 0,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "body.core"
+      },
+      "head": {
+        "partId": "head_02",
+        "anchor": 1,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "neck.standard"
+      },
+      "eye": {
+        "partId": "eye_01",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "mouth": {
+        "partId": "mouth_06",
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "face.standard"
+      },
+      "hand": {
+        "partId": "hand_01",
+        "anchor": 3,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "arm.standard"
+      },
+      "foot": {
+        "partId": "foot_03",
+        "anchor": 4,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": true,
+        "requiredConnection": "leg.standard"
+      },
+      "tail": {
+        "partId": null,
+        "anchor": 5,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "tail.standard"
+      },
+      "hat": {
+        "partId": null,
+        "anchor": 2,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "crown.standard"
+      },
+      "accessory": {
+        "partId": null,
+        "anchor": 6,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "rotation": 0,
+        "enabled": false,
+        "requiredConnection": "body.attach"
+      }
+    }
+  ],
+  "sprites": [
+    {
+      "id": "body_01",
+      "guid": "075250e1f1c1bb840b2c4b7189b13c6a",
+      "fileId": 21300000
+    },
+    {
+      "id": "body_02",
+      "guid": "dc80c0b7867319a4ab9dc85b7da36fd8",
+      "fileId": 21300000
+    },
+    {
+      "id": "body_03",
+      "guid": "4d54585611a189744b367ba6339e6f1c",
+      "fileId": 21300000
+    },
+    {
+      "id": "body_04",
+      "guid": "292ecff9133b1f349ac84594ae97236f",
+      "fileId": 21300000
+    },
+    {
+      "id": "body_05",
+      "guid": "b97fd58bf3945324f84105052b8c2ece",
+      "fileId": 21300000
+    },
+    {
+      "id": "body_06",
+      "guid": "6ed5e02e55c8cc8449bba52ec4728642",
+      "fileId": 21300000
+    },
+    {
+      "id": "head_01",
+      "guid": "3326961d1a74c234ea6db0834208db68",
+      "fileId": 21300000
+    },
+    {
+      "id": "head_02",
+      "guid": "6f088ddfa247540439e8ff1331463c29",
+      "fileId": 21300000
+    },
+    {
+      "id": "head_03",
+      "guid": "578c8a7cda3b7454e969ee9209f8dfd4",
+      "fileId": 21300000
+    },
+    {
+      "id": "head_04",
+      "guid": "f81e473848d35584986203dc9a75e843",
+      "fileId": 21300000
+    },
+    {
+      "id": "eye_01",
+      "guid": "9699ed144f7084a41b9734cd5ae4d9ac",
+      "fileId": 21300000
+    },
+    {
+      "id": "eye_02",
+      "guid": "7d2eabc86b6b58b4d860a523e37cde17",
+      "fileId": 21300000
+    },
+    {
+      "id": "eye_03",
+      "guid": "e46f1d7293694464fb2322ea676f0f46",
+      "fileId": 21300000
+    },
+    {
+      "id": "eye_04",
+      "guid": "56015c045e0d2a34eb4e4b060c4a4ec7",
+      "fileId": 21300000
+    },
+    {
+      "id": "eye_05",
+      "guid": "8e35db30fe6ce954b873fdcbb20d62c4",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_01",
+      "guid": "47a680c3d04a9e9438aa82f18be4c3be",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_02",
+      "guid": "233af73b66f4fec4da13f1093295dc19",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_03",
+      "guid": "46249cef48bd2df43bab6ff8e08f9a8c",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_04",
+      "guid": "f253ee0a384056442a1f33bd02ec6285",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_05",
+      "guid": "ec0e2acdecaa2324bad6f2128bb455d4",
+      "fileId": 21300000
+    },
+    {
+      "id": "mouth_06",
+      "guid": "9fc8b79b44b4eae43a1edac77ae807cd",
+      "fileId": 21300000
+    },
+    {
+      "id": "hand_01",
+      "guid": "1ab02c2a1eff7ef4eace83b1f18a2d39",
+      "fileId": 21300000
+    },
+    {
+      "id": "hand_02",
+      "guid": "49618d0778231344983d6e7cc9b181ae",
+      "fileId": 21300000
+    },
+    {
+      "id": "hand_03",
+      "guid": "a2fd751049e048746a9cec129672aa15",
+      "fileId": 21300000
+    },
+    {
+      "id": "hand_04",
+      "guid": "f14432274af1f0346b95aa6ec1e4b5e1",
+      "fileId": 21300000
+    },
+    {
+      "id": "hand_05",
+      "guid": "e044890d8d2b2b44d98cdb8d3de93031",
+      "fileId": 21300000
+    },
+    {
+      "id": "foot_01",
+      "guid": "28eecd7aae4d40540a42a6fa415b71c2",
+      "fileId": 21300000
+    },
+    {
+      "id": "foot_02",
+      "guid": "ed1e096e31167fe4898907da2500735b",
+      "fileId": 21300000
+    },
+    {
+      "id": "foot_03",
+      "guid": "fb44be1c922292b49a7d67d252096987",
+      "fileId": 21300000
+    },
+    {
+      "id": "tail_01",
+      "guid": "3249fbf9ed5952244b08774ee9a26ee5",
+      "fileId": 21300000
+    },
+    {
+      "id": "tail_02",
+      "guid": "99f7ecc4a4112c8428387b0767289d7d",
+      "fileId": 21300000
+    },
+    {
+      "id": "tail_03",
+      "guid": "19b5168e299b2de409927ad770963719",
+      "fileId": 21300000
+    },
+    {
+      "id": "hat_01",
+      "guid": "0d864b6ed2807144b91385b627943997",
+      "fileId": 21300000
+    },
+    {
+      "id": "hat_02",
+      "guid": "77ba5dbdbf89e2e469f2e7f43cea8aa0",
+      "fileId": 21300000
+    },
+    {
+      "id": "hat_03",
+      "guid": "326d21d62a2d0544297ce2012bf41d68",
+      "fileId": 21300000
+    },
+    {
+      "id": "hat_04",
+      "guid": "a47f2549215726f43ba25987b36c20f4",
+      "fileId": 21300000
+    },
+    {
+      "id": "accessory_01",
+      "guid": "2d2a2970b8e5e0549950fb2f39485cd7",
+      "fileId": 21300000
+    },
+    {
+      "id": "accessory_02",
+      "guid": "a3c71d5fc861a5f43ba999cd5f2ef047",
+      "fileId": 21300000
+    },
+    {
+      "id": "accessory_03",
+      "guid": "37422da053e0f594f97f0b97f72824a7",
+      "fileId": 21300000
+    }
+  ],
+  "originalHash": "a3d01a1d2ad9938c3c2d7ed7cb170ebcf7905345c4a06eb3c8e1dc058a5871eb"
+}

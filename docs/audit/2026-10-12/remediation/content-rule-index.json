@@ -1,0 +1,958 @@
+{
+  "source": "Assets/StreamingAssets/call-book.json",
+  "test_evidence": "settlement-final.trx",
+  "count": 93,
+  "rows": [
+    {
+      "category": "技能",
+      "name": "能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"生长能量体\",2)",
+        "SkillProductionHasIndependentBasicFixture(\"右能量体\",2)",
+        "SkillProductionHasIndependentBasicFixture(\"优秀能量体\",2)",
+        "SkillProductionHasIndependentBasicFixture(\"双头能量体\",4)",
+        "SkillProductionHasIndependentBasicFixture(\"群能量体\",3)",
+        "SkillProductionHasIndependentBasicFixture(\"能量体\",5)",
+        "SkillProductionHasIndependentBasicFixture(\"增生能量体\",1)",
+        "SkillProductionHasIndependentBasicFixture(\"不稳定能量体\",20)",
+        "SkillProductionHasIndependentBasicFixture(\"左能量体\",2)",
+        "SkillProductionHasIndependentBasicFixture(\"蜜能量体\",3)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "左能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"左能量体\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "右能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"右能量体\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "双头能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"双头能量体\",4)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "蜜能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"蜜能量体\",3)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "优秀能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"优秀能量体\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "增生能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"增生能量体\",1)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "自爆体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"自爆体\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "奇异香",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillAuraHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillAuraHasIndependentBasicFixture(\"奇异香\",6)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "传能耳",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"传能耳\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "优质肉体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"优质肉体\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "良好肉体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"良好肉体\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "情绪收集器",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"情绪收集器\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "收尸腺",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"收尸腺\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "啃食体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"啃食体\",4)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "抽杀体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"抽杀体\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "群能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"群能量体\",3)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "生长能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"生长能量体\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "不稳定能量体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"不稳定能量体\",20)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "怪异香",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillAuraHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillAuraHasIndependentBasicFixture(\"怪异香\",7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "左复制腺体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"左复制腺体\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "右复制腺体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"右复制腺体\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "换位手",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"换位手\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "汲取鼻",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"汲取鼻\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "外接胚胎",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"外接胚胎\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "产金管道",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"产金管道\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "不稳定肉体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"不稳定肉体\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "祭品腺",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"祭品腺\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "移植胚胎",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"移植胚胎\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "血祭体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"血祭体\",16)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "回响嗓",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"回响嗓\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "镜眼",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillAuraHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillAuraHasIndependentBasicFixture(\"镜眼\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "无穷肌肉",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillSupportAndReactionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillSupportAndReactionHasIndependentBasicFixture(\"无穷肌肉\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "技能",
+      "name": "血崩体",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SkillProductionHasIndependentBasicFixture",
+      "passed_cases": [
+        "SkillProductionHasIndependentBasicFixture(\"血崩体\",20)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "稳定",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "F09_初生固定性格即时覆盖普通心情",
+      "passed_cases": [
+        "F09_初生固定性格即时覆盖普通心情(\"稳定\",\"普通\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "孤僻",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachIsolatedSettlementPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachIsolatedSettlementPersonalityHasItsOwnEffect(\"孤僻\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "重视血脉",
+      "test_file": "Assets/Scripts/Core/Tests/SettlementRemediationTests.cs",
+      "method": "F10_KinAffectsBothEndpointsAndExcludesStranger",
+      "passed_cases": [
+        "F10_KinAffectsBothEndpointsAndExcludesStranger(\"重视血脉\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "合群",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachNeighborPersonalityHasItsOwnEffect(\"合群\",8)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "自私",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborContributionChangesBothObservedEndpoints",
+      "passed_cases": [
+        "EachNeighborContributionChangesBothObservedEndpoints(\"自私\",10,2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "独立",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachNeighborPersonalityHasItsOwnEffect(\"独立\",5)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "恋爱脑",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborContributionChangesBothObservedEndpoints",
+      "passed_cases": [
+        "EachNeighborContributionChangesBothObservedEndpoints(\"恋爱脑\",7,7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "自律",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachIsolatedSettlementPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachIsolatedSettlementPersonalityHasItsOwnEffect(\"自律\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "安于现状",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachIsolatedSettlementPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachIsolatedSettlementPersonalityHasItsOwnEffect(\"安于现状\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "贪财",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "GreedyReceivesGoldOnEveryActiveAttempt",
+      "passed_cases": [
+        "GreedyReceivesGoldOnEveryActiveAttempt"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "急躁",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachIsolatedSettlementPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachIsolatedSettlementPersonalityHasItsOwnEffect(\"急躁\",8)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "稳重",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachIsolatedSettlementPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachIsolatedSettlementPersonalityHasItsOwnEffect(\"稳重\",8)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "乐天派",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "F09_初生固定性格即时覆盖普通心情",
+      "passed_cases": [
+        "F09_初生固定性格即时覆盖普通心情(\"乐天派\",\"热情\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "热爱工作",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_工作性格通过两天实际结算影响次日心情且加班不双记",
+      "passed_cases": [
+        "Content_工作性格通过两天实际结算影响次日心情且加班不双记(\"热爱工作\",\"热情\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "乐于助人",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborContributionChangesBothObservedEndpoints",
+      "passed_cases": [
+        "EachNeighborContributionChangesBothObservedEndpoints(\"乐于助人\",5,7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "依赖",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachNeighborPersonalityHasItsOwnEffect",
+      "passed_cases": [
+        "EachNeighborPersonalityHasItsOwnEffect(\"依赖\",7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "好学",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_好学经真实开工获得常驻技能并即时复制固定性格心情",
+      "passed_cases": [
+        "Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"厌世\",\"倦怠\")",
+        "Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"乐天派\",\"热情\")",
+        "Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"摸鱼派\",\"疲倦\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "摸鱼派",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "F09_初生固定性格即时覆盖普通心情",
+      "passed_cases": [
+        "F09_初生固定性格即时覆盖普通心情(\"摸鱼派\",\"疲倦\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "厌恶工作",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_工作性格通过两天实际结算影响次日心情且加班不双记",
+      "passed_cases": [
+        "Content_工作性格通过两天实际结算影响次日心情且加班不双记(\"厌恶工作\",\"倦怠\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "厌世",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "F09_初生固定性格即时覆盖普通心情",
+      "passed_cases": [
+        "F09_初生固定性格即时覆盖普通心情(\"厌世\",\"倦怠\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "仇恨血脉",
+      "test_file": "Assets/Scripts/Core/Tests/SettlementRemediationTests.cs",
+      "method": "F10_KinAffectsBothEndpointsAndExcludesStranger",
+      "passed_cases": [
+        "F10_KinAffectsBothEndpointsAndExcludesStranger(\"仇恨血脉\",2)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "随心所欲",
+      "test_file": "Assets/Scripts/Core/Tests/SettlementRemediationTests.cs",
+      "method": "FreeWillFailureStillNotifiesEnergyEar",
+      "passed_cases": [
+        "FreeWillFailureStillNotifiesEnergyEar"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "好奇",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_好奇开始新增及改写常驻实例清原成长保留怪物修正",
+      "passed_cases": [
+        "Content_好奇开始新增及改写常驻实例清原成长保留怪物修正"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "上进心",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_上进心每日开始只加一次常驻修正",
+      "passed_cases": [
+        "Content_上进心每日开始只加一次常驻修正"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "性格",
+      "name": "迷恋死亡",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "F08_正式拖放安装遵循重复许可并只成功消费",
+      "passed_cases": [
+        "F08_正式拖放安装遵循重复许可并只成功消费(False)",
+        "F08_正式拖放安装遵循重复许可并只成功消费(True)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "急急装置",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachSimpleEnergyToolHasItsOwnActualSettlement",
+      "passed_cases": [
+        "EachSimpleEnergyToolHasItsOwnActualSettlement(\"急急装置\",10)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "小喇叭",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachSimpleEnergyToolHasItsOwnActualSettlement",
+      "passed_cases": [
+        "EachSimpleEnergyToolHasItsOwnActualSettlement(\"小喇叭\",8)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "打卡机",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_打卡机仅离店生效一次额外十金币",
+      "passed_cases": [
+        "Content_打卡机仅离店生效一次额外十金币"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "招工海报",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_招工海报购买即补第五怪物且下次刷新仍五个",
+      "passed_cases": [
+        "Content_招工海报购买即补第五怪物且下次刷新仍五个"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "批发合同",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_批发合同不折扣自身但后买每个工具减五金币",
+      "passed_cases": [
+        "Content_批发合同不折扣自身但后买每个工具减五金币"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "研磨机",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_研磨机仅成功废弃加五金币满仓拒绝不发钱",
+      "passed_cases": [
+        "Content_研磨机仅成功废弃加五金币满仓拒绝不发钱"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "电化能机",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "MachineProducesUnownedEnergyInItsOwnEntry",
+      "passed_cases": [
+        "MachineProducesUnownedEnergyInItsOwnEntry"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "精神操控仪",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "MindControlChangesPersonalityAdditionOnly",
+      "passed_cases": [
+        "MindControlChangesPersonalityAdditionOnly"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "怪物严选",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_好学加严选真实开始与开工保留当天提升不重记历史",
+      "passed_cases": [
+        "Content_好学加严选真实开始与开工保留当天提升不重记历史"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "情绪收割机",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachSimpleEnergyToolHasItsOwnActualSettlement",
+      "passed_cases": [
+        "EachSimpleEnergyToolHasItsOwnActualSettlement(\"情绪收割机\",7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "上级员工证",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_上级员工证购买后下一天可放第六格",
+      "passed_cases": [
+        "Content_上级员工证购买后下一天可放第六格"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "隔音棉",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_隔音棉阻止厌恶工作两天后的下降",
+      "passed_cases": [
+        "Content_隔音棉阻止厌恶工作两天后的下降"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "五行罗盘",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"森林\",\"天空\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"山脉\",\"海生\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"天空\",\"沙漠\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"海生\",\"森林\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"沙漠\",\"山脉\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "验货单",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_验货单购买即补第三工具且不再刷新已购工具",
+      "passed_cases": [
+        "Content_验货单购买即补第三工具且不再刷新已购工具"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "稀有度检测仪",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "GoldSkillDetectorCountsActualGoldSkillInstances",
+      "passed_cases": [
+        "GoldSkillDetectorCountsActualGoldSkillInstances"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "劣胜装置",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "SingleSkillDeviceAddsOneTriggerAndDoublesEachOutput",
+      "passed_cases": [
+        "SingleSkillDeviceAddsOneTriggerAndDoublesEachOutput"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "复读腺",
+      "test_file": "Assets/Scripts/Core/Tests/SettlementRemediationTests.cs",
+      "method": "F06_DuplicateMirrorInstancesMultiplyIndependently",
+      "passed_cases": [
+        "F06_DuplicateMirrorInstancesMultiplyIndependently"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "工具",
+      "name": "蓄热熔炉",
+      "test_file": "Assets/Scripts/Core/Tests/SettlementRemediationTests.cs",
+      "method": "F17_OvertimeLedgerSeparatesInitialNetAndCumulative",
+      "passed_cases": [
+        "F17_OvertimeLedgerSeparatesInitialNetAndCumulative"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "基因实验",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"基因实验\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "槽位扩容",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"槽位扩容\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "变异学说",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"变异学说\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "大乱炖",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"大乱炖\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "科学培育",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"科学培育\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "科技",
+      "name": "基因仓储",
+      "test_file": "Assets/Scripts/Core/Tests/LifecycleRemediationTests.cs",
+      "method": "Content_六项科技逐项无前置一点仅一次且零余额拒绝",
+      "passed_cases": [
+        "Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"基因仓储\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "种族",
+      "name": "森林",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"森林\",\"天空\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"海生\",\"森林\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "种族",
+      "name": "天空",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"森林\",\"天空\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"天空\",\"沙漠\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "种族",
+      "name": "沙漠",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"天空\",\"沙漠\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"沙漠\",\"山脉\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "种族",
+      "name": "山脉",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"山脉\",\"海生\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"沙漠\",\"山脉\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "种族",
+      "name": "海生",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachRaceHasActualGeneratingNeighborBonus",
+      "passed_cases": [
+        "EachRaceHasActualGeneratingNeighborBonus(\"山脉\",\"海生\")",
+        "EachRaceHasActualGeneratingNeighborBonus(\"海生\",\"森林\")"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "心情",
+      "name": "倦怠",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachMoodChangesProductionByItsActualTier",
+      "passed_cases": [
+        "EachMoodChangesProductionByItsActualTier(\"倦怠\",3)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "心情",
+      "name": "疲倦",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachMoodChangesProductionByItsActualTier",
+      "passed_cases": [
+        "EachMoodChangesProductionByItsActualTier(\"疲倦\",4)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "心情",
+      "name": "普通",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachMoodChangesProductionByItsActualTier",
+      "passed_cases": [
+        "EachMoodChangesProductionByItsActualTier(\"普通\",5)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "心情",
+      "name": "热情",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachMoodChangesProductionByItsActualTier",
+      "passed_cases": [
+        "EachMoodChangesProductionByItsActualTier(\"热情\",6)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    },
+    {
+      "category": "心情",
+      "name": "热爱",
+      "test_file": "Assets/Scripts/Core/Tests/ContentMechanismRemediationTests.cs",
+      "method": "EachMoodChangesProductionByItsActualTier",
+      "passed_cases": [
+        "EachMoodChangesProductionByItsActualTier(\"热爱\",7)"
+      ],
+      "status": "基础机制断言通过；组合与Unity见总验收矩阵"
+    }
+  ]
+}

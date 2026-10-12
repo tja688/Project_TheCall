@@ -12,13 +12,21 @@ namespace TheCall
             var draw = this.GetUtility<IDraw>();
             var personalities = this.GetUtility<IPersonalityCatalog>();
             var races = this.GetUtility<IRaceCatalog>();
-            var pairs = StockDraw.OpeningCandidates(catalog, draw);
-            for (var i = 0; i < pairs.Length; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var p = personalities.Draw(draw);
                 var r = races.Draw(draw);
-                run.AddCandidate(pairs[i], p, r);
+                run.AddCandidate(StockDraw.OpeningPair(catalog, draw), p, r);
             }
+        }
+
+        internal Monster GenerateSingleMonster()
+        {
+            var draw = this.GetUtility<IDraw>();
+            var personality = this.GetUtility<IPersonalityCatalog>().Draw(draw);
+            var race = this.GetUtility<IRaceCatalog>().Draw(draw);
+            var name = StockDraw.One(this.GetUtility<SkillCatalog>(), draw, DrawnPool.NoAmplifyBit, null);
+            return this.GetModel<RunModel>().CreateMonster(new[] { name }, personality: personality, race: race, sourceKind: SkillSourceKind.SkillEffect);
         }
 
         public void Keep(string monsterId)
@@ -32,12 +40,11 @@ namespace TheCall
             var draw = this.GetUtility<IDraw>();
             var personalities = this.GetUtility<IPersonalityCatalog>();
             var races = this.GetUtility<IRaceCatalog>();
-            var fillers = StockDraw.OpeningFillers(catalog, draw);
-            for (var i = 0; i < fillers.Length; i++)
+            for (var i = 0; i < 8; i++)
             {
                 var p = personalities.Draw(draw);
                 var r = races.Draw(draw);
-                run.AddToCage(run.CreateMonster(new[] { fillers[i] }, personality: p, race: r, mood: "普通"));
+                run.AddToCage(run.CreateMonster(new[] { StockDraw.One(catalog, draw, i < 4 ? DrawnPool.Produce : DrawnPool.Support, null) }, personality: p, race: r, sourceKind: SkillSourceKind.Opening));
             }
 
             run.EnterOperation(1);
@@ -68,13 +75,20 @@ namespace TheCall
             var level = this.GetModel<LevelModel>();
             var facts = Facts(run, level);
             if (!OperationTransition.TryPlan(facts, drop, out var plan))
+            {
+                run.SetOperationFailure(RejectReason(run, drop));
                 return false;
+            }
+            run.SetOperationFailure(null);
 
             if (!Apply(plan, run, level))
                 return false;
 
-            if (plan.ToArea == OperationArea.Extraction)
-                HandleClockIn(plan.SourceMonsterId);
+            if (plan.Effect == TransitionEffect.Move || plan.Effect == TransitionEffect.Replace || plan.Effect == TransitionEffect.Exchange)
+            {
+                if (plan.ToArea == OperationArea.Extraction) HandleClockIn(plan.SourceMonsterId);
+                if (plan.Effect == TransitionEffect.Exchange && plan.FromArea == OperationArea.Extraction) HandleClockIn(plan.OtherMonsterId);
+            }
 
             return true;
         }
@@ -141,38 +155,14 @@ namespace TheCall
                 return false;
 
             var monster = run.Find(monsterId);
-            if (monster == null || monster.Personality != "迷恋死亡")
-                return false;
-
-            if (geneSlotIndex < 0 || geneSlotIndex >= run.GeneSlots.Count)
-                return false;
-
+            if (monster == null || monster.Personality != "迷恋死亡") return false;
+            if (geneSlotIndex < 0 || geneSlotIndex >= run.GeneSlots.Count) return false;
             var slot = run.GeneSlots[geneSlotIndex];
-            if (slot.IsReserved)
-                return false;
-
-            var skillName = slot.SkillName;
-            if (string.IsNullOrEmpty(skillName))
-                return false;
-
-            var maxSkills = monster.Personality == "安于现状" ? 2 : 4;
-            if (monster.Skills.Count >= maxSkills)
-                return false;
-
-            var allowsDup = run.HasTool("复读腺");
-            if (!allowsDup)
-            {
-                for (var i = 0; i < monster.Skills.Count; i++)
-                {
-                    if (monster.Skills[i].Name == skillName)
-                        return false;
-                }
-            }
-
-            if (!run.TryTakeSkillAt(geneSlotIndex, out var taken))
-                return false;
-
-            return run.TryGainSkill(monsterId, taken, false);
+            if (slot.IsReserved || run.SkillGainFailure(monsterId, slot.SkillName) != null) return false;
+            var result = run.GainSkill(monsterId, slot.SkillName, false, SkillSourceKind.Gene, slot.Id);
+            if (!result.Success) return false;
+            run.TryTakeSkillAt(geneSlotIndex, out _);
+            return true;
         }
 
         public void Unlock(string name)
@@ -253,6 +243,7 @@ namespace TheCall
             ReturnBoard(run);
             run.GrowAfterClear(this.GetUtility<SkillCatalog>());
             run.ClearTemporarySkills();
+            run.ClearDailyEffects();
             run.ClearTemporaryQuotes();
             run.ClearTemporaryImmovable();
             run.ClearCapacity();
@@ -281,18 +272,43 @@ namespace TheCall
                 run.AddTool(board.Tools[i]);
 
             var levels = this.GetUtility<ILevelCatalog>();
-            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(board.LevelNumber), levels.ExcessEnergy(board.LevelNumber));
+            this.GetModel<LevelModel>().BeginLevel(levels.EnergyDue(board.LevelNumber), levels.ExcessEnergy(board.LevelNumber), board.InitialEnergy);
             FitExtraction(run);
             var level = this.GetModel<LevelModel>();
-            for (var cell = 0; cell < board.Row.Length; cell++)
+            var built = new Monster[board.Row.Length];
+            var visiting = new bool[board.Row.Length];
+            Monster Build(int cell)
             {
-                if (board.Row[cell] == null)
-                    continue;
-
+                if (built[cell] != null) return built[cell];
+                if (visiting[cell]) throw new BenchRejectedException("亲本关系不能形成循环");
+                visiting[cell] = true;
                 var bm = board.Row[cell].Value;
-                var monster = run.CreateMonster(bm.SkillNames, personality: bm.Personality, mood: bm.Mood, race: bm.Race);
-                level.Put(OperationArea.Extraction, cell, monster.Id);
+                var parentIds = new List<string>();
+                if (bm.ParentCells != null)
+                    foreach (var parentCell in bm.ParentCells)
+                    {
+                        if (parentCell < 0 || parentCell >= board.Row.Length || board.Row[parentCell] == null)
+                            throw new BenchRejectedException("亲本格必须引用实际怪物");
+                        parentIds.Add(Build(parentCell).Id);
+                    }
+                var monster = run.CreateMonster(bm.SkillNames, bm.Modifier, parentIds: parentIds,
+                    personality: bm.Personality, mood: bm.Mood, race: bm.Race,
+                    consecutiveWorkDays: bm.WorkDays, consecutiveRestDays: bm.RestDays, sourceKind: SkillSourceKind.Fixture);
+                if (bm.Instances != null && bm.Instances.Count != monster.Skills.Count) throw new BenchRejectedException("技能实例数量须与技能名单一致");
+                if (bm.Instances != null)
+                    for (var index = 0; index < bm.Instances.Count; index++)
+                    {
+                        var source = bm.Instances[index];
+                        var instance = run.MakeSkill(source.Name, source.Temporary, SkillSourceKind.Fixture);
+                        instance.Add(source.Growth, true);
+                        monster.Skills[index] = instance;
+                    }
+                built[cell] = monster;
+                visiting[cell] = false;
+                return monster;
             }
+            for (var cell = 0; cell < board.Row.Length; cell++)
+                if (board.Row[cell] != null) level.Put(OperationArea.Extraction, cell, Build(cell).Id);
         }
 
         void FitBreeding(RunModel run)
@@ -399,6 +415,11 @@ namespace TheCall
                     if (run.HasTool("研磨机"))
                         run.AddGold(5);
                     return true;
+                case TransitionEffect.Install:
+                    var installGene = run.GeneSlots[plan.SkillSlotIndex];
+                    var acquired = run.GainSkill(plan.SourceMonsterId, installGene.SkillName, false, SkillSourceKind.Gene, installGene.Id);
+                    if (!acquired.Success) return false;
+                    return run.TryTakeSkillAt(plan.SkillSlotIndex, out _);
                 case TransitionEffect.Invest:
                     if (plan.SkillSlotIndex < 0 || plan.SkillSlotIndex >= run.GeneSlots.Count)
                         return false;
@@ -472,7 +493,7 @@ namespace TheCall
                 breeding,
                 breedingSkills,
                 monsters.ToArray(),
-                geneReserved);
+                geneReserved, run.GeneCapacity, run.HasTool("复读腺"));
         }
 
         static MonsterFact Fact(Monster monster, MonsterWhere where, OperationArea area, int cell)
@@ -481,7 +502,7 @@ namespace TheCall
             for (var i = 0; i < names.Length; i++)
                 names[i] = monster.Skills[i].Name;
 
-            return new MonsterFact(monster.Id, where, area, cell, names);
+            return new MonsterFact(monster.Id, where, area, cell, names, monster.Personality);
         }
 
         static void SetMonster(List<MonsterFact> monsters, MonsterFact fact)
@@ -498,10 +519,33 @@ namespace TheCall
             monsters.Add(fact);
         }
 
-        static bool EnterOperation(RunModel run)
+        static string RejectReason(RunModel run, OperationDrop drop)
+        {
+            if (drop.Landing.Place == LandingPlace.Discard && run.GeneSlots.Count >= run.GeneCapacity) return "基因仓储已满（含培育预约）";
+            if (drop.Payload.Kind == PayloadKind.SkillChip)
+            {
+                if (drop.Payload.Index < 0 || drop.Payload.Index >= run.GeneSlots.Count) return "基因材料不存在";
+                var gene = run.GeneSlots[drop.Payload.Index];
+                if (gene.IsReserved) return "基因正在培育槽预约";
+                if (drop.Landing.Place != LandingPlace.BreedingSocket)
+                {
+                    var target = run.Find(drop.Landing.MonsterId);
+                    if (target == null) return "请选择怪物作为安装目标";
+                    if (target.Personality != "迷恋死亡") return "只有迷恋死亡可直接安装基因";
+                    return run.SkillGainFailure(target.Id, gene.SkillName) ?? "目标槽位不可用";
+                }
+                if (!run.HasTech("基因实验")) return "请先研究基因实验";
+            }
+            return "此投放位置不可用";
+        }
+
+        bool EnterOperation(RunModel run)
         {
             if (run.Phase == RunPhase.LevelStart)
+            {
                 run.EnterOperation(run.LevelNumber);
+                TriggerStartPhase(run);
+            }
 
             return run.Phase == RunPhase.Operation;
         }
@@ -539,7 +583,7 @@ namespace TheCall
                     monster.RecordRestDay();
 
                 var newMood = moodCatalog.CalculateDailyMood(monster, hasSoundproofCotton);
-                monster.SetMood(newMood);
+                monster.BeginDailyMood(moodCatalog.CalculateDailyMood(moodCatalog.FixedMood(monster.Personality) != null ? null : monster.Personality, monster.ConsecutiveWorkDays, monster.ConsecutiveRestDays, hasSoundproofCotton), newMood);
             }
 
             run.ClearWorkedToday();
@@ -571,7 +615,7 @@ namespace TheCall
                 if (upgradeable.Count > 0)
                 {
                     var chosen = draw.Choose(upgradeable);
-                    chosen.SetMood(moodCatalog.UpgradeMood(chosen.Mood));
+                    chosen.BoostDailyMood(moodCatalog.UpgradeMood(chosen.Mood));
                 }
             }
 
@@ -599,7 +643,7 @@ namespace TheCall
                         if (candidates.Count > 0)
                         {
                             var addedSkillName = draw.Choose(candidates);
-                            run.TryGainSkill(monster.Id, addedSkillName, isTemporary: false);
+                            run.GainSkill(monster.Id, addedSkillName, false, SkillSourceKind.Personality, "好奇", monster.Id);
 
                             for (var i = 0; i < monster.Skills.Count - 1; i++)
                             {
@@ -618,7 +662,7 @@ namespace TheCall
                                 if (rewriteCandidates.Count > 0)
                                 {
                                     var rewrittenName = draw.Choose(rewriteCandidates);
-                                    monster.Skills[i] = new SkillInstance(rewrittenName, skillCatalog.StartingQuote(rewrittenName), false);
+                                    monster.Skills[i] = run.MakeSkill(rewrittenName, false, SkillSourceKind.Personality, "好奇", monster.Id);
                                 }
                             }
                         }
@@ -657,17 +701,15 @@ namespace TheCall
                 if (target == null || target.Skills.Count == 0)
                     return;
 
-                var targetSkillNames = new List<string>();
-                for (var i = 0; i < target.Skills.Count; i++)
-                    targetSkillNames.Add(target.Skills[i].Name);
-
-                var chosenSkill = draw.Choose(targetSkillNames);
-                if (run.TryGainSkill(monsterId, chosenSkill, isTemporary: false))
+                var sourceInstance = draw.Choose(target.Skills);
+                var chosenSkill = sourceInstance.Name;
+                if (run.GainSkill(monsterId, chosenSkill, false, SkillSourceKind.Personality, sourceInstance.Id, target.Id).Success)
                 {
-                    monster.ChangePersonality(target.Personality);
+                    run.ChangePersonality(monsterId, target.Personality);
                     var moodCatalog = this.GetUtility<MoodCatalog>();
                     var hasSoundproofCotton = run.HasTool("隔音棉");
-                    monster.SetMood(moodCatalog.CalculateDailyMood(monster, hasSoundproofCotton));
+                    var fixedMood = moodCatalog.FixedMood(monster.Personality);
+                    if (fixedMood != null) monster.SetMood(fixedMood);
                 }
             }
         }

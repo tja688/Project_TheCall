@@ -6,6 +6,9 @@ namespace TheCall
 {
     public sealed class MonsterSlotView : MonoBehaviour
     {
+        public Image personalityIcon;
+        public Image raceIcon;
+        public Image moodIcon;
         public Button button;
         public MonsterPortrait portrait;
         public TMP_Text title;

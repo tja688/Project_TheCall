@@ -56,17 +56,21 @@ namespace TheCall.Scoring
 
     public readonly struct ScoreBeat
     {
-        public ScoreBeat(string text, BeatRole role, string sourceName, string caption)
+        public ScoreBeat(string text, BeatRole role, string sourceName, string caption, string sourceMonsterId = "", string sourceSkillInstanceId = "", string sourceToolId = "")
         {
             Text = text;
             Role = role;
             SourceName = sourceName ?? "";
+            SourceMonsterId = sourceMonsterId ?? ""; SourceSkillInstanceId = sourceSkillInstanceId ?? ""; SourceToolId = sourceToolId ?? "";
             Caption = caption ?? "";
         }
 
         public string Text { get; }
         public BeatRole Role { get; }
         public string SourceName { get; }
+        public string SourceMonsterId { get; }
+        public string SourceSkillInstanceId { get; }
+        public string SourceToolId { get; }
         public string Caption { get; }
     }
 
@@ -195,7 +199,7 @@ namespace TheCall.Scoring
             int wage,
             bool excess,
             string line,
-            int retainedEnergy = 0)
+            int retainedEnergy = 0, int initialEnergy = 0)
         {
             Kind = kind;
             Produced = produced;
@@ -205,6 +209,7 @@ namespace TheCall.Scoring
             Excess = excess;
             Line = line;
             RetainedEnergy = retainedEnergy;
+            InitialEnergy = initialEnergy;
         }
 
         public PayKind Kind { get; }
@@ -215,6 +220,8 @@ namespace TheCall.Scoring
         public bool Excess { get; }
         public string Line { get; }
         public int RetainedEnergy { get; }
+        public int InitialEnergy { get; }
+        public int RoundProduced => Produced - InitialEnergy;
 
         internal override IEnumerator Accept(ICueSink sink) => sink.Pay(this);
     }

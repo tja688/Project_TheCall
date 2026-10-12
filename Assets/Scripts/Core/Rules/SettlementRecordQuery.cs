@@ -5,23 +5,29 @@ using QFramework;
 
 namespace TheCall
 {
+    public enum SettlementSourceKind { Skill, Personality, Mood, Tool, Growth, Payment, Movement, Death }
+
     public abstract class SettlementEntry
     {
+        public string EventId { get; internal set; }
+        public int Sequence { get; internal set; }
     }
 
     public readonly struct LandingAdd
     {
-        public LandingAdd(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName)
+        public LandingAdd(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName, string sourceSkillInstanceId = null, SettlementSourceKind? sourceKind = null)
         {
             Label = label;
             Amount = amount;
             SourceId = sourceId;
             SourceSkillIndex = sourceSkillIndex;
             SourceName = sourceName;
+            SourceSkillInstanceId = sourceSkillInstanceId;
+            _sourceKind = sourceKind;
         }
 
-        public static LandingAdd Of(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName) =>
-            new LandingAdd(label, amount, sourceId, sourceSkillIndex, sourceName);
+        public static LandingAdd Of(string label, int amount, string sourceId, int sourceSkillIndex, string sourceName, string sourceSkillInstanceId = null, SettlementSourceKind? sourceKind = null) =>
+            new LandingAdd(label, amount, sourceId, sourceSkillIndex, sourceName, sourceSkillInstanceId, sourceKind);
 
         public string Label { get; }
 
@@ -32,21 +38,29 @@ namespace TheCall
         public int SourceSkillIndex { get; }
 
         public string SourceName { get; }
+        public string SourceMonsterId => SourceId;
+        public string SourceSkillInstanceId { get; }
+        public string SourceToolId => SourceId == null && SourceSkillIndex < 0 && ContentGate.Current?.FindTool(Label) != null ? Label : null;
+        readonly SettlementSourceKind? _sourceKind;
+        public SettlementSourceKind SourceKind => _sourceKind ?? (SourceToolId != null ? SettlementSourceKind.Tool :
+            SourceSkillIndex >= 0 ? SettlementSourceKind.Skill : Label == "心情" ? SettlementSourceKind.Mood : SettlementSourceKind.Personality);
     }
 
     public readonly struct LandingFactor
     {
-        public LandingFactor(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName)
+        public LandingFactor(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName, string sourceSkillInstanceId = null, SettlementSourceKind? sourceKind = null)
         {
             Label = label;
             Factor = factor;
             SourceId = sourceId;
             SourceSkillIndex = sourceSkillIndex;
             SourceName = sourceName;
+            SourceSkillInstanceId = sourceSkillInstanceId;
+            _sourceKind = sourceKind;
         }
 
-        public static LandingFactor Of(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName) =>
-            new LandingFactor(label, factor, sourceId, sourceSkillIndex, sourceName);
+        public static LandingFactor Of(string label, int factor, string sourceId, int sourceSkillIndex, string sourceName, string sourceSkillInstanceId = null, SettlementSourceKind? sourceKind = null) =>
+            new LandingFactor(label, factor, sourceId, sourceSkillIndex, sourceName, sourceSkillInstanceId, sourceKind);
 
         public string Label { get; }
 
@@ -57,6 +71,12 @@ namespace TheCall
         public int SourceSkillIndex { get; }
 
         public string SourceName { get; }
+        public string SourceMonsterId => SourceId;
+        public string SourceSkillInstanceId { get; }
+        public string SourceToolId => SourceId == null && SourceSkillIndex < 0 && ContentGate.Current?.FindTool(Label) != null ? Label : null;
+        readonly SettlementSourceKind? _sourceKind;
+        public SettlementSourceKind SourceKind => _sourceKind ?? (SourceToolId != null ? SettlementSourceKind.Tool :
+            SourceSkillIndex >= 0 ? SettlementSourceKind.Skill : Label == "心情" ? SettlementSourceKind.Mood : SettlementSourceKind.Personality);
     }
 
     public enum MarkMotion
@@ -184,7 +204,7 @@ namespace TheCall
             System.Collections.Generic.IReadOnlyList<LandingFactor> factors,
             string monsterName = null,
             int cell = -1,
-            string countedSideName = null)
+            string countedSideName = null, string skillInstanceId = null, int lockedTimes = 1)
         {
             MonsterId = monsterId;
             SkillName = skillName;
@@ -200,6 +220,8 @@ namespace TheCall
             MonsterName = monsterName;
             Cell = cell;
             CountedSideName = countedSideName;
+            SkillInstanceId = skillInstanceId;
+            LockedTimes = lockedTimes;
             Check();
         }
 
@@ -226,6 +248,18 @@ namespace TheCall
         public int Cell { get; }
 
         public string CountedSideName { get; }
+        public string SkillInstanceId { get; }
+        public int LockedTimes { get; }
+        public int ProbabilityPercent { get; internal set; } = 100;
+        public int MinimumEnergy => ProbabilityPercent < 100 ? 0 : Energy;
+        public int MaximumEnergy => Energy;
+        public int OpeningCell { get; internal set; } = -1;
+        public int OpeningSkillCount { get; internal set; }
+        public int DisplayUnitEnergy { get; internal set; }
+        public int NominalQuote { get; internal set; }
+        public SettlementSourceKind SourceKind => MonsterId == null ? SettlementSourceKind.Tool :
+            SkillInstanceId == null && SkillName == "自律" ? SettlementSourceKind.Personality : SettlementSourceKind.Skill;
+        public string SourceToolId => MonsterId == null ? SkillName : null;
 
         public System.Collections.Generic.IReadOnlyList<LandingAdd> Adds { get; }
 
@@ -274,11 +308,15 @@ namespace TheCall
         {
         }
 
-        public SettlementRemoval(string monsterId, bool happened, string sourceId)
+        public SettlementRemoval(string monsterId, bool happened, string sourceId, int cell = -1, IReadOnlyList<string> skillInstanceIds = null, string personality = null, string sourceSkillInstanceId = null)
         {
             MonsterId = monsterId;
             Happened = happened;
             SourceId = sourceId;
+            Cell = cell;
+            SkillInstanceIds = skillInstanceIds ?? Array.Empty<string>();
+            Personality = personality;
+            SourceSkillInstanceId = sourceSkillInstanceId;
         }
 
         public string MonsterId { get; }
@@ -286,6 +324,10 @@ namespace TheCall
         public bool Happened { get; }
 
         public string SourceId { get; }
+        public int Cell { get; }
+        public IReadOnlyList<string> SkillInstanceIds { get; }
+        public string Personality { get; }
+        public string SourceSkillInstanceId { get; }
     }
 
     public sealed class SettlementPayment : SettlementEntry

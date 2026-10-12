@@ -30,7 +30,7 @@ namespace TheCall.Scoring
             var head = -1;
             var produced = initialEnergy;
             for (var i = 0; i < entries.Count; i++)
-                Append(entries[i], ids, cues, ref head, ref produced);
+                Append(entries[i], ids, cues, ref head, ref produced, initialEnergy);
 
             return new ScoringTape(cues.ToArray(), produced);
         }
@@ -40,7 +40,7 @@ namespace TheCall.Scoring
             List<string> ids,
             List<ScoringCue> cues,
             ref int head,
-            ref int produced)
+            ref int produced, int initialEnergy)
         {
             if (entry is SettlementMark mark)
             {
@@ -128,8 +128,8 @@ namespace TheCall.Scoring
                     payment.Shortfall,
                     payment.Wage,
                     payment.Excess,
-                    PaymentLine(payment, produced),
-                    payment.RetainedEnergy));
+                    PaymentLine(payment, produced, initialEnergy),
+                    payment.RetainedEnergy, initialEnergy));
                 return;
             }
 
@@ -185,13 +185,13 @@ namespace TheCall.Scoring
                 for (var i = 0; i < landing.Adds.Count; i++)
                 {
                     var add = landing.Adds[i];
-                    beats.Add(new ScoreBeat(Signed(add.Amount), BeatRole.Add, Other(add.SourceName, landing.MonsterName), add.Label));
+                    beats.Add(new ScoreBeat(Signed(add.Amount), BeatRole.Add, Other(add.SourceName, landing.MonsterName), add.Label, add.SourceMonsterId, add.SourceSkillInstanceId, add.SourceToolId));
                 }
 
                 for (var i = 0; i < landing.Factors.Count; i++)
                 {
                     var factor = landing.Factors[i];
-                    beats.Add(new ScoreBeat("×" + factor.Factor, BeatRole.Factor, Other(factor.SourceName, landing.MonsterName), factor.Label));
+                    beats.Add(new ScoreBeat("×" + factor.Factor, BeatRole.Factor, Other(factor.SourceName, landing.MonsterName), factor.Label, factor.SourceMonsterId, factor.SourceSkillInstanceId, factor.SourceToolId));
                 }
             }
 
@@ -246,15 +246,15 @@ namespace TheCall.Scoring
             return PayKind.Paid;
         }
 
-        static string PaymentLine(SettlementPayment payment, int produced)
+        static string PaymentLine(SettlementPayment payment, int produced, int initialEnergy)
         {
-            var gained = "获得 " + produced + " 能量";
+            var gained = initialEnergy == 0 ? "获得 " + produced + " 能量" : "带入 " + initialEnergy + "，本轮新增 " + (produced - initialEnergy) + "，累计 " + produced + " 能量";
             if (payment.Failed || (payment.Deducted == 0 && payment.Shortfall > 0))
                 return gained;
             var suffix = payment.RetainedEnergy > 0 ? "，熔炉保留 " + payment.RetainedEnergy + " 能量" : "";
             if (payment.Excess)
                 return gained + "，超额，获得 1 科技点" + suffix;
-            return gained + "，获得 1 科技点" + suffix;
+            return gained + "，获得 0 科技点" + suffix;
         }
 
         static int IndexOf(List<string> ids, string id)

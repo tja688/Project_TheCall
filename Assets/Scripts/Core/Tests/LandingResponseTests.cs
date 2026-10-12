@@ -239,7 +239,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 蜜能量体的加三不写进技能报价且本次结算结束即失效()
+        public void 蜜能量体的加三不写进技能报价且加班当天保留()
         {
             Open(
                 "蜜能量体",
@@ -271,9 +271,9 @@ namespace TheCall.Tests
             var second = Landings();
             Assert.That(second.Select(landing => landing.MonsterId).ToArray(), Is.EqualTo(new[] { breathId }));
             Assert.That(second.Select(landing => landing.SkillName).ToArray(), Is.EqualTo(new[] { "能量体" }));
-            Assert.That(second.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 5 }));
+            Assert.That(second.Select(landing => landing.Base).ToArray(), Is.EqualTo(new[] { 8 }));
             Assert.That(second.Select(landing => landing.Multiplier).ToArray(), Is.EqualTo(new[] { 1 }));
-            Assert.That(second.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 5 }));
+            Assert.That(second.Select(landing => landing.Energy).ToArray(), Is.EqualTo(new[] { 8 }));
         }
 
         void Open(params string[] names)

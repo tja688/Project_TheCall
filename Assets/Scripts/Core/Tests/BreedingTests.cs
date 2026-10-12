@@ -99,6 +99,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(host, OperationArea.Breeding, 0));
             App.SendCommand(new PlaceMonsterCommand(mate, OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
+            draw.BeginBreeding();
             App.SendCommand(new LeaveShopCommand());
 
             Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "怪异香" }));
@@ -133,6 +134,7 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Breeding, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
+            draw.BeginBreeding();
             App.SendCommand(new LeaveShopCommand());
 
             Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "奇异香", "能量体" }));
@@ -149,7 +151,7 @@ namespace TheCall.Tests
                     "右能量体",
                     "能量体",
                     "奇异香",
-                    "孤独心",
+                    "回响嗓",
                     "汲取鼻",
                     "吞噬大嘴",
                     "双头能量体",
@@ -162,7 +164,7 @@ namespace TheCall.Tests
                 .Where(monster => Holds(monster, "能量体"))
                 .ToArray();
             var hand = Parent("奇异香");
-            var heart = Parent("孤独心");
+            var heart = Parent("回响嗓");
             App.SendCommand(new DiscardMonsterCommand(hand));
             InstallFromSlot(breaths[0].Id);
             App.SendCommand(new DiscardMonsterCommand(heart));
@@ -172,9 +174,10 @@ namespace TheCall.Tests
             App.SendCommand(new PlaceMonsterCommand(breaths[0].Id, OperationArea.Breeding, 0));
             App.SendCommand(new PlaceMonsterCommand(breaths[1].Id, OperationArea.Breeding, 1));
             App.SendCommand(new ConfirmSettlementCommand());
+            draw.BeginBreeding();
             App.SendCommand(new LeaveShopCommand());
 
-            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量体", "孤独心" }));
+            Assert.That(Offspring(before).SkillNames, Is.EqualTo(new[] { "能量体", "回响嗓" }));
         }
 
         [Test]
@@ -306,6 +309,8 @@ namespace TheCall.Tests
     {
         readonly Queue<string> _opening;
         readonly Queue<string> _picks;
+        bool _breeding;
+        public void BeginBreeding() => _breeding = true;
 
         public BreedingDraw(string[] opening, params string[] picks)
         {
@@ -318,10 +323,20 @@ namespace TheCall.Tests
             if (options == null || options.Count == 0)
                 throw new InvalidOperationException("抽取名单是空的。");
 
-            if (options.Count > 4)
-                return Take(_opening, options);
+            if (_opening.Count > 0)
+            {
+                var head = _opening.Peek();
+                foreach (var option in options)
+                    if (option is string text && text == head) return Take(_opening, options);
+                if (options[0] is string word && (word == "白" || word == "蓝" || word == "金"))
+                    return Take(_opening, options);
+            }
+            if (options[0] is Rarity || options[0] is Monster ||
+                (options[0] is string attribute && (ContentGate.Current.FindPersonality(attribute) != null || ContentGate.Current.FindRace(attribute) != null)))
+                return options[0];
+            if (options.Count > 4) return Take(_opening, options);
 
-            if (options.Count > 1)
+            if (_breeding && options.Count > 1)
                 return Take(_picks, options);
 
             return options[0];
@@ -333,6 +348,17 @@ namespace TheCall.Tests
                 return options[0];
 
             var name = queue.Peek();
+            if (ContentGate.Current != null && options.Count > 0 && options[0] is string rarityWord &&
+                (rarityWord == "白" || rarityWord == "蓝" || rarityWord == "金"))
+            {
+                var skill = ContentGate.Current.FindSkill(name);
+                if (skill != null)
+                {
+                    var word = skill.Rarity == Rarity.Gold ? "金" : skill.Rarity == Rarity.Blue ? "蓝" : "白";
+                    for (var i = 0; i < options.Count; i++) if (options[i] is string text && text == word) return options[i];
+                }
+            }
+
             for (var i = 0; i < options.Count; i++)
             {
                 if (options[i] is string text && text == name)

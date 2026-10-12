@@ -41,6 +41,7 @@ namespace TheCall
         PresentationSpriteCatalog _spriteCatalog;
         string _selectedTech = "基因实验";
         float _noticeUntil;
+        string _lastTrimNotice;
 
         public IArchitecture GetArchitecture() => TheCallApp.Interface;
 
@@ -68,6 +69,7 @@ namespace TheCall
         public void StartSession()
         {
             _back = BackTarget.None;
+            _lastTrimNotice = null;
             _sellTab = false;
             _busy = false;
             if (_log != null)
@@ -302,10 +304,10 @@ namespace TheCall
             var target = this.SendQuery(new LevelTargetQuery());
             var energy = this.SendQuery(new LevelEnergyQuery());
             var shortfall = this.SendQuery(new LevelShortfallQuery());
-            var goal = shortfall > 0 ? shortfall : target.EnergyDue;
+            var goal = target.EnergyDue;
             SetLabel(_operation.transform, "TargetCaption", "目标");
             _operation.targetLabel.text = goal.ToString();
-            _operation.energyLabel.text = "获得 " + energy;
+            _operation.energyLabel.text = "累计 " + energy + " · 尚差 " + shortfall + " · 科技 " + run.TechPoints;
             if (_operation.dayLabel != null)
                 _operation.dayLabel.text = "第 " + target.LevelNumber + " 天";
             if (_operation.excessLabel != null)
@@ -324,14 +326,13 @@ namespace TheCall
                 }
 
                 if (current != null)
-                    current.text = "0";
+                    current.text = energy.ToString();
             }
             _operation.goldLabel.text = run.Gold.ToString();
-            _operation.nextDayLabel.text = shortfall > 0
-                ? "再试一次"
-                : target.LevelNumber >= 7 ? "结束第7天" : "进入第" + (target.LevelNumber + 1) + "天";
+            _operation.nextDayLabel.text = target.InOvertime ? "开始加班结算" : "开始结算";
 
             var cage = this.SendQuery(new MonsterCageQuery());
+            _operation.cageSlots = GrowInventory(_operation.cageSlots, cage.Count, false);
             FillList(_operation.cageSlots, cage, ArmedMonsterId());
             FillCells(_operation.extractionSlots, this.SendQuery(new ExtractionSlotsQuery()));
             FillParents(_operation.breedingSlots, this.SendQuery(new BreedingSlotsQuery()));
@@ -357,6 +358,8 @@ namespace TheCall
             if (_shop.sellPage != null)
                 _shop.sellPage.SetActive(_sellTab);
 
+            var leaveText = _shop.leaveButton != null ? _shop.leaveButton.GetComponentInChildren<TMP_Text>() : null;
+            if (leaveText != null) leaveText.text = this.SendQuery(new LevelTargetQuery()).LevelNumber >= 7 ? "结束本局" : "下一天";
             var cardIndex = 0;
             var cards = _shop.cards;
             if (cards != null)
@@ -370,6 +373,7 @@ namespace TheCall
             }
 
             var cage = this.SendQuery(new MonsterCageQuery());
+            _shop.sellSlots = GrowInventory(_shop.sellSlots, cage.Count, true);
             FillList(_shop.sellSlots, cage, null);
         }
 
@@ -406,7 +410,7 @@ namespace TheCall
                 if (_research.researchLabel != null)
                     _research.researchLabel.text = unlocked ? "已研究" : "研究";
                 if (_research.researchButton != null)
-                    _research.researchButton.interactable = !unlocked;
+                    _research.researchButton.interactable = !unlocked && run.TechPoints >= 1;
             }
         }
 
@@ -419,6 +423,34 @@ namespace TheCall
                 : "这一关的目标没有达到。这一局结束。";
             if (_result.portrait != null)
                 _result.portrait.Show(MonsterAppearance.FromSeed(victory ? 73 : 29));
+        }
+
+        MonsterSlotView[] GrowInventory(MonsterSlotView[] slots, int count, bool selling)
+        {
+            if (slots == null || slots.Length == 0 || slots[0] == null) return slots;
+            var template = slots[0];
+            var parent = template.transform.parent as RectTransform;
+            var pool = new List<MonsterSlotView>(slots);
+            while (pool.Count < count)
+            {
+                var copy = Instantiate(template, parent);
+                copy.name = (selling ? "SellCard_" : "CageCard_") + pool.Count;
+                copy.monsterId = null;
+                if (selling && copy.button != null)
+                {
+                    copy.button.onClick.RemoveAllListeners();
+                    copy.button.onClick.AddListener(() => OnSell(copy));
+                }
+                pool.Add(copy);
+            }
+            var first = template.transform as RectTransform;
+            var second = slots.Length > 1 ? slots[1].transform as RectTransform : null;
+            var xStep = second != null ? second.anchoredPosition.x - first.anchoredPosition.x : first.rect.width + 8;
+            var rowStep = selling ? 156f : 118f;
+            for (var i = 0; i < pool.Count; i++)
+                ((RectTransform)pool[i].transform).anchoredPosition = first.anchoredPosition + new Vector2((i % 2) * xStep, -(i / 2) * rowStep);
+            if (parent != null) parent.sizeDelta = new Vector2(parent.sizeDelta.x, Mathf.Ceil(pool.Count / 2f) * rowStep + 8);
+            return pool.ToArray();
         }
 
         void FillList(MonsterSlotView[] slots, IReadOnlyList<MonsterView> monsters, string selectedId)
@@ -551,6 +583,9 @@ namespace TheCall
                 var toolName = tools[i];
                 view.toolName = toolName;
                 var def = _spriteCatalog != null ? _spriteCatalog.FindTool(toolName) : null;
+                view.icon = null;
+                view.description = "";
+                if (view.iconImage != null) view.iconImage.sprite = null;
                 if (def != null)
                 {
                     view.icon = def.icon;
@@ -620,8 +655,18 @@ namespace TheCall
                 slot.title.text = occupied ? $"{monster.DisplayName} [{monster.Race}]" : "";
             if (slot.subtitle != null)
                 slot.subtitle.text = occupied ? $"{monster.Personality} · {monster.Mood} | {SkillLine(monster)}" : "";
+            EnsureSpriteCatalog();
+            BindBadge(slot.personalityIcon, occupied ? _spriteCatalog?.GetPersonalityIcon(monster.Personality) : null);
+            BindBadge(slot.raceIcon, occupied ? _spriteCatalog?.GetRaceIcon(monster.Race) : null);
+            BindBadge(slot.moodIcon, occupied ? _spriteCatalog?.GetMoodIcon(monster.Mood) : null);
             if (slot.selection != null)
                 slot.selection.SetActive(selected);
+        }
+
+        static void BindBadge(UnityEngine.UI.Image image, Sprite sprite)
+        {
+            if (image == null) return;
+            image.sprite = sprite; image.enabled = sprite != null; image.preserveAspect = true;
         }
 
         void FillSeat(MonsterSlotView slot, string monsterId)
@@ -668,6 +713,7 @@ namespace TheCall
             var art = _spriteCatalog != null ? _spriteCatalog.FindTool(item.Name) : null;
             if (card.icon != null)
             {
+                card.icon.sprite = null;
                 card.icon.enabled = true;
                 card.icon.type = UnityEngine.UI.Image.Type.Simple;
                 card.icon.preserveAspect = true;
@@ -743,8 +789,13 @@ namespace TheCall
         {
             var applied = this.SendCommand(new CommitOperationDropCommand(drop));
             if (applied)
+            {
                 Refresh();
-
+                if (drop.Payload.Kind == PayloadKind.SkillChip && !string.IsNullOrEmpty(drop.Landing.MonsterId)) Notice("基因安装成功。");
+                else if (drop.Payload.Kind == PayloadKind.SkillChip && drop.Landing.Place == LandingPlace.BreedingSocket) Notice("已预约此格基因用于培育；取回时恢复原格。");
+                else if (drop.Payload.Kind == PayloadKind.BreedingSkill) Notice("培育基因已退还原格。");
+            }
+            else Notice(this.SendQuery(new OperationFeedbackQuery()) ?? "无法放入此位置。");
             return applied;
         }
 
@@ -756,6 +807,8 @@ namespace TheCall
                 return;
 
             _busy = true;
+            var initialEnergy = this.SendQuery(new LevelEnergyQuery());
+            var initialGold = this.SendQuery(new RunLedgerQuery()).Gold;
             this.SendCommand(new ConfirmSettlementCommand());
             ScoringShow.Play(new ScoringStage(
                 this.GetArchitecture(),
@@ -765,7 +818,7 @@ namespace TheCall
                 _operation.goldLabel,
                 _operation.currentNumber,
                 Notice,
-                FinishSettle));
+                FinishSettle, initialEnergy, initialGold));
         }
 
         void FinishSettle()
@@ -775,6 +828,12 @@ namespace TheCall
                 return;
 
             _busy = false;
+            var trimmed = this.SendQuery(new SkillTrimFeedbackQuery());
+            if (!string.IsNullOrEmpty(trimmed) && trimmed != _lastTrimNotice)
+            {
+                _lastTrimNotice = trimmed;
+                Notice("性格技能上限调整，移除：" + trimmed);
+            }
             if (!isActiveAndEnabled)
                 return;
 

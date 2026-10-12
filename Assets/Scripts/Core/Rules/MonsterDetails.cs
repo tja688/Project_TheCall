@@ -30,7 +30,7 @@ namespace TheCall
 
     public sealed class MonsterSkillDetail
     {
-        public MonsterSkillDetail(string name, SkillUse kind, Rarity rarity, string function, IReadOnlyList<SentenceSpan> spans, bool isTemporary = false)
+        public MonsterSkillDetail(string name, SkillUse kind, Rarity rarity, string function, IReadOnlyList<SentenceSpan> spans, bool isTemporary = false, string instanceId = "", string sourceKind = "", string sourceId = "", string sourceMonsterId = "")
         {
             if (string.IsNullOrEmpty(function))
                 throw new ArgumentException("A skill needs a function.", nameof(function));
@@ -62,8 +62,13 @@ namespace TheCall
             Sentence = plain.ToString();
             DisplaySentence = display.ToString();
             IsTemporary = isTemporary;
+            InstanceId = instanceId; SourceKind = sourceKind; SourceId = sourceId; SourceMonsterId = sourceMonsterId;
         }
 
+        public string InstanceId { get; }
+        public string SourceKind { get; }
+        public string SourceId { get; }
+        public string SourceMonsterId { get; }
         public string Name { get; }
 
         public string Sentence { get; }
@@ -96,7 +101,7 @@ namespace TheCall
             string mood = "普通",
             int moodEnergyDelta = 0,
             int consecutiveWorkDays = 0,
-            int consecutiveRestDays = 0)
+            int consecutiveRestDays = 0, string personalityDescription = "")
         {
             if (skills == null || skills.Count == 0 || skills.Count > 4)
                 throw new ArgumentException("A monster needs 1 to 4 skills.", nameof(skills));
@@ -124,6 +129,7 @@ namespace TheCall
             MoodEnergyDelta = moodEnergyDelta;
             ConsecutiveWorkDays = consecutiveWorkDays;
             ConsecutiveRestDays = consecutiveRestDays;
+            PersonalityDescription = personalityDescription;
         }
 
         public string Id { get; }
@@ -140,6 +146,7 @@ namespace TheCall
         public int Capacity { get; }
 
         public string Personality { get; }
+        public string PersonalityDescription { get; }
 
         public string Race { get; }
 

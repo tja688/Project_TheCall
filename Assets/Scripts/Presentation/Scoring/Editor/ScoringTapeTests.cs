@@ -6,6 +6,36 @@ namespace TheCall.Scoring
     public sealed class ScoringTapeTests
     {
         [Test]
+        public void 加班支付解释区分带入本轮与累计()
+        {
+            var tape = ScoringTape.Arrange(new SettlementEntry[]
+            {
+                new SettlementLanding("target", "能量体", 25, 1, 25, 0),
+                new SettlementPayment(50, 0, true, false, true, 40, 2)
+            }, new[] { "target" }, 35);
+            var pay = tape.Cues.OfType<PayCue>().Single();
+            Assert.That(pay.InitialEnergy, Is.EqualTo(35));
+            Assert.That(pay.RoundProduced, Is.EqualTo(25));
+            Assert.That(pay.Produced, Is.EqualTo(60));
+            Assert.That(pay.Line, Is.EqualTo("带入 35，本轮新增 25，累计 60 能量，超额，获得 1 科技点，熔炉保留 2 能量"));
+        }
+
+        [Test]
+        public void 结构化来源保持怪物与技能实例标识而不依赖显示名()
+        {
+            var tape = ScoringTape.Arrange(new SettlementEntry[]
+            {
+                new SettlementLanding("target", "能量体", 8, 1, 8, 0, 5, 0, false,
+                    new[] { LandingAdd.Of("奇异香", 3, "source", 0, "同名怪物", "source-instance") },
+                    System.Array.Empty<LandingFactor>(), "同名怪物")
+            }, new[] { "target", "source" }, 10);
+            var addition = tape.Cues.OfType<PopCue>().Single().Beats.Single(beat => beat.Role == BeatRole.Add);
+            Assert.That(addition.SourceMonsterId, Is.EqualTo("source"));
+            Assert.That(addition.SourceSkillInstanceId, Is.EqualTo("source-instance"));
+            Assert.That(tape.Produced, Is.EqualTo(18));
+        }
+
+        [Test]
         public void 残留之后空消灭从残留走回吞噬者()
         {
             var tape = ScoringTape.Arrange(
@@ -72,7 +102,7 @@ namespace TheCall.Scoring
             Assert.That(pay.Kind, Is.EqualTo(PayKind.Paid));
             Assert.That(pay.Produced, Is.EqualTo(6));
             Assert.That(pay.Wage, Is.EqualTo(40));
-            Assert.That(pay.Line, Is.EqualTo("获得 6 能量，获得 1 科技点"));
+            Assert.That(pay.Line, Is.EqualTo("获得 6 能量，获得 0 科技点"));
             Assert.That(slots, Is.EqualTo(new[] { "breath", "swapper" }));
             AssertRolesOnce(tape);
         }
@@ -165,7 +195,7 @@ namespace TheCall.Scoring
 
             var paid = PayOf(new SettlementPayment(8, 0, false, false, false, 0));
             Assert.That(paid.Kind, Is.EqualTo(PayKind.Paid));
-            Assert.That(paid.Line, Is.EqualTo("获得 0 能量，获得 1 科技点"));
+            Assert.That(paid.Line, Is.EqualTo("获得 0 能量，获得 0 科技点"));
         }
 
         [Test]

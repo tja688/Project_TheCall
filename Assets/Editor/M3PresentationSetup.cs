@@ -88,33 +88,36 @@ namespace TheCall.Editor
 
             catalog.races.Clear();
             void AddRace(string name, Sprite icon) => catalog.races.Add(new NamedSpriteDef { name = name, icon = icon });
-            AddRace("金", S("coin") ?? IconAt(200));
-            AddRace("木", S("wood_log") ?? IconAt(205));
-            AddRace("水", S("watering_can") ?? S("potion") ?? IconAt(210));
-            AddRace("火", S("bar_fill_energy") ?? IconAt(215));
-            AddRace("土", S("stone") ?? IconAt(220));
+            AddRace("山脉", S("coin") ?? IconAt(200));
+            AddRace("森林", S("wood_log") ?? IconAt(205));
+            AddRace("海生", S("watering_can") ?? S("potion") ?? IconAt(210));
+            AddRace("天空", S("bar_fill_energy") ?? IconAt(215));
+            AddRace("沙漠", S("stone") ?? IconAt(220));
 
             catalog.moods.Clear();
             void AddMood(string name, Sprite icon) => catalog.moods.Add(new NamedSpriteDef { name = name, icon = icon });
-            AddMood("极好", S("gem") ?? IconAt(250));
-            AddMood("良好", S("apple") ?? IconAt(251));
+            AddMood("热爱", S("gem") ?? IconAt(250));
+            AddMood("热情", S("apple") ?? IconAt(251));
             AddMood("普通", S("bread") ?? IconAt(252));
-            AddMood("糟糕", S("turnip") ?? IconAt(253));
-            AddMood("崩溃", S("mushroom") ?? IconAt(254));
+            AddMood("疲倦", S("turnip") ?? IconAt(253));
+            AddMood("倦怠", S("mushroom") ?? IconAt(254));
 
             catalog.personalities.Clear();
             void AddPersonality(string name, Sprite icon) => catalog.personalities.Add(new NamedSpriteDef { name = name, icon = icon });
-            string[] personalities = {
-                "稳定", "狂躁", "悲观", "乐天", "嫉妒", "宽容", "自律", "怠惰", "贪财", "慷慨", "孤僻", "随和", "重视血脉",
-                "独断", "追随", "随心所欲", "按部就班", "暴食", "厌食", "独立", "依赖",
-                "自私", "利他", "极端", "安于现状"
-            };
+            var book = ContentBook.Parse(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json")));
+            var personalities = new string[book.Personalities.Count];
+            for (var i = 0; i < personalities.Length; i++) personalities[i] = book.Personalities[i].Name;
             for (var i = 0; i < personalities.Length; i++)
             {
                 var icon = IconAt(i + 1) ?? S("gem");
                 AddPersonality(personalities[i], icon);
             }
 
+            foreach (var tool in catalog.tools)
+            {
+                var definition = book.FindTool(tool.name);
+                if (definition != null) { tool.description = definition.Description; tool.price = definition.Price; tool.rarity = definition.Rarity; }
+            }
             EditorUtility.SetDirty(catalog);
             AssetDatabase.SaveAssets();
             Debug.Log($"Created PresentationSpriteCatalog with {catalog.tools.Count} tools, {catalog.races.Count} races, {catalog.moods.Count} moods, {catalog.personalities.Count} personalities.");

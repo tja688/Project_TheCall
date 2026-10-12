@@ -49,6 +49,16 @@ namespace TheCall.Tests
                 }
             }
 
+            if (ContentGate.Current != null && options.Count > 0 && options[0] is string rarityWord &&
+                (rarityWord == "白" || rarityWord == "蓝" || rarityWord == "金"))
+            {
+                var skillDef = ContentGate.Current.FindSkill(name);
+                if (skillDef != null)
+                {
+                    var word = skillDef.Rarity == Rarity.Gold ? "金" : skillDef.Rarity == Rarity.Blue ? "蓝" : "白";
+                    for (var i = 0; i < options.Count; i++) if (options[i] is string text && text == word) return options[i];
+                }
+            }
             if (ContentGate.Current != null)
             {
                 var tool = ContentGate.Current.FindTool(name);

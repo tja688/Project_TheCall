@@ -35,6 +35,8 @@ namespace TheCall
         readonly Dictionary<string, Sprite> _personalityMap = new Dictionary<string, Sprite>(StringComparer.Ordinal);
 
         bool _initialized;
+        void OnEnable() => _initialized = false;
+        void OnValidate() => _initialized = false;
 
         void Init()
         {

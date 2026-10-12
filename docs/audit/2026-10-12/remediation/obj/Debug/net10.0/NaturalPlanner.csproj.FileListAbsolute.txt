@@ -1,0 +1,15 @@
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\bin\Debug\net10.0\NaturalPlanner.exe
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\bin\Debug\net10.0\NaturalPlanner.deps.json
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\bin\Debug\net10.0\NaturalPlanner.runtimeconfig.json
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\bin\Debug\net10.0\NaturalPlanner.dll
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\bin\Debug\net10.0\NaturalPlanner.pdb
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.AssemblyInfoInputs.cache
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.AssemblyInfo.cs
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.csproj.CoreCompileInputs.cache
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.sourcelink.json
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.dll
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\refint\NaturalPlanner.dll
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.pdb
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\NaturalPlanner.genruntimeconfig.cache
+C:\Users\jinji\Documents\GitHub\Project_TheCall\docs\audit\2026-10-12\remediation\obj\Debug\net10.0\ref\NaturalPlanner.dll

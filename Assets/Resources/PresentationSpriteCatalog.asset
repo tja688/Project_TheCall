@@ -104,75 +104,75 @@ MonoBehaviour:
     rarity: 2
     price: 80
   races:
-  - name: "\u91D1"
+  - name: "\u5C71\u8109"
     icon: {fileID: -232543730, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u6728"
+  - name: "\u68EE\u6797"
     icon: {fileID: -568833257, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u6C34"
+  - name: "\u6D77\u751F"
     icon: {fileID: 1694634285, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u706B"
+  - name: "\u5929\u7A7A"
     icon: {fileID: 1533199738, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u571F"
+  - name: "\u6C99\u6F20"
     icon: {fileID: -509520459, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
   moods:
-  - name: "\u6781\u597D"
+  - name: "\u70ED\u7231"
     icon: {fileID: -1555036855, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u826F\u597D"
+  - name: "\u70ED\u60C5"
     icon: {fileID: 1457295534, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
   - name: "\u666E\u901A"
     icon: {fileID: -327584178, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u7CDF\u7CD5"
+  - name: "\u75B2\u5026"
     icon: {fileID: -269321964, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
-  - name: "\u5D29\u6E83"
+  - name: "\u5026\u6020"
     icon: {fileID: 1773079932, guid: 1a42a2c43538708469b44ad70c0f2b95, type: 3}
   personalities:
   - name: "\u7A33\u5B9A"
     icon: {fileID: -2035314436, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u72C2\u8E81"
-    icon: {fileID: 992068599, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u60B2\u89C2"
-    icon: {fileID: 901203590, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u4E50\u5929"
-    icon: {fileID: -811548174, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u5AC9\u5992"
-    icon: {fileID: 1803604945, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u5BBD\u5BB9"
-    icon: {fileID: 613240779, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u81EA\u5F8B"
-    icon: {fileID: -752226768, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u6020\u60F0"
-    icon: {fileID: 1456249318, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u8D2A\u8D22"
-    icon: {fileID: -21301037, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u6177\u6168"
-    icon: {fileID: 33429771, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
   - name: "\u5B64\u50FB"
-    icon: {fileID: -851275779, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u968F\u548C"
-    icon: {fileID: -849626947, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+    icon: {fileID: 992068599, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
   - name: "\u91CD\u89C6\u8840\u8109"
-    icon: {fileID: 1766691334, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u72EC\u65AD"
-    icon: {fileID: 2079997125, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u8FFD\u968F"
-    icon: {fileID: 52365683, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u968F\u5FC3\u6240\u6B32"
-    icon: {fileID: 626690836, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u6309\u90E8\u5C31\u73ED"
-    icon: {fileID: -519625987, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u66B4\u98DF"
-    icon: {fileID: 1104101613, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u538C\u98DF"
-    icon: {fileID: 949882826, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u72EC\u7ACB"
-    icon: {fileID: 1751535217, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u4F9D\u8D56"
-    icon: {fileID: 1409905150, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+    icon: {fileID: 901203590, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u5408\u7FA4"
+    icon: {fileID: -811548174, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
   - name: "\u81EA\u79C1"
-    icon: {fileID: 348071480, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u5229\u4ED6"
-    icon: {fileID: -377720976, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
-  - name: "\u6781\u7AEF"
-    icon: {fileID: 634431898, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+    icon: {fileID: 1803604945, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u72EC\u7ACB"
+    icon: {fileID: 613240779, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u604B\u7231\u8111"
+    icon: {fileID: -752226768, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u81EA\u5F8B"
+    icon: {fileID: 1456249318, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
   - name: "\u5B89\u4E8E\u73B0\u72B6"
+    icon: {fileID: -21301037, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u8D2A\u8D22"
+    icon: {fileID: 33429771, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u6025\u8E81"
+    icon: {fileID: -851275779, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u7A33\u91CD"
+    icon: {fileID: -849626947, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u4E50\u5929\u6D3E"
+    icon: {fileID: 1766691334, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u70ED\u7231\u5DE5\u4F5C"
+    icon: {fileID: 2079997125, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u4E50\u4E8E\u52A9\u4EBA"
+    icon: {fileID: 52365683, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u4F9D\u8D56"
+    icon: {fileID: 626690836, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u597D\u5B66"
+    icon: {fileID: -519625987, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u6478\u9C7C\u6D3E"
+    icon: {fileID: 1104101613, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u538C\u6076\u5DE5\u4F5C"
+    icon: {fileID: 949882826, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u538C\u4E16"
+    icon: {fileID: 1751535217, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u4EC7\u6068\u8840\u8109"
+    icon: {fileID: 1409905150, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u968F\u5FC3\u6240\u6B32"
+    icon: {fileID: 348071480, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u597D\u5947"
+    icon: {fileID: -377720976, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u4E0A\u8FDB\u5FC3"
+    icon: {fileID: 634431898, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}
+  - name: "\u8FF7\u604B\u6B7B\u4EA1"
     icon: {fileID: -1080336686, guid: 8531f80ad934327479c0b708c23b73ba, type: 3}

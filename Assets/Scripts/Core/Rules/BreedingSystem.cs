@@ -44,50 +44,31 @@ namespace TheCall
                 var race = parentWithRace.Race ?? races.Draw(draw);
 
                 var maxSkills = personality == "安于现状" ? 2 : 4;
-                var names = Inherit(parents, draw);
-
-                var geneAdded = false;
-                if (!string.IsNullOrEmpty(skill))
-                {
-                    if (run.HasTool("复读腺") || !names.Contains(skill))
-                    {
-                        names.Add(skill);
-                        geneAdded = true;
-                    }
-                }
-
+                var candidates = Inherit(parents, draw, run.HasTool("复读腺"));
+                string geneId = null;
+                foreach (var gene in run.GeneSlots) if (gene.ReservedBreedingSlot == slot) geneId = gene.Id;
+                var geneCandidate = string.IsNullOrEmpty(skill) ? null :
+                    new Candidate(skill, SkillSourceKind.Gene, geneId, null);
+                if (geneCandidate != null && (run.HasTool("复读腺") || !Contains(candidates, skill)))
+                    candidates.Add(geneCandidate);
                 var tech = this.GetUtility<TechCatalog>();
                 if (tech.GrantsExtraSkill(run.UnlockedTech))
                 {
-                    var pool = Addable(this.GetUtility<SkillCatalog>(), names);
+                    var pool = new List<string>();
+                    foreach (var name in this.GetUtility<SkillCatalog>().Names())
+                        if (run.HasTool("复读腺") || !Contains(candidates, name)) pool.Add(name);
+                    // Mutation is rolled even if the eventual child is already at capacity.
                     if (pool.Count > 0 && draw.Chance(ContentGate.Current.Economy.TechPercent))
-                        names.Add(draw.Choose(pool));
+                        candidates.Add(new Candidate(draw.Choose(pool), SkillSourceKind.Mutation, "mutation:" + slot, null));
                 }
-
-                var geneRetained = geneAdded;
-                if (names.Count > maxSkills)
+                while (candidates.Count > maxSkills)
                 {
-                    while (names.Count > maxSkills)
-                    {
-                        var toRemove = draw.Choose(names);
-                        var removeIdx = names.IndexOf(toRemove);
-                        if (removeIdx >= 0)
-                        {
-                            if (geneAdded && names[removeIdx] == skill)
-                                geneRetained = false;
-                            names.RemoveAt(removeIdx);
-                        }
-                        else
-                        {
-                            names.RemoveAt(names.Count - 1);
-                        }
-                    }
+                    var indices = new List<int>();
+                    for (var i = 0; i < candidates.Count; i++) indices.Add(i);
+                    candidates.RemoveAt(draw.Choose(indices));
                 }
-
-                if (geneRetained)
-                    run.ConsumeReservedGene(slot);
-                else
-                    run.UnreserveGene(slot);
+                if (geneCandidate != null && candidates.Contains(geneCandidate)) run.ConsumeReservedGene(slot);
+                else run.UnreserveGene(slot);
 
                 var modifier = 0;
                 if (tech.GrantsModifier(run.UnlockedTech) && draw.Chance(ContentGate.Current.Economy.TechPercent))
@@ -97,7 +78,12 @@ namespace TheCall
                 for (var parent = 0; parent < parents.Count; parent++)
                     parentIds[parent] = parents[parent].Id;
 
-                run.AddToCage(run.CreateMonster(names, modifier, appearance, parentIds, personality: personality, race: race, mood: "普通"));
+                var names = new List<string>();
+                foreach (var candidate in candidates) names.Add(candidate.Name);
+                var child = run.CreateMonster(names, modifier, appearance, parentIds, personality: personality, race: race);
+                for (var i = 0; i < candidates.Count; i++)
+                    child.Skills[i] = run.MakeSkill(candidates[i].Name, false, candidates[i].Kind, candidates[i].SourceId, candidates[i].ParentId);
+                run.AddToCage(child);
             }
         }
 
@@ -134,120 +120,78 @@ namespace TheCall
             return parents;
         }
 
-        static void ReturnSkill(RunModel run, string skill)
+        sealed class Candidate
         {
-            if (string.IsNullOrEmpty(skill) || run.SkillSlots.Count >= 3)
-                return;
-
-            run.PutSkillInSlot(skill);
+            public Candidate(string name, SkillSourceKind kind, string sourceId, string parentId)
+            { Name = name; Kind = kind; SourceId = sourceId; ParentId = parentId; }
+            public string Name { get; }
+            public SkillSourceKind Kind { get; }
+            public string SourceId { get; }
+            public string ParentId { get; }
         }
-
-        static List<string> Addable(SkillCatalog catalog, List<string> names)
+        static bool Contains(List<Candidate> candidates, string name) => candidates.Exists(x => x.Name == name);
+        static List<string> Options(Monster parent, List<Candidate> chosen)
         {
-            var pool = new List<string>();
-            if (names.Count >= 4)
-                return pool;
-
-            var all = catalog.Names();
-            for (var i = 0; i < all.Count; i++)
-            {
-                if (!names.Contains(all[i]))
-                    pool.Add(all[i]);
-            }
-
-            return pool;
+            var names = new List<string>();
+            foreach (var skill in parent.Skills)
+                if (!Contains(chosen, skill.Name) && !names.Contains(skill.Name)) names.Add(skill.Name);
+            return names;
         }
-
-        static List<string> Inherit(List<Monster> parents, IDraw draw)
+        static Candidate FromParent(Monster parent, string name)
         {
-            var allSingle = true;
-            for (var i = 0; i < parents.Count; i++)
+            foreach (var skill in parent.Skills)
+                if (skill.Name == name) return new Candidate(name, SkillSourceKind.Parent, skill.Id, parent.Id);
+            throw new System.InvalidOperationException("亲本候选不存在");
+        }
+        static List<Candidate> Inherit(List<Monster> parents, IDraw draw, bool duplicates)
+        {
+            var chosen = new List<Candidate>();
+            foreach (var parent in parents)
             {
-                if (parents[i].Skills.Count != 1)
-                    allSingle = false;
-            }
-
-            if (allSingle)
-                return Distinct(parents);
-
-            var chosen = new List<string>();
-            for (var i = 0; i < parents.Count; i++)
-            {
-                var options = Except(parents[i], chosen);
+                if (duplicates)
+                {
+                    var indices = new List<int>();
+                    for (var i = 0; i < parent.Skills.Count; i++) indices.Add(i);
+                    var instance = parent.Skills[indices.Count == 1 ? 0 : draw.Choose(indices)];
+                    chosen.Add(new Candidate(instance.Name, SkillSourceKind.Parent, instance.Id, parent.Id));
+                    continue;
+                }
+                var options = Options(parent, chosen);
                 if (options.Count == 0)
                 {
-                    Release(parents, chosen, i, draw);
-                    options = Except(parents[i], chosen);
+                    // Follow alternate-source chains, so three-parent collisions do not lose a
+                    // contribution when a legal distinct assignment exists.
+                    for (var i = 0; i < chosen.Count && options.Count == 0; i++)
+                    {
+                        if (!parent.HasSkill(chosen[i].Name)) continue;
+                        if (MoveContribution(parents, chosen, i, new HashSet<int>(), draw))
+                            options = Options(parent, chosen);
+                    }
                 }
-
-                if (options.Count == 0)
-                    continue;
-
-                chosen.Add(options.Count == 1 ? options[0] : draw.Choose(options));
+                if (options.Count != 0)
+                    chosen.Add(FromParent(parent, options.Count == 1 ? options[0] : draw.Choose(options)));
             }
-
             return chosen;
         }
 
-        static List<string> Distinct(List<Monster> parents)
+        static bool MoveContribution(List<Monster> parents, List<Candidate> chosen, int index, HashSet<int> visited, IDraw draw)
         {
-            var names = new List<string>();
-            for (var i = 0; i < parents.Count; i++)
+            if (!visited.Add(index)) return false;
+            var source = parents.Find(x => x.Id == chosen[index].ParentId);
+            var alternatives = new List<string>();
+            foreach (var skill in source.Skills)
+                if (skill.Name != chosen[index].Name && !alternatives.Contains(skill.Name)) alternatives.Add(skill.Name);
+            while (alternatives.Count > 0)
             {
-                var name = parents[i].Skills[0].Name;
-                if (!names.Contains(name))
-                    names.Add(name);
-            }
-
-            return names;
-        }
-
-        static void Release(List<Monster> parents, List<string> chosen, int stuckIndex, IDraw draw)
-        {
-            var stuck = parents[stuckIndex];
-            for (var i = 0; i < stuckIndex; i++)
-            {
-                if (!Has(stuck, chosen[i]))
-                    continue;
-
-                var alternatives = new List<string>();
-                var skills = parents[i].Skills;
-                for (var skill = 0; skill < skills.Count; skill++)
+                var name = alternatives.Count == 1 ? alternatives[0] : draw.Choose(alternatives);
+                alternatives.Remove(name);
+                var conflict = chosen.FindIndex(x => x.Name == name);
+                if (conflict < 0 || MoveContribution(parents, chosen, conflict, visited, draw))
                 {
-                    var name = skills[skill].Name;
-                    if (name != chosen[i] && !chosen.Contains(name))
-                        alternatives.Add(name);
-                }
-
-                if (alternatives.Count == 0)
-                    continue;
-
-                chosen[i] = alternatives.Count == 1 ? alternatives[0] : draw.Choose(alternatives);
-                return;
-            }
-        }
-
-        static List<string> Except(Monster parent, List<string> chosen)
-        {
-            var options = new List<string>();
-            for (var i = 0; i < parent.Skills.Count; i++)
-            {
-                var name = parent.Skills[i].Name;
-                if (!chosen.Contains(name))
-                    options.Add(name);
-            }
-
-            return options;
-        }
-
-        static bool Has(Monster parent, string name)
-        {
-            for (var i = 0; i < parent.Skills.Count; i++)
-            {
-                if (parent.Skills[i].Name == name)
+                    chosen[index] = FromParent(source, name);
                     return true;
+                }
             }
-
             return false;
         }
 

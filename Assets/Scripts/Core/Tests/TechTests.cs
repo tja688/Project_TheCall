@@ -398,7 +398,7 @@ namespace TheCall.Tests
         }
 
         [Test]
-        public void 后代已经有四个技能时变异学说不再追加()
+        public void 后代已有四个候选仍掷变异并随机裁切()
         {
             var draw = new TechDraw(OpeningNames, true);
             Open(draw);
@@ -420,7 +420,8 @@ namespace TheCall.Tests
 
             Assert.That(
                 Offspring(before).SkillNames,
-                Is.EqualTo(new[] { "奇异香", "怪异香", "汲取鼻", "良好肉体" }));
+                Is.EqualTo(new[] { "怪异香", "汲取鼻", "良好肉体", "左复制腺体" }));
+            Assert.That(draw.Percents, Is.EqualTo(new[] { 10 }));
         }
 
         [Test]

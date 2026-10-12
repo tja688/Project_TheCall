@@ -13,11 +13,12 @@ namespace TheCall
             int produced,
             int due,
             SettlementPayment payment,
-            IReadOnlyList<SettlementEntry> entries)
+            IReadOnlyList<SettlementEntry> entries, int initialEnergy = 0)
         {
             LevelNumber = levelNumber;
             Overtime = overtime;
             Produced = produced;
+            InitialEnergy = initialEnergy;
             Due = due;
             Payment = payment;
             Entries = entries ?? System.Array.Empty<SettlementEntry>();
@@ -28,6 +29,10 @@ namespace TheCall
         public bool Overtime { get; }
 
         public int Produced { get; }
+
+        public int InitialEnergy { get; }
+
+        public int AccumulatedEnergy => InitialEnergy + Produced;
 
         public int Due { get; }
 
@@ -97,7 +102,7 @@ namespace TheCall
         {
             var payment = submission.Payment;
             var gained = (submission.Overtime ? "加班获得 " : "本关获得 ") + submission.Produced +
-                         " 点能量，目标 " + submission.Due + " 点。";
+                         " 点能量，带入 " + submission.InitialEnergy + "，支付前累计 " + submission.AccumulatedEnergy + "，目标 " + submission.Due + " 点。";
             if (payment.Failed)
                 return gained + "游戏失败。";
 
@@ -108,7 +113,7 @@ namespace TheCall
                 gained += "超额。";
 
             var wage = submission.Overtime ? "本段工资 " : "工资 ";
-            var result = gained + "获得 1 科技点。" + wage + payment.Wage + " 金币。";
+            var result = gained + "获得 " + (payment.Excess ? 1 : 0) + " 科技点。" + wage + payment.Wage + " 金币。";
             if (payment.RetainedEnergy > 0)
                 result += "蓄热熔炉保留 " + payment.RetainedEnergy + " 点能量到下一关。";
             return result;

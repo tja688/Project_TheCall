@@ -1,0 +1,177 @@
+natural-player-run seed=90 unity=6000.6.0f1
+frame=13 input=begin phase=Opening day=0 energy=0 gold=0 tech=0 rng=21 playback=False
+  monster=m1 personality=厌恶工作 race=山脉 mood=普通 skills=良好肉体:0:temporary=False;双头能量体:2:temporary=False;
+  monster=m2 personality=乐天派 race=沙漠 mood=热情 skills=良好肉体:0:temporary=False;蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=优质肉体:0:temporary=False;情绪收集器:0:temporary=False;
+frame=13 input=capture 01-opening.png phase=Opening day=0 energy=0 gold=0 tech=0 rng=21 playback=False
+  monster=m1 personality=厌恶工作 race=山脉 mood=普通 skills=良好肉体:0:temporary=False;双头能量体:2:temporary=False;
+  monster=m2 personality=乐天派 race=沙漠 mood=热情 skills=良好肉体:0:temporary=False;蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=优质肉体:0:temporary=False;情绪收集器:0:temporary=False;
+frame=396 input=opening m3 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=578 input=drag m4 extraction 0 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=769 input=drag m10 extraction 1 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=947 input=drag m3 extraction 2 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=1192 input=drag m7 extraction 3 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=1453 input=drag m6 extraction 4 phase=Operation day=1 energy=0 gold=0 tech=0 rng=66 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m4 personality=好奇 race=沙漠 mood=普通 skills=自爆体:10:temporary=False;不稳定肉体:0:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m6 personality=独立 race=天空 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m7 personality=依赖 race=山脉 mood=普通 skills=自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m10 personality=稳定 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=1773 input=settle  phase=Shop day=1 energy=0 gold=60 tech=0 rng=99 playback=True
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m15 personality=自律 race=天空 mood=普通 skills=右能量体:2:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m13 personality=合群 race=山脉 mood=普通 skills=增生能量体:1:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m14 personality=恋爱脑 race=天空 mood=普通 skills=左能量体:2:temporary=False;能量体:5:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=1773 input=capture settle-7.png phase=Shop day=1 energy=0 gold=60 tech=0 rng=99 playback=True
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m15 personality=自律 race=天空 mood=普通 skills=右能量体:2:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m13 personality=合群 race=山脉 mood=普通 skills=增生能量体:1:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m14 personality=恋爱脑 race=天空 mood=普通 skills=左能量体:2:temporary=False;能量体:5:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=6884 input=buy m12 phase=Shop day=1 energy=0 gold=20 tech=0 rng=99 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m15 personality=自律 race=天空 mood=普通 skills=右能量体:2:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m13 personality=合群 race=山脉 mood=普通 skills=增生能量体:1:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m14 personality=恋爱脑 race=天空 mood=普通 skills=左能量体:2:temporary=False;能量体:5:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=6884 input=capture shop-8.png phase=Shop day=1 energy=0 gold=20 tech=0 rng=99 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m15 personality=自律 race=天空 mood=普通 skills=右能量体:2:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m13 personality=合群 race=山脉 mood=普通 skills=增生能量体:1:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m14 personality=恋爱脑 race=天空 mood=普通 skills=左能量体:2:temporary=False;能量体:5:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7056 input=leave  phase=LevelStart day=2 energy=0 gold=20 tech=0 rng=99 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7056 input=capture day-end-9.png phase=LevelStart day=2 energy=0 gold=20 tech=0 rng=99 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=左能量体:2:temporary=False;抽杀体:10:temporary=False;怪异香:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7239 input=begin  phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7382 input=drag m5 extraction 0 phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7513 input=drag m8 extraction 1 phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7604 input=drag m3 extraction 2 phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7722 input=drag m9 extraction 3 phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7802 input=drag m12 extraction 4 phase=Operation day=2 energy=0 gold=20 tech=0 rng=103 playback=False
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m12 personality=重视血脉 race=天空 mood=普通 skills=回响嗓:0:temporary=False;自爆体:10:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7926 input=settle  phase=Operation day=2 energy=53 gold=20 tech=0 rng=103 playback=True
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;
+frame=7926 input=capture settle-16.png phase=Operation day=2 energy=53 gold=20 tech=0 rng=103 playback=True
+  monster=m5 personality=独立 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m3 personality=好奇 race=山脉 mood=普通 skills=祭品腺:0:temporary=False;换位手:0:temporary=False;左复制腺体:0:temporary=False;镜眼:0:temporary=False;
+  monster=m8 personality=仇恨血脉 race=沙漠 mood=普通 skills=蜜能量体:3:temporary=False;
+  monster=m9 personality=迷恋死亡 race=海生 mood=普通 skills=传能耳:0:temporary=False;
+  monster=m11 personality=重视血脉 race=天空 mood=普通 skills=传能耳:0:temporary=False;

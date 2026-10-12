@@ -1,0 +1,2 @@
+System.InvalidOperationException: No visible empty cage target.
+  at TheCall.Editor.M5PlayModeAutomation.AdvancePlan () [0x00198] in C:\Users\jinji\Documents\GitHub\Project_TheCall\Assets\Editor\M5PlayModeAutomation.cs:189 

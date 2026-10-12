@@ -22,11 +22,17 @@ namespace TheCall
         readonly Dictionary<string, List<LandingAdd>> _rowAdds = new Dictionary<string, List<LandingAdd>>();
         readonly Dictionary<string, List<GrantedExtra>> _skillExtra = new Dictionary<string, List<GrantedExtra>>();
         readonly List<LandingAdd> _legacyAdds = new List<LandingAdd>();
+        SettlementSight _previewSight;
+        string[] _openingCells;
+        readonly Dictionary<string, int> _openingSkillCounts = new Dictionary<string, int>();
+        SkillInstance _executingSkill;
+        int _lockedTimes = 1;
         int _removalSequence;
         bool _sealed;
         string _hasteToolName;
         string _hasteMonsterId;
         string _hasteSkillName;
+        string _hasteSkillInstanceId;
         string _singleAffixToolName;
 
         public IReadOnlyList<SettlementEntry> Entries => _entries;
@@ -36,6 +42,7 @@ namespace TheCall
             var level = this.GetModel<LevelModel>();
             var run = this.GetModel<RunModel>();
             this.GetModel<SettlementSight>().Capture(level, run);
+            var initialEnergy = level.Energy;
             Score();
             ExecuteSwaps();
             ExecuteEndRemovals();
@@ -83,13 +90,18 @@ namespace TheCall
 
             Seal();
             _entries.Add(payment);
+            for (var eventIndex = 0; eventIndex < _entries.Count; eventIndex++)
+            {
+                _entries[eventIndex].Sequence = eventIndex;
+                _entries[eventIndex].EventId = run.LevelNumber + ":" + (wasOvertime ? "overtime" : "normal") + ":" + eventIndex;
+            }
             run.AppendProduction(new ProductionSubmission(
                 run.LevelNumber,
                 wasOvertime,
-                produced,
+                produced - initialEnergy,
                 due,
                 payment,
-                _entries.ToArray()));
+                _entries.ToArray(), initialEnergy));
             return result;
         }
 
@@ -113,6 +125,10 @@ namespace TheCall
             var tools = this.GetUtility<IToolCatalog>().Tools;
             _hasteToolName = ToolRules.HeldName(tools, run.Tools, ToolEffect.DoubleFirstEnergy);
             _singleAffixToolName = ToolRules.HeldName(tools, run.Tools, ToolEffect.DoubleSingleAffix);
+            _openingCells = level.CaptureExtraction();
+            _openingSkillCounts.Clear();
+            foreach (var id in _openingCells)
+                if (id != null && run.Find(id) != null) _openingSkillCounts[id] = run.Find(id).Skills.Count;
             BindHaste(level, run, catalog);
             GrantPermanentImmovable(run, intents);
             ApplyKin(level, run, catalog);
@@ -245,64 +261,28 @@ namespace TheCall
             if (curCell < 0)
                 return;
 
-            var stayingId = monsterId;
-            var echoGrants = NeighborGrants(run, level.Extraction, curCell - 1, catalog.ExtraWalksForRightNeighbor);
-            var capacityFromRight = NeighborGrants(run, level.Extraction, curCell + 1, catalog.CapacityExtraForLeftNeighbor);
-            var capacityFromLeft = NeighborGrants(run, level.Extraction, curCell - 1, catalog.CapacityExtraForRightNeighbor);
-            var affixEnergy = AffixEnergySnapshot(run, catalog, stayingId);
-            var points = SecondPointCount(stayingId);
-            for (var point = 0; point < points; point++)
+            for (var point = 0; point < SecondPointCount(monsterId); point++)
             {
-                var nowCell = IndexOf(level.Extraction, stayingId);
-                if (nowCell < 0)
-                    return;
-
-                WalkSkills(level, run, catalog, level.Extraction, nowCell, stayingId);
-                if (IndexOf(level.Extraction, stayingId) >= 0)
-                    SettlePoison(stayingId);
+                WalkSkills(level, run, catalog, level.Extraction, curCell, monsterId);
+                if (IndexOf(level.Extraction, monsterId) >= 0) SettlePoison(monsterId);
             }
+        }
 
-            var afterCell = IndexOf(level.Extraction, stayingId);
-            if (afterCell < 0)
-                return;
-
-            var monster = run.Find(stayingId);
-            if (monster == null)
-                return;
-
-            var skills = monster.Skills.ToArray();
-            for (var index = 0; index < skills.Length; index++)
+        List<ExtraGrant> TriggerGrants(RunModel run, SkillCatalog catalog, string monsterId, SkillInstance skill)
+        {
+            var cells = _openingCells ?? this.GetModel<LevelModel>().Extraction;
+            var cell = IndexOf(cells, monsterId);
+            var grants = NeighborGrants(run, cells, cell - 1, catalog.ExtraWalksForRightNeighbor);
+            if (catalog.ProducesEnergy(skill.Name))
             {
-                if (IndexOf(level.Extraction, stayingId) < 0)
-                    return;
-
-                var skill = skills[index];
-                var grants = new List<ExtraGrant>();
-                grants.AddRange(echoGrants);
-                if (catalog.ProducesEnergy(skill.Name))
-                {
-                    grants.AddRange(capacityFromRight);
-                    grants.AddRange(capacityFromLeft);
-                }
-
-                AppendSkillCountGrants(run, catalog, level.Extraction, stayingId, skill.Name, grants);
-                AppendPendingGrants(stayingId, skill.Name, grants);
-                if (AffixExtra(affixEnergy, skill.Name) == 1)
-                    grants.Add(new ExtraGrant(null, -1, false));
-
-                for (var time = 0; time < grants.Count; time++)
-                {
-                    var nowCell = IndexOf(level.Extraction, stayingId);
-                    if (nowCell < 0)
-                        return;
-
-                    var grant = grants[time];
-                    if (grant.Cause)
-                        _entries.Add(new SettlementCause(grant.SourceId, grant.SkillIndex));
-
-                    ScoreSkill(level, run, catalog, level.Extraction, nowCell, stayingId, skill, index);
-                }
+                grants.AddRange(NeighborGrants(run, cells, cell - 1, catalog.CapacityExtraForRightNeighbor));
+                grants.AddRange(NeighborGrants(run, cells, cell + 1, catalog.CapacityExtraForLeftNeighbor));
             }
+            AppendSkillCountGrants(run, catalog, cells, monsterId, skill.Name, grants);
+            AppendPendingGrants(monsterId, skill.Id, grants);
+            if (_singleAffixToolName != null && AffixExtra(AffixEnergySnapshot(run, catalog, monsterId), skill.Name) == 1)
+                grants.Add(new ExtraGrant(null, -1, false));
+            return grants;
         }
 
         void WalkSkills(
@@ -320,11 +300,23 @@ namespace TheCall
             var skills = monster.Skills.ToArray();
             for (var index = 0; index < skills.Length; index++)
             {
-                var nowCell = IndexOf(level.Extraction, monsterId);
-                if (nowCell < 0)
-                    return;
-
-                ScoreSkill(level, run, catalog, level.Extraction, nowCell, monsterId, skills[index], index);
+                var skill = skills[index];
+                if (!catalog.IsActive(skill.Name)) { NoteHolds(catalog, monsterId, skill.Name, index); continue; }
+                var grants = TriggerGrants(run, catalog, monsterId, skill);
+                var times = 1 + grants.Count;
+                for (var time = 0; time < times; time++)
+                {
+                    var nowCell = IndexOf(level.Extraction, monsterId);
+                    if (nowCell < 0) return;
+                    if (time > 0 && time - 1 < grants.Count && grants[time - 1].Cause)
+                        _entries.Add(new SettlementCause(grants[time - 1].SourceId, grants[time - 1].SkillIndex));
+                    var prior = _executingSkill;
+                    var priorTimes = _lockedTimes;
+                    _executingSkill = skill;
+                    _lockedTimes = times;
+                    try { ScoreSkill(level, run, catalog, level.Extraction, nowCell, monsterId, skill, index); }
+                    finally { _executingSkill = prior; _lockedTimes = priorTimes; }
+                }
             }
         }
 
@@ -389,8 +381,8 @@ namespace TheCall
                         _entries.Add(new SettlementSwap(monsterId, targetId, true));
                         actor.MakeImmovable(false);
 
-                        var targetSkills = target.Skills;
-                        for (var tIdx = 0; tIdx < targetSkills.Count; tIdx++)
+                        var targetSkills = target.Skills.ToArray();
+                        for (var tIdx = 0; tIdx < targetSkills.Length; tIdx++)
                         {
                             var tSkill = targetSkills[tIdx];
                             if (!catalog.IsActive(tSkill.Name))
@@ -398,7 +390,12 @@ namespace TheCall
 
                             var tCell = IndexOf(level.Extraction, targetId);
                             if (tCell >= 0)
-                                ScoreSkill(level, run, catalog, level.Extraction, tCell, targetId, tSkill, tIdx);
+                            {
+                                var prior = _executingSkill; var priorTimes = _lockedTimes;
+                                _executingSkill = tSkill; _lockedTimes = 1;
+                                try { ScoreSkill(level, run, catalog, level.Extraction, tCell, targetId, tSkill, tIdx); }
+                                finally { _executingSkill = prior; _lockedTimes = priorTimes; }
+                            }
                         }
                     }
                     else
@@ -434,7 +431,7 @@ namespace TheCall
                     }
                     else
                     {
-                        Land(level, run, catalog, cells, cell, monsterId, skillName, 0);
+                        _entries.Add(new SettlementLanding(monsterId, skillName, 0, 1, 0, 0));
                     }
                     var afterCell = IndexOf(level.Extraction, monsterId);
                     if (afterCell >= 0)
@@ -470,15 +467,21 @@ namespace TheCall
                     if (leftTarget != null)
                     {
                         if (EliminateMonster(leftTarget))
+                        {
                             killed++;
+                            Land(level, run, catalog, level.Extraction, IndexOf(level.Extraction, monsterId), monsterId, skillName, sacrificeQuote);
+                        }
                     }
                     if (rightTarget != null && IndexOf(level.Extraction, rightTarget) >= 0)
                     {
                         if (EliminateMonster(rightTarget))
+                        {
                             killed++;
+                            Land(level, run, catalog, level.Extraction, IndexOf(level.Extraction, monsterId), monsterId, skillName, sacrificeQuote);
+                        }
                     }
                     var nowCell = IndexOf(level.Extraction, monsterId);
-                    Land(level, run, catalog, level.Extraction, nowCell, monsterId, skillName, killed * sacrificeQuote);
+                    if (killed == 0) _entries.Add(SettlementMark.Miss(monsterId));
                     if (nowCell >= 0)
                         OpenCapacity(level, run, catalog, level.Extraction, nowCell, monsterId);
                     return;
@@ -499,13 +502,13 @@ namespace TheCall
                             break;
                         var victim = this.GetUtility<IDraw>().Choose(others);
                         if (EliminateMonster(victim))
+                        {
                             killed++;
+                            Land(level, run, catalog, level.Extraction, IndexOf(level.Extraction, monsterId), monsterId, skillName, cullQuote);
+                        }
                     }
                     var nowCell = IndexOf(level.Extraction, monsterId);
-                    if (killed > 0)
-                        Land(level, run, catalog, level.Extraction, nowCell, monsterId, skillName, killed * cullQuote);
-                    else
-                        Land(level, run, catalog, level.Extraction, nowCell, monsterId, skillName, 0);
+                    if (killed == 0) _entries.Add(SettlementMark.Miss(monsterId));
                     if (nowCell >= 0)
                         OpenCapacity(level, run, catalog, level.Extraction, nowCell, monsterId);
                     return;
@@ -677,10 +680,72 @@ namespace TheCall
             int quote,
             int writeback = 0)
         {
-            var host = monsterId != null ? run.Find(monsterId) : null;
+            var landing = EvaluateLanding(level, run, catalog, cells, cell, monsterId, skillName, quote, writeback);
+            _entries.Add(landing);
+            level.AddEnergy(landing.Energy);
+            RespondToLanding(level, run, catalog, monsterId, skillName);
+        }
+
+        internal SettlementLanding Preview(string monsterId, string skillName, int quote, SettlementSight sight = null, string skillInstanceId = null)
+        {
+            var isolated = new SettlementSystem();
+            ((ICanSetArchitecture)isolated).SetArchitecture(((IBelongToArchitecture)this).GetArchitecture());
+            var level = this.GetModel<LevelModel>();
+            var run = this.GetModel<RunModel>();
+            var catalog = this.GetUtility<SkillCatalog>();
+            var cells = sight != null && sight.Showing ? sight.Cells : level.Extraction;
+            isolated._previewSight = sight;
+            isolated._openingCells = new List<string>(cells).ToArray();
+            foreach (var id in cells)
+                if (id != null && run.Find(id) != null) isolated._openingSkillCounts[id] = run.Find(id).Skills.Count;
+            isolated._singleAffixToolName = ToolRules.HeldName(this.GetUtility<IToolCatalog>().Tools, run.Tools, ToolEffect.DoubleSingleAffix);
+            isolated._hasteToolName = ToolRules.HeldName(this.GetUtility<IToolCatalog>().Tools, run.Tools, ToolEffect.DoubleFirstEnergy);
+            isolated.BindHaste(level, run, catalog);
+            var previewHost = isolated.FindForEvaluation(run, monsterId);
+            if (previewHost != null && skillInstanceId != null)
+                foreach (var instance in previewHost.Skills)
+                    if (instance.Id == skillInstanceId) isolated._executingSkill = instance;
+            if (IndexOf(cells, monsterId) >= 0)
+            {
+                for (var sourceCell = 0; sourceCell < cells.Count; sourceCell++)
+                {
+                    var source = isolated.FindForEvaluation(run, cells[sourceCell]);
+                    if (source == null) continue;
+                    for (var index = 0; index < source.Skills.Count; index++)
+                    {
+                        var skill = source.Skills[index];
+                        var bonus = catalog.NextEnergyBonus(skill.Name);
+                        if (bonus > 0 && NextMonster(cells, sourceCell) == monsterId)
+                            Remember(isolated._nextAdds, monsterId, LandingAdd.Of(skill.Name, bonus, source.Id, index, source.DisplayName, skill.Id));
+                        var earAmount = catalog.RightNeighborBonus(skill.Name) + catalog.RightRowBonus(skill.Name);
+                        if (earAmount > 0 && sourceCell + 1 < cells.Count && cells[sourceCell + 1] == monsterId && sourceCell > 0)
+                        {
+                            var actor = isolated.FindForEvaluation(run, cells[sourceCell - 1]);
+                            if (actor == null) continue;
+                            var attempts = 0;
+                            foreach (var active in actor.Skills)
+                                if (catalog.IsActive(active.Name)) attempts += 1 + isolated.TriggerGrants(run, catalog, actor.Id, active).Count;
+                            if (attempts > 0) Remember(isolated._rowAdds, monsterId, LandingAdd.Of(skill.Name, earAmount * attempts, source.Id, index, source.DisplayName, skill.Id));
+                        }
+                    }
+                }
+            }
+            var nominal = quote;
+            if (catalog.IsPopulation(skillName)) { nominal = Population(level, run); quote += nominal; }
+            else if (catalog.TryOwnMultiple(skillName, out var factor)) { nominal = previewHost == null ? 0 : isolated.OpeningSkillCount(previewHost) * factor; quote += nominal; }
+            var landing = isolated.EvaluateLanding(level, run, catalog, cells, IndexOf(cells, monsterId), monsterId, skillName, quote);
+            landing.NominalQuote = nominal;
+            return landing;
+        }
+
+        internal SettlementLanding EvaluateLanding(
+            LevelModel level, RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells,
+            int cell, string monsterId, string skillName, int quote, int writeback = 0)
+        {
+            var host = monsterId != null ? FindForEvaluation(run, monsterId) : null;
             var modifier = host == null ? 0 : host.Modifier;
             var adds = new List<LandingAdd>();
-            var added = CollectAdds(catalog, run, cells, cell, monsterId, skillName, modifier, adds);
+            var added = CollectAdds(catalog, run, _openingCells ?? cells, IndexOf(_openingCells ?? cells, monsterId), monsterId, skillName, modifier, adds);
 
             if (host != null && host.Personality == "依赖" && added != 0)
             {
@@ -715,7 +780,7 @@ namespace TheCall
                 factors.Add(LandingFactor.Of("自私", 2, monsterId, -1, host.DisplayName));
             }
 
-            if (run.HasTool("劣胜装置") && host != null && host.Skills.Count == 1)
+            if (run.HasTool("劣胜装置") && host != null && OpeningSkillCount(host) == 1)
             {
                 multiplier *= 2;
                 factors.Add(LandingFactor.Of("劣胜装置", 2, null, -1, null));
@@ -730,10 +795,11 @@ namespace TheCall
             var isIndependent = host != null && host.Personality == "独立";
             if (!isIndependent)
             {
-                multiplier *= RecordAdjacent(run, catalog, cells, cell, factors);
+                var openingCell = IndexOf(_openingCells ?? cells, monsterId);
+                multiplier *= RecordAdjacent(run, catalog, _openingCells ?? cells, openingCell, factors);
             }
 
-            if (_hasteToolName != null && monsterId == _hasteMonsterId && skillName == _hasteSkillName)
+            if (_hasteToolName != null && monsterId == _hasteMonsterId && skillName == _hasteSkillName && (_executingSkill == null || _executingSkill.Id == _hasteSkillInstanceId))
             {
                 multiplier *= 2;
                 factors.Add(LandingFactor.Of(_hasteToolName, 2, null, -1, null));
@@ -755,7 +821,7 @@ namespace TheCall
             }
 
             var energy = Math.Max(0, baseValue * multiplier);
-            _entries.Add(new SettlementLanding(
+            var landing = new SettlementLanding(
                 monsterId,
                 skillName,
                 baseValue,
@@ -769,9 +835,22 @@ namespace TheCall
                 factors,
                 host == null ? null : host.DisplayName,
                 cell,
-                countedSideName));
-            level.AddEnergy(energy);
-            RespondToLanding(level, run, catalog, monsterId, skillName);
+                countedSideName, _executingSkill?.Name == skillName ? _executingSkill.Id : null, _lockedTimes);
+            landing.OpeningCell = IndexOf(_openingCells ?? cells, monsterId);
+            landing.OpeningSkillCount = host == null ? 0 : OpeningSkillCount(host);
+            landing.NominalQuote = quote;
+            landing.DisplayUnitEnergy = sideSkill && sideCount != 1 ? Math.Max(0, quote * multiplier) : energy;
+            if (catalog.TryChance(skillName, out var chance, out _)) landing.ProbabilityPercent = chance;
+            if (host?.Personality == "随心所欲" && catalog.IsActive(skillName)) landing.ProbabilityPercent = landing.ProbabilityPercent * 80 / 100;
+            return landing;
+        }
+
+        void LandResponse(LevelModel level, RunModel run, SkillCatalog catalog, string id, SkillInstance skill, int times)
+        {
+            var prior = _executingSkill; var priorTimes = _lockedTimes;
+            _executingSkill = skill; _lockedTimes = times;
+            try { Land(level, run, catalog, level.Extraction, IndexOf(level.Extraction, id), id, skill.Name, skill.Quote); }
+            finally { _executingSkill = prior; _lockedTimes = priorTimes; }
         }
 
         void RespondToLanding(
@@ -801,8 +880,7 @@ namespace TheCall
                     if (!catalog.TryLandingResponse(skills[index].Name, causeSkill, out _))
                         continue;
 
-                    var echoGrants = NeighborGrants(run, cells, cell - 1, catalog.ExtraWalksForRightNeighbor);
-                    var times = 1 + echoGrants.Count;
+                    var times = 1 + TriggerGrants(run, catalog, id, skills[index]).Count;
                     for (var t = 0; t < times; t++)
                     {
                         Land(level, run, catalog, cells, cell, id, skills[index].Name, skills[index].Quote);
@@ -818,7 +896,7 @@ namespace TheCall
                 return;
 
             var source = run.Find(cells[cell]);
-            Remember(_nextAdds, next, LandingAdd.Of(skillName, bonus, cells[cell], skillIndex, source == null ? null : source.DisplayName));
+            run.RememberDailyAdd(next, LandingAdd.Of(skillName, bonus, cells[cell], skillIndex, source == null ? null : source.DisplayName, _executingSkill?.Id));
         }
 
         static void Remember(Dictionary<string, List<LandingAdd>> book, string monsterId, LandingAdd add)
@@ -1013,8 +1091,15 @@ namespace TheCall
             }
 
             var victimSkills = new List<string>(victim.Skills.Count);
+            var victimInstanceIds = new List<string>(victim.Skills.Count);
             for (var i = 0; i < victim.Skills.Count; i++)
+            {
                 victimSkills.Add(victim.Skills[i].Name);
+                victimInstanceIds.Add(victim.Skills[i].Id);
+            }
+            string sourceMonsterId = null;
+            foreach (var sourceId in level.Extraction)
+                if (sourceId != null && run.Find(sourceId) != null && run.Find(sourceId).Skills.Contains(_executingSkill)) sourceMonsterId = sourceId;
 
             level.TryRemove(monsterId);
             if (!run.TryDestroy(monsterId))
@@ -1023,66 +1108,52 @@ namespace TheCall
                 return false;
             }
 
-            _entries.Add(new SettlementRemoval(monsterId, true));
+            _entries.Add(new SettlementRemoval(monsterId, true, sourceMonsterId, cell, victimInstanceIds, victim.Personality, _executingSkill?.Id));
 
-            // Legacy from victim (遗赠)
-            for (var i = 0; i < victimSkills.Count; i++)
+            // Freeze the complete event recipient list before the first reaction can acquire skills.
+            var reactions = new List<Action>();
+            for (var position = 0; position < level.Extraction.Count; position++)
             {
-                int legacyAmt;
-                if (catalog.TryLegacyAddToOthers(victimSkills[i], out legacyAmt))
-                    _legacyAdds.Add(LandingAdd.Of(victimSkills[i], legacyAmt, null, -1, victim.DisplayName));
-
-                if (catalog.HasLegacy(victimSkills[i]))
+                if (position == cell)
                 {
-                    var pool = catalog.Names(DrawnPool.NotAmplifyOnly, Rarity.White, null);
-                    if (pool.Count > 0)
+                    for (var v = 0; v < victimSkills.Count; v++)
                     {
-                        var chosenSkill = draw.Choose(pool);
-                        run.AddToCage(run.CreateMonster(new[] { chosenSkill }));
+                        var name = victimSkills[v];
+                        if (catalog.TryLegacyAddToOthers(name, out var amount))
+                            reactions.Add(() => run.RememberDailyLegacy(LandingAdd.Of(name, amount, victim.Id, -1, victim.DisplayName)));
+                        if (catalog.HasLegacy(name))
+                            reactions.Add(() =>
+                            {
+                                run.AddToCage(this.GetSystem<FlowSystem>().GenerateSingleMonster());
+                            });
                     }
                 }
-            }
-
-            // Snapshot living listeners in extraction
-            var livingIds = new List<string>();
-            for (var i = 0; i < level.Extraction.Count; i++)
-            {
-                if (level.Extraction[i] != null && level.Extraction[i] != monsterId)
-                    livingIds.Add(level.Extraction[i]);
-            }
-
-            for (var i = 0; i < livingIds.Count; i++)
-            {
-                var listenerId = livingIds[i];
-                var curCell = IndexOf(level.Extraction, listenerId);
-                if (curCell < 0)
-                    continue;
-
+                var listenerId = level.Extraction[position];
+                if (listenerId == null) continue;
                 var listener = run.Find(listenerId);
-                if (listener == null)
-                    continue;
-
-                var lSkills = new List<SkillInstance>(listener.Skills);
-                for (var sIdx = 0; sIdx < lSkills.Count; sIdx++)
+                if (listener == null) continue;
+                var snapshot = listener.Skills.ToArray();
+                for (var index = 0; index < snapshot.Length; index++)
                 {
-                    var sName = lSkills[sIdx].Name;
-                    int corpseQuote;
-                    if (catalog.TryCorpseEnergyQuote(sName, out corpseQuote))
+                    var skill = snapshot[index];
+                    if (!catalog.TryCorpseEnergyQuote(skill.Name, out _) && !catalog.TryStealSkillOnOtherDestroyed(skill.Name)) continue;
+                    reactions.Add(() =>
                     {
-                        var nowCell = IndexOf(level.Extraction, listenerId);
-                        if (nowCell >= 0)
-                            Land(level, run, catalog, level.Extraction, nowCell, listenerId, sName, corpseQuote);
-                    }
-                    else if (catalog.TryStealSkillOnOtherDestroyed(sName))
-                    {
-                        if (victimSkills.Count > 0)
+                        if (IndexOf(level.Extraction, listenerId) < 0 || !listener.Skills.Contains(skill)) return;
+                        var times = 1 + TriggerGrants(run, catalog, listenerId, skill).Count;
+                        for (var t = 0; t < times; t++)
                         {
-                            var stolen = draw.Choose(victimSkills);
-                            run.TryGainSkill(listenerId, stolen, false);
+                            var nowCell = IndexOf(level.Extraction, listenerId);
+                            if (nowCell < 0) break;
+                            if (catalog.TryCorpseEnergyQuote(skill.Name, out var quote))
+                                LandResponse(level, run, catalog, listenerId, skill, times);
+                            else if (victimSkills.Count > 0)
+                                run.GainSkill(listenerId, draw.Choose(victimSkills), true, SkillSourceKind.SkillEffect, skill.Id, listenerId);
                         }
-                    }
+                    });
                 }
             }
+            foreach (var reaction in reactions) reaction();
 
             return true;
         }
@@ -1115,6 +1186,7 @@ namespace TheCall
         {
             _hasteMonsterId = null;
             _hasteSkillName = null;
+            _hasteSkillInstanceId = null;
             if (_hasteToolName == null)
                 return;
 
@@ -1136,6 +1208,7 @@ namespace TheCall
 
                     _hasteMonsterId = monster.Id;
                     _hasteSkillName = skills[skill].Name;
+                    _hasteSkillInstanceId = skills[skill].Id;
                     return;
                 }
 
@@ -1317,11 +1390,12 @@ namespace TheCall
                 if (amount == 0)
                     continue;
 
-                var add = LandingAdd.Of(skills[skillIndex].Name, amount, neighbor.Id, skillIndex, neighbor.DisplayName);
+                var responseTimes = 1 + TriggerGrants(run, catalog, neighbor.Id, skills[skillIndex]).Count;
+                var add = LandingAdd.Of(skills[skillIndex].Name, amount * responseTimes, neighbor.Id, skillIndex, neighbor.DisplayName, skills[skillIndex].Id);
                 var target = ear + 1;
                 if (target < cells.Count && cells[target] != null)
                 {
-                    Remember(_rowAdds, cells[target], add);
+                    run.RememberDailyAdd(cells[target], add);
                 }
             }
         }
@@ -1341,7 +1415,7 @@ namespace TheCall
                 for (var skill = 0; skill < monster.Skills.Count; skill++)
                 {
                     if (monster.Skills[skill].Name == skillName)
-                        AddExtra(id, skillName, 1, selfId, skillIndex);
+                        AddExtra(id, monster.Skills[skill].Id, 1, selfId, skillIndex);
                 }
             }
         }
@@ -1400,7 +1474,7 @@ namespace TheCall
                     {
                         GrantedExtra owner;
                         nameOwners.TryGetValue(monster.Skills[skill].Name, out owner);
-                        AddExtra(id, monster.Skills[skill].Name, 1, owner.SourceId, owner.SkillIndex);
+                        AddExtra(id, monster.Skills[skill].Id, 1, owner.SourceId, owner.SkillIndex);
                     }
                 }
             }
@@ -1444,11 +1518,11 @@ namespace TheCall
                 if (monster == null || monster.Skills.Count >= 4)
                     return gained;
 
-                var options = Missing(catalog, monster);
+                var options = run.HasTool("复读腺") ? new List<string>(catalog.Names()) : Missing(catalog, monster);
                 if (options.Count == 0)
                     return gained;
 
-                if (run.TryGainSkill(monsterId, draw.Choose(options)))
+                if (run.GainSkill(monsterId, draw.Choose(options), true, SkillSourceKind.SkillEffect, _executingSkill?.Id, monsterId).Success)
                     gained++;
             }
 
@@ -1477,14 +1551,14 @@ namespace TheCall
                     for (var index = 0; index < source.Skills.Count; index++)
                     {
                         var name = source.Skills[index].Name;
-                        if (!Owns(host, name))
+                        if (run.HasTool("复读腺") || !Owns(host, name))
                             options.Add(name);
                     }
 
                     if (options.Count == 0)
                         continue;
 
-                    if (run.TryGainSkill(monsterId, draw.Choose(options)))
+                    if (run.GainSkill(monsterId, draw.Choose(options), true, SkillSourceKind.SkillEffect, _executingSkill?.Id, monsterId).Success)
                         gained++;
                 }
             }
@@ -1551,7 +1625,7 @@ namespace TheCall
             if (!catalog.ProducesEnergy(skillName))
                 return;
 
-            var host = run.Find(monsterId);
+            var host = FindForEvaluation(run, monsterId);
             if (host == null)
                 return;
 
@@ -1560,12 +1634,12 @@ namespace TheCall
             {
                 int when;
                 int amount;
-                if (catalog.TrySkillCountAdd(skills[index].Name, out when, out amount) && skills.Count == when)
-                    adds.Add(LandingAdd.Of(skills[index].Name, amount, host.Id, index, host.DisplayName));
+                if (catalog.TrySkillCountAdd(skills[index].Name, out when, out amount) && OpeningSkillCount(host) == when)
+                    adds.Add(LandingAdd.Of(skills[index].Name, amount, host.Id, index, host.DisplayName, skills[index].Id));
 
                 CountedSide side;
                 if (catalog.TryEdge(skills[index].Name, out side, out amount) && AtEdge(cells, cell, side))
-                    adds.Add(LandingAdd.Of(skills[index].Name, amount, host.Id, index, host.DisplayName));
+                    adds.Add(LandingAdd.Of(skills[index].Name, amount, host.Id, index, host.DisplayName, skills[index].Id));
             }
         }
 
@@ -1626,7 +1700,7 @@ namespace TheCall
             return grants;
         }
 
-        static void AppendSkillCountGrants(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, string monsterId, string skillName, List<ExtraGrant> into)
+        void AppendSkillCountGrants(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, string monsterId, string skillName, List<ExtraGrant> into)
         {
             var monster = run.Find(monsterId);
             if (monster == null)
@@ -1641,7 +1715,7 @@ namespace TheCall
                     continue;
                 if (skills[index].Name == skillName)
                     continue;
-                if (skills.Count != when)
+                if (OpeningSkillCount(monster) != when)
                     continue;
 
                 for (var n = 0; n < walks; n++)
@@ -1653,7 +1727,7 @@ namespace TheCall
                 into.Add(new ExtraGrant(monster.Id, -1, true));
             }
 
-            if (run.HasTool("劣胜装置") && monster.Skills.Count == 1 && catalog.ProducesEnergy(skillName))
+            if (run.HasTool("劣胜装置") && OpeningSkillCount(monster) == 1 && catalog.ProducesEnergy(skillName))
             {
                 into.Add(new ExtraGrant(null, -1, true));
             }
@@ -1667,10 +1741,10 @@ namespace TheCall
                     var other = run.Find(otherId);
                     if (other == null) continue;
 
-                    if (HasParent(other, monster.Id) && other.HasSkill(skillName))
+                    if ((HasParent(other, monster.Id) || HasParent(monster, other.Id)) && other.HasSkill(skillName))
                     {
-                        if (monster.Personality == "重视血脉" || other.Personality == "重视血脉")
-                            into.Add(new ExtraGrant(other.Personality == "重视血脉" ? other.Id : monster.Id, -1, true));
+                        if (monster.Personality == "重视血脉") into.Add(new ExtraGrant(monster.Id, -1, true));
+                        if (other.Personality == "重视血脉") into.Add(new ExtraGrant(other.Id, -1, true));
                     }
                 }
             }
@@ -1692,8 +1766,10 @@ namespace TheCall
             if (!_skillExtra.TryGetValue(monsterId + "|" + skillName, out list) || list == null)
                 return;
 
+            var run = this.GetModel<RunModel>();
             for (var i = 0; i < list.Count; i++)
-                into.Add(new ExtraGrant(list[i].SourceId, list[i].SkillIndex, true));
+                if (list[i].SourceId == null || run.Find(list[i].SourceId) != null)
+                    into.Add(new ExtraGrant(list[i].SourceId, list[i].SkillIndex, true));
         }
 
         readonly struct GrantedExtra
@@ -1735,13 +1811,13 @@ namespace TheCall
             int modifier,
             List<LandingAdd> adds)
         {
-            var host = monsterId != null ? run.Find(monsterId) : null;
+            var host = monsterId != null ? FindForEvaluation(run, monsterId) : null;
             var isIndependent = host != null && host.Personality == "独立";
             var moodCatalog = this.GetUtility<IMoodCatalog>();
             var raceCatalog = this.GetUtility<IRaceCatalog>();
             var hasMindControl = run.HasTool("精神操控仪");
 
-            int PersonalityBonus(int amount) => (amount > 0 && hasMindControl) ? amount + 1 : amount;
+            int PersonalityBonus(int amount) => hasMindControl ? amount + 1 : amount;
 
             if (host != null && !string.IsNullOrEmpty(host.Mood) && moodCatalog != null)
             {
@@ -1751,9 +1827,9 @@ namespace TheCall
             }
 
             if (modifier != 0)
-                adds.Add(LandingAdd.Of("怪物修正", modifier, null, -1, null));
+                adds.Add(LandingAdd.Of("怪物修正", modifier, monsterId, -1, host?.DisplayName, sourceKind: SettlementSourceKind.Growth));
 
-            if (!isIndependent)
+            if (host != null && cell >= 0 && !isIndependent)
             {
                 for (var other = 0; other < cells.Count; other++)
                 {
@@ -1761,7 +1837,8 @@ namespace TheCall
                     if (otherId == null || otherId == monsterId)
                         continue;
 
-                    var otherMonster = run.Find(otherId);
+                    var otherMonster = FindForEvaluation(run, otherId);
+                    if (otherMonster == null) continue;
                     var skills = otherMonster.Skills;
                     for (var index = 0; index < skills.Count; index++)
                     {
@@ -1769,13 +1846,14 @@ namespace TheCall
                         if (amount == 0)
                             continue;
 
-                        adds.Add(LandingAdd.Of(skills[index].Name, amount, otherId, index, otherMonster.DisplayName));
+                        adds.Add(LandingAdd.Of(skills[index].Name, amount, otherId, index, otherMonster.DisplayName, skills[index].Id));
                     }
                 }
 
-                for (var i = 0; i < _legacyAdds.Count; i++)
-                    adds.Add(_legacyAdds[i]);
+                for (var i = 0; i < run.DailyLegacyAdds.Count; i++)
+                    adds.Add(run.DailyLegacyAdds[i]);
 
+                for (var i = 0; i < run.DailyAddsFor(monsterId).Count; i++) adds.Add(run.DailyAddsFor(monsterId)[i]);
                 Flush(_nextAdds, monsterId, adds);
                 Flush(_rowAdds, monsterId, adds);
             }
@@ -1805,15 +1883,16 @@ namespace TheCall
                 if (host.Personality == "稳重" && cell == rightmost)
                     adds.Add(LandingAdd.Of("稳重", PersonalityBonus(3), monsterId, -1, host.DisplayName));
 
-                if (host.Personality == "合群" && neighborCount > 0)
-                    adds.Add(LandingAdd.Of("合群", PersonalityBonus(neighborCount), monsterId, -1, host.DisplayName));
+                if (host.Personality == "合群")
+                    for (var neighbor = 0; neighbor < neighborCount; neighbor++)
+                        adds.Add(LandingAdd.Of("合群", PersonalityBonus(1), monsterId, -1, host.DisplayName));
 
                 if (host.Personality == "恋爱脑" && neighborCount == 1)
                     adds.Add(LandingAdd.Of("恋爱脑", PersonalityBonus(2), monsterId, -1, host.DisplayName));
 
                 if (leftNeighborId != null)
                 {
-                    var leftMonster = run.Find(leftNeighborId);
+                    var leftMonster = FindForEvaluation(run, leftNeighborId);
                     if (leftMonster != null)
                     {
                         if (leftMonster.Personality == "恋爱脑")
@@ -1825,13 +1904,13 @@ namespace TheCall
                         if (leftMonster.Personality == "乐于助人")
                             adds.Add(LandingAdd.Of("乐于助人", PersonalityBonus(2), leftMonster.Id, -1, leftMonster.DisplayName));
                         if (leftMonster.Personality == "自私")
-                            adds.Add(LandingAdd.Of("自私", -3, leftMonster.Id, -1, leftMonster.DisplayName));
+                            adds.Add(LandingAdd.Of("自私", PersonalityBonus(-3), leftMonster.Id, -1, leftMonster.DisplayName));
                     }
                 }
 
                 if (rightNeighborId != null)
                 {
-                    var rightMonster = run.Find(rightNeighborId);
+                    var rightMonster = FindForEvaluation(run, rightNeighborId);
                     if (rightMonster != null)
                     {
                         if (rightMonster.Personality == "恋爱脑")
@@ -1843,7 +1922,7 @@ namespace TheCall
                         if (rightMonster.Personality == "乐于助人")
                             adds.Add(LandingAdd.Of("乐于助人", PersonalityBonus(2), rightMonster.Id, -1, rightMonster.DisplayName));
                         if (rightMonster.Personality == "自私")
-                            adds.Add(LandingAdd.Of("自私", -3, rightMonster.Id, -1, rightMonster.DisplayName));
+                            adds.Add(LandingAdd.Of("自私", PersonalityBonus(-3), rightMonster.Id, -1, rightMonster.DisplayName));
                     }
                 }
 
@@ -1851,15 +1930,15 @@ namespace TheCall
                 {
                     var otherId = cells[c];
                     if (otherId == null || otherId == monsterId) continue;
-                    var other = run.Find(otherId);
+                    var other = FindForEvaluation(run, otherId);
                     if (other == null) continue;
 
-                    if (HasParent(host, otherId) && other.HasSkill(skillName))
+                    if ((HasParent(host, otherId) || HasParent(other, host.Id)) && other.HasSkill(skillName))
                     {
                         if (host.Personality == "仇恨血脉")
-                            adds.Add(LandingAdd.Of("仇恨血脉", -3, host.Id, -1, host.DisplayName));
+                            adds.Add(LandingAdd.Of("仇恨血脉", PersonalityBonus(-3), host.Id, -1, host.DisplayName));
                         if (other.Personality == "仇恨血脉")
-                            adds.Add(LandingAdd.Of("仇恨血脉", -3, other.Id, -1, other.DisplayName));
+                            adds.Add(LandingAdd.Of("仇恨血脉", PersonalityBonus(-3), other.Id, -1, other.DisplayName));
                     }
                 }
 
@@ -1874,13 +1953,13 @@ namespace TheCall
                     var pairCount = 0;
                     if (leftNeighborId != null)
                     {
-                        var leftMonster = run.Find(leftNeighborId);
+                        var leftMonster = FindForEvaluation(run, leftNeighborId);
                         if (leftMonster != null && raceCatalog.IsGenerating(host.Race, leftMonster.Race))
                             pairCount++;
                     }
                     if (rightNeighborId != null)
                     {
-                        var rightMonster = run.Find(rightNeighborId);
+                        var rightMonster = FindForEvaluation(run, rightNeighborId);
                         if (rightMonster != null && raceCatalog.IsGenerating(host.Race, rightMonster.Race))
                             pairCount++;
                     }
@@ -1895,7 +1974,7 @@ namespace TheCall
                 for (var c = 0; c < cells.Count; c++)
                 {
                     if (cells[c] == null) continue;
-                    var m = run.Find(cells[c]);
+                    var m = FindForEvaluation(run, cells[c]);
                     if (m == null) continue;
                     for (var s = 0; s < m.Skills.Count; s++)
                     {
@@ -1925,20 +2004,25 @@ namespace TheCall
             return multiplier;
         }
 
-        static int RecordNeighbor(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell, List<LandingFactor> factors)
+        int RecordNeighbor(RunModel run, SkillCatalog catalog, IReadOnlyList<string> cells, int cell, List<LandingFactor> factors)
         {
-            string label;
-            string sourceId;
-            int skillIndex;
-            var value = NeighborEnergyDouble(run, catalog, cells, cell, out label, out sourceId, out skillIndex);
-            if (value != 1)
-            {
-                var neighbor = run.Find(cells[cell]);
-                factors.Add(LandingFactor.Of(label, value, sourceId, skillIndex, neighbor == null ? null : neighbor.DisplayName));
-            }
-
-            return value;
+            if (cell < 0 || cell >= cells.Count || cells[cell] == null) return 1;
+            var neighbor = FindForEvaluation(run, cells[cell]);
+            if (neighbor == null) return 1;
+            var multiplier = 1;
+            for (var i = 0; i < neighbor.Skills.Count; i++)
+                if (catalog.DoublesAdjacentEnergy(neighbor.Skills[i].Name))
+                {
+                    multiplier *= 2;
+                    factors.Add(LandingFactor.Of(neighbor.Skills[i].Name, 2, neighbor.Id, i, neighbor.DisplayName, neighbor.Skills[i].Id));
+                }
+            return multiplier;
         }
+
+        Monster FindForEvaluation(RunModel run, string monsterId) => monsterId == null ? null :
+            _previewSight != null && _previewSight.Showing ? _previewSight.Find(monsterId) ?? run.Find(monsterId) : run.Find(monsterId);
+
+        int OpeningSkillCount(Monster monster) => _openingSkillCounts.TryGetValue(monster.Id, out var count) ? count : monster.Skills.Count;
 
         static int AddedByOthers(SkillCatalog catalog, RunModel run, IReadOnlyList<string> cells, string monsterId)
         {

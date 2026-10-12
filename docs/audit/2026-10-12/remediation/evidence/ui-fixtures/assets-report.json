@@ -1,0 +1,66 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/UI/Button.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/UI/MonsterHoverPanel.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/UI/MonsterPortrait.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Action.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Compact.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_GlassyBreeding.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_GlassyExtraction.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_Strip.prefab",
+            "frame": 6
+        },
+        {
+            "name": "prefab-reload",
+            "passed": true,
+            "actual": "Assets/Prefabs/MonsterSlotCard/MonsterSlotCard_WideAction.prefab",
+            "frame": 6
+        },
+        {
+            "name": "asset-audit",
+            "passed": true,
+            "actual": "prefabs=9;39 saved parts / 6 templates complete",
+            "frame": 6
+        }
+    ]
+}
