@@ -49,7 +49,29 @@ namespace TheCall.Editor
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
             AssetDatabase.SaveAssets();
-            return "Presentation migrated locally and saved: six research entries, separate tool icons, badges and readable details.";
+            return "Presentation migrated locally and saved: six research entries, separate tool icons, badges and readable details. badgeDupeSets=" + CountBadgeDuplicateSets();
+        }
+
+        public static int CountBadgeDuplicateSets()
+        {
+            var dupes = 0;
+            foreach (var slot in UnityEngine.Object.FindObjectsByType<MonsterSlotView>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                foreach (var name in new[] { "PersonalityBadge", "RaceBadge", "MoodBadge" })
+                {
+                    var count = 0;
+                    foreach (var transform in slot.GetComponentsInChildren<Transform>(true))
+                    {
+                        if (transform.name == name)
+                            count++;
+                    }
+
+                    if (count > 1)
+                        dupes++;
+                }
+            }
+
+            return dupes;
         }
 
         public static string ValidateSaved()
@@ -221,22 +243,67 @@ namespace TheCall.Editor
 
         static void Badges(MonsterSlotView slot)
         {
-            slot.personalityIcon = Badge(slot, "PersonalityBadge", 0);
-            slot.raceIcon = Badge(slot, "RaceBadge", 1);
-            slot.moodIcon = Badge(slot, "MoodBadge", 2);
+            slot.personalityIcon = Badge(slot, slot.personalityIcon, "PersonalityBadge", 0);
+            slot.raceIcon = Badge(slot, slot.raceIcon, "RaceBadge", 1);
+            slot.moodIcon = Badge(slot, slot.moodIcon, "MoodBadge", 2);
             EditorUtility.SetDirty(slot);
         }
-        static Image Badge(MonsterSlotView slot, string name, int index)
+
+        static Image Badge(MonsterSlotView slot, Image preferred, string name, int index)
         {
-            var found = slot.transform.Find(name);
-            if (found == null)
+            var matches = new List<Image>();
+            foreach (var transform in slot.GetComponentsInChildren<Transform>(true))
             {
-                var go = new GameObject(name, typeof(RectTransform), typeof(Image)); go.transform.SetParent(slot.transform, false); found = go.transform;
-                var rect = (RectTransform)found; rect.anchorMin = rect.anchorMax = new Vector2(1, 1); rect.pivot = new Vector2(1, 1);
-                rect.anchoredPosition = new Vector2(-4 - index * 20, -4); rect.sizeDelta = new Vector2(18, 18);
+                if (transform.name != name)
+                    continue;
+                var image = transform.GetComponent<Image>();
+                if (image != null)
+                    matches.Add(image);
             }
-            var image = found.GetComponent<Image>(); image.raycastTarget = false; image.preserveAspect = true;
-            return image;
+
+            Image keep;
+            if (matches.Count == 0)
+            {
+                var go = new GameObject(name, typeof(RectTransform), typeof(Image));
+                go.transform.SetParent(slot.transform, false);
+                keep = go.GetComponent<Image>();
+            }
+            else
+            {
+                keep = preferred != null && matches.Contains(preferred) ? preferred : matches[0];
+                for (var i = 0; i < matches.Count; i++)
+                {
+                    if (matches[i] == keep)
+                        continue;
+                    DestroyBadgeObject(matches[i].gameObject);
+                }
+            }
+
+            var rect = (RectTransform)keep.transform;
+            rect.SetParent(slot.transform, false);
+            rect.anchorMin = rect.anchorMax = new Vector2(1, 1);
+            rect.pivot = new Vector2(1, 1);
+            rect.anchoredPosition = new Vector2(-4 - index * 20, -4);
+            rect.sizeDelta = new Vector2(18, 18);
+            keep.raycastTarget = false;
+            keep.preserveAspect = true;
+            return keep;
+        }
+
+        static void DestroyBadgeObject(GameObject gameObject)
+        {
+            if (gameObject == null)
+                return;
+            if (PrefabUtility.IsPartOfPrefabInstance(gameObject))
+            {
+                if (PrefabUtility.IsAddedGameObjectOverride(gameObject))
+                    UnityEngine.Object.DestroyImmediate(gameObject);
+                else
+                    gameObject.SetActive(false);
+                return;
+            }
+
+            UnityEngine.Object.DestroyImmediate(gameObject);
         }
 
         public static void MigrateHover(MonsterHover hover)
