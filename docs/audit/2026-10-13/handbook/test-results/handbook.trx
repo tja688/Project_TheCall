@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="667d1a89-816b-47bd-ae78-de30a1188f67" name="jinji@JT 2026-10-13 10:16:46" runUser="JT\jinji" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-13T10:16:46.1538690+08:00" queuing="2026-10-13T10:16:46.1538692+08:00" start="2026-10-13T10:16:45.5163429+08:00" finish="2026-10-13T10:16:46.1585018+08:00" />
+  <TestSettings name="default" id="f88182d3-9164-4140-b6ec-6d9c36b08657">
+    <Deployment runDeploymentRoot="jinji_JT_2026-10-13_10_16_46" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="cce1b9ae-0935-43e5-8e33-a3ee5b1de8e9" testId="6647c7d3-a64b-4d5f-ef1c-34c73761091e" testName="技能图鉴按目录顺序列出每一项且字段与悬停栏相同" computerName="JT" duration="00:00:00.0018440" startTime="2026-10-13T10:16:46.0774566+08:00" endTime="2026-10-13T10:16:46.0793003+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cce1b9ae-0935-43e5-8e33-a3ee5b1de8e9" />
+    <UnitTestResult executionId="9e307634-776a-456a-a721-61b3e053d6fd" testId="d04d5ca0-f2c4-95d9-af44-624c45118f38" testName="搜索可查效果且反复读取不改变对局" computerName="JT" duration="00:00:00.0025160" startTime="2026-10-13T10:16:46.0722202+08:00" endTime="2026-10-13T10:16:46.0747362+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e307634-776a-456a-a721-61b3e053d6fd" />
+    <UnitTestResult executionId="fa6b41d4-eb50-4e21-95ca-9c1ed8f45401" testId="c9a6d7d8-157a-f8fd-2b63-18fd8ee5fb17" testName="手册完整覆盖当前内容且每条关联都能到达" computerName="JT" duration="00:00:00.0298310" startTime="2026-10-13T10:16:46.0320941+08:00" endTime="2026-10-13T10:16:46.0618827+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa6b41d4-eb50-4e21-95ca-9c1ed8f45401" />
+    <UnitTestResult executionId="9c6b241c-f684-4396-99c5-0119606ae0a9" testId="a250e9a5-47c3-8f72-d584-58b6c395173d" testName="手册效果和价格直接取自当前游戏目录并保留负面性格" computerName="JT" duration="00:00:00.0093070" startTime="2026-10-13T10:16:46.0628564+08:00" endTime="2026-10-13T10:16:46.0721638+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c6b241c-f684-4396-99c5-0119606ae0a9" />
+    <UnitTestResult executionId="2f589389-7043-4652-9a44-492b281c8110" testId="1bfd4c17-fca9-c7f3-2693-0d38d51e6777" testName="心情条目解释当前阈值并包含所有关卡需求" computerName="JT" duration="00:00:00.0013960" startTime="2026-10-13T10:16:46.0747532+08:00" endTime="2026-10-13T10:16:46.0761490+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f589389-7043-4652-9a44-492b281c8110" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="搜索可查效果且反复读取不改变对局" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="d04d5ca0-f2c4-95d9-af44-624c45118f38">
+      <Execution id="9e307634-776a-456a-a721-61b3e053d6fd" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.HandbookIndexTests" name="搜索可查效果且反复读取不改变对局" />
+    </UnitTest>
+    <UnitTest name="心情条目解释当前阈值并包含所有关卡需求" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="1bfd4c17-fca9-c7f3-2693-0d38d51e6777">
+      <Execution id="2f589389-7043-4652-9a44-492b281c8110" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.HandbookIndexTests" name="心情条目解释当前阈值并包含所有关卡需求" />
+    </UnitTest>
+    <UnitTest name="手册完整覆盖当前内容且每条关联都能到达" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="c9a6d7d8-157a-f8fd-2b63-18fd8ee5fb17">
+      <Execution id="fa6b41d4-eb50-4e21-95ca-9c1ed8f45401" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.HandbookIndexTests" name="手册完整覆盖当前内容且每条关联都能到达" />
+    </UnitTest>
+    <UnitTest name="技能图鉴按目录顺序列出每一项且字段与悬停栏相同" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="6647c7d3-a64b-4d5f-ef1c-34c73761091e">
+      <Execution id="cce1b9ae-0935-43e5-8e33-a3ee5b1de8e9" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.SkillIndexTests" name="技能图鉴按目录顺序列出每一项且字段与悬停栏相同" />
+    </UnitTest>
+    <UnitTest name="手册效果和价格直接取自当前游戏目录并保留负面性格" storage="c:\users\jinji\documents\github\project_thecall\kernel\thecall.rules.tests\bin\debug\net10.0\thecall.rules.tests.dll" id="a250e9a5-47c3-8f72-d584-58b6c395173d">
+      <Execution id="9c6b241c-f684-4396-99c5-0119606ae0a9" />
+      <TestMethod codeBase="C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TheCall.Tests.HandbookIndexTests" name="手册效果和价格直接取自当前游戏目录并保留负面性格" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6647c7d3-a64b-4d5f-ef1c-34c73761091e" executionId="cce1b9ae-0935-43e5-8e33-a3ee5b1de8e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d04d5ca0-f2c4-95d9-af44-624c45118f38" executionId="9e307634-776a-456a-a721-61b3e053d6fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9a6d7d8-157a-f8fd-2b63-18fd8ee5fb17" executionId="fa6b41d4-eb50-4e21-95ca-9c1ed8f45401" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a250e9a5-47c3-8f72-d584-58b6c395173d" executionId="9c6b241c-f684-4396-99c5-0119606ae0a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bfd4c17-fca9-c7f3-2693-0d38d51e6777" executionId="2f589389-7043-4652-9a44-492b281c8110" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有已加载的结果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.6.0.0: Test execution started&#xD;
+Running selected tests in C:\Users\jinji\Documents\GitHub\Project_TheCall\kernel\TheCall.Rules.Tests\bin\Debug\net10.0\TheCall.Rules.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 5 of 5 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 4.6.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

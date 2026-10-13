@@ -1,0 +1,93 @@
+[
+  {
+    "check": "Saved Main scene references",
+    "result": "PASS"
+  },
+  {
+    "check": "Authoring repair is idempotent",
+    "result": "PASS"
+  },
+  {
+    "check": "NUnit handbook and legacy skill index tests",
+    "result": "PASS"
+  },
+  {
+    "check": "Player frames advance",
+    "result": "PASS"
+  },
+  {
+    "check": "Runtime contracts",
+    "result": "PASS: 6 stage bindings, 8 categories / 108 entries, negative rarity, effect search, empty state, clear, wheel scrolling, related navigation, return/reopen, read-only run state. frame=4745"
+  },
+  {
+    "check": "Audio sliders reach settings and live mixer; preferences restored",
+    "result": "PASS"
+  },
+  {
+    "bytes": 524768,
+    "check": "Game View screen capture: settings",
+    "result": "PASS"
+  },
+  {
+    "bytes": 318105,
+    "check": "Game View screen capture: guide",
+    "result": "PASS"
+  },
+  {
+    "bytes": 281373,
+    "check": "Game View screen capture: mood",
+    "result": "PASS"
+  },
+  {
+    "bytes": 266566,
+    "check": "Game View screen capture: negative-personalities",
+    "result": "PASS"
+  },
+  {
+    "bytes": 253688,
+    "check": "Game View screen capture: tool",
+    "result": "PASS"
+  },
+  {
+    "check": "Typed Chinese search reaches filtered results",
+    "result": "PASS"
+  },
+  {
+    "bytes": 279147,
+    "check": "Game View screen capture: skill-search",
+    "result": "PASS"
+  },
+  {
+    "check": "Escape returns from handbook to settings",
+    "result": "PASS"
+  },
+  {
+    "check": "Escape closes settings",
+    "result": "PASS"
+  },
+  {
+    "check": "Natural opening selection enters operation",
+    "result": "PASS"
+  },
+  {
+    "check": "Operation visible settings and handbook",
+    "result": "PASS"
+  },
+  {
+    "bytes": 421104,
+    "check": "Game View screen capture: research-settings",
+    "result": "PASS"
+  },
+  {
+    "check": "Research settings and original back button remain reachable",
+    "result": "PASS"
+  },
+  {
+    "check": "No new Unity console errors",
+    "result": "PASS"
+  },
+  {
+    "check": "Final three slider handles render at 30px",
+    "result": "PASS"
+  }
+]

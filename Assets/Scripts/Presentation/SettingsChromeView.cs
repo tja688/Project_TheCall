@@ -18,11 +18,13 @@ namespace TheCall
         public Button logButton;
         public Button settingsCloseButton;
         public Button settingsShadeButton;
-        public SkillCodexView codex;
+        public HandbookView codex;
         public ProductionLogView log;
+        public Slider masterVolume, musicVolume, sfxVolume;
 
         bool _logFromSettings;
         bool _logHooked;
+        bool _audioHooked;
 
         public bool SettingsOpen => settingsWindow != null && settingsWindow.activeSelf;
 
@@ -56,6 +58,20 @@ namespace TheCall
 
             EnsureLogButton();
             HookLog();
+            if (!_audioHooked)
+            {
+                _audioHooked = true;
+                BindVolume(masterVolume, GameAudioSettings.MasterVolume, GameAudioSettings.SetMasterVolume);
+                BindVolume(musicVolume, GameAudioSettings.MusicVolume, GameAudioSettings.SetMusicVolume);
+                BindVolume(sfxVolume, GameAudioSettings.SfxVolume, GameAudioSettings.SetSfxVolume);
+            }
+        }
+
+        static void BindVolume(Slider slider, float value, System.Action<float> set)
+        {
+            if (slider == null) return;
+            slider.SetValueWithoutNotify(value);
+            slider.onValueChanged.AddListener(v => { set(v); GameAudioSettings.Save(); });
         }
 
         public void ShowSettings()
@@ -80,7 +96,7 @@ namespace TheCall
                 settingsWindow.SetActive(false);
         }
 
-        public void ShowCodex(IReadOnlyList<MonsterSkillDetail> skills)
+        public void ShowCodex(IReadOnlyList<HandbookEntry> entries)
         {
             _logFromSettings = false;
             if (log != null)
@@ -88,7 +104,7 @@ namespace TheCall
             if (settingsWindow != null)
                 settingsWindow.SetActive(false);
             if (codex != null)
-                codex.Show(skills);
+                codex.Show(entries);
         }
 
         public void CloseCodex()

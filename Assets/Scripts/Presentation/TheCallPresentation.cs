@@ -141,7 +141,6 @@ namespace TheCall
             Listen(_levelStart != null ? _levelStart.beginButton : null, OnBegin);
             Listen(_operation != null ? _operation.shopButton : null, OnShopLocked);
             Listen(_operation != null ? _operation.researchButton : null, () => OpenResearch(BackTarget.Operation));
-            Listen(_operation != null ? _operation.settingsButton : null, ToggleSettings);
             Listen(_operation != null ? _operation.titleButton : null, OnTitle);
             Listen(_operation != null ? _operation.nextDayButton : null, OnSettle);
             Listen(_operation != null ? _operation.addGeneSlotButton : null, OnAddGeneSlot);
@@ -203,7 +202,7 @@ namespace TheCall
             if (_settings == null)
                 return;
 
-            _settings.ShowCodex(this.SendQuery(new SkillIndexQuery()));
+            _settings.ShowCodex(this.SendQuery(new HandbookIndexQuery()));
         }
 
         void BindLog()

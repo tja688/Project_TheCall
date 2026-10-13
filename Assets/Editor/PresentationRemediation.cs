@@ -16,6 +16,7 @@ namespace TheCall.Editor
         public static string Apply()
         {
             if (EditorApplication.isPlaying) throw new InvalidOperationException("Exit Play Mode before saving presentation assets.");
+            HandbookSceneSetup.Ensure();
             var book = ContentBook.Parse(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json")));
             M3PresentationSetup.CreateSpriteCatalog();
             RepairAssemblyCatalog();

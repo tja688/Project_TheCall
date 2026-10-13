@@ -212,6 +212,7 @@ namespace TheCall.Editor
             result.gameObject.SetActive(false);
             toast.SetActive(false);
             BuildHoverWindow();
+            HandbookSceneSetup.Ensure();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
