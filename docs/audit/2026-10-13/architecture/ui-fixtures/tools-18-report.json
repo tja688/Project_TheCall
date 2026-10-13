@@ -1,0 +1,24 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin tools",
+            "passed": true,
+            "actual": "count=18 IDs=m4",
+            "frame": 2143
+        },
+        {
+            "name": "tools 18",
+            "passed": true,
+            "actual": "急急装置=IconRocket;小喇叭=icons_full_32_54;打卡机=icons_full_32_50;招工海报=paper_9slice;批发合同=icons_full_32_62;研磨机=icons_full_32_70;电化能机=IconBolt;精神操控仪=icons_full_32_90;怪物严选=gem;情绪收割机=icons_full_32_110;上级员工证=IconBadge;隔音棉=icons_full_32_130;五行罗盘=cursor;验货单=icons_full_32_150;稀有度检测仪=icons_full_32_160;劣胜装置=IconBolt;复读腺=icons_full_32_180;蓄热熔炉=iron_ore",
+            "frame": 3333
+        },
+        {
+            "name": "tool-hover 17",
+            "passed": true,
+            "actual": "蓄热熔炉:工资结算阶段时，将剩余能量的 20%保留到下一关卡，其余正常清零",
+            "frame": 4384
+        }
+    ]
+}

@@ -79,3 +79,7 @@ Use the five default canonical triage labels. Before applying triage labels, rea
 ### Domain docs
 
 Use a single-context layout: root `GLOSSARY.md` and `docs/adr/`. Before exploring the codebase or proposing domain or architecture changes, read `docs/agents/domain.md` and follow its consumer rules.
+
+### Presentation
+
+Before replacing art, changing UI controls, or editing settlement animation, read `docs/presentation/seams.md` and `docs/presentation/art-integration.md`.

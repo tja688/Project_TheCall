@@ -52,15 +52,17 @@ namespace TheCall
             WirePayloadDrags();
         }
 
-        static void WirePayloadDrags()
+        void WirePayloadDrags()
         {
-            var drags = FindObjectsByType<OperationPayloadDrag>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var screen = GetComponentInParent<OperationScreenView>(true);
+            if (screen == null) return;
+            var drags = screen.GetComponentsInChildren<OperationPayloadDrag>(true);
             for (var i = 0; i < drags.Length; i++)
             {
-                if (drags[i] == null || drags[i].session != null)
+                if (drags[i] == null)
                     continue;
 
-                drags[i].session = FindAnyObjectByType<OperationPointer>();
+                drags[i].session = this;
             }
         }
 

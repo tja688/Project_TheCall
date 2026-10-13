@@ -157,6 +157,58 @@ namespace TheCall.Scoring
             yield return null;
         }
 
+        [UnityTest]
+        public IEnumerator 真实播放停用后释放演出并且只通知一次()
+        {
+            var root = new GameObject("PlaybackLifetime", typeof(RectTransform), typeof(Canvas));
+            var count = 0;
+            try
+            {
+                var board = (RectTransform)root.transform;
+                var tape = ScoringTape.Arrange(new SettlementEntry[]
+                    { new SettlementPayment(0, 10, true, false, false, 0) }, Array.Empty<string>());
+                var show = ScoringShow.Play(new ScoringStage(tape, Array.Empty<MonsterSlotView>(), board, board,
+                    null, null, null, () => count++));
+                Assert.That(ScoringShow.IsPlaying, Is.True);
+                root.SetActive(false);
+                Assert.That(ScoringShow.IsPlaying, Is.False);
+                Assert.That(count, Is.EqualTo(1));
+                UnityEngine.Object.DestroyImmediate(show.gameObject);
+                Assert.That(count, Is.EqualTo(1));
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); }
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 重复播放拒绝时仍通知调用者且原播放继续()
+        {
+            var root = new GameObject("DuplicatePlayback", typeof(RectTransform), typeof(Canvas));
+            var first = 0;
+            var second = 0;
+            try
+            {
+                var board = (RectTransform)root.transform;
+                var tape = ScoringTape.Arrange(new SettlementEntry[]
+                    { new SettlementPayment(0, 10, true, false, false, 0) }, Array.Empty<string>());
+                var show = ScoringShow.Play(new ScoringStage(tape, Array.Empty<MonsterSlotView>(), board, board,
+                    null, null, null, () => first++));
+                var rejected = ScoringShow.Play(new ScoringStage(tape, Array.Empty<MonsterSlotView>(), board, board,
+                    null, null, null, () => second++));
+                Assert.That(rejected, Is.Null);
+                Assert.That(second, Is.EqualTo(1));
+                Assert.That(first, Is.EqualTo(0));
+                Assert.That(ScoringShow.IsPlaying, Is.True);
+                show.Cancel();
+                Assert.That(first, Is.EqualTo(1));
+                Assert.That(ScoringShow.IsPlaying, Is.False);
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); }
+            yield return null;
+        }
+
         static Action CompletionOf(TheCallPresentation presentation) =>
             (Action)Delegate.CreateDelegate(typeof(Action), presentation,
                 typeof(TheCallPresentation).GetMethod("FinishSettle", BindingFlags.NonPublic | BindingFlags.Instance));

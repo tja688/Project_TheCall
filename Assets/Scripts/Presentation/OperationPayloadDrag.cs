@@ -42,10 +42,7 @@ namespace TheCall
             if (chip == null)
                 return false;
 
-            if (payloadKind == PayloadKind.SkillChip)
-                return chip.button != null && chip.button.interactable;
-
-            return chip.label != null && chip.label.text != "投入技能";
+            return chip.HasPayload;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -93,11 +90,11 @@ namespace TheCall
 
         bool TrySession(out OperationPointer pointer)
         {
-            if (session == null)
-                session = FindAnyObjectByType<OperationPointer>();
+            var screen = GetComponentInParent<OperationScreenView>(true);
+            session = screen != null ? screen.pointer : null;
 
             pointer = session;
-            return pointer != null;
+            return pointer != null && pointer.isActiveAndEnabled;
         }
     }
 }

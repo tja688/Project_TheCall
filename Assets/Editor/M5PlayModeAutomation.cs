@@ -36,7 +36,8 @@ namespace TheCall.Editor
         static SeededDraw _draw;
         public static bool Playing => Object.FindAnyObjectByType<ScoringShow>() != null;
         static string _evidenceName = "natural-normal";
-        public static string EvidenceRoot => Path.GetFullPath(Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/evidence", _evidenceName));
+        static string _evidenceDirectory;
+        public static string EvidenceRoot => _evidenceDirectory ?? Path.GetFullPath(Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/evidence", _evidenceName));
 
         public static string Begin(int seed)
         {
@@ -174,9 +175,10 @@ namespace TheCall.Editor
         static int _clickCount;
         public static string PlanStatus => _failure ?? (_running ? "running " + _step + "/" + _plan.actions.Length : "completed " + _step);
 
-        public static string BeginPlan(string path, int playbackMode = 0)
+        public static string BeginPlan(string path, int playbackMode = 0, string evidenceDirectory = null)
         {
             if (_running) throw new InvalidOperationException("Player replay already running.");
+            _evidenceDirectory = string.IsNullOrEmpty(evidenceDirectory) ? null : Path.GetFullPath(evidenceDirectory);
             _plan = JsonUtility.FromJson<PlayerPlan>(File.ReadAllText(path));
             _playbackMode = playbackMode; _lastPlayback = null; _clickCount = 0;
             _evidenceName = playbackMode == 0 ? "natural-normal" : playbackMode == 1 ? "natural-fast" : "natural-skip";
@@ -198,7 +200,7 @@ namespace TheCall.Editor
                 {
                     var show = Object.FindAnyObjectByType<ScoringShow>();
                     if (_lastPlayback != show) { _lastPlayback = show; _clickCount = 0; }
-                    var blocker = show.transform.Find("ScoringBlocker");
+                    var blocker = Object.FindAnyObjectByType<OperationScreenView>().transform.Find("ScoringBlocker");
                     if (blocker != null && (_clickCount < (_playbackMode == 1 ? 1 : 2) || (_playbackMode == 2 && _clickCount == 2)))
                     {
                         ExecuteEvents.Execute(blocker.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);

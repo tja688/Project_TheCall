@@ -1,0 +1,54 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin capacity",
+            "passed": true,
+            "actual": "count=6 IDs=m4,m5,m6,m7,m8,m9",
+            "frame": 16710
+        },
+        {
+            "name": "research 基因实验",
+            "passed": true,
+            "actual": "success=True points=5 description=培育槽可放入基因数量+1\n消耗1科技点；每局一次；无前置。",
+            "frame": 17405
+        },
+        {
+            "name": "research-back",
+            "passed": true,
+            "actual": "operation=True",
+            "frame": 18587
+        },
+        {
+            "name": "parent-drag",
+            "passed": true,
+            "actual": "m4 -> flat parent seat 0",
+            "frame": 19325
+        },
+        {
+            "name": "parent-drag",
+            "passed": true,
+            "actual": "m5 -> flat parent seat 1",
+            "frame": 20299
+        },
+        {
+            "name": "fixture-genes",
+            "passed": true,
+            "actual": "count=3",
+            "frame": 21276
+        },
+        {
+            "name": "gene-drag 0 -> breeding",
+            "passed": true,
+            "actual": "success=True before=gold=0;tech=5;tools=上级员工证;unlocked=基因实验;cage=m6,m7,m8,m9;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];m5[s8:能量体:5:False:Fixture::];m6[s9:能量体:5:False:Fixture::];m7[s10:能量体:5:False:Fixture::];m8[s11:能量体:5:False:Fixture::];m9[s12:能量体:5:False:Fixture::];genes=g1:奇异香:,g2:左能量体:,g3:右能量体:;extraction=,,,,,;breeding=m4,m5 after=gold=0;tech=5;tools=上级员工证;unlocked=基因实验;cage=m6,m7,m8,m9;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];m5[s8:能量体:5:False:Fixture::];m6[s9:能量体:5:False:Fixture::];m7[s10:能量体:5:False:Fixture::];m8[s11:能量体:5:False:Fixture::];m9[s12:能量体:5:False:Fixture::];genes=g1:奇异香:0,g2:左能量体:,g3:右能量体:;extraction=,,,,,;breeding=m4,m5",
+            "frame": 22331
+        },
+        {
+            "name": "gene-return",
+            "passed": true,
+            "actual": "id=g1 originalIndex=0",
+            "frame": 23467
+        }
+    ]
+}

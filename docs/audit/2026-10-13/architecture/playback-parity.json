@@ -1,0 +1,17 @@
+[
+  {
+    "sha256": "4BF1DD1877C27AFF7A6A3C04199B1EF014F5FE472FE4E57941F39924B718FACA",
+    "file": "final-state.txt",
+    "result": "PASS"
+  },
+  {
+    "sha256": "C726A9C99C85C038B6462D63815CD3F32418C6A2AA55E553728D08D287673D6A",
+    "file": "production-log.txt",
+    "result": "PASS"
+  },
+  {
+    "sha256": "F376ED72F6E352330E5921E001C909B704B21B64112686C7C5D89079611490DB",
+    "file": "state-trace.txt",
+    "result": "PASS"
+  }
+]

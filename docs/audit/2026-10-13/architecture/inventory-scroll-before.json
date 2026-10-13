@@ -1,0 +1,12 @@
+{
+  "contentPositionY": 1420,
+  "hasGenePayload": true,
+  "case": "30 pooled cards then new one-monster operation",
+  "contentHeight": 1778,
+  "diagnosis": "Hidden pooled cards retained scroll extent",
+  "viewportHeight": 358,
+  "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+  "cardCenterY": 2276,
+  "verticalNormalizedPosition": 0,
+  "activeCards": 1
+}

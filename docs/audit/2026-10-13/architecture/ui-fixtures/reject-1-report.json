@@ -1,0 +1,18 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin reject",
+            "passed": true,
+            "actual": "count=1 IDs=m4",
+            "frame": 14847
+        },
+        {
+            "name": "gene-drag 0 -> monster",
+            "passed": true,
+            "actual": "success=False before=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];genes=g1:奇异香:;extraction=,,,,;breeding=, after=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];genes=g1:奇异香:;extraction=,,,,;breeding=,",
+            "frame": 15782
+        }
+    ]
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "begin tools PASS count=18 IDs=m4"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "tools 18 PASS 急急装置=IconRocket;小喇叭=icons_full_32_54;打卡机=icons_full_32_50;招工海报=paper_9slice;批发合同=icons_full_32_62;研磨机=icons_full_32_70;电化能机=IconBolt;精神操控仪=icons_full_32_90;怪物严选=gem;情绪收割机=icons_full_32_110;上级员工证=IconBadge;隔音棉=icons_full_32_130;五行罗盘=cursor;验货单=icons_full_32_150;稀有度检测仪=icons_full_32_160;劣胜装置=IconBolt;复读腺=icons_full_32_180;蓄热熔炉=iron_ore"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "tool-hover 17 PASS 蓄热熔炉:工资结算阶段时，将剩余能量的 20%保留到下一关卡，其余正常清零"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "begin inventory PASS count=30 IDs=m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "cage-inventory 30 PASS first=m4 last=m33 contentHeight=1778"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "inventory-drag 29 PASS m33 -> extraction 0"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "inventory-return PASS m33"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "sell-inventory 30 PASS first=m4 last=m33 contentHeight=2348"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "sell 29 PASS m33 gold 0 -> 5"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "sell-inventory 29 PASS first=m4 last=m32 contentHeight=2348"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "sell 0 PASS m4 gold 5 -> 10"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "sell-inventory 28 PASS first=m5 last=m32 contentHeight=2192"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "begin install PASS count=1 IDs=m4"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "gene-drag 0 -> monster PASS success=True before=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];genes=g1:奇异香:;extraction=,,,,;breeding=, after=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::,s8:奇异香:0:False:Gene:g1:];genes=;extraction=,,,,;breeding=,"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "begin reject PASS count=1 IDs=m4"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "gene-drag 0 -> monster PASS success=False before=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];genes=g1:奇异香:;extraction=,,,,;breeding=, after=gold=0;tech=0;tools=;unlocked=;cage=m4;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];genes=g1:奇异香:;extraction=,,,,;breeding=,"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "begin capacity PASS count=6 IDs=m4,m5,m6,m7,m8,m9"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "research 基因实验 PASS success=True points=5 description=培育槽可放入基因数量+1\n消耗1科技点；每局一次；无前置。"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "research-back PASS operation=True"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "parent-drag PASS m4 -> flat parent seat 0"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "parent-drag PASS m5 -> flat parent seat 1"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "fixture-genes PASS count=3"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "gene-drag 0 -> breeding PASS success=True before=gold=0;tech=5;tools=上级员工证;unlocked=基因实验;cage=m6,m7,m8,m9;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];m5[s8:能量体:5:False:Fixture::];m6[s9:能量体:5:False:Fixture::];m7[s10:能量体:5:False:Fixture::];m8[s11:能量体:5:False:Fixture::];m9[s12:能量体:5:False:Fixture::];genes=g1:奇异香:,g2:左能量体:,g3:右能量体:;extraction=,,,,,;breeding=m4,m5 after=gold=0;tech=5;tools=上级员工证;unlocked=基因实验;cage=m6,m7,m8,m9;monsters=m1[s1:优质肉体:0:False:Opening::,s2:自爆体:10:False:Opening::];m2[s3:优质肉体:0:False:Opening::,s4:祭品腺:0:False:Opening::];m3[s5:良好肉体:0:False:Opening::,s6:汲取鼻:1:False:Opening::];m4[s7:能量体:5:False:Fixture::];m5[s8:能量体:5:False:Fixture::];m6[s9:能量体:5:False:Fixture::];m7[s10:能量体:5:False:Fixture::];m8[s11:能量体:5:False:Fixture::];m9[s12:能量体:5:False:Fixture::];genes=g1:奇异香:0,g2:左能量体:,g3:右能量体:;extraction=,,,,,;breeding=m4,m5"
+  },
+  {
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "result": "gene-return PASS id=g1 originalIndex=0"
+  }
+]

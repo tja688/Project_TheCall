@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using QFramework;
 using TheCall.Scoring;
 using TMPro;
@@ -38,6 +37,9 @@ namespace TheCall
         bool _wired;
         bool _busy;
         bool _sessionStarted;
+        int _sessionVersion;
+        readonly ButtonBindings _bindings = new ButtonBindings();
+        SettlementPlayback _playback;
         ProductionLogView _log;
         PresentationSpriteCatalog _spriteCatalog;
         string _selectedTech = "基因实验";
@@ -61,6 +63,28 @@ namespace TheCall
             StartSession();
         }
 
+        void OnEnable()
+        {
+            Wire();
+            if (_sessionStarted) Refresh();
+        }
+
+        void OnDisable()
+        {
+            RetirePlayback();
+            _bindings.Dispose();
+            _wired = false;
+        }
+
+        void RetirePlayback()
+        {
+            _sessionVersion++;
+            StopAllCoroutines();
+            _playback?.Cancel();
+            _playback = null;
+            _busy = false;
+        }
+
         void EnsureSpriteCatalog()
         {
             if (_spriteCatalog == null)
@@ -69,6 +93,7 @@ namespace TheCall
 
         public void StartSession()
         {
+            RetirePlayback();
             _sessionStarted = true;
             // Session resets stop pooled effects and both BGM tracks before reopening the menu.
             GameSfx.StopAll();
@@ -136,32 +161,32 @@ namespace TheCall
 
             _wired = true;
             BindOpeningExitButton();
-            Listen(_opening != null ? _opening.exitButton : null, QuitGame);
+            BindAction(_opening != null ? _opening.exitButton : null, PresentationAction.Quit);
             ListenSlots(_opening != null ? _opening.candidates : null, OnKeep);
-            Listen(_levelStart != null ? _levelStart.beginButton : null, OnBegin);
+            BindAction(_levelStart != null ? _levelStart.beginButton : null, PresentationAction.BeginLevel);
             Listen(_operation != null ? _operation.shopButton : null, OnShopLocked);
-            Listen(_operation != null ? _operation.researchButton : null, () => OpenResearch(BackTarget.Operation));
-            Listen(_operation != null ? _operation.titleButton : null, OnTitle);
-            Listen(_operation != null ? _operation.nextDayButton : null, OnSettle);
-            Listen(_operation != null ? _operation.addGeneSlotButton : null, OnAddGeneSlot);
+            BindAction(_operation != null ? _operation.researchButton : null, PresentationAction.OpenResearch);
+            BindAction(_operation != null ? _operation.titleButton : null, PresentationAction.ReturnToTitle);
+            BindAction(_operation != null ? _operation.nextDayButton : null, PresentationAction.Settle);
+            BindAction(_operation != null ? _operation.addGeneSlotButton : null, PresentationAction.AddGeneSlot);
             if (_operation != null && _operation.pointer != null)
                 _operation.pointer.Attach(this);
-            Listen(_research != null ? _research.researchButton : null, OnResearch);
-            Listen(_research != null ? _research.backButton : null, CloseResearch);
+            BindAction(_research != null ? _research.researchButton : null, PresentationAction.Research);
+            BindAction(_research != null ? _research.backButton : null, PresentationAction.CloseResearch);
             ListenNodes(_research != null ? _research.nodes : null);
-            Listen(_shop != null ? _shop.buyTabButton : null, () => SetSellTab(false));
-            Listen(_shop != null ? _shop.sellTabButton : null, () => SetSellTab(true));
-            Listen(_shop != null ? _shop.shopButton : null, () => SetSellTab(false));
-            Listen(_shop != null ? _shop.researchButton : null, () => OpenResearch(BackTarget.Shop));
+            BindAction(_shop != null ? _shop.buyTabButton : null, PresentationAction.BuyTab);
+            BindAction(_shop != null ? _shop.sellTabButton : null, PresentationAction.SellTab);
+            BindAction(_shop != null ? _shop.shopButton : null, PresentationAction.BuyTab);
+            BindAction(_shop != null ? _shop.researchButton : null, PresentationAction.OpenResearch);
             Listen(_shop != null ? _shop.saveButton : null, () => Notice("这一版还不能存档。"));
-            Listen(_shop != null ? _shop.titleButton : null, OnTitle);
+            BindAction(_shop != null ? _shop.titleButton : null, PresentationAction.ReturnToTitle);
             if (_shop != null)
                 _shop.EnsureRefreshControl();
-            Listen(_shop != null ? _shop.leaveButton : null, OnLeaveShop);
-            Listen(_shop != null ? _shop.refreshButton : null, OnRefreshShelf);
+            BindAction(_shop != null ? _shop.leaveButton : null, PresentationAction.LeaveShop);
+            BindAction(_shop != null ? _shop.refreshButton : null, PresentationAction.RefreshShelf);
             ListenCards(_shop != null ? _shop.cards : null);
             ListenSlots(_shop != null ? _shop.sellSlots : null, OnSell);
-            Listen(_result != null ? _result.restartButton : null, OnTitle);
+            BindAction(_result != null ? _result.restartButton : null, PresentationAction.ReturnToTitle);
             BindLog();
             BindSettings();
         }
@@ -177,11 +202,11 @@ namespace TheCall
             if (buttons != null)
             {
                 for (var i = 0; i < buttons.Length; i++)
-                    Listen(buttons[i], ToggleSettings);
+                    BindAction(buttons[i], PresentationAction.ToggleSettings);
             }
 
-            Listen(_settings.quitButton, QuitGame);
-            Listen(_settings.codexButton, OpenCodex);
+            BindAction(_settings.quitButton, PresentationAction.Quit);
+            BindAction(_settings.codexButton, PresentationAction.OpenHandbook);
             _settings.Prepare();
             Listen(_settings.logButton, OpenLogFromSettings);
         }
@@ -209,7 +234,7 @@ namespace TheCall
         {
             _log = FindAnyObjectByType<ProductionLogView>(FindObjectsInactive.Include);
             var buttonObject = _operation != null ? _operation.transform.Find("LogButton") : null;
-            Listen(buttonObject != null ? buttonObject.GetComponent<UnityEngine.UI.Button>() : null, ToggleLog);
+            BindAction(buttonObject != null ? buttonObject.GetComponent<UnityEngine.UI.Button>() : null, PresentationAction.ToggleLog);
         }
 
         void OpenLogFromSettings()
@@ -242,7 +267,7 @@ namespace TheCall
 
         public void Refresh()
         {
-            if (_opening == null)
+            if (_playback != null && _playback.IsPlaying)
                 return;
 
             var phase = this.SendQuery(new RunPhaseQuery());
@@ -279,331 +304,40 @@ namespace TheCall
         void DrawOpening()
         {
             Show(_opening);
-            var candidates = this.SendQuery(new OpeningCandidatesQuery());
-            var slots = _opening.candidates;
-            for (var i = 0; i < slots.Length; i++)
-            {
-                var monster = i < candidates.Count ? candidates[i] : null;
-                FillMonster(slots[i], monster, false);
-                slots[i].gameObject.SetActive(monster != null);
-            }
+            _opening?.Render(GetArchitecture(), _spriteCatalog);
         }
 
         void DrawLevelStart()
         {
             Show(_levelStart);
-            var target = this.SendQuery(new LevelTargetQuery());
-            _levelStart.levelLabel.text = "第 " + target.LevelNumber + " 关";
-            _levelStart.dueLabel.text = target.EnergyDue.ToString();
-            SetLabel(_levelStart.transform, "DueCaption", "目标额度");
-            if (_levelStart.excessLabel != null)
-                _levelStart.excessLabel.gameObject.SetActive(false);
-            SetShown(_levelStart.transform, "ExcessCaption", false);
+            _levelStart?.Render(GetArchitecture());
         }
 
         void DrawOperation()
         {
             Show(_operation);
-            var run = this.SendQuery(new RunLedgerQuery());
-            var target = this.SendQuery(new LevelTargetQuery());
-            var energy = this.SendQuery(new LevelEnergyQuery());
-            var shortfall = this.SendQuery(new LevelShortfallQuery());
-            var goal = target.EnergyDue;
-            SetLabel(_operation.transform, "TargetCaption", "目标");
-            _operation.targetLabel.text = goal.ToString();
-            _operation.energyLabel.text = "累计 " + energy + " · 尚差 " + shortfall + " · 科技 " + run.TechPoints;
-            if (_operation.dayLabel != null)
-                _operation.dayLabel.text = "第 " + target.LevelNumber + " 天";
-            if (_operation.excessLabel != null)
-                _operation.excessLabel.text = target.ExcessEnergy + "+";
-            if (_operation.overtimeLabel != null)
-                _operation.overtimeLabel.text = target.InOvertime ? "加班中" : "正常工时";
-
-            if (!_busy)
-            {
-                var current = _operation.currentNumber;
-                if (current == null)
-                {
-                    var found = _operation.transform.Find("CurrentNumber");
-                    if (found != null)
-                        current = found.GetComponent<TMP_Text>();
-                }
-
-                if (current != null)
-                    current.text = energy.ToString();
-            }
-            _operation.goldLabel.text = run.Gold.ToString();
-            _operation.nextDayLabel.text = target.InOvertime ? "开始加班结算" : "开始结算";
-
-            var cage = this.SendQuery(new MonsterCageQuery());
-            _operation.cageSlots = GrowInventory(_operation.cageSlots, cage.Count, false);
-            FillList(_operation.cageSlots, cage, ArmedMonsterId());
-            FillCells(_operation.extractionSlots, this.SendQuery(new ExtractionSlotsQuery()));
-            FillParents(_operation.breedingSlots, this.SendQuery(new BreedingSlotsQuery()));
-            FillGeneSlots(_operation.skillChips, run.GeneCapacity);
-            if (_operation.addGeneSlotButton != null)
-                _operation.addGeneSlotButton.gameObject.SetActive(run.GeneCapacity < 4);
-            FillBreedingSkills(_operation.breedingSkills, this.SendQuery(new BreedingPlansQuery()));
-            FillOwnedTools(run.Tools);
+            _operation?.Render(GetArchitecture(), _spriteCatalog);
         }
 
         void DrawShop()
         {
             Show(_shop);
-            var run = this.SendQuery(new RunLedgerQuery());
-            var shelf = this.SendQuery(new ShelfQuery());
-            _shop.balanceLabel.text = run.Gold.ToString();
-            if (_shop.portraitBalanceLabel != null)
-                _shop.portraitBalanceLabel.text = run.Gold.ToString();
-            if (_shop.refreshPriceLabel != null)
-                _shop.refreshPriceLabel.text = "刷新 " + shelf.NextRefreshPrice;
-            if (_shop.buyPage != null)
-                _shop.buyPage.SetActive(!_sellTab);
-            if (_shop.sellPage != null)
-                _shop.sellPage.SetActive(_sellTab);
-
-            var leaveText = _shop.leaveButton != null ? _shop.leaveButton.GetComponentInChildren<TMP_Text>() : null;
-            if (leaveText != null) leaveText.text = this.SendQuery(new LevelTargetQuery()).LevelNumber >= 7 ? "结束本局" : "下一天";
-            var cardIndex = 0;
-            var cards = _shop.cards;
-            if (cards != null)
-            {
-                for (var i = 0; i < shelf.Monsters.Count && cardIndex < cards.Length; i++)
-                    FillMonsterCard(cards[cardIndex++], shelf.Monsters[i], run.Gold);
-                for (var i = 0; i < shelf.Tools.Count && cardIndex < cards.Length; i++)
-                    FillToolCard(cards[cardIndex++], shelf.Tools[i], run.Gold);
-                for (; cardIndex < cards.Length; cardIndex++)
-                    cards[cardIndex].gameObject.SetActive(false);
-            }
-
-            var cage = this.SendQuery(new MonsterCageQuery());
-            _shop.sellSlots = GrowInventory(_shop.sellSlots, cage.Count, true);
-            FillList(_shop.sellSlots, cage, null);
+            _shop?.Render(GetArchitecture(), _spriteCatalog, _sellTab, BindSellSlot);
         }
 
         void DrawResearch()
         {
             Show(_research);
-            var run = this.SendQuery(new RunLedgerQuery());
-            _research.techPointLabel.text = run.TechPoints.ToString();
-            _research.goldLabel.text = run.Gold.ToString();
-            TechNodeView selected = null;
-            var nodes = _research.nodes;
-            for (var i = 0; i < nodes.Length; i++)
-            {
-                var node = nodes[i];
-                var unlocked = Contains(run.UnlockedTech, node.techName);
-                if (node.costLabel != null)
-                    node.costLabel.text = unlocked ? "已研究" : "消耗 1 科技点";
-                if (node.selection != null)
-                    node.selection.SetActive(node.techName == _selectedTech);
-                if (node.techName == _selectedTech)
-                    selected = node;
-            }
-
-            if (selected == null && nodes.Length > 0)
-                selected = nodes[0];
-
-            if (selected != null)
-            {
-                _selectedTech = selected.techName;
-                _research.detailTitle.text = selected.title != null ? selected.title.text : selected.techName;
-                _research.detailBody.text = selected.summary;
-                var unlocked = Contains(run.UnlockedTech, selected.techName);
-                _research.detailCost.text = unlocked ? "已经研究" : "科技点消耗：1";
-                if (_research.researchLabel != null)
-                    _research.researchLabel.text = unlocked ? "已研究" : "研究";
-                if (_research.researchButton != null)
-                    _research.researchButton.interactable = !unlocked && run.TechPoints >= 1;
-            }
+            if (_research != null) _selectedTech = _research.Render(GetArchitecture(), _selectedTech);
         }
 
         void DrawResult(bool victory)
         {
             Show(_result);
-            _result.title.text = victory ? "七关都交上去了" : "账单没有补上";
-            _result.body.text = victory
-                ? "这一局结束。怪物笼、金币和科技都已清空。"
-                : "这一关的目标没有达到。这一局结束。";
-            if (_result.portrait != null)
-                _result.portrait.Show(MonsterAppearance.FromSeed(victory ? 73 : 29));
+            _result?.Render(victory);
         }
 
-        MonsterSlotView[] GrowInventory(MonsterSlotView[] slots, int count, bool selling)
-        {
-            if (slots == null || slots.Length == 0 || slots[0] == null) return slots;
-            var template = slots[0];
-            var parent = template.transform.parent as RectTransform;
-            var pool = new List<MonsterSlotView>(slots);
-            while (pool.Count < count)
-            {
-                var copy = Instantiate(template, parent);
-                copy.name = (selling ? "SellCard_" : "CageCard_") + pool.Count;
-                copy.monsterId = null;
-                if (selling && copy.button != null)
-                {
-                    copy.button.onClick.RemoveAllListeners();
-                    copy.button.onClick.AddListener(() => OnSell(copy));
-                }
-                pool.Add(copy);
-            }
-            var first = template.transform as RectTransform;
-            var second = slots.Length > 1 ? slots[1].transform as RectTransform : null;
-            var xStep = second != null ? second.anchoredPosition.x - first.anchoredPosition.x : first.rect.width + 8;
-            var rowStep = selling ? 156f : 118f;
-            for (var i = 0; i < pool.Count; i++)
-                ((RectTransform)pool[i].transform).anchoredPosition = first.anchoredPosition + new Vector2((i % 2) * xStep, -(i / 2) * rowStep);
-            if (parent != null) parent.sizeDelta = new Vector2(parent.sizeDelta.x, Mathf.Ceil(pool.Count / 2f) * rowStep + 8);
-            return pool.ToArray();
-        }
-
-        void FillList(MonsterSlotView[] slots, IReadOnlyList<MonsterView> monsters, string selectedId)
-        {
-            if (slots == null)
-                return;
-
-            for (var i = 0; i < slots.Length; i++)
-            {
-                var slot = slots[i];
-                if (slot == null)
-                    continue;
-
-                var slotObject = slot.gameObject;
-                if (!slotObject)
-                    continue;
-
-                var monster = monsters != null && i < monsters.Count ? monsters[i] : null;
-                slotObject.SetActive(monster != null);
-                if (monster != null)
-                    FillMonster(slot, monster, monster.Id == selectedId);
-            }
-        }
-
-        void FillCells(MonsterSlotView[] slots, IReadOnlyList<ExtractionCellView> cells)
-        {
-            for (var i = 0; i < slots.Length; i++)
-            {
-                var slot = slots[i];
-                if (slot == null)
-                    continue;
-
-                var slotObject = slot.gameObject;
-                if (!slotObject)
-                    continue;
-
-                var active = cells != null && i < cells.Count;
-                slotObject.SetActive(active);
-                if (!active)
-                    continue;
-
-                slot.index = cells[i].Index;
-                FillSeat(slot, cells[i].MonsterId);
-            }
-        }
-
-        void FillParents(MonsterSlotView[] slots, IReadOnlyList<BreedingParentView> parents)
-        {
-            for (var i = 0; i < slots.Length; i++)
-            {
-                var active = parents != null && i < parents.Count;
-                slots[i].gameObject.SetActive(active);
-                if (!active)
-                    continue;
-
-                slots[i].index = parents[i].Index;
-                FillSeat(slots[i], parents[i].MonsterId);
-            }
-        }
-
-        void FillGeneSlots(SkillChipView[] chips, int capacity)
-        {
-            if (chips == null)
-                return;
-
-            var geneSlots = this.SendQuery(new GeneSlotsQuery());
-            for (var i = 0; i < chips.Length; i++)
-            {
-                var chip = chips[i];
-                if (chip == null)
-                    continue;
-
-                var active = i < capacity;
-                chip.gameObject.SetActive(active);
-                if (!active)
-                    continue;
-
-                chip.index = i;
-                var hasGene = geneSlots != null && i < geneSlots.Count;
-                if (hasGene)
-                {
-                    var slot = geneSlots[i];
-                    chip.label.text = slot.SkillName;
-                    if (chip.reservedLabel != null)
-                    {
-                        chip.reservedLabel.text = slot.IsReserved
-                            ? (slot.ReservedBreedingSlot.HasValue ? $"[已预约 培育{slot.ReservedBreedingSlot.Value + 1}]" : "[已预约]")
-                            : "";
-                    }
-                    if (chip.reservedMark != null)
-                        chip.reservedMark.SetActive(slot.IsReserved);
-                    if (chip.button != null)
-                        chip.button.interactable = true;
-                    if (chip.selection != null)
-                        chip.selection.SetActive(IsArmed(DropPayload.SkillChip(i)));
-                }
-                else
-                {
-                    chip.label.text = "空";
-                    if (chip.reservedLabel != null)
-                        chip.reservedLabel.text = "";
-                    if (chip.reservedMark != null)
-                        chip.reservedMark.SetActive(false);
-                    if (chip.button != null)
-                        chip.button.interactable = false;
-                    if (chip.selection != null)
-                        chip.selection.SetActive(false);
-                }
-            }
-        }
-
-        void FillOwnedTools(IReadOnlyList<string> tools)
-        {
-            var views = _operation != null ? _operation.ownedToolViews : null;
-            if (views == null)
-                return;
-
-            EnsureSpriteCatalog();
-            for (var i = 0; i < views.Length; i++)
-            {
-                var view = views[i];
-                if (view == null)
-                    continue;
-
-                var owned = tools != null && i < tools.Count;
-                view.gameObject.SetActive(owned);
-                if (!owned)
-                    continue;
-
-                var toolName = tools[i];
-                view.toolName = toolName;
-                var def = _spriteCatalog != null ? _spriteCatalog.FindTool(toolName) : null;
-                view.icon = null;
-                view.description = "";
-                if (view.iconImage != null) view.iconImage.sprite = null;
-                if (def != null)
-                {
-                    view.icon = def.icon;
-                    view.description = def.description;
-                }
-                if (view.iconImage != null && view.icon != null)
-                {
-                    view.iconImage.sprite = view.icon;
-                    view.iconImage.preserveAspect = true;
-                }
-                if (view.nameLabel != null)
-                    view.nameLabel.text = toolName;
-            }
-        }
+        void BindSellSlot(MonsterSlotView slot) => Listen(slot != null ? slot.button : null, () => OnSell(slot));
 
         void OnAddGeneSlot()
         {
@@ -623,137 +357,6 @@ namespace TheCall
             Refresh();
         }
 
-        void FillBreedingSkills(SkillChipView[] chips, IReadOnlyList<BreedingPlanView> plans)
-        {
-            for (var i = 0; i < chips.Length; i++)
-            {
-                var active = plans != null && i < plans.Count;
-                chips[i].gameObject.SetActive(active);
-                if (!active)
-                    continue;
-
-                chips[i].index = plans[i].Index;
-                chips[i].label.text = string.IsNullOrEmpty(plans[i].SkillName) ? "投入技能" : plans[i].SkillName;
-                if (chips[i].selection != null)
-                    chips[i].selection.SetActive(
-                        !string.IsNullOrEmpty(plans[i].SkillName) && IsArmed(DropPayload.BreedingSkill(plans[i].Index)));
-            }
-        }
-
-        void FillMonster(MonsterSlotView slot, MonsterView monster, bool selected)
-        {
-            slot.monsterId = monster != null ? monster.Id : null;
-            var occupied = monster != null;
-            if (slot.portrait != null)
-            {
-                slot.portrait.gameObject.SetActive(occupied);
-                if (occupied)
-                    slot.portrait.Show(monster.Appearance);
-                else
-                    slot.portrait.Clear();
-            }
-
-            if (slot.emptyMark != null)
-                slot.emptyMark.SetActive(!occupied);
-            if (slot.title != null)
-                slot.title.text = occupied ? $"{monster.DisplayName} [{monster.Race}]" : "";
-            if (slot.subtitle != null)
-                slot.subtitle.text = occupied ? $"{monster.Personality} · {monster.Mood} | {SkillLine(monster)}" : "";
-            EnsureSpriteCatalog();
-            BindBadge(slot.personalityIcon, occupied ? _spriteCatalog?.GetPersonalityIcon(monster.Personality) : null);
-            BindBadge(slot.raceIcon, occupied ? _spriteCatalog?.GetRaceIcon(monster.Race) : null);
-            BindBadge(slot.moodIcon, occupied ? _spriteCatalog?.GetMoodIcon(monster.Mood) : null);
-            if (slot.selection != null)
-                slot.selection.SetActive(selected);
-        }
-
-        static void BindBadge(UnityEngine.UI.Image image, Sprite sprite)
-        {
-            if (image == null) return;
-            image.sprite = sprite; image.enabled = sprite != null; image.preserveAspect = true;
-        }
-
-        void FillSeat(MonsterSlotView slot, string monsterId)
-        {
-            if (string.IsNullOrEmpty(monsterId))
-            {
-                FillMonster(slot, null, false);
-                return;
-            }
-
-            FillMonster(slot, this.SendQuery(new MonsterQuery(monsterId)), monsterId == ArmedMonsterId());
-        }
-
-        void FillMonsterCard(ShopCardView card, ShelfMonster item, int gold)
-        {
-            card.gameObject.SetActive(true);
-            card.monsterId = item.Id;
-            card.toolName = null;
-            if (card.portrait != null)
-            {
-                card.portrait.gameObject.SetActive(true);
-                card.portrait.Show(item.Appearance);
-            }
-
-            if (card.icon != null)
-                card.icon.enabled = false;
-            card.title.text = item.DisplayName;
-            card.body.text = Join(item.SkillNames);
-            card.price.text = item.Price + " 金币";
-            card.stock.text = "本轮剩余 1 件";
-            var affordable = gold >= item.Price;
-            card.buyLabel.text = affordable ? "购买" : "金币不足";
-            card.buyButton.interactable = affordable;
-        }
-
-        void FillToolCard(ShopCardView card, ShelfTool item, int gold)
-        {
-            card.gameObject.SetActive(true);
-            card.monsterId = null;
-            card.toolName = item.Name;
-            if (card.portrait != null)
-                card.portrait.gameObject.SetActive(false);
-            EnsureSpriteCatalog();
-            var art = _spriteCatalog != null ? _spriteCatalog.FindTool(item.Name) : null;
-            if (card.icon != null)
-            {
-                card.icon.sprite = null;
-                card.icon.enabled = true;
-                card.icon.type = UnityEngine.UI.Image.Type.Simple;
-                card.icon.preserveAspect = true;
-                card.icon.color = Color.white;
-                if (art != null && art.icon != null)
-                    card.icon.sprite = art.icon;
-                else
-                {
-                    var fallback = FindArt(item.Name);
-                    if (fallback != null && fallback.icon != null)
-                        card.icon.sprite = fallback.icon;
-                }
-            }
-
-            card.title.text = item.Name;
-            card.body.text = art != null ? art.description : (FindArt(item.Name)?.description ?? "");
-            card.price.text = item.Price + " 金币";
-            card.stock.text = "本轮剩余 1 件";
-            var affordable = gold >= item.Price;
-            card.buyLabel.text = affordable ? "购买" : "金币不足";
-            card.buyButton.interactable = affordable;
-        }
-
-        ToolArtView FindArt(string toolName)
-        {
-            var art = _shop != null ? _shop.toolArt : null;
-            if (art == null)
-                return null;
-
-            for (var i = 0; i < art.Length; i++)
-                if (art[i] != null && art[i].toolName == toolName)
-                    return art[i];
-
-            return null;
-        }
-
         void OnKeep(MonsterSlotView slot)
         {
             if (string.IsNullOrEmpty(slot.monsterId))
@@ -768,29 +371,9 @@ namespace TheCall
             Run(() => this.SendCommand(new BeginLevelCommand()));
         }
 
-        string ArmedMonsterId()
-        {
-            var armed = _operation != null && _operation.pointer != null ? _operation.pointer.Armed : null;
-            if (armed == null || armed.Value.Kind != PayloadKind.Monster)
-                return null;
-
-            return armed.Value.MonsterId;
-        }
-
-        bool IsArmed(DropPayload payload)
-        {
-            var armed = _operation != null && _operation.pointer != null ? _operation.pointer.Armed : null;
-            if (armed == null || armed.Value.Kind != payload.Kind)
-                return false;
-
-            if (payload.Kind == PayloadKind.Monster)
-                return armed.Value.MonsterId == payload.MonsterId;
-
-            return armed.Value.Index == payload.Index;
-        }
-
         internal bool CommitDrop(OperationDrop drop)
         {
+            if (_busy || !isActiveAndEnabled) return false;
             var applied = this.SendCommand(new CommitOperationDropCommand(drop));
             if (applied)
             {
@@ -805,24 +388,60 @@ namespace TheCall
 
         public void TriggerSettle() => OnSettle();
 
+        public void Perform(PresentationAction action)
+        {
+            if (!isActiveAndEnabled) return;
+            // Menu and reset controls remain available while gameplay is blocked by playback.
+            if (_busy && action != PresentationAction.ReturnToTitle && action != PresentationAction.ToggleSettings
+                && action != PresentationAction.OpenHandbook && action != PresentationAction.ToggleLog
+                && action != PresentationAction.Quit && action != PresentationAction.OpenSettingsLog) return;
+            switch (action)
+            {
+                case PresentationAction.None: break;
+                case PresentationAction.BeginLevel: OnBegin(); break;
+                case PresentationAction.Settle: OnSettle(); break;
+                case PresentationAction.ReturnToTitle: OnTitle(); break;
+                case PresentationAction.OpenResearch:
+                    var phase = this.SendQuery(new RunPhaseQuery());
+                    if (phase == RunPhase.Operation || phase == RunPhase.Shop)
+                        OpenResearch(phase == RunPhase.Shop ? BackTarget.Shop : BackTarget.Operation);
+                    break;
+                case PresentationAction.CloseResearch: CloseResearch(); break;
+                case PresentationAction.Research: OnResearch(); break;
+                case PresentationAction.BuyTab: SetSellTab(false); break;
+                case PresentationAction.SellTab: SetSellTab(true); break;
+                case PresentationAction.RefreshShelf: OnRefreshShelf(); break;
+                case PresentationAction.LeaveShop: OnLeaveShop(); break;
+                case PresentationAction.AddGeneSlot: OnAddGeneSlot(); break;
+                case PresentationAction.ToggleSettings: ToggleSettings(); break;
+                case PresentationAction.OpenHandbook: OpenCodex(); break;
+                case PresentationAction.ToggleLog: ToggleLog(); break;
+                case PresentationAction.OpenSettingsLog: OpenLogFromSettings(); break;
+                case PresentationAction.Quit: QuitGame(); break;
+                default: throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
+        }
+
         void OnSettle()
         {
             if (_busy)
                 return;
 
             _busy = true;
-            var initialEnergy = this.SendQuery(new LevelEnergyQuery());
-            var initialGold = this.SendQuery(new RunLedgerQuery()).Gold;
-            this.SendCommand(new ConfirmSettlementCommand());
-            ScoringShow.Play(new ScoringStage(
-                this.GetArchitecture(),
-                _operation.extractionSlots,
-                _operation.transform as RectTransform,
-                _operation.dragLayer,
-                _operation.goldLabel,
-                _operation.currentNumber,
-                Notice,
-                FinishSettle, initialEnergy, initialGold));
+            _playback = new SettlementPlayback(GetArchitecture());
+            var version = _sessionVersion;
+            try
+            {
+                if (!_playback.TryStart(_operation, Notice, () =>
+                    {
+                        if (this != null && version == _sessionVersion) FinishSettle();
+                    })) _busy = false;
+            }
+            catch
+            {
+                _busy = false;
+                throw;
+            }
         }
 
         void FinishSettle()
@@ -832,22 +451,20 @@ namespace TheCall
                 return;
 
             _busy = false;
+            if (!isActiveAndEnabled) return;
             var trimmed = this.SendQuery(new SkillTrimFeedbackQuery());
             if (!string.IsNullOrEmpty(trimmed) && trimmed != _lastTrimNotice)
             {
                 _lastTrimNotice = trimmed;
                 Notice("性格技能上限调整，移除：" + trimmed);
             }
-            if (!isActiveAndEnabled)
-                return;
-
-            StartCoroutine(RefreshAfterSettle());
+            StartCoroutine(RefreshAfterSettle(_sessionVersion));
         }
 
-        IEnumerator RefreshAfterSettle()
+        IEnumerator RefreshAfterSettle(int version)
         {
             yield return null;
-            if (this != null)
+            if (this != null && isActiveAndEnabled && version == _sessionVersion)
                 Refresh();
         }
 
@@ -945,6 +562,7 @@ namespace TheCall
 
         void OnTitle()
         {
+            RetirePlayback();
             TheCallApp.Reset();
             StartSession();
         }
@@ -988,8 +606,8 @@ namespace TheCall
                 return;
 
             _busy = true;
-            send();
-            _busy = false;
+            try { send(); }
+            finally { _busy = false; }
             Refresh();
         }
 
@@ -999,8 +617,8 @@ namespace TheCall
                 return;
 
             _busy = true;
-            send();
-            _busy = false;
+            try { send(); }
+            finally { _busy = false; }
             if (!succeeded() && !string.IsNullOrEmpty(failureNotice))
                 Notice(failureNotice);
 
@@ -1062,7 +680,7 @@ namespace TheCall
             return false;
         }
 
-        static bool Contains(IReadOnlyList<string> values, string value)
+        static bool Contains(System.Collections.Generic.IReadOnlyList<string> values, string value)
         {
             if (values == null || value == null)
                 return false;
@@ -1074,72 +692,20 @@ namespace TheCall
             return false;
         }
 
-        static void SetLabel(Transform root, string name, string value)
+        void Listen(UnityEngine.UI.Button button, UnityEngine.Events.UnityAction action)
         {
-            var found = FindChild(root, name);
-            if (found == null)
-                return;
-
-            var label = found.GetComponent<TMP_Text>();
-            if (label != null)
-                label.text = value;
-        }
-
-        static void SetShown(Transform root, string name, bool shown)
-        {
-            var found = FindChild(root, name);
-            if (found != null)
-                found.gameObject.SetActive(shown);
-        }
-
-        static Transform FindChild(Transform root, string name)
-        {
-            if (root == null)
-                return null;
-            if (root.name == name)
-                return root;
-
-            for (var i = 0; i < root.childCount; i++)
+            if (button == null) return;
+            _bindings.Listen(button, () =>
             {
-                var found = FindChild(root.GetChild(i), name);
-                if (found != null)
-                    return found;
-            }
-
-            return null;
+                var declared = button != null ? button.GetComponent<PresentationActionButton>() : null;
+                if (declared == null || !declared.isActiveAndEnabled || declared.Action == PresentationAction.None)
+                    action?.Invoke();
+            });
         }
 
-        static string SkillLine(MonsterView monster)
-        {
-            if (monster.Skills.Count == 0)
-                return "";
+        void BindAction(UnityEngine.UI.Button button, PresentationAction action) => Listen(button, () => Perform(action));
 
-            var skill = monster.Skills[0];
-            var quote = skill.Quote > 0 ? "报价 " + skill.Quote : "效果";
-            var rarity = skill.Rarity == Rarity.Gold ? "金" : skill.Rarity == Rarity.Blue ? "蓝" : "白";
-            return monster.Skills.Count == 1 ? quote + " · " + rarity : quote + " · " + monster.Skills.Count + "项";
-        }
-
-        static string Join(IReadOnlyList<string> values)
-        {
-            var text = "";
-            for (var i = 0; i < values.Count; i++)
-            {
-                if (i > 0)
-                    text += "\n";
-                text += values[i];
-            }
-
-            return text;
-        }
-
-        static void Listen(UnityEngine.UI.Button button, UnityEngine.Events.UnityAction action)
-        {
-            if (button != null && action != null)
-                button.onClick.AddListener(action);
-        }
-
-        static void ListenSlots(MonsterSlotView[] slots, Action<MonsterSlotView> handler)
+        void ListenSlots(MonsterSlotView[] slots, Action<MonsterSlotView> handler)
         {
             if (slots == null)
                 return;
@@ -1148,7 +714,7 @@ namespace TheCall
             {
                 var slot = slots[i];
                 if (slot != null && slot.button != null)
-                    slot.button.onClick.AddListener(() => handler(slot));
+                    Listen(slot.button, () => handler(slot));
             }
         }
 
@@ -1161,7 +727,7 @@ namespace TheCall
             {
                 var card = cards[i];
                 if (card != null && card.buyButton != null)
-                    card.buyButton.onClick.AddListener(() => OnBuy(card));
+                    Listen(card.buyButton, () => OnBuy(card));
             }
         }
 
@@ -1174,7 +740,7 @@ namespace TheCall
             {
                 var node = nodes[i];
                 if (node != null && node.button != null)
-                    node.button.onClick.AddListener(() => OnSelectTech(node));
+                    Listen(node.button, () => OnSelectTech(node));
             }
         }
     }

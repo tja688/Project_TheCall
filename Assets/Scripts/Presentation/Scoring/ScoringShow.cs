@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using DG.Tweening;
-using QFramework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +11,7 @@ namespace TheCall.Scoring
     public readonly struct ScoringStage
     {
         public ScoringStage(
-            IArchitecture architecture,
+            ScoringTape tape,
             MonsterSlotView[] extractionSlots,
             RectTransform boardRoot,
             RectTransform dragLayer,
@@ -20,9 +19,10 @@ namespace TheCall.Scoring
             TMP_Text currentNumber,
             Action<string> say,
             Action completed,
-            int initialEnergy = 0, int initialGold = 0)
+            int initialEnergy = 0, int initialGold = 0,
+            Action<int, int> moved = null, Action<int> removed = null)
         {
-            Architecture = architecture;
+            Tape = tape;
             ExtractionSlots = extractionSlots;
             BoardRoot = boardRoot;
             DragLayer = dragLayer;
@@ -32,9 +32,11 @@ namespace TheCall.Scoring
             Completed = completed;
             InitialEnergy = initialEnergy;
             InitialGold = initialGold;
+            Moved = moved;
+            Removed = removed;
         }
 
-        public IArchitecture Architecture { get; }
+        public ScoringTape Tape { get; }
         public MonsterSlotView[] ExtractionSlots { get; }
         public RectTransform BoardRoot { get; }
         public RectTransform DragLayer { get; }
@@ -44,6 +46,8 @@ namespace TheCall.Scoring
         public Action Completed { get; }
         public int InitialEnergy { get; }
         public int InitialGold { get; }
+        public Action<int, int> Moved { get; }
+        public Action<int> Removed { get; }
     }
 
     public sealed class ScoringShow : MonoBehaviour, ICueSink
@@ -75,7 +79,7 @@ namespace TheCall.Scoring
         const float FigureShakeSeconds = 0.16f * FigureLinger;
         const float PaySeconds = 0.9f * FigureLinger;
 
-        static readonly object TweenId = new object();
+        readonly object TweenId = new object();
         static ScoringShow _active;
 
         ScoringStage _stage;
@@ -110,23 +114,39 @@ namespace TheCall.Scoring
             public Vector2 RestAnchoredPosition;
         }
 
-        public static void Play(ScoringStage stage)
+        public static bool IsPlaying => _active != null;
+
+        public static ScoringShow Play(ScoringStage stage)
         {
-            if (stage.Architecture == null || stage.BoardRoot == null || stage.DragLayer == null)
+            if (stage.Tape == null || stage.BoardRoot == null || stage.DragLayer == null || !stage.DragLayer.gameObject.activeInHierarchy)
             {
                 stage.Completed?.Invoke();
-                return;
+                return null;
             }
 
             if (_active != null)
-                return;
+            {
+                stage.Completed?.Invoke();
+                return null;
+            }
 
             var host = new GameObject("ScoringShow");
             host.transform.SetParent(stage.DragLayer, false);
             var show = host.AddComponent<ScoringShow>();
             _active = show;
             show.Begin(stage);
+            return show;
         }
+
+        public void Cancel()
+        {
+            StopAllCoroutines();
+            Finish();
+        }
+
+        public void Advance() => OnBlocked();
+
+        void OnDisable() => Cancel();
 
         void Begin(ScoringStage stage)
         {
@@ -140,10 +160,8 @@ namespace TheCall.Scoring
             try
             {
                 var ids = ReadIds(_stage.ExtractionSlots);
-                var entries = _stage.Architecture.SendQuery(new SettlementRecordQuery());
-                _tape = ScoringTape.Arrange(entries, ids, _stage.InitialEnergy);
+                _tape = _stage.Tape;
                 Capture(ids);
-                _stage.Architecture.SendCommand(new ShowSettlementSightCommand());
                 _restBoardPosition = _stage.BoardRoot.anchoredPosition;
                 _boardHeld = true;
                 BindCurrent();
@@ -190,7 +208,7 @@ namespace TheCall.Scoring
 
             TeardownPresentation();
             NotifyCompleted();
-            if (this != null)
+            if (this != null && !gameObject.IsDestroying())
                 Destroy(gameObject);
         }
 
@@ -211,9 +229,6 @@ namespace TheCall.Scoring
 
         void TeardownPresentation()
         {
-            if (_stage.Architecture != null)
-                _stage.Architecture.SendCommand(new HideSettlementSightCommand());
-
             DOTween.Kill(TweenId);
             RestoreCurrent();
             RestoreSlots();
@@ -240,6 +255,7 @@ namespace TheCall.Scoring
 
             if (_blocker != null)
             {
+                _blocker.gameObject.SetActive(false);
                 Destroy(_blocker.gameObject);
                 _blocker = null;
             }
@@ -705,7 +721,7 @@ namespace TheCall.Scoring
                     if (slot.View != null)
                         slot.View.monsterId = null;
                     _slots[cue.VictimIndex] = slot;
-                    _stage.Architecture.SendCommand(new ClearSettlementSightCommand(cue.VictimIndex));
+                    _stage.Removed?.Invoke(cue.VictimIndex);
                 }
 
                 yield break;
@@ -913,7 +929,7 @@ namespace TheCall.Scoring
             HoverRide.Detach(target.Portrait);
             _slots[actorIndex] = actor;
             _slots[targetIndex] = target;
-            _stage.Architecture.SendCommand(new MoveSettlementSightCommand(actorIndex, targetIndex));
+            _stage.Moved?.Invoke(actorIndex, targetIndex);
         }
 
         void Lift(int index)

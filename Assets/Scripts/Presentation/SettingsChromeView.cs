@@ -149,6 +149,7 @@ namespace TheCall
 
             var clone = Instantiate(codexButton.gameObject, parent);
             clone.name = "LogButton";
+            clone.GetComponent<PresentationActionButton>()?.Configure(null, PresentationAction.OpenSettingsLog);
             clone.transform.SetSiblingIndex(codexButton.transform.GetSiblingIndex() + 1);
             logButton = clone.GetComponent<Button>();
             var labels = clone.GetComponentsInChildren<TMP_Text>(true);

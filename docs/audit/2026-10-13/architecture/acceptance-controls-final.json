@@ -1,0 +1,74 @@
+[
+  {
+    "check": "Player frames advance",
+    "result": "PASS"
+  },
+  {
+    "check": "CheckButtonAdapter",
+    "result": "PASS"
+  },
+  {
+    "check": "CheckLegacyButtonAdapter",
+    "result": "PASS"
+  },
+  {
+    "check": "CheckControllerReenable",
+    "result": "PASS"
+  },
+  {
+    "check": "Existing handbook/settings/log bindings and read-only browsing",
+    "result": "PASS"
+  },
+  {
+    "check": "Player opening choice reaches operation",
+    "result": "PASS"
+  },
+  {
+    "check": "Optional labels/buttons can be removed",
+    "result": "PASS"
+  },
+  {
+    "check": "Refresh during actual settlement",
+    "result": "PASS"
+  },
+  {
+    "check": "Empty extraction enters overtime naturally",
+    "result": "PASS"
+  },
+  {
+    "check": "Second insufficient settlement reaches failure screen",
+    "result": "PASS"
+  },
+  {
+    "check": "Original restart button reopens a new run",
+    "result": "PASS"
+  },
+  {
+    "check": "Player opening choice reaches operation",
+    "result": "PASS"
+  },
+  {
+    "check": "Reset during actual playback",
+    "result": "PASS"
+  },
+  {
+    "check": "Old completion cannot revive the prior run",
+    "result": "PASS"
+  },
+  {
+    "check": "Player opening choice reaches operation",
+    "result": "PASS"
+  },
+  {
+    "check": "Owner disable and reenable during actual playback",
+    "result": "PASS"
+  },
+  {
+    "check": "No new Unity errors or exceptions",
+    "result": "PASS"
+  },
+  {
+    "check": "Saved scene remains unchanged by acceptance",
+    "result": "PASS"
+  }
+]

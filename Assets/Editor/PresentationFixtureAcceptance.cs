@@ -21,16 +21,18 @@ namespace TheCall.Editor
         static Report report = new Report();
         static readonly List<string> ids = new List<string>();
         static string scenario;
-        static string Root => Path.GetFullPath(Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/evidence/ui-fixtures"));
+        static string _evidenceDirectory;
+        static string Root => _evidenceDirectory ?? Path.GetFullPath(Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/evidence/ui-fixtures"));
         static TheCallPresentation Presentation => Object.FindAnyObjectByType<TheCallPresentation>();
         static OperationScreenView Operation => Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
         static RunModel Run => TheCallApp.Interface.GetModel<RunModel>();
         static LevelModel Level => TheCallApp.Interface.GetModel<LevelModel>();
         static ContentBook Book => ContentGate.Current;
 
-        public static string Begin(string kind, int count = 30)
+        public static string Begin(string kind, int count = 30, string evidenceDirectory = null)
         {
             Need(Application.isPlaying && Object.FindAnyObjectByType<TheCall.Scoring.ScoringShow>() == null, "Fixture requires idle Play Mode.");
+            _evidenceDirectory = string.IsNullOrEmpty(evidenceDirectory) ? null : Path.GetFullPath(evidenceDirectory);
             foreach (var hover in Object.FindObjectsByType<MonsterHover>(FindObjectsInactive.Include, FindObjectsSortMode.None)) { hover.HideManual(); hover.enabled = true; }
             TheCallApp.Reset();
             ContentGate.Use(ContentBook.Parse(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json"))));
