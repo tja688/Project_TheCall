@@ -566,7 +566,8 @@ namespace TheCall
         bool RigVisualIntact()
         {
             if (_motion == null)
-                return true;
+                return Painted(_body) || Painted(_head) || Painted(_tail) || Painted(_foot)
+                    || Painted(_hand) || Painted(_eye) || Painted(_mouth) || Painted(_hat) || Painted(_accessory);
 
             if (_rigRoot == null || _rigImages.Count == 0)
                 return false;
@@ -579,6 +580,8 @@ namespace TheCall
 
             return true;
         }
+
+        static bool Painted(Image image) => image != null && image.enabled && image.sprite != null && image.gameObject.activeSelf;
 
         /// <summary>
         /// 把当前帧的骨架写到画面上。每根骨头一个 Image，挂在 rig 根下，位置、旋转、镜像都来自同一帧数据；

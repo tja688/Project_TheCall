@@ -32,6 +32,7 @@ namespace TheCall
         public ToolArtView[] ownedToolViews;
         public RectTransform dragLayer;
         public OperationPointer pointer;
+        public LabSceneView lab;
         [Min(1)] public int cageColumns = 2;
         [Min(1)] public float cageRowSpacing = 118f;
         [Min(0)] public float cagePadding = 8f;
@@ -56,6 +57,8 @@ namespace TheCall
             var selectedId = armed.HasValue && armed.Value.Kind == PayloadKind.Monster ? armed.Value.MonsterId : null;
             cageSlots = MonsterInventory.Render(cageSlots, architecture.SendQuery(new MonsterCageQuery()), selectedId,
                 catalog, "CageCard_", cageColumns, cageRowSpacing, cagePadding);
+            if (lab != null && lab.cageScroll is LabCageLift lift)
+                lift.Render(architecture.SendQuery(new MonsterCageQuery()).Count);
             if (extractionSlots != null)
             {
                 var cells = architecture.SendQuery(new ExtractionSlotsQuery());
@@ -127,6 +130,8 @@ namespace TheCall
                     }
                     PresentationReadout.Text(view.nameLabel, view.toolName);
                 }
+            if (lab != null) lab.Render(architecture.SendQuery(new BreedingPlansQuery()), energy, target.EnergyDue,
+                architecture.SendQuery(new MonsterCageQuery()).Count, run.GeneCapacity);
         }
     }
 }

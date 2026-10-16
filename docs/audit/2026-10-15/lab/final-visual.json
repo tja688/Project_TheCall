@@ -1,0 +1,30 @@
+[
+  {
+    "result": "PASS",
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual research selection 变异学说"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS all six research summaries stay inside their rendered card bounds"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS runtime Renderer2D, painted room locks, 2 mapped parents and visible raycast targets"
+  },
+  {
+    "result": "PASS",
+    "check": "Actual lamp opacity animates: 0.475326657 -> 0.542114139"
+  },
+  {
+    "result": "PASS",
+    "check": "Final visual pass has no new Unity errors"
+  }
+]

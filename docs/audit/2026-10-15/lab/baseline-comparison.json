@@ -1,0 +1,17 @@
+[
+  {
+    "file": "final-state.txt",
+    "matches": true,
+    "sha256": "4bf1dd1877c27aff7a6a3c04199b1ef014f5fe472fe4e57941f39924b718faca"
+  },
+  {
+    "file": "production-log.txt",
+    "matches": true,
+    "sha256": "c726a9c99c85c038b6462d63815cd3f32418c6a2aa55e553728d08d287673d6a"
+  },
+  {
+    "file": "state-trace.txt",
+    "matches": true,
+    "sha256": "f376ed72f6e352330e5921e001c909b704b21b64112686c7c5d89079611490db"
+  }
+]

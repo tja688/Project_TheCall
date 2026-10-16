@@ -377,6 +377,8 @@ namespace TheCall
             var applied = this.SendCommand(new CommitOperationDropCommand(drop));
             if (applied)
             {
+                if (drop.Landing.Place == LandingPlace.Discard && _operation != null && _operation.lab != null)
+                    _operation.lab.recycler?.Consume();
                 Refresh();
                 if (drop.Payload.Kind == PayloadKind.SkillChip && !string.IsNullOrEmpty(drop.Landing.MonsterId)) Notice("基因安装成功。");
                 else if (drop.Payload.Kind == PayloadKind.SkillChip && drop.Landing.Place == LandingPlace.BreedingSocket) Notice("已预约此格基因用于培育；取回时恢复原格。");

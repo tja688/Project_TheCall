@@ -1,0 +1,18 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin inventory",
+            "passed": true,
+            "actual": "count=1 IDs=m4",
+            "frame": 24412
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m4 -> extraction 0",
+            "frame": 28254
+        }
+    ]
+}

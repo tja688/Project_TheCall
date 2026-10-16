@@ -1,0 +1,3612 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {},
+    "result": {
+      "status": "completed",
+      "duration": 8.95,
+      "summary": {
+        "total": 512,
+        "passed": 512,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.两个操作界面各自绑定自己的拖动指针",
+          "Status": "Passed",
+          "Duration": 0.0074972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.删除按钮与标签仍能携带存在的基因(SkillChip)",
+          "Status": "Passed",
+          "Duration": 0.00622,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.删除按钮与标签仍能携带存在的基因(BreedingSkill)",
+          "Status": "Passed",
+          "Duration": 0.0010488,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.游离拖动控件不会借用别的界面的指针",
+          "Status": "Passed",
+          "Duration": 0.0008438,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.界面移除所有可选控件仍可读取同一规则状态",
+          "Status": "Passed",
+          "Duration": 0.0350436,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.空基因不会因美术标签或按钮变成可拖动(SkillChip)",
+          "Status": "Passed",
+          "Duration": 0.0052904,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.空基因不会因美术标签或按钮变成可拖动(BreedingSkill)",
+          "Status": "Passed",
+          "Duration": 0.0004201,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.PresentationSeamTests.缓存三十张卡片后仅剩一只怪物仍能出现在可见笼内",
+          "Status": "Passed",
+          "Duration": 0.0154133,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.只销毁演出时把藏起的画像重新激活",
+          "Status": "Passed",
+          "Duration": 1.3617245,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.演出完成再销毁只通知一次",
+          "Status": "Passed",
+          "Duration": 0.9555838,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.界面一起销毁时不把正在销毁的画像重新激活",
+          "Status": "Passed",
+          "Duration": 0.6696104,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.界面先销毁后演出结束不访问已销毁的界面",
+          "Status": "Passed",
+          "Duration": 0.7422487,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.界面已停用时演出结束不启动刷新协程",
+          "Status": "Passed",
+          "Duration": 0.5647484,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.真实播放停用后释放演出并且只通知一次",
+          "Status": "Passed",
+          "Duration": 0.625053,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringShowTeardownTests.重复播放拒绝时仍通知调用者且原播放继续",
+          "Status": "Passed",
+          "Duration": 0.9014418,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.侧向落地按报价加项只数底因子倍能量写回出字",
+          "Status": "Passed",
+          "Duration": 0.0145855,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.再触发字在来源上且弹出里不再有加一次",
+          "Status": "Passed",
+          "Duration": 0.0018147,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.加班支付解释区分带入本轮与累计",
+          "Status": "Passed",
+          "Duration": 0.0004996,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.同一怪物连续落地不插入行走",
+          "Status": "Passed",
+          "Duration": 0.0014429,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.外来加项和倍率从那只怪物抛向正在计分的怪物最后才落地",
+          "Status": "Passed",
+          "Duration": 0.0025713,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.换位之后消灭吐息落在下标1",
+          "Status": "Passed",
+          "Duration": 0.0021709,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.支付句子沿用结算的四句且失败优先",
+          "Status": "Passed",
+          "Duration": 0.0006232,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.未中先走到那一格再亮红字且不计入产出",
+          "Status": "Passed",
+          "Duration": 0.000615,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.残留之后空消灭从残留走回吞噬者",
+          "Status": "Passed",
+          "Duration": 0.0008524,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.结构化来源保持怪物与技能实例标识而不依赖显示名",
+          "Status": "Passed",
+          "Duration": 0.0006189,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.落地先加上自身底分再逐个加上别人的分数和倍率差额",
+          "Status": "Passed",
+          "Duration": 0.0019539,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Scoring.ScoringTapeTests.记录或槽位缺失时步骤为空",
+          "Status": "Passed",
+          "Duration": 0.000409,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CanvasMapTests.世界画布上的肖像按屏幕像素放大层级缩放不会放大",
+          "Status": "Passed",
+          "Duration": 0.0085553,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CanvasMapTests.关掉的世界肖像仍能量出屏幕尺寸",
+          "Status": "Passed",
+          "Duration": 0.0010843,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CanvasMapTests.指针在世界槽位的屏幕投影内时距离为零",
+          "Status": "Passed",
+          "Duration": 0.0019589,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CarryScaleTests.关掉的肖像仍按父级缩放算出画面大小",
+          "Status": "Passed",
+          "Duration": 0.0008097,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CarryScaleTests.指针在卡片内时距离为零卡片外按边计算",
+          "Status": "Passed",
+          "Duration": 0.0004404,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CarryScaleTests.松手后在固定时间内回到怪物栏尺寸",
+          "Status": "Passed",
+          "Duration": 0.0004487,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.CarryScaleTests.靠近生产区时放大到生产区离开时保持怪物栏大小",
+          "Status": "Passed",
+          "Duration": 0.0004743,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.三张技能按总高居中从上往下排",
+          "Status": "Passed",
+          "Duration": 0.0013202,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.两张技能的子面板关于卡中心对称且第一张在上",
+          "Status": "Passed",
+          "Duration": 0.000309,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.四张技能按总高居中从上往下排",
+          "Status": "Passed",
+          "Duration": 0.0002307,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.左半屏一张技能时栈在槽的右侧且子面板在窗口中线",
+          "Status": "Passed",
+          "Duration": 0.0010201,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.指针在屏幕中线时栈在槽的左侧",
+          "Status": "Passed",
+          "Duration": 0.0003374,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.栈超出画布右缘时只把窗口中心往回挪且子面板本地坐标不变",
+          "Status": "Passed",
+          "Duration": 0.000319,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverLayoutTests.没有技能时布局拒绝",
+          "Status": "Passed",
+          "Duration": 0.0012037,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.位移平方达到阈值平方才算拖拽没有设备也算拖拽",
+          "Status": "Passed",
+          "Duration": 0.00112,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.商店卡上指向怪物时返回这只怪物",
+          "Status": "Passed",
+          "Duration": 0.0024599,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.工具卡没有怪物id时购买按钮也不出详情",
+          "Status": "Passed",
+          "Duration": 0.0005121,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.按下记下原点之后的移动和同一次按下的第二次调用都不改原点",
+          "Status": "Passed",
+          "Duration": 0.0005637,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.挡板命中时继续找下面的怪物",
+          "Status": "Passed",
+          "Duration": 0.0015169,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.槽位子图形返回该槽的怪物和矩形",
+          "Status": "Passed",
+          "Duration": 0.0004882,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.消失后的空槽不再给出技能对象",
+          "Status": "Passed",
+          "Duration": 0.0004364,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.空怪物id的槽停止向上查找",
+          "Status": "Passed",
+          "Duration": 0.0004811,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.HoverSampleTests.飞行中的肖像比槽位上的旧编号优先",
+          "Status": "Passed",
+          "Duration": 0.0014506,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterAssemblyTests.五官先对齐头型脸部锚点动画支点偏移独立计算",
+          "Status": "Passed",
+          "Duration": 0.0043527,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterAssemblyTests.挂点接口与部件接口不相同时组合不兼容",
+          "Status": "Passed",
+          "Duration": 0.0008772,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.一百像素对应一个世界单位",
+          "Status": "Passed",
+          "Duration": 0.0018365,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.偏心包围盒仍盖住矩形",
+          "Status": "Passed",
+          "Duration": 0.0015985,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.屏幕中心落在灯光平面原点",
+          "Status": "Passed",
+          "Duration": 0.0007004,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.屏幕矩形投到平面后尺寸不变",
+          "Status": "Passed",
+          "Duration": 0.0008995,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.旋转矩形的上方向跟着左边",
+          "Status": "Passed",
+          "Duration": 0.0006708,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterLightPoseTests.镜像矩形把精灵翻到同一块区域",
+          "Status": "Passed",
+          "Duration": 0.000564,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.拖拽角度不会超过关节上限",
+          "Status": "Passed",
+          "Duration": 0.0028772,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.拖拽角度和惯性在编辑器里被夹到合理范围",
+          "Status": "Passed",
+          "Duration": 0.0007764,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.按下点偏离中心时身体先不动再把中心贴到指针上",
+          "Status": "Passed",
+          "Duration": 0.0005635,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.旧版文件升级后补上默认的摆动拖拽和惯性",
+          "Status": "Passed",
+          "Duration": 0.0006246,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.松手后抓取分量回到静止",
+          "Status": "Passed",
+          "Duration": 0.0008018,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.版本二的文件不会覆盖用户设成零的摆动",
+          "Status": "Passed",
+          "Duration": 0.0002848,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.画面放大时抓取位移按比例收回且关节角不变",
+          "Status": "Passed",
+          "Duration": 0.0006979,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.计分反应弹出后会回落到静止",
+          "Status": "Passed",
+          "Duration": 0.0004901,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterMotionControllerTests.镜像父骨头时子骨头的转向相反",
+          "Status": "Passed",
+          "Duration": 0.0003613,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitLayoutTests.包围盒中心在原点时拟合位移为零",
+          "Status": "Passed",
+          "Duration": 0.0003554,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitLayoutTests.卡片轴心在左上角时仍然量到骨架中心",
+          "Status": "Passed",
+          "Duration": 0.0011842,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitLayoutTests.拟合后怪物中心落在视口中心",
+          "Status": "Passed",
+          "Duration": 0.0003259,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitRecoveryTests.场景实例上的预览刷新会装上立绘",
+          "Status": "Passed",
+          "Duration": 0.0099967,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitRecoveryTests.已缓存外观但没有骨架或可见回退部件时会重新装上立绘",
+          "Status": "Passed",
+          "Duration": 0.0076888,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitRecoveryTests.预制体资源上的预览刷新不会改父级",
+          "Status": "Passed",
+          "Duration": 0.0013424,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterPortraitRecoveryTests.预览骨架被销毁后再次显示会重新装上立绘",
+          "Status": "Passed",
+          "Duration": 0.0042557,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.主体排除次主体时左右都不能再抽到并且排除会传给头上的副体",
+          "Status": "Passed",
+          "Duration": 0.0046271,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.单个部件可以改到一定在前或一定在后",
+          "Status": "Passed",
+          "Duration": 0.0021056,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.子部件的安装点落在父挂点上左挂点镜像素材",
+          "Status": "Passed",
+          "Duration": 0.0009836,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.左右手和左右脚各抽同一种再镜像",
+          "Status": "Passed",
+          "Duration": 0.0008845,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.左右挂点交替默认并且必须标明一侧",
+          "Status": "Passed",
+          "Duration": 0.0008987,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.已有身体按自己的槽位生成脚和配饰",
+          "Status": "Passed",
+          "Duration": 0.0027554,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.待机在四分之一周期时头和身体抬起用的是动作配置",
+          "Status": "Passed",
+          "Duration": 0.0008538,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.手脚继承身体颜色头和尾巴各自随机眼不上色",
+          "Status": "Passed",
+          "Duration": 0.0015035,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.扭头以头部对接点为轴镜像",
+          "Status": "Passed",
+          "Duration": 0.0008786,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.拖拽松手后弹簧回到静止",
+          "Status": "Passed",
+          "Duration": 0.0004051,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.摆动为零时子部件跟着父体转",
+          "Status": "Passed",
+          "Duration": 0.0004325,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.摆动超过上限会被夹到上限",
+          "Status": "Passed",
+          "Duration": 0.0003533,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.整只预览回到上次随机的身体而不是当前点开的手",
+          "Status": "Passed",
+          "Duration": 0.0003372,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.文件夹把身体和头当作主体把手脚眼当作次主体",
+          "Status": "Passed",
+          "Duration": 0.0005444,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.新主体没有挂点副体不能再加挂点",
+          "Status": "Passed",
+          "Duration": 0.001278,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.旋转九十度后挂点偏移和手算一致",
+          "Status": "Passed",
+          "Duration": 0.0014022,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.未看过的部件更常被抽到但扰动可以抽到看过的",
+          "Status": "Passed",
+          "Duration": 0.0008991,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.第三套配方生成没脚且有三件配饰的画像",
+          "Status": "Passed",
+          "Duration": 0.0006298,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.身体转动九十度时手绕身体挂点转出",
+          "Status": "Passed",
+          "Duration": 0.0004895,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.进入整只预览会清掉组件上的临时搭配",
+          "Status": "Passed",
+          "Duration": 0.0028563,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.配饰画在头后面",
+          "Status": "Passed",
+          "Duration": 0.00044,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Hover.Tests.MonsterRigTests.默认图层从前往后是眼嘴头头饰身体手脚配饰尾巴",
+          "Status": "Passed",
+          "Duration": 0.0014309,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台亲缘可引用后格并对父子双向生效",
+          "Status": "Passed",
+          "Duration": 0.0254266,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台复读允许同名实例并各自产出",
+          "Status": "Passed",
+          "Duration": 0.0022731,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台无复读拒绝重复且安于现状使用领域上限",
+          "Status": "Passed",
+          "Duration": 0.0026666,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台重复实例成长临时性独立且累计包括带入",
+          "Status": "Passed",
+          "Duration": 0.0078191,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台预览使用真实人格心情且没有结算写入(\"急躁\",\"普通\",\"8\")",
+          "Status": "Passed",
+          "Duration": 0.003913,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台预览使用真实人格心情且没有结算写入(\"热爱工作\",\"热爱\",\"7\")",
+          "Status": "Passed",
+          "Duration": 0.0019089,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BenchRemediationTests.工作台预览使用真实人格心情且没有结算写入(\"孤僻\",\"普通\",\"10\")",
+          "Status": "Passed",
+          "Duration": 0.0027146,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.一只亲本在下一关开始不生育亲本仍留在怪物笼",
+          "Status": "Passed",
+          "Duration": 0.0173126,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.两只单技能亲本技能不同时后代按亲本顺序得到这两个技能",
+          "Status": "Passed",
+          "Duration": 0.0065557,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.两只单技能亲本技能相同时后代只有这一个技能",
+          "Status": "Passed",
+          "Duration": 0.0161663,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.亲本不全是单技能而又抽到同名时后代得到两个不同技能",
+          "Status": "Passed",
+          "Duration": 0.0280071,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.亲本有多个技能时后代得到抽中的那一个",
+          "Status": "Passed",
+          "Duration": 0.0192523,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.加班可以改掉尚未最终锁定的方案锁定后的亲本不能出售",
+          "Status": "Passed",
+          "Duration": 0.0174837,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.培育槽只有两个亲本位放不进第三只也不吃技能槽",
+          "Status": "Passed",
+          "Duration": 0.0172659,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.抽到同名时不会把同一技能再随机一次",
+          "Status": "Passed",
+          "Duration": 0.018523,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.BreedingTests.空的培育槽不会生成后代",
+          "Status": "Passed",
+          "Duration": 0.0042654,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.不报价的技能也会支付已经持有的产能",
+          "Status": "Passed",
+          "Duration": 0.0066097,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.产能按主动执行计次因此双头能量体只另开一次",
+          "Status": "Passed",
+          "Duration": 0.0051155,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.产能量技能的再走次数是额外触发与产能额外次数相加且秒点先走完",
+          "Status": "Passed",
+          "Duration": 0.0045762,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.只有镜眼时下一次主动执行支付已经持有的层",
+          "Status": "Passed",
+          "Duration": 0.0041011,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.同一关之后的主动执行按层数另开一点且产能计分自身不再听产能",
+          "Status": "Passed",
+          "Duration": 0.0034215,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.回响嗓在右侧相邻停留开始时给技能再走一次且中途新次数不算",
+          "Status": "Passed",
+          "Duration": 0.0047958,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.左复制腺体只给左侧相邻的产能量技能加一次产能额外次数",
+          "Status": "Passed",
+          "Duration": 0.0052952,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.没有永久的产能离开关卡时清掉",
+          "Status": "Passed",
+          "Duration": 0.0038351,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.镜眼获得一层产能且获得的那一次主动执行不计",
+          "Status": "Passed",
+          "Duration": 0.0036395,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.CapacityTests.隔一格不算相邻所以回响嗓和左复制腺体都不给再走",
+          "Status": "Passed",
+          "Duration": 0.0040843,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.五个退役技能不得出现在技能库中",
+          "Status": "Passed",
+          "Duration": 0.0035492,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.全量三十四个技能均能正确生成文案描述且效果非空",
+          "Status": "Passed",
+          "Duration": 0.0042768,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.全量二十五个性格名称与文案均非空且稀有度有效",
+          "Status": "Passed",
+          "Duration": 0.003341,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.全量十八个工具效果与文案均非空",
+          "Status": "Passed",
+          "Duration": 0.0061788,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.关卡库定义七个关卡且达标能量与超额能量正确",
+          "Status": "Passed",
+          "Duration": 0.0130266,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.关键改动技能属性符合最新规格要求",
+          "Status": "Passed",
+          "Duration": 0.0172534,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.工具库包含十八个工具且价格分为三十五十和八十",
+          "Status": "Passed",
+          "Duration": 0.0068805,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.心情库包含五档且能量加成从负二到正二",
+          "Status": "Passed",
+          "Duration": 0.004746,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.性格库包含二十五个性格且稀有度分布为十二白五蓝五负面三金",
+          "Status": "Passed",
+          "Duration": 0.0044065,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.技能库包含三十四个有效技能且稀有度分布为十六白十四蓝四金",
+          "Status": "Passed",
+          "Duration": 0.0041602,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.状态边界符合ADR0003模型划分",
+          "Status": "Passed",
+          "Duration": 0.0045642,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.种族库包含五大种族相生闭环与相克闭环",
+          "Status": "Passed",
+          "Duration": 0.0049353,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.科技库包含六项科技且花费皆为一点科技点",
+          "Status": "Passed",
+          "Duration": 0.0065714,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentAuditTests.经济与权重参数符合规格配置",
+          "Status": "Passed",
+          "Duration": 0.0047556,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"孤僻\",10)",
+          "Status": "Passed",
+          "Duration": 0.0036373,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"自私\",10)",
+          "Status": "Passed",
+          "Duration": 0.0020466,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"自律\",10)",
+          "Status": "Passed",
+          "Duration": 0.0015856,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"安于现状\",10)",
+          "Status": "Passed",
+          "Duration": 0.0014604,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"急躁\",8)",
+          "Status": "Passed",
+          "Duration": 0.0014865,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachIsolatedSettlementPersonalityHasItsOwnEffect(\"稳重\",8)",
+          "Status": "Passed",
+          "Duration": 0.0018553,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachMoodChangesProductionByItsActualTier(\"普通\",5)",
+          "Status": "Passed",
+          "Duration": 0.0025198,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachMoodChangesProductionByItsActualTier(\"热情\",6)",
+          "Status": "Passed",
+          "Duration": 0.0018313,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachMoodChangesProductionByItsActualTier(\"热爱\",7)",
+          "Status": "Passed",
+          "Duration": 0.0025233,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachMoodChangesProductionByItsActualTier(\"疲倦\",4)",
+          "Status": "Passed",
+          "Duration": 0.0015705,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachMoodChangesProductionByItsActualTier(\"倦怠\",3)",
+          "Status": "Passed",
+          "Duration": 0.0014225,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborContributionChangesBothObservedEndpoints(\"恋爱脑\",7,7)",
+          "Status": "Passed",
+          "Duration": 0.0023205,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborContributionChangesBothObservedEndpoints(\"乐于助人\",5,7)",
+          "Status": "Passed",
+          "Duration": 0.0019413,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborContributionChangesBothObservedEndpoints(\"自私\",10,2)",
+          "Status": "Passed",
+          "Duration": 0.0017542,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborPersonalityHasItsOwnEffect(\"合群\",8)",
+          "Status": "Passed",
+          "Duration": 0.0025795,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborPersonalityHasItsOwnEffect(\"独立\",5)",
+          "Status": "Passed",
+          "Duration": 0.0021889,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachNeighborPersonalityHasItsOwnEffect(\"依赖\",7)",
+          "Status": "Passed",
+          "Duration": 0.0050721,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(\"森林\",\"天空\")",
+          "Status": "Passed",
+          "Duration": 0.0063076,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(\"天空\",\"沙漠\")",
+          "Status": "Passed",
+          "Duration": 0.0171091,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(\"沙漠\",\"山脉\")",
+          "Status": "Passed",
+          "Duration": 0.0020247,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(\"山脉\",\"海生\")",
+          "Status": "Passed",
+          "Duration": 0.002073,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachRaceHasActualGeneratingNeighborBonus(\"海生\",\"森林\")",
+          "Status": "Passed",
+          "Duration": 0.0019519,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachSimpleEnergyToolHasItsOwnActualSettlement(\"急急装置\",10)",
+          "Status": "Passed",
+          "Duration": 0.0031665,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachSimpleEnergyToolHasItsOwnActualSettlement(\"小喇叭\",8)",
+          "Status": "Passed",
+          "Duration": 0.0024797,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.EachSimpleEnergyToolHasItsOwnActualSettlement(\"情绪收割机\",7)",
+          "Status": "Passed",
+          "Duration": 0.0027486,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.FreeWillFailureStillNotifiesEnergyEar",
+          "Status": "Passed",
+          "Duration": 0.0042304,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.GoldSkillDetectorCountsActualGoldSkillInstances",
+          "Status": "Passed",
+          "Duration": 0.0031328,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.GreedyReceivesGoldOnEveryActiveAttempt",
+          "Status": "Passed",
+          "Duration": 0.0033347,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.MachineProducesUnownedEnergyInItsOwnEntry",
+          "Status": "Passed",
+          "Duration": 0.0029551,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.MindControlChangesPersonalityAdditionOnly",
+          "Status": "Passed",
+          "Duration": 0.0029152,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SingleSkillDeviceAddsOneTriggerAndDoublesEachOutput",
+          "Status": "Passed",
+          "Duration": 0.0035844,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillAuraHasIndependentBasicFixture(\"奇异香\",6)",
+          "Status": "Passed",
+          "Duration": 0.0034164,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillAuraHasIndependentBasicFixture(\"怪异香\",7)",
+          "Status": "Passed",
+          "Duration": 0.0028128,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillAuraHasIndependentBasicFixture(\"镜眼\",10)",
+          "Status": "Passed",
+          "Duration": 0.0026481,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"能量体\",5)",
+          "Status": "Passed",
+          "Duration": 0.0040567,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"左能量体\",2)",
+          "Status": "Passed",
+          "Duration": 0.0031827,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"右能量体\",2)",
+          "Status": "Passed",
+          "Duration": 0.0026466,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"双头能量体\",4)",
+          "Status": "Passed",
+          "Duration": 0.0032431,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"蜜能量体\",3)",
+          "Status": "Passed",
+          "Duration": 0.002952,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"优秀能量体\",2)",
+          "Status": "Passed",
+          "Duration": 0.002461,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"增生能量体\",1)",
+          "Status": "Passed",
+          "Duration": 0.0030308,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"自爆体\",10)",
+          "Status": "Passed",
+          "Duration": 0.0047494,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"情绪收集器\",2)",
+          "Status": "Passed",
+          "Duration": 0.0025304,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"啃食体\",4)",
+          "Status": "Passed",
+          "Duration": 0.0022097,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"抽杀体\",10)",
+          "Status": "Passed",
+          "Duration": 0.0032667,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"群能量体\",3)",
+          "Status": "Passed",
+          "Duration": 0.0031846,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"生长能量体\",2)",
+          "Status": "Passed",
+          "Duration": 0.002314,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"不稳定能量体\",20)",
+          "Status": "Passed",
+          "Duration": 0.0027767,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"血祭体\",16)",
+          "Status": "Passed",
+          "Duration": 0.0028843,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillProductionHasIndependentBasicFixture(\"血崩体\",20)",
+          "Status": "Passed",
+          "Duration": 0.0027795,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"传能耳\")",
+          "Status": "Passed",
+          "Duration": 0.0061287,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"优质肉体\")",
+          "Status": "Passed",
+          "Duration": 0.0031368,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"良好肉体\")",
+          "Status": "Passed",
+          "Duration": 0.0027353,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"收尸腺\")",
+          "Status": "Passed",
+          "Duration": 0.007858,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"左复制腺体\")",
+          "Status": "Passed",
+          "Duration": 0.0238238,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"右复制腺体\")",
+          "Status": "Passed",
+          "Duration": 0.0024775,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"换位手\")",
+          "Status": "Passed",
+          "Duration": 0.0028272,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"汲取鼻\")",
+          "Status": "Passed",
+          "Duration": 0.0025322,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"外接胚胎\")",
+          "Status": "Passed",
+          "Duration": 0.003143,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"产金管道\")",
+          "Status": "Passed",
+          "Duration": 0.0023115,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"不稳定肉体\")",
+          "Status": "Passed",
+          "Duration": 0.0035508,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"祭品腺\")",
+          "Status": "Passed",
+          "Duration": 0.0028714,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"移植胚胎\")",
+          "Status": "Passed",
+          "Duration": 0.0024654,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"回响嗓\")",
+          "Status": "Passed",
+          "Duration": 0.0024491,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ContentMechanismRemediationTests.SkillSupportAndReactionHasIndependentBasicFixture(\"无穷肌肉\")",
+          "Status": "Passed",
+          "Duration": 0.0031855,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.产出达到超额能量但扣款后剩余低于超额能量时获得一点科技点",
+          "Status": "Passed",
+          "Duration": 0.0069123,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.偿付成功且产出达到超额能量时获得一点科技点",
+          "Status": "Passed",
+          "Duration": 0.005523,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.刚好达到目标也获得一点科技点但不记超额",
+          "Status": "Passed",
+          "Duration": 0.005737,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.加班只扣除欠额不重新支付整关应交能量",
+          "Status": "Passed",
+          "Duration": 0.0063769,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.加班后仍不足则在扣除处游戏失败并清空怪物笼金币科技点科技工具和技能槽",
+          "Status": "Passed",
+          "Duration": 0.0083265,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.加班后本次产出达到超额能量时获得一点科技点并且工资是二十",
+          "Status": "Passed",
+          "Duration": 0.0064495,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.本关加过班时偿付成功的工资是二十金币",
+          "Status": "Passed",
+          "Duration": 0.0060858,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.第一关超额能量是六十",
+          "Status": "Passed",
+          "Duration": 0.0043979,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.第一次能量不足时记下欠额并清掉已偿付能量回到操作阶段",
+          "Status": "Passed",
+          "Duration": 0.0041982,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.DeductionTests.达标就获得一点科技点并且清掉剩余能量",
+          "Status": "Passed",
+          "Duration": 0.006274,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.HandbookIndexTests.心情条目解释当前阈值并包含所有关卡需求",
+          "Status": "Passed",
+          "Duration": 0.0126636,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.HandbookIndexTests.手册完整覆盖当前内容且每条关联都能到达",
+          "Status": "Passed",
+          "Duration": 0.0452742,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.HandbookIndexTests.手册效果和价格直接取自当前游戏目录并保留负面性格",
+          "Status": "Passed",
+          "Duration": 0.012691,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.HandbookIndexTests.搜索可查效果且反复读取不改变对局",
+          "Status": "Passed",
+          "Duration": 0.0066611,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.两只汲取鼻按从左到右各落地一点且不响应同名落地",
+          "Status": "Passed",
+          "Duration": 0.0060328,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.同一批从左到右响应且不在最上的汲取鼻也会落地",
+          "Status": "Passed",
+          "Duration": 0.0051969,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.培育槽里的汲取鼻不响应提取落地",
+          "Status": "Passed",
+          "Duration": 0.005799,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.汲取鼻不响应自己这只怪物的落地",
+          "Status": "Passed",
+          "Duration": 0.0058335,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.汲取鼻在其他怪物落地能量时自己立刻再落地一点",
+          "Status": "Passed",
+          "Duration": 0.005444,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.没有下一个怪物时蜜能量体的加三消失",
+          "Status": "Passed",
+          "Duration": 0.0054514,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.蜜能量体的加三不写进技能报价且加班当天保留",
+          "Status": "Passed",
+          "Duration": 0.0062732,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LandingResponseTests.蜜能量体落地三点且只给空档后的下一只后续产能量计分加三",
+          "Status": "Passed",
+          "Duration": 0.0058118,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_上级员工证购买后下一天可放第六格",
+          "Status": "Passed",
+          "Duration": 0.0045436,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_上进心每日开始只加一次常驻修正",
+          "Status": "Passed",
+          "Duration": 0.0023636,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"基因实验\")",
+          "Status": "Passed",
+          "Duration": 0.0029446,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"槽位扩容\")",
+          "Status": "Passed",
+          "Duration": 0.0022308,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"大乱炖\")",
+          "Status": "Passed",
+          "Duration": 0.0020153,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"变异学说\")",
+          "Status": "Passed",
+          "Duration": 0.0023018,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"科学培育\")",
+          "Status": "Passed",
+          "Duration": 0.0022008,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_六项科技逐项无前置一点仅一次且零余额拒绝(\"基因仓储\")",
+          "Status": "Passed",
+          "Duration": 0.0054748,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_复读腺不增加四技能上限",
+          "Status": "Passed",
+          "Duration": 0.0099359,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好奇开始新增及改写常驻实例清原成长保留怪物修正",
+          "Status": "Passed",
+          "Duration": 0.0222812,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学加严选真实开始与开工保留当天提升不重记历史",
+          "Status": "Passed",
+          "Duration": 0.0040147,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学复读来源记录实际抽中的第二实例且不继承其成长",
+          "Status": "Passed",
+          "Duration": 0.0033331,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"乐天派\",\"热情\")",
+          "Status": "Passed",
+          "Duration": 0.0031054,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"摸鱼派\",\"疲倦\")",
+          "Status": "Passed",
+          "Duration": 0.0018515,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学经真实开工获得常驻技能并即时复制固定性格心情(\"厌世\",\"倦怠\")",
+          "Status": "Passed",
+          "Duration": 0.0021878,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_好学重复或上限失败不改变性格心情材料",
+          "Status": "Passed",
+          "Duration": 0.0026172,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_工作性格通过两天实际结算影响次日心情且加班不双记(\"热爱工作\",\"热情\")",
+          "Status": "Passed",
+          "Duration": 0.0026094,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_工作性格通过两天实际结算影响次日心情且加班不双记(\"厌恶工作\",\"倦怠\")",
+          "Status": "Passed",
+          "Duration": 0.0020642,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_打卡机仅离店生效一次额外十金币",
+          "Status": "Passed",
+          "Duration": 0.0024894,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_批发合同不折扣自身但后买每个工具减五金币",
+          "Status": "Passed",
+          "Duration": 0.0026672,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_招工海报购买即补第五怪物且下次刷新仍五个",
+          "Status": "Passed",
+          "Duration": 0.0039086,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_研磨机仅成功废弃加五金币满仓拒绝不发钱",
+          "Status": "Passed",
+          "Duration": 0.002781,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_隔音棉阻止厌恶工作两天后的下降",
+          "Status": "Passed",
+          "Duration": 0.0030244,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.Content_验货单购买即补第三工具且不再刷新已购工具",
+          "Status": "Passed",
+          "Duration": 0.0032727,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F01_取得实例身份来源成长及临时清理独立",
+          "Status": "Passed",
+          "Duration": 0.0029254,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F01_复读允许商店生成两份同名技能",
+          "Status": "Passed",
+          "Duration": 0.0027841,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F07_A18_三亲本加基因满四候选仍掷变异并裁切不携带成长",
+          "Status": "Passed",
+          "Duration": 0.0085608,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F07_三亲本碰撞通过各自来源链重抽而不丢合法贡献",
+          "Status": "Passed",
+          "Duration": 0.0042328,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F07_同名亲本与基因裁切按候选身份决定消费(0,False)",
+          "Status": "Passed",
+          "Duration": 0.0077378,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F07_同名亲本与基因裁切按候选身份决定消费(1,True)",
+          "Status": "Passed",
+          "Duration": 0.0032692,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F08_仓储科技第四格可废弃满仓含预约原子拒绝",
+          "Status": "Passed",
+          "Duration": 0.0127215,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F08_普通性格及上限与预约安装失败保持字段不变",
+          "Status": "Passed",
+          "Duration": 0.0052798,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F08_正式拖放安装遵循重复许可并只成功消费(False)",
+          "Status": "Passed",
+          "Duration": 0.0030847,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F08_正式拖放安装遵循重复许可并只成功消费(True)",
+          "Status": "Passed",
+          "Duration": 0.0020638,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F08_预约基因不能安装且退回保持同一材料身份与原格",
+          "Status": "Passed",
+          "Duration": 0.0035322,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_初生固定性格即时覆盖普通心情(\"乐天派\",\"热情\")",
+          "Status": "Passed",
+          "Duration": 0.0024135,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_初生固定性格即时覆盖普通心情(\"摸鱼派\",\"疲倦\")",
+          "Status": "Passed",
+          "Duration": 0.0018575,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_初生固定性格即时覆盖普通心情(\"厌世\",\"倦怠\")",
+          "Status": "Passed",
+          "Duration": 0.0018154,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_初生固定性格即时覆盖普通心情(\"稳定\",\"普通\")",
+          "Status": "Passed",
+          "Duration": 0.0019291,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_改变性格保留当天基础与严选提升但即时应用固定覆盖",
+          "Status": "Passed",
+          "Duration": 0.0028022,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F09_笼内安装不会提前消费开工事件",
+          "Status": "Passed",
+          "Duration": 0.0032561,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_五族一次等概率池选择(0)",
+          "Status": "Passed",
+          "Duration": 0.0031779,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_五族一次等概率池选择(1)",
+          "Status": "Passed",
+          "Duration": 0.0018279,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_五族一次等概率池选择(2)",
+          "Status": "Passed",
+          "Duration": 0.0052171,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_五族一次等概率池选择(3)",
+          "Status": "Passed",
+          "Duration": 0.0032167,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_五族一次等概率池选择(4)",
+          "Status": "Passed",
+          "Duration": 0.0072723,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_功能与排重导致空档时仅保留原权重归一(null,7,0)",
+          "Status": "Passed",
+          "Duration": 0.0166787,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_功能与排重导致空档时仅保留原权重归一(\"良好肉体\",7,0)",
+          "Status": "Passed",
+          "Duration": 0.0018674,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(49,White)",
+          "Status": "Passed",
+          "Duration": 0.0023374,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(50,Blue)",
+          "Status": "Passed",
+          "Duration": 0.0015246,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(69,Blue)",
+          "Status": "Passed",
+          "Duration": 0.0016715,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(70,Negative)",
+          "Status": "Passed",
+          "Duration": 0.0017408,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(89,Negative)",
+          "Status": "Passed",
+          "Duration": 0.0019204,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_性格五二二一选择边界及独立两次随机消费(90,Gold)",
+          "Status": "Passed",
+          "Duration": 0.0021462,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_技能抽样先按七二一权重再档内均匀(0,White)",
+          "Status": "Passed",
+          "Duration": 0.0027146,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_技能抽样先按七二一权重再档内均匀(6,White)",
+          "Status": "Passed",
+          "Duration": 0.0018556,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_技能抽样先按七二一权重再档内均匀(7,Blue)",
+          "Status": "Passed",
+          "Duration": 0.0016976,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_技能抽样先按七二一权重再档内均匀(8,Blue)",
+          "Status": "Passed",
+          "Duration": 0.001774,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F12_A27_技能抽样先按七二一权重再档内均匀(9,Gold)",
+          "Status": "Passed",
+          "Duration": 0.0022958,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F16_安于现状均匀抽合法保留对且至少一常驻(0)",
+          "Status": "Passed",
+          "Duration": 0.0029596,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F16_安于现状均匀抽合法保留对且至少一常驻(1)",
+          "Status": "Passed",
+          "Duration": 0.0015746,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F16_安于现状均匀抽合法保留对且至少一常驻(2)",
+          "Status": "Passed",
+          "Duration": 0.0014943,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F16_安于现状均匀抽合法保留对且至少一常驻(3)",
+          "Status": "Passed",
+          "Duration": 0.0019239,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F16_安于现状均匀抽合法保留对且至少一常驻(4)",
+          "Status": "Passed",
+          "Duration": 0.0023964,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F17_工作台夹具应用带入成长临时与任意格亲缘且不产生第二份公式",
+          "Status": "Passed",
+          "Duration": 0.0032634,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.LifecycleRemediationTests.F17_工作台循环亲缘明确拒绝",
+          "Status": "Passed",
+          "Duration": 0.0030332,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterAppearanceTests.同一外观种子返回相同的稳定部件选择",
+          "Status": "Passed",
+          "Duration": 0.0006193,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterAppearanceTests.子代保存独立部件id并继承父代特征与次代色板",
+          "Status": "Passed",
+          "Duration": 0.0009637,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.不稳定能量体在奇异香离开提取槽后回到原文",
+          "Status": "Passed",
+          "Duration": 0.0046064,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.两侧镜眼连乘",
+          "Status": "Passed",
+          "Duration": 0.0047887,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.优秀能量体按技能数两倍再吃提取槽里的加项",
+          "Status": "Passed",
+          "Duration": 0.003049,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.传能耳按左侧主动技能加到更右侧的能量上",
+          "Status": "Passed",
+          "Duration": 0.0036163,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.光环自己的加值不改写",
+          "Status": "Passed",
+          "Duration": 0.0030394,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.劣胜装置在提取槽里翻倍单技能怪物",
+          "Status": "Passed",
+          "Duration": 0.0026137,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.句子片段拼回原文且只有产出能量的数单独成段",
+          "Status": "Passed",
+          "Duration": 0.0057554,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.回响嗓让传能耳左侧的主动技能再推一次",
+          "Status": "Passed",
+          "Duration": 0.0030177,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.奇异香还没和目标一起放进提取槽时不加",
+          "Status": "Passed",
+          "Duration": 0.003254,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.左能量体一侧只有一只时把平加并进单价一侧多只时不并",
+          "Status": "Passed",
+          "Duration": 0.0061231,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.左能量体的单价写回后变色",
+          "Status": "Passed",
+          "Duration": 0.0025547,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.左能量体的详情是主动白字且句子来自效果说明",
+          "Status": "Passed",
+          "Duration": 0.0088828,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.急急装置只翻最左侧第一张产能技能",
+          "Status": "Passed",
+          "Duration": 0.0152509,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.怪物修正直接加进能量数",
+          "Status": "Passed",
+          "Duration": 0.0023045,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.文案表的名字与技能目录相同且能量体有句子",
+          "Status": "Passed",
+          "Duration": 0.0018807,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.未知怪物id的详情是空",
+          "Status": "Passed",
+          "Duration": 0.0018965,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.汲取鼻吃到同槽的能量加项",
+          "Status": "Passed",
+          "Duration": 0.0028965,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.没改过的能量数保持原文且不上色",
+          "Status": "Passed",
+          "Duration": 0.002039,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.生长能量体把写回加项和倍率收成一个数",
+          "Status": "Passed",
+          "Duration": 0.002795,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.生长能量体过关后只把产出数改成橙色",
+          "Status": "Passed",
+          "Duration": 0.0015912,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.群能量体显示当前总量并在香离开后降回来",
+          "Status": "Passed",
+          "Duration": 0.0029258,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.良好肉体只在技能数对上时加进能量",
+          "Status": "Passed",
+          "Duration": 0.0021275,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.良好肉体的句子没有星号",
+          "Status": "Passed",
+          "Duration": 0.0033678,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterDetailsTests.蜜能量体把加值写进下一个怪物而不是自己的赠送数字",
+          "Status": "Passed",
+          "Duration": 0.0022276,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterQueryTests.换位成功后查询能看到不动",
+          "Status": "Passed",
+          "Duration": 0.005147,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.MonsterQueryTests.摆上提取槽后怪物笼里没有它但查询仍返回技能报价和稀有度",
+          "Status": "Passed",
+          "Duration": 0.0032306,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.开局时金币科技点工具技能槽和已解锁科技都是空的",
+          "Status": "Passed",
+          "Duration": 0.0050379,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.开局给出三只双技能候选且怪物笼为空",
+          "Status": "Passed",
+          "Duration": 0.0044931,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.留下一只后落选不进笼并补到九只",
+          "Status": "Passed",
+          "Duration": 0.0058226,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OpeningTests.留下后进入第一关操作阶段且应交能量为50提取槽有五格",
+          "Status": "Passed",
+          "Duration": 0.0054683,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.从提取格废弃怪物后格子空出并且技能进槽",
+          "Status": "Passed",
+          "Duration": 0.0037779,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.同一只怪物不能同时处于提取槽和培育槽",
+          "Status": "Passed",
+          "Duration": 0.0032238,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.同一次落子再提交一次返回失败且棋盘不变",
+          "Status": "Passed",
+          "Duration": 0.0032728,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.技能槽已有三份时从棋盘废弃不会发生",
+          "Status": "Passed",
+          "Duration": 0.0030344,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.技能芯片落到棋盘怪物上时装入",
+          "Status": "Passed",
+          "Duration": 0.0027042,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.操作阶段可以把怪物摆上提取槽并在确认前拿回",
+          "Status": "Passed",
+          "Duration": 0.0033417,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.棋盘上的怪物交换提取格和培育位",
+          "Status": "Passed",
+          "Duration": 0.0062187,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.棋盘上的怪物移入空格且仍不在笼里",
+          "Status": "Passed",
+          "Duration": 0.0079801,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.笼里的怪物落到占用格时替换并把原占用者送回笼",
+          "Status": "Passed",
+          "Duration": 0.0142221,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.非法落点不改变笼子和棋盘",
+          "Status": "Passed",
+          "Duration": 0.0029951,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.OperationTests.预约基因计入容量且拿回时不丢技能",
+          "Status": "Passed",
+          "Duration": 0.0048401,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.上级员工证使提取槽多一格且第六格参与结算",
+          "Status": "Passed",
+          "Duration": 0.0043152,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.再走是之后的主动执行急急装置不翻",
+          "Status": "Passed",
+          "Duration": 0.0046125,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.劣胜装置把单词条怪物的产能量计分翻倍",
+          "Status": "Passed",
+          "Duration": 0.0043822,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.单技能怪物受劣胜装置翻倍且多走一次",
+          "Status": "Passed",
+          "Duration": 0.0040718,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.急急和独孤叠乘进倍率且计分不改变工具次序",
+          "Status": "Passed",
+          "Duration": 0.0044636,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.急急装置不翻第一段执行带出的产能",
+          "Status": "Passed",
+          "Duration": 0.0051247,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.急急装置把第一段主动执行里的每次报价都翻倍",
+          "Status": "Passed",
+          "Duration": 0.0035422,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.急急装置把第一段产能量主动执行的落地能量翻倍之后的不翻",
+          "Status": "Passed",
+          "Duration": 0.0036007,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PassiveToolTests.身上合起来有两个词条的怪物不是单词条",
+          "Status": "Passed",
+          "Duration": 0.0038502,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A01_开局三选一一双八单共九只性格种族有效未选消失",
+          "Status": "Passed",
+          "Duration": 0.0051626,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A17_基因安装只有迷恋死亡合法成功才消耗普通性格拒绝失败状态与材料不变",
+          "Status": "Passed",
+          "Duration": 0.0052926,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A18_一个亲本不生育保留亲本两个亲本三亲本基因变异超上限随机裁切基因实际留下才消耗",
+          "Status": "Passed",
+          "Duration": 0.0072735,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A19_临时技能参与培育清临时后取常驻技能不足时合并不凭空补技能父母子代关系准确",
+          "Status": "Passed",
+          "Duration": 0.0047551,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A20_材料投入后又废弃未遗传退还预约计容量不能重复使用不会满槽丢失界面原位占用可见",
+          "Status": "Passed",
+          "Duration": 0.0092051,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A22_六项科技与基因槽加号每项每局一次一点无前置仓储扩到4不能重复花费",
+          "Status": "Passed",
+          "Duration": 0.0083069,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A23_商店已购工具剩余不足刷新增位折扣已购永不再现同架不重名不足少显示失败刷新不变新栏位立即补合同不追溯自身",
+          "Status": "Passed",
+          "Duration": 0.0196122,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.PlayerFlowM2Tests.A25_亲缘性格场上另有无亲缘同名怪物仅实际亲本子代受联动第三者不受亲缘效果",
+          "Status": "Passed",
+          "Duration": 0.0039903,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.内部叫法改写成怪物修正和下一个怪物的能量数值",
+          "Status": "Passed",
+          "Duration": 0.0032665,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.再触发写在对应落地之前且能量可逐项加总",
+          "Status": "Passed",
+          "Duration": 0.0040707,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.同一关先结算再加班记成两段",
+          "Status": "Passed",
+          "Duration": 0.0038456,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.左能量体按右侧还有几只来写",
+          "Status": "Passed",
+          "Duration": 0.003132,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.结算把报价加项和倍率写成技能和收容编号",
+          "Status": "Passed",
+          "Duration": 0.0035146,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ProductionLogTests.还没结算时说明每一次提交都会记下来",
+          "Status": "Passed",
+          "Duration": 0.0035536,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.QuoteTests.双头能量体在一次主动执行里报价两次且每次落地两点",
+          "Status": "Passed",
+          "Duration": 0.0047027,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.RulesChangeTests.刷新依次花费5和10和20失败时货架与价格不变",
+          "Status": "Passed",
+          "Duration": 0.0050535,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.RulesChangeTests.劣胜装置给产能量技能多走一次并且因素名是劣胜装置",
+          "Status": "Passed",
+          "Duration": 0.0052615,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.RulesChangeTests.幅的前一个技能没有金时稀有度名单省略金",
+          "Status": "Passed",
+          "Duration": 0.0094508,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.RulesChangeTests.急急装置绑定的技能之后再走仍然翻倍",
+          "Status": "Passed",
+          "Duration": 0.0096308,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.RulesChangeTests.最左怪物没有产能量技能时急急装置不翻右侧",
+          "Status": "Passed",
+          "Duration": 0.0069211,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ScoringPlaybackM4Tests.A26_快进与跳过相同固定随机局面最终能量金币科技材料工作记录与正常播放一致",
+          "Status": "Passed",
+          "Duration": 0.0119574,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ScoringPlaybackM4Tests.结构化回放包含正确来源与数值读数",
+          "Status": "Passed",
+          "Duration": 0.0122535,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A02_基础5加成3依赖总量乘2产能22负结果截0",
+          "Status": "Passed",
+          "Duration": 0.006968,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A03_奇异香加自律为6且稀有度检测仪加电化能机为11包含正确来源",
+          "Status": "Passed",
+          "Duration": 0.0044953,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A04_连续工作两天次日疲倦两轮仅记一天且未结算算休息",
+          "Status": "Passed",
+          "Duration": 0.0044713,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A05_固定心情不被改隔音棉阻止连续工作下降情绪收割机包含普通档",
+          "Status": "Passed",
+          "Duration": 0.0028727,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A06_带入10两轮25加25超额60得科技点工资40熔炉带2",
+          "Status": "Passed",
+          "Duration": 0.0036678,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A07_刚达需求无科技点超额相等得一点两轮仍不足失败",
+          "Status": "Passed",
+          "Duration": 0.0102277,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A08_开工至多一次且失败不通过重放补触发",
+          "Status": "Passed",
+          "Duration": 0.0024054,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A09_加班保留临时与常驻且跨天只清临时且继承不带成长",
+          "Status": "Passed",
+          "Duration": 0.0019659,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A10_三只单技能增生能量体触发1_2_4次无次日积存",
+          "Status": "Passed",
+          "Duration": 0.0032865,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A11_中途取得新主动技能当轮不补执行下轮可用新被动立即可用",
+          "Status": "Passed",
+          "Duration": 0.00309,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A12_回响嗓覆盖汲取鼻响应两次且同名不无限互触发",
+          "Status": "Passed",
+          "Duration": 0.0036653,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A13_即时换位手插入被交换者主动技能并继续剩余技能且遍序无遗漏",
+          "Status": "Passed",
+          "Duration": 0.0027554,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A14_无法换位时使用者仍得当天不动且不触发目标执行",
+          "Status": "Passed",
+          "Duration": 0.0023865,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A15_左祭品中央血祭右收尸按序死亡且遗赠即时生效且光环撤销",
+          "Status": "Passed",
+          "Duration": 0.0033648,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A16_自爆体停止余下技能且无目标攻击按规则且废弃不触发死亡反应",
+          "Status": "Passed",
+          "Duration": 0.0070168,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A21_复读腺允许重复且安于现状裁切至两项保证常驻",
+          "Status": "Passed",
+          "Duration": 0.0019562,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A24_五行罗盘种族相生双向生效中间天空获两对加成",
+          "Status": "Passed",
+          "Duration": 0.0079277,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A26_快进与跳过相同固定局面结果一致",
+          "Status": "Passed",
+          "Duration": 0.0054424,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A27_商店工具按稀有度档位70_20_10等概率抽选",
+          "Status": "Passed",
+          "Duration": 0.0181542,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementEngineM1Tests.A28_移植在死亡反应中新获收尸腺不追补同一死亡且笼与培育槽不参与反应",
+          "Status": "Passed",
+          "Duration": 0.0025367,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementMarkTests.不稳定能量体抽中时落地二十且没有未中",
+          "Status": "Passed",
+          "Duration": 0.00531,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementMarkTests.不稳定能量体没抽中时是未中且能量不增加",
+          "Status": "Passed",
+          "Duration": 0.0060337,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementMarkTests.产金管道记五金且本局金币增加五",
+          "Status": "Passed",
+          "Duration": 0.0036938,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementMarkTests.左复制腺体的再触发插在双头的两次普通弹出和两次额外弹出之间",
+          "Status": "Passed",
+          "Duration": 0.0050451,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementMarkTests.良好肉体只在正好两个技能时给产能加上三",
+          "Status": "Passed",
+          "Duration": 0.0064254,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.偿付成功且达到超额时记录扣除超额和工资",
+          "Status": "Passed",
+          "Duration": 0.0039064,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.加班失败的支付记录留下欠额和失败且命令返回后仍能读到",
+          "Status": "Passed",
+          "Duration": 0.0039196,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.换位成功时记录发生且排在落地之后",
+          "Status": "Passed",
+          "Duration": 0.0039389,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRecordTests.没有左侧目标时换位记录为没有发生",
+          "Status": "Passed",
+          "Duration": 0.00329,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.A10_ProliferationRoundGrantsResetBeforeActualOvertime",
+          "Status": "Passed",
+          "Duration": 0.0043593,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.A11_NewActiveIsDeferredButNewAuraIsImmediate",
+          "Status": "Passed",
+          "Duration": 0.0025576,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.A28_NewDeathListenerStartsOnSecondDeathOnly",
+          "Status": "Passed",
+          "Duration": 0.0026406,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.A28_NewTransplantInstanceStartsOnlyOnNextDeath",
+          "Status": "Passed",
+          "Duration": 0.002298,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F02_ContentedLocksEachSkillBeforeSelfDestruct",
+          "Status": "Passed",
+          "Duration": 0.0020307,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F02_EchoExecutesEachActiveInstanceCompletely",
+          "Status": "Passed",
+          "Duration": 0.0020184,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F02_SourceDeathPreservesLockedTimesButRemovesLaterGrants",
+          "Status": "Passed",
+          "Duration": 0.0056699,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F03_MirrorRetainsOpeningTargetAfterSwap",
+          "Status": "Passed",
+          "Duration": 0.0035166,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F03_QualityEligibilityUsesOpeningInstanceCountAfterCopy",
+          "Status": "Passed",
+          "Duration": 0.0248384,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F04_DeathDispatchCombinesLeftListenerAndRightLegacyByPosition",
+          "Status": "Passed",
+          "Duration": 0.003762,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F04_LeftListenerReactsBeforeRightVictimLegacy",
+          "Status": "Passed",
+          "Duration": 0.0048793,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F05_EchoRepeatsCorpseResponseForOneDeath",
+          "Status": "Passed",
+          "Duration": 0.004089,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F06_DuplicateMirrorInstancesMultiplyIndependently",
+          "Status": "Passed",
+          "Duration": 0.0030779,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F06_DuplicateProliferationReceivesOneGrantPerInstance",
+          "Status": "Passed",
+          "Duration": 0.0053537,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F06_FirstEnergyToolBindsOnlyFirstDuplicateInstance",
+          "Status": "Passed",
+          "Duration": 0.0033477,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F10_KinAffectsBothEndpointsAndExcludesStranger(\"重视血脉\",10)",
+          "Status": "Passed",
+          "Duration": 0.004137,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F10_KinAffectsBothEndpointsAndExcludesStranger(\"仇恨血脉\",2)",
+          "Status": "Passed",
+          "Duration": 0.0019076,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F10_TwoKinPersonalitySourcesStackIndependently",
+          "Status": "Passed",
+          "Duration": 0.0028984,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F11_IndependentStillReceivesPersonalityToolAndExtraTriggers",
+          "Status": "Passed",
+          "Duration": 0.0030161,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F11_MonsterTargetAuraDoesNotAddToUnownedTool",
+          "Status": "Passed",
+          "Duration": 0.0023594,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F14_MindControlCorrectsNegativePersonalityAmount",
+          "Status": "Passed",
+          "Duration": 0.0023502,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F14_SociableEachNeighborIsOnePersonalityContribution",
+          "Status": "Passed",
+          "Duration": 0.0043702,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F15_NoTargetDoesNotProducePersonalityEnergy",
+          "Status": "Passed",
+          "Duration": 0.0026405,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_NoExcessProducesZeroTechLogAndStableEventIds",
+          "Status": "Passed",
+          "Duration": 0.004362,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_OvertimeLedgerSeparatesInitialNetAndCumulative",
+          "Status": "Passed",
+          "Duration": 0.0044498,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_PreviewAndExecutionSharePersonalityAndMoodFormula(\"急躁\",\"普通\",8)",
+          "Status": "Passed",
+          "Duration": 0.0035422,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_PreviewAndExecutionSharePersonalityAndMoodFormula(\"稳定\",\"热爱\",7)",
+          "Status": "Passed",
+          "Duration": 0.0027965,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_PreviewAndExecutionSharePersonalityAndMoodFormula(\"孤僻\",\"普通\",10)",
+          "Status": "Passed",
+          "Duration": 0.0028769,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementRemediationTests.F17_PreviewDoesNotConsumeRandomOrChangeRuleState",
+          "Status": "Passed",
+          "Duration": 0.0039085,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementSightTests.演出换位后悬停句子按新格子而不是终局棋盘",
+          "Status": "Passed",
+          "Duration": 0.0049572,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementSightTests.结算删掉的怪物在演出格子清空前仍能读出技能",
+          "Status": "Passed",
+          "Duration": 0.0039991,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.播放头按这一刻的格子从左到右走且每只怪物只落地一次",
+          "Status": "Passed",
+          "Duration": 0.0065911,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.能量体落地五点且不足时清掉本关能量",
+          "Status": "Passed",
+          "Duration": 0.0047044,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.能量刚好等于应交时也发四十金币并停在商店",
+          "Status": "Passed",
+          "Duration": 0.0111435,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SettlementTests.能量超过应交时一次确认就清零剩余能量发放四十金币并停在商店",
+          "Status": "Passed",
+          "Duration": 0.0317367,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.七关应交能量和超额能量按关卡表",
+          "Status": "Passed",
+          "Duration": 0.0026154,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.不在商店时离开不进入下一关",
+          "Status": "Passed",
+          "Duration": 0.0047609,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.不是第七关时离开商店进入下一关开始阶段并清空本关",
+          "Status": "Passed",
+          "Duration": 0.0071626,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopLeaveTests.第七关离开商店后游戏胜利并清空",
+          "Status": "Passed",
+          "Duration": 0.0102906,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.买得起的怪物进入怪物笼并从货架拿走而且不补新货",
+          "Status": "Passed",
+          "Duration": 0.0074879,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.出售怪物笼里的怪物按稀有度一半得金币",
+          "Status": "Passed",
+          "Duration": 0.0054407,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.双技能商品的售价是两个稀有度相加",
+          "Status": "Passed",
+          "Duration": 0.004673,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.同一只商品怪物不会抽到两个同名技能",
+          "Status": "Passed",
+          "Duration": 0.0051883,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.商店之外不能买卖",
+          "Status": "Passed",
+          "Duration": 0.004687,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.商店开始时按注入结果摆出四只怪物并按稀有度标价",
+          "Status": "Passed",
+          "Duration": 0.0060155,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.商店按九成一只一成两只以及七成白两成蓝一成金抽取",
+          "Status": "Passed",
+          "Duration": 0.0066489,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.工具种类不足两件时货架少开位数",
+          "Status": "Passed",
+          "Duration": 0.0052556,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.工具货架怪物和提取槽里的怪物都不能出售",
+          "Status": "Passed",
+          "Duration": 0.0064325,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.新买的工具按购买顺序排在工具次序末尾",
+          "Status": "Passed",
+          "Duration": 0.0051119,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.本阶段不能更换货物离开时没买的消失",
+          "Status": "Passed",
+          "Duration": 0.0057366,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.没有可卖的工具时货架不放工具",
+          "Status": "Passed",
+          "Duration": 0.0133899,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.货架最多两件不同名工具并按稀有度权重和标价抽取",
+          "Status": "Passed",
+          "Duration": 0.0272634,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.ShopTests.金币不足时购买不发生货物仍留在货架",
+          "Status": "Passed",
+          "Duration": 0.0060135,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.中间空档不取消更远的怪物",
+          "Status": "Passed",
+          "Duration": 0.0065064,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.右能量体按左侧现在还有的每只怪物落地两点",
+          "Status": "Passed",
+          "Duration": 0.0058054,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.右能量体的加减加在左侧人数乘完后的总产出上",
+          "Status": "Passed",
+          "Duration": 0.0054052,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.培育槽上的增量光环不改提取计分",
+          "Status": "Passed",
+          "Duration": 0.004688,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.增量加进左右计数的底数",
+          "Status": "Passed",
+          "Duration": 0.005987,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.增量翻倍和额外次数结算为三十八且没有右侧时只剩外部加一",
+          "Status": "Passed",
+          "Duration": 0.0055091,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.外部加法进入底数外部乘法进入倍率",
+          "Status": "Passed",
+          "Duration": 0.0056734,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.奇异香给其他怪物的产能量计分加一且不加给自己",
+          "Status": "Passed",
+          "Duration": 0.0058741,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.左右计数的加减加在总产出上且残留只按这一次发动插队",
+          "Status": "Passed",
+          "Duration": 0.0040317,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.左能量体按右侧现在还有的每只怪物落地两点",
+          "Status": "Passed",
+          "Duration": 0.0045453,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.怪异香给其他怪物的产能量计分加二且不加给自己",
+          "Status": "Passed",
+          "Duration": 0.0047461,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SideScoreTests.镜眼让这一刻相邻怪物的产能量计分翻倍且不翻自己和隔格",
+          "Status": "Passed",
+          "Duration": 0.0050478,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillIndexTests.技能图鉴按目录顺序列出每一项且字段与悬停栏相同",
+          "Status": "Passed",
+          "Duration": 0.0039562,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.废弃双技能怪物时放进技能槽的是抽到的那一个",
+          "Status": "Passed",
+          "Duration": 0.0107454,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.废弃已经摆上提取槽的怪物后格子空出并且怪物消失",
+          "Status": "Passed",
+          "Duration": 0.0327029,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.废弃立刻消灭怪物并把抽到的技能放入技能槽",
+          "Status": "Passed",
+          "Duration": 0.0061209,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.开局阶段废弃候选不会消灭它也不会得到技能",
+          "Status": "Passed",
+          "Duration": 0.0056646,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.技能槽已满时废弃不发生怪物还在",
+          "Status": "Passed",
+          "Duration": 0.005901,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.技能槽能放下三份并且同名可以并存",
+          "Status": "Passed",
+          "Duration": 0.0062042,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SkillSlotTests.技能芯片落到怪物上不会装入",
+          "Status": "Passed",
+          "Duration": 0.0065977,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.两个秒点各自把毒跳伤再结算一遍",
+          "Status": "Passed",
+          "Duration": 0.0086188,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.倒放仍按换位前的格子给左能量体报价",
+          "Status": "Passed",
+          "Duration": 0.0065395,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.再走一遍仍按换位前的格子给左能量体报价",
+          "Status": "Passed",
+          "Duration": 0.0131544,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.同一只怪物要等零点一逻辑秒才能再次被强制触发",
+          "Status": "Passed",
+          "Duration": 0.0125194,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.同一时刻登记的结束消灭按从左到右拿走",
+          "Status": "Passed",
+          "Duration": 0.0096956,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.多个重触发来源也只把毒跳伤再结算一遍",
+          "Status": "Passed",
+          "Duration": 0.0055325,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.换位手不把空档对面的怪物当成左侧相邻",
+          "Status": "Passed",
+          "Duration": 0.0066854,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.换位手即时与左侧相邻怪物交换且插入被交换者主动技能",
+          "Status": "Passed",
+          "Duration": 0.0060075,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.换位手按即时顺序依次与左邻交换",
+          "Status": "Passed",
+          "Duration": 0.0053099,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.更早登记的结束消灭先于左边的怪物拿走",
+          "Status": "Passed",
+          "Duration": 0.0062444,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.永久不动离开关卡后仍然挡住换位",
+          "Status": "Passed",
+          "Duration": 0.012647,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.没有左侧目标时换位不发生但获得不动",
+          "Status": "Passed",
+          "Duration": 0.0306679,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.没有永久的不动在离开关卡后不再挡住换位",
+          "Status": "Passed",
+          "Duration": 0.0065015,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.目标带有不动时换位不发生且使用者获得不动",
+          "Status": "Passed",
+          "Duration": 0.0063913,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.稍后逻辑时刻才落下的写回在落下前的计分里读不到",
+          "Status": "Passed",
+          "Duration": 0.0072664,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.结束消灭在换位之后拿走且扣除仍计入它落地的能量",
+          "Status": "Passed",
+          "Duration": 0.0057143,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.能量体和外接胚胎的下一次计分读技能实例上的报价",
+          "Status": "Passed",
+          "Duration": 0.0062418,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.获得不动后操作阶段仍可把怪物改放到别的格子",
+          "Status": "Passed",
+          "Duration": 0.0043574,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.SwapAndClockTests.重触发让每个秒点的毒跳伤再结算一遍且不重走技能",
+          "Status": "Passed",
+          "Duration": 0.004455,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.不存在的科技不消耗科技点",
+          "Status": "Passed",
+          "Duration": 0.0055889,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.两项变异都抽中时只追加一个技能和加二修正",
+          "Status": "Passed",
+          "Duration": 0.0086762,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.五项科技没有前置且各消耗一点",
+          "Status": "Passed",
+          "Duration": 0.0053059,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.变异学说抽中时后代再获得指定技能",
+          "Status": "Passed",
+          "Duration": 0.0040706,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.变异学说没抽中时后代不获得额外技能",
+          "Status": "Passed",
+          "Duration": 0.0044514,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.同一科技不能再次解锁",
+          "Status": "Passed",
+          "Duration": 0.0038915,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.后代已有四个候选仍掷变异并随机裁切",
+          "Status": "Passed",
+          "Duration": 0.0062937,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.商店阶段不能解锁科技",
+          "Status": "Passed",
+          "Duration": 0.0083209,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.培育技能与后代已有技能不同名时交给后代",
+          "Status": "Passed",
+          "Duration": 0.0199317,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.培育技能与后代已有技能同名时不交给后代",
+          "Status": "Passed",
+          "Duration": 0.0089121,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.基因实验使每个培育槽放入一个培育技能",
+          "Status": "Passed",
+          "Duration": 0.0056949,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.大乱炖使每个培育槽的亲本容量加一",
+          "Status": "Passed",
+          "Duration": 0.0066282,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.扩容后的两个培育槽都能再放一只亲本并各自生成后代",
+          "Status": "Passed",
+          "Duration": 0.0065831,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.未解锁变异时抽中也不会改变后代",
+          "Status": "Passed",
+          "Duration": 0.0048018,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.槽位扩容增加一个独立培育槽且各自锁定方案",
+          "Status": "Passed",
+          "Duration": 0.006006,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.每个培育槽的培育技能只交给该槽的后代",
+          "Status": "Passed",
+          "Duration": 0.0058801,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.没有基因实验时培育槽不接收技能",
+          "Status": "Passed",
+          "Duration": 0.0067395,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.没有科技点时金币不能解锁科技",
+          "Status": "Passed",
+          "Duration": 0.0051857,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.科学培育抽中时后代获得加二修正且只参加自己的产能量计分",
+          "Status": "Passed",
+          "Duration": 0.0065351,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.科学培育没抽中时没有怪物修正",
+          "Status": "Passed",
+          "Duration": 0.003766,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.科学培育的加二也加进产能另开的底数且不写进报价",
+          "Status": "Passed",
+          "Duration": 0.0033971,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.解锁科技消耗一点科技点且不消耗金币和能量",
+          "Status": "Passed",
+          "Duration": 0.0037787,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.锁定前可以把培育技能拿回技能槽",
+          "Status": "Passed",
+          "Duration": 0.003759,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TechTests.预约基因计入容量且拿回时不丢技能",
+          "Status": "Passed",
+          "Duration": 0.0049956,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TraceTests.工作台写下报价加项倍率并且达标来自结算记录",
+          "Status": "Passed",
+          "Duration": 0.0051757,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.TraceTests.左能量体的报价是每只基数且侧向人数单独记下",
+          "Status": "Passed",
+          "Duration": 0.0032549,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.UpdatedSkillTests.传能耳只给右侧相邻怪物加上二",
+          "Status": "Passed",
+          "Duration": 0.0158957,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.Tests.UpdatedSkillTests.群能量体按培育槽提取槽和怪物笼各算一次",
+          "Status": "Passed",
+          "Duration": 0.0042255,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

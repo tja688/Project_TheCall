@@ -35,7 +35,8 @@ namespace TheCall.Scoring
                     screen.transform as RectTransform, screen.dragLayer, screen.goldLabel, screen.currentNumber,
                     say, Finish, initialEnergy, initialGold,
                     (actor, target) => _architecture.SendCommand(new MoveSettlementSightCommand(actor, target)),
-                    cell => _architecture.SendCommand(new ClearSettlementSightCommand(cell))));
+                    cell => _architecture.SendCommand(new ClearSettlementSightCommand(cell)),
+                    energy => { if (screen.lab != null) screen.lab.EnergyShown(energy); }));
                 return true;
             }
             catch

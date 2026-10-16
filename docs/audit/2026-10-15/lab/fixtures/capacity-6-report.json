@@ -1,0 +1,48 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin capacity",
+            "passed": true,
+            "actual": "count=6 IDs=m4,m5,m6,m7,m8,m9",
+            "frame": 81741
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m4 -> extraction 0",
+            "frame": 82513
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m5 -> extraction 1",
+            "frame": 83218
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m6 -> extraction 2",
+            "frame": 84150
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m7 -> extraction 3",
+            "frame": 85327
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m8 -> extraction 4",
+            "frame": 85947
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m9 -> extraction 5",
+            "frame": 86530
+        }
+    ]
+}

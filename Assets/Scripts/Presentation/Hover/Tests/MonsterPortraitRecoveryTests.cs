@@ -12,6 +12,32 @@ namespace TheCall.Hover.Tests
         const string PortraitPrefabPath = "Assets/Prefabs/UI/MonsterPortrait.prefab";
 
         [Test]
+        public void 已缓存外观但没有骨架或可见回退部件时会重新装上立绘()
+        {
+            var instance = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PortraitPrefabPath));
+            var portrait = instance.GetComponent<MonsterPortrait>();
+            var serialized = new SerializedObject(portrait);
+            serialized.FindProperty("_editorPreview").boolValue = false;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            try
+            {
+                var appearance = MonsterAppearance.FromSeed(48291);
+                portrait.Show(appearance);
+                typeof(MonsterPortrait).GetMethod("DropSkeleton", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(portrait, null);
+                var rig = instance.transform.Find("Rig");
+                Object.DestroyImmediate(rig.gameObject);
+                foreach (var image in portrait.GetComponentsInChildren<Image>(true)) image.gameObject.SetActive(false);
+                Assert.That(VisibleSprites(portrait), Is.Zero);
+
+                portrait.Show(appearance);
+
+                Assert.That(portrait.HasCreature, Is.True);
+                Assert.That(VisibleSprites(portrait), Is.GreaterThan(0));
+            }
+            finally { Object.DestroyImmediate(instance); }
+        }
+
+        [Test]
         public void 预览骨架被销毁后再次显示会重新装上立绘()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PortraitPrefabPath);

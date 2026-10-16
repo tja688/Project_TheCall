@@ -1,0 +1,178 @@
+[
+  {
+    "result": "PASS",
+    "check": "PASS saved individual painted cages, masked aperture and smooth row lift"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS saved individual painted cages, masked aperture and smooth row lift"
+  },
+  {
+    "result": "PASS",
+    "check": "Idempotent authoring: 2054 objects after both passes"
+  },
+  {
+    "result": "PASS",
+    "check": "begin inventory PASS count=8 IDs=m4,m5,m6,m7,m8,m9,m10,m11"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 8 unique monsters, one cage each; 4 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual down input starts continuous lift 0 -> 280"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS down settles at 280; 110 advancing-frame samples, largest step 60.13"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual up input starts continuous lift 280 -> 0"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS up settles at 0; 114 advancing-frame samples, largest step 62.45"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual wheel-down input starts continuous lift 0 -> 140"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS wheel-down settles at 140; 150 advancing-frame samples, largest step 31.68"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual wheel-up input starts continuous lift 140 -> 0"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS wheel-up settles at 0; 86 advancing-frame samples, largest step 32.42"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual drag ghost scales to production: 1.72"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS enlarged ghost commits to extraction through actual raycast drop"
+  },
+  {
+    "result": "PASS",
+    "check": "inventory-return PASS m4"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 8 unique monsters, one cage each; 4 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "begin inventory PASS count=31 IDs=m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33,m34"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 31 unique monsters, one cage each; 16 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "cage-inventory 31 PASS first=m4 last=m34 contentHeight=2240"
+  },
+  {
+    "result": "PASS",
+    "check": "inventory-drag 30 PASS m34 -> extraction 0"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 30 unique monsters, one cage each; 15 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "inventory-return PASS m34"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 31 unique monsters, one cage each; 16 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "begin inventory PASS count=1 IDs=m4"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 1 unique monsters, one cage each; 2 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 1 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "inventory-drag 0 PASS m4 -> extraction 0"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 0 unique monsters, one cage each; 2 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "begin inventory PASS count=8 IDs=m4,m5,m6,m7,m8,m9,m10,m11"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS actual down input starts continuous lift 0 -> 280"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS down settles at 280; 112 advancing-frame samples, largest step 61.78"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 4 visible cages receive input through iron; hidden cages reject input"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS reopened lift starts at the first row with no retired motion"
+  },
+  {
+    "result": "PASS",
+    "check": "PASS 8 unique monsters, one cage each; 4 moving rows, foreground iron, individual clipping, no scrollbar"
+  },
+  {
+    "result": "PASS",
+    "check": "No new Unity errors during runtime verification"
+  }
+]

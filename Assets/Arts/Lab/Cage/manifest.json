@@ -1,0 +1,16 @@
+{
+  "source": "Assets\\Arts\\Psds\\游玩主界面.psd",
+  "sha256": "3f65ed12595cfc1ddbf0341b978b96e1c3bc8bfd96d1aaa805e26d81b056c543",
+  "aperture": [
+    1538,
+    158,
+    264,
+    280
+  ],
+  "rowHeight": 140,
+  "foregroundLayers": [
+    6,
+    19
+  ],
+  "description": "Original RGB with iron/bar alpha; two authored rows alternate."
+}

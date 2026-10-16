@@ -1,0 +1,98 @@
+{
+  "source": "Assets/Arts/Psds/游玩主界面.psd",
+  "sha256": "3f65ed12595cfc1ddbf0341b978b96e1c3bc8bfd96d1aaa805e26d81b056c543",
+  "size": [
+    1920,
+    1080
+  ],
+  "layers": [
+    {
+      "name": "LightBreeding2",
+      "sourceLayer": "图层 29",
+      "index": 30,
+      "bounds": [
+        669,
+        151,
+        1500,
+        542
+      ]
+    },
+    {
+      "name": "LightBreeding1",
+      "sourceLayer": "图层 31",
+      "index": 31,
+      "bounds": [
+        -34,
+        164,
+        892,
+        555
+      ]
+    },
+    {
+      "name": "LightProduction1",
+      "sourceLayer": "图层 34",
+      "index": 32,
+      "bounds": [
+        -80,
+        574,
+        850,
+        965
+      ]
+    },
+    {
+      "name": "LightProduction2",
+      "sourceLayer": "图层 35",
+      "index": 33,
+      "bounds": [
+        337,
+        572,
+        1474,
+        956
+      ]
+    },
+    {
+      "name": "CollectorGlow",
+      "sourceLayer": "图层 36",
+      "index": 34,
+      "bounds": [
+        1280,
+        686,
+        1438,
+        906
+      ]
+    },
+    {
+      "name": "RecyclerGlow",
+      "sourceLayer": "图层 37",
+      "index": 35,
+      "bounds": [
+        1537,
+        621,
+        1794,
+        678
+      ]
+    },
+    {
+      "name": "CollectorNeedle",
+      "sourceLayer": "图层 38",
+      "index": 36,
+      "bounds": [
+        1360,
+        555,
+        1438,
+        633
+      ]
+    },
+    {
+      "name": "BossReserved",
+      "sourceLayer": "图层 6",
+      "index": 38,
+      "bounds": [
+        -384,
+        177,
+        1293,
+        1369
+      ]
+    }
+  ]
+}

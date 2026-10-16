@@ -20,7 +20,7 @@ namespace TheCall.Scoring
             Action<string> say,
             Action completed,
             int initialEnergy = 0, int initialGold = 0,
-            Action<int, int> moved = null, Action<int> removed = null)
+            Action<int, int> moved = null, Action<int> removed = null, Action<int> energyShown = null)
         {
             Tape = tape;
             ExtractionSlots = extractionSlots;
@@ -34,6 +34,7 @@ namespace TheCall.Scoring
             InitialGold = initialGold;
             Moved = moved;
             Removed = removed;
+            EnergyShown = energyShown;
         }
 
         public ScoringTape Tape { get; }
@@ -48,6 +49,7 @@ namespace TheCall.Scoring
         public int InitialGold { get; }
         public Action<int, int> Moved { get; }
         public Action<int> Removed { get; }
+        public Action<int> EnergyShown { get; }
     }
 
     public sealed class ScoringShow : MonoBehaviour, ICueSink
@@ -1006,6 +1008,7 @@ namespace TheCall.Scoring
         void AddShown(int amount)
         {
             _shown += amount;
+            _stage.EnergyShown?.Invoke(_shown);
             if (_current != null)
                 _current.text = _shown.ToString();
         }

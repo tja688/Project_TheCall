@@ -1,0 +1,234 @@
+[
+  {
+    "check": "PASS saved lab: art, 6 extraction / 6 parent / 4 gene slots, recycler, meter, one UI space, Graphics and all Quality levels on URP 2D, orthographic camera, no skybox.",
+    "result": "PASS"
+  },
+  {
+    "check": "begin capacity PASS count=8 IDs=m4,m5,m6,m7,m8,m9,m10,m11",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS runtime Renderer2D, painted room locks, 2 mapped parents and visible raycast targets",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual drag ghost scales to production: 2.00",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS enlarged ghost commits to extraction through actual raycast drop",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research selection 槽位扩容",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research clicks unlock 槽位扩容",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS runtime Renderer2D, painted room locks, 4 mapped parents and visible raycast targets",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research selection 大乱炖",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research clicks unlock 大乱炖",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS runtime Renderer2D, painted room locks, 6 mapped parents and visible raycast targets",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research selection 基因实验",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research clicks unlock 基因实验",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research selection 基因仓储",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS actual research clicks unlock 基因仓储",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS real cage to painted parent-room drop",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS recycler hover True",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS animated recycler is open",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS raycast recycle removes monster, yields gene and triggers one chew",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS animated recycler is closed",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS recycler hover False",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: ResearchButton at (1407.50, 1033.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "begin inventory PASS count=30 IDs=m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33",
+    "result": "PASS"
+  },
+  {
+    "check": "cage-inventory 30 PASS first=m4 last=m33 contentHeight=1416",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 29 PASS m33 -> extraction 0",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-return PASS m33",
+    "result": "PASS"
+  },
+  {
+    "check": "begin capacity PASS count=6 IDs=m4,m5,m6,m7,m8,m9",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m4 -> extraction 0",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m5 -> extraction 1",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m6 -> extraction 2",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m7 -> extraction 3",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m8 -> extraction 4",
+    "result": "PASS"
+  },
+  {
+    "check": "inventory-drag 0 PASS m9 -> extraction 5",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS visible raycast+pointer click: NextDayButton at (1667.00, 60.50)",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS real settlement reached collector 2 times",
+    "result": "PASS"
+  },
+  {
+    "check": "PASS reset retires scoring, energy motes and mouth motion",
+    "result": "PASS"
+  },
+  {
+    "check": "Seven-day player replay mode 0 completes 125 inputs",
+    "result": "PASS"
+  },
+  {
+    "check": "Seven-day player replay mode 1 completes 125 inputs",
+    "result": "PASS"
+  },
+  {
+    "check": "Seven-day player replay mode 2 completes 125 inputs",
+    "result": "PASS"
+  },
+  {
+    "check": "Normal/fast/skip final states match",
+    "result": "PASS"
+  },
+  {
+    "check": "Normal/fast/skip production records match",
+    "result": "PASS"
+  },
+  {
+    "check": "Normal/fast/skip every input state matches",
+    "result": "PASS"
+  },
+  {
+    "check": "Final state matches pre-art acceptance baseline",
+    "result": "PASS"
+  },
+  {
+    "check": "No new Unity errors",
+    "result": "PASS"
+  },
+  {
+    "check": "Acceptance leaves saved scene unchanged",
+    "result": "PASS"
+  }
+]
