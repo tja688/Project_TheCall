@@ -1,0 +1,14 @@
+{
+  "scene": "Assets/Scenes/Main.unity",
+  "dirty": false,
+  "playing": false,
+  "engine": "6000.6.0f1",
+  "pipeline": "UniversalRenderPipelineAsset",
+  "scenePortraits": 66,
+  "shadowPortraits": 66,
+  "panoramas": 1,
+  "lamps": 10,
+  "upgradeGates": 4,
+  "gameStateReset": true,
+  "acceptance": "PASS saved Main, five silhouettes, six dorm seats, four deferred upgrades, 2D lamp bindings"
+}

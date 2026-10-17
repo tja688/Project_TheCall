@@ -2,7 +2,7 @@
 
 保留各界面的 `ScreenView` 和已接好的槽位脚本。图片、分层、按钮位置和动画可以在这些对象下替换。玩法规则继续由同一个 QFramework 架构持有。
 
-首批实验室 PSD 的图层对应、临时素材和替换入口见[实验室原画接棒笔记](lab-art-handoff.md)。
+当前正式横向地图的图层、灯光、宿舍状态监控、剪影怪物和后续改造入口见[横向设施接入说明](horizontal-facility-handoff.md)。首批旧版实验室 PSD 的历史接入见[实验室原画接棒笔记](lab-art-handoff.md)。
 
 ## 替换界面的图片与布局
 
@@ -23,7 +23,7 @@
 3. 在 `MonsterMotionProfile` 中调整抓取、回弹和计分反应的参数。
 4. 检查开局、怪物笼、商店、拖动虚影和结算中的同一只怪物。
 
-当前 `MonsterPortrait.Show` 优先从 `MonsterRigRuntime` 组装骨架。这份 implementation 共用部件与姿势，图层接入不需要修改怪物技能或结算规则。没有可用骨架时才使用 `MonsterAssemblyCatalog` 的回退模板。
+当前游戏中的 `MonsterPortrait.Show` 默认从 `ShadowMonsterCatalog` 选择整张剪影，拖动虚影和结算共用同一张图。旧 `MonsterRigRuntime`、`MonsterAssemblyCatalog`、拼装工作区和运动资源保留；需要恢复拼接表现时，关闭画像的 `_useShadow` 并按以上骨架流程接入。外观路径不改变技能或结算规则。
 
 ## 接入新的按钮
 
@@ -60,6 +60,8 @@
 取消演出会清理 Tween、恢复画像、停用阻挡层并释放交互。返回标题会先取消演出，再重置架构。播放期间调用 `Refresh` 会等待演出结束，避免提前显示规则已经进入的商店或失败界面。
 
 ## 验证改动
+
+当前横向设施先运行 `scripts/verify-facility-art.ps1`。它检查实际跨区拖放、监控、收容柜末尾、科研扩建、回收和商店。运行 `scripts/verify-facility-replay.ps1`，再对照正常、快进、跳过三种七天流程的全部状态与生产记录。图层与灯光的独立校验使用 `scripts/audit-facility-art.py`。证据位于 `docs/audit/2026-10-17/facility/`。
 
 在 Unity 6000.6.0f1 中打开 Main 场景，然后退出 Play Mode。使用 PowerShell 7 运行：
 

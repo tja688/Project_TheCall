@@ -85,7 +85,14 @@ namespace TheCall.Editor
             }
             if (button == null || !button.gameObject.activeInHierarchy || !button.interactable)
                 throw new InvalidOperationException("Unavailable player button: " + action + " " + value);
-            button.onClick.Invoke();
+            Canvas.ForceUpdateCanvases();
+            var clickPoint = CenterOf((RectTransform)button.transform);
+            var clickData = new PointerEventData(EventSystem.current) { position = clickPoint, button = PointerEventData.InputButton.Left };
+            var clickHits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(clickData, clickHits);
+            if (clickHits.Count == 0 || clickHits[0].gameObject.GetComponentInParent<UnityEngine.UI.Button>() != button)
+                throw new InvalidOperationException("Player button is occluded: " + action + " " + value);
+            ExecuteEvents.Execute(button.gameObject, clickData, ExecuteEvents.pointerClickHandler);
             return Snapshot(action + " " + value);
         }
 
@@ -94,20 +101,27 @@ namespace TheCall.Editor
             if (Playing) throw new InvalidOperationException("Presentation still playing");
             var operation = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
             MonsterSlotView source = null;
-            foreach (var slot in Object.FindObjectsByType<MonsterSlotView>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            foreach (var slot in operation.cageSlots.Concat(operation.extractionSlots).Concat(operation.breedingSlots))
                 if (slot.monsterId == monsterId && slot.GetComponent<OperationPayloadDrag>() != null) { source = slot; break; }
             if (source == null) throw new InvalidOperationException("Visible drag source missing: " + monsterId);
             var targets = area == "extraction" ? operation.extractionSlots : area == "breeding" ? operation.breedingSlots : operation.cageSlots;
             var target = targets[index];
-            if (!target.gameObject.activeInHierarchy) throw new InvalidOperationException("Drop target hidden");
+            if (area != "cage" && !target.gameObject.activeInHierarchy) throw new InvalidOperationException("Drop target hidden");
             Canvas.ForceUpdateCanvases();
             var canvas = target.GetComponentInParent<Canvas>();
             var camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-            var position = RectTransformUtility.WorldToScreenPoint(camera, target.GetComponent<RectTransform>().TransformPoint(target.GetComponent<RectTransform>().rect.center));
-            var data = new PointerEventData(EventSystem.current) { position = position, button = PointerEventData.InputButton.Left };
+            var destination = area == "cage" && operation.lab != null ? operation.lab.cageScroll.viewport : target.GetComponent<RectTransform>();
+            var position = RectTransformUtility.WorldToScreenPoint(camera, destination.TransformPoint(destination.rect.center));
+            var start = CenterOf((RectTransform)source.transform);
+            var data = new PointerEventData(EventSystem.current) { position = start, pressPosition = start, button = PointerEventData.InputButton.Left };
+            var hits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(data, hits);
+            if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<MonsterSlotView>() != source)
+                throw new InvalidOperationException("Drag source occluded: " + monsterId);
             var payload = source.GetComponent<OperationPayloadDrag>();
             payload.OnPointerDown(data);
             payload.OnBeginDrag(data);
+            data.position = position;
             payload.OnDrag(data);
             payload.OnEndDrag(data);
             if (area != "cage" && target.monsterId != monsterId) throw new InvalidOperationException("Actual raycast drop failed: " + monsterId + " -> " + area + " " + index);
@@ -182,6 +196,8 @@ namespace TheCall.Editor
             _plan = JsonUtility.FromJson<PlayerPlan>(File.ReadAllText(path));
             _playbackMode = playbackMode; _lastPlayback = null; _clickCount = 0;
             _evidenceName = playbackMode == 0 ? "natural-normal" : playbackMode == 1 ? "natural-fast" : "natural-skip";
+            Directory.CreateDirectory(EvidenceRoot);
+            File.WriteAllText(Path.Combine(EvidenceRoot, "state-trace.txt"), "");
             Begin(_plan.seed);
             _step = 0; _failure = null; _running = true;
             CaptureScreenshot("01-opening.png");
@@ -228,7 +244,12 @@ namespace TheCall.Editor
                 // player screen, not only the destruction of the playback host.
                 if ((input.Action == "buy" || input.Action == "leave" || input.Action == "refresh") && !Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include).gameObject.activeInHierarchy) return;
                 if (input.Action == "begin" && !Object.FindAnyObjectByType<LevelStartScreenView>(FindObjectsInactive.Include).gameObject.activeInHierarchy) return;
-                if (input.Action == "extraction" || input.Action == "breeding") Drag(input.Value, input.Action, input.Index);
+                if (input.Action == "buy" && !ExposeShopCategory(input.Value)) return;
+                if (input.Action == "extraction" || input.Action == "breeding")
+                {
+                    if (!ExposeCageSource(input.Value)) return;
+                    Drag(input.Value, input.Action, input.Index);
+                }
                 else if (input.Action == "cage")
                 {
                     var operation = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
@@ -252,5 +273,35 @@ namespace TheCall.Editor
         }
 
         static TheCallPresentation Presentation() => Object.FindAnyObjectByType<TheCallPresentation>() ?? throw new InvalidOperationException("Missing presentation");
+
+        static Vector2 CenterOf(RectTransform rect) => RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center));
+
+        static bool ExposeShopCategory(string value)
+        {
+            var shop = Object.FindAnyObjectByType<ShopScreenView>();
+            if (shop.facility == null) return true;
+            var card = shop.cards.FirstOrDefault(c => c.monsterId == value || c.toolName == value);
+            if (card == null || card.gameObject.activeInHierarchy) return true;
+            if (string.IsNullOrEmpty(card.toolName)) shop.facility.ShowMonsters(); else shop.facility.ShowTools();
+            _nextInput = EditorApplication.timeSinceStartup + 0.25;
+            return false;
+        }
+
+        static bool ExposeCageSource(string monsterId)
+        {
+            var operation = Object.FindAnyObjectByType<OperationScreenView>();
+            if (operation == null || !(operation.lab?.cageScroll is LabCageLift lift)) return true;
+            var slot = operation.cageSlots.FirstOrDefault(s => s.gameObject.activeInHierarchy && s.monsterId == monsterId);
+            if (slot == null) return true;
+            if (lift.IsMoving) { _nextInput = EditorApplication.timeSinceStartup + 0.25; return false; }
+            var point = CenterOf((RectTransform)slot.transform);
+            if (RectTransformUtility.RectangleContainsScreenPoint(lift.viewport, point)) return true;
+            var center = CenterOf(lift.viewport);
+            var button = point.y > center.y ? lift.previousButton : lift.nextButton;
+            if (button == null || !button.interactable) throw new InvalidOperationException("Cannot expose cage source " + monsterId);
+            button.onClick.Invoke();
+            _nextInput = EditorApplication.timeSinceStartup + 0.25;
+            return false;
+        }
     }
 }

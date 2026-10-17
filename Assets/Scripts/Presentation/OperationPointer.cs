@@ -20,6 +20,10 @@ namespace TheCall
         const float FadeSeconds = 0.16f;
 
         public RectTransform dragLayer;
+        public FacilityPanorama panorama;
+        bool _panning;
+        float _edgeHold;
+        Vector2 _lastPointer;
 
         TheCallPresentation _presentation;
         OperationPayloadDrag _pressed;
@@ -84,12 +88,16 @@ namespace TheCall
             _dragging = true;
             _hasArmed = false;
             ResetVisuals();
+            if (!_hasPressedPayload && panorama != null && panorama.BeginBackground(eventData))
+            { _panning = true; return; }
             if (_hasPressedPayload && source == _pressed)
                 Carry(source, eventData);
         }
 
         public void MoveGhost(PointerEventData eventData)
         {
+            _lastPointer = eventData.position;
+            if (_panning) { panorama.DragBackground(eventData); return; }
             if (_card != null)
                 _card.transform.position = eventData.position + _cardOffset;
             if (_carried == null)
@@ -108,6 +116,8 @@ namespace TheCall
                 return;
 
             _finished = true;
+            if (_panning)
+            { panorama.EndBackground(eventData); _panning = false; ClearGesture(); return; }
             if (_dragging)
             {
                 var applied = false;
@@ -225,7 +235,8 @@ namespace TheCall
                 return;
             }
 
-            _carried.Release();
+            var homeRect = _home != null ? _home.transform as RectTransform : null;
+            _carried.Release(homeRect != null ? homeRect.TransformPoint(homeRect.rect.center) : (Vector3?)null);
             _releasing = true;
             _releaseClock = 0f;
             _returning = true;
@@ -252,6 +263,8 @@ namespace TheCall
 
         void ClearGesture()
         {
+            _edgeHold = 0;
+            _panning = false;
             _dragging = false;
             _hasArmed = false;
             _hasPressedPayload = false;
@@ -296,6 +309,13 @@ namespace TheCall
 
         void Update()
         {
+            if (_dragging && _carried != null && panorama != null && !panorama.Moving && !panorama.Locked)
+            {
+                var next = !panorama.Production && _lastPointer.x > Screen.width * 0.94f;
+                var previous = panorama.Production && _lastPointer.x < Screen.width * 0.06f;
+                _edgeHold = next || previous ? _edgeHold + Time.unscaledDeltaTime : 0;
+                if (_edgeHold > 0.35f) { panorama.Focus(next); _edgeHold = 0; }
+            }
             if (_carried == null)
                 return;
 

@@ -1,0 +1,215 @@
+{
+  "count": 52,
+  "kind": "LOCAL_UI_FIXTURES_NOT_NATURAL_RUN",
+  "savedSceneHash": "C59F0D88F505D135F2A0CFA54C4E3CCE8BA938719CC4148C80AFE65027EF9E63",
+  "checks": [
+    {
+      "check": "PASS saved Main, five silhouettes, six dorm seats, four deferred upgrades, 2D lamp bindings",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS fixture ownership, five mood states, shadow portraits, deferred upgrades stay hidden",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual background ray and horizontal drag initiate continuous snap to dorm",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS camera docks exactly at dorm; sampled 152 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole silhouette and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole silhouette and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole silhouette and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS invalid cross-room drop leaves the monster resting and starts return toward its actual moved origin",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS rejected ghost follows the moved origin, fades out and restores its source; 285 frames sampled",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityDormTab at (124.00, 44.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityDormNext at (1740.50, 904.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS authoring-only upgrade preview True",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS authoring-only upgrade preview False",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityProductionTab at (319.00, 44.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS fixture production seats display six owned whole silhouettes",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: ResearchButton at (1432.00, 1033.00)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual research selection 槽位扩容",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual research clicks unlock 槽位扩容",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: ResearchButton at (1432.00, 1033.00)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual research selection 大乱炖",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: ResearchButton at (1397.50, 294.00)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual research clicks unlock 大乱炖",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: BackButton at (1615.00, 936.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual research opens shutter and exposes all correctly mapped parent seats",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real owned-tool and researched-technology projections reveal their configured art",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Light2D sources disabled",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Light2D sources enabled",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual recycler ray reaches mouth",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS independent jaws animate open",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real recycle drop extracts one gene, retires one monster and triggers one chew",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS fixture ownership, five mood states, shadow portraits, deferred upgrades stay hidden",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: LabNextCagePage at (1762.00, 560.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 31-monster tail is clipped, visible to rays and drags through the original command",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: NextDayButton at (1625.50, 141.00)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS settlement opens authored shop with actual stock",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityToolCategory at (300.00, 788.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS tool category, actual exposed buy control, purchase and owned inventory refresh",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityDoctorTalk at (1682.00, 308.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS refresh lever spends exact shelf quote and starts one physical animation",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: SellTab at (349.00, 659.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS original sell command retires selected monster from real inventory",
+      "result": "PASS"
+    },
+    {
+      "check": "No runtime Unity errors",
+      "result": "PASS"
+    }
+  ]
+}

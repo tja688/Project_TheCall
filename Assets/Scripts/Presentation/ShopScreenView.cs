@@ -24,6 +24,7 @@ namespace TheCall
         public ShopCardView[] cards;
         public MonsterSlotView[] sellSlots;
         public ToolArtView[] toolArt;
+        public FacilityShopView facility;
         [Min(1)] public int sellColumns = 2;
         [Min(1)] public float sellRowSpacing = 156f;
         [Min(0)] public float sellPadding = 8f;
@@ -57,6 +58,7 @@ namespace TheCall
             }
             sellSlots = MonsterInventory.Render(sellSlots, architecture.SendQuery(new MonsterCageQuery()), null,
                 catalog, "SellCard_", sellColumns, sellRowSpacing, sellPadding, bindNewSlot);
+            if (facility != null) facility.Render(selling, shelf, run);
         }
 
         static void RenderMonster(ShopCardView card, ShelfMonster item, int gold)

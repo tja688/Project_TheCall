@@ -10,6 +10,8 @@ namespace TheCall
     public sealed class LabCageLift : ScrollRect
     {
         public const float RowHeight = 140f;
+        public float rowHeight = RowHeight;
+        public float rowWidth = 264;
         public Sprite[] rowBacks;
         public Sprite[] rowFronts;
         public TMP_Text rangeLabel;
@@ -31,7 +33,7 @@ namespace TheCall
         {
             _count = count;
             _rows = Mathf.Max(2, Mathf.CeilToInt(count / 2f));
-            content.sizeDelta = new Vector2(0, _rows * RowHeight);
+            content.sizeDelta = new Vector2(0, _rows * rowHeight);
             for (var i = 0; i < _rows; i++)
             {
                 EnsureRow(_backs, i, "CageInterior", rowBacks);
@@ -55,7 +57,7 @@ namespace TheCall
             var node = new GameObject(prefix + row, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             node.transform.SetParent(content, false);
             var rect = (RectTransform)node.transform;
-            LabSceneView.Place(rect, 0, row * RowHeight, 264, RowHeight);
+            LabSceneView.Place(rect, 0, row * rowHeight, rowWidth, rowHeight);
             var image = node.GetComponent<Image>();
             image.sprite = sprites[row % sprites.Length];
             image.raycastTarget = false;
@@ -69,7 +71,7 @@ namespace TheCall
             if (content == null || viewport == null) return;
             StopMovement();
             var origin = _moving ? _target : content.anchoredPosition.y;
-            _target = Mathf.Clamp((Mathf.Round(origin / RowHeight) + rows) * RowHeight, 0, Span);
+            _target = Mathf.Clamp((Mathf.Round(origin / rowHeight) + rows) * rowHeight, 0, Span);
             _moving = Mathf.Abs(_target - content.anchoredPosition.y) > 0.05f;
             PaintNavigation();
         }
@@ -127,7 +129,7 @@ namespace TheCall
         void PaintNavigation()
         {
             var offset = content.anchoredPosition.y;
-            var row = Mathf.Clamp(Mathf.RoundToInt(offset / RowHeight), 0, _rows - 2);
+            var row = Mathf.Clamp(Mathf.RoundToInt(offset / rowHeight), 0, _rows - 2);
             if (rangeLabel != null) rangeLabel.text = _count == 0 ? "空置" : (row * 2 + 1) + "-" + Mathf.Min(_count, row * 2 + 4) + " / " + _count;
             var destination = _moving ? _target : offset;
             if (previousButton != null) previousButton.interactable = destination > 0.1f;

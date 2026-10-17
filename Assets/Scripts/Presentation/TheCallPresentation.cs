@@ -78,6 +78,8 @@ namespace TheCall
 
         void RetirePlayback()
         {
+            var panorama = _operation != null ? _operation.pointer?.panorama : null;
+            if (panorama != null) panorama.Locked = false;
             _sessionVersion++;
             StopAllCoroutines();
             _playback?.Cancel();
@@ -430,6 +432,28 @@ namespace TheCall
                 return;
 
             _busy = true;
+            var panorama = _operation != null ? _operation.pointer?.panorama : null;
+            if (panorama != null && (!panorama.Production || panorama.Moving))
+            {
+                StartCoroutine(SettleAfterSlide(panorama, _sessionVersion));
+                return;
+            }
+            StartSettlement();
+        }
+
+        IEnumerator SettleAfterSlide(FacilityPanorama panorama, int version)
+        {
+            panorama.Locked = true;
+            panorama.Focus(true);
+            while (panorama != null && panorama.Moving) yield return null;
+            if (panorama != null) panorama.Locked = false;
+            if (this != null && isActiveAndEnabled && version == _sessionVersion && _operation.gameObject.activeInHierarchy)
+                StartSettlement();
+            else _busy = false;
+        }
+
+        void StartSettlement()
+        {
             _playback = new SettlementPlayback(GetArchitecture());
             var version = _sessionVersion;
             try

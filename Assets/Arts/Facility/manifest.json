@@ -1,0 +1,447 @@
+{
+  "source": "Assets/Arts/Psds/横向地图分层拆解.psd",
+  "sha256": "09c7423a364f1805a607b6d452437aa64857dcd2437d2c61ea34b90e3c8b940b",
+  "size": [
+    4992,
+    3128
+  ],
+  "panoramaOrigin": [
+    739,
+    605
+  ],
+  "shopOrigin": [
+    2659,
+    1766
+  ],
+  "layers": [
+    {
+      "name": "DormShell",
+      "bounds": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "sources": [
+        58
+      ],
+      "sha256": "054a5207a74d5dee234984bc3f175af91fdabb7d8f45b6ce9eb83b6710148aeb"
+    },
+    {
+      "name": "ProductionShell",
+      "bounds": [
+        1920,
+        0,
+        3840,
+        1080
+      ],
+      "sources": [
+        58
+      ],
+      "sha256": "2f32752e9f1f403369524f9fc39d186af6ce30a74c8f9ba56b07bcaaafc2ad51"
+    },
+    {
+      "name": "ShopShell",
+      "bounds": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "sources": [
+        3
+      ],
+      "sha256": "46aaeaea652c281bf2be0509804dfe4c551f6b77e703b308e0a7b8c964e9f973"
+    },
+    {
+      "name": "DormGeometry",
+      "bounds": [
+        1430,
+        73,
+        1833,
+        489
+      ],
+      "sources": [
+        68
+      ],
+      "sha256": "931328e5d0e08aadab69905393ff835c0b6cee8ed8e022929dcf28adc68436ae"
+    },
+    {
+      "name": "DormTelevision",
+      "bounds": [
+        1253,
+        541,
+        1497,
+        731
+      ],
+      "sources": [
+        69
+      ],
+      "sha256": "2da72e5814892b174f34ac3e9f4c032a7a64504a8a5177b06fd34cd315e52b64"
+    },
+    {
+      "name": "DormCandy",
+      "bounds": [
+        1064,
+        608,
+        1295,
+        972
+      ],
+      "sources": [
+        70
+      ],
+      "sha256": "7ef8eace41ae7046c543af8f76af524f0a0a4a84e7739a65c3426b8111ba8121"
+    },
+    {
+      "name": "DormPlant",
+      "bounds": [
+        1371,
+        597,
+        1679,
+        968
+      ],
+      "sources": [
+        71
+      ],
+      "sha256": "3566d5bf20e5e45bd39cbc2223f8cfdf7770561848df7d8d951c65adb960de26"
+    },
+    {
+      "name": "Platform",
+      "bounds": [
+        1995,
+        809,
+        2183,
+        973
+      ],
+      "sources": [
+        127
+      ],
+      "sha256": "0b12b521d8decfb26c4f9554f1220c11207fbbd05c6c935f05eb345a9c698339"
+    },
+    {
+      "name": "Shutter",
+      "bounds": [
+        2625,
+        81,
+        3351,
+        505
+      ],
+      "sources": [
+        132
+      ],
+      "sha256": "fd0529941421092be921f973b22e491792221534bc23a2766743858dba6b1bec"
+    },
+    {
+      "name": "GaugeNeedle",
+      "bounds": [
+        2083,
+        567,
+        2130,
+        649
+      ],
+      "sources": [
+        172
+      ],
+      "sha256": "680060e479fe884f6c56c17e9324dda7115abc7267d062f5a4e77390581a7005"
+    },
+    {
+      "name": "CollectorGlow",
+      "bounds": [
+        3046,
+        540,
+        3332,
+        972
+      ],
+      "sources": [
+        98
+      ],
+      "sha256": "ad8a97f4f190f1728524919d236652ccee94f3764063151d27199af20a23dc2a"
+    },
+    {
+      "name": "CollectorCore",
+      "bounds": [
+        3176,
+        754,
+        3216,
+        919
+      ],
+      "sources": [
+        93
+      ],
+      "sha256": "1fb976e91a67fabf573b0dc802321eb94b78d1f471a320f5b4d87c6763969dbb"
+    },
+    {
+      "name": "CageDoor",
+      "bounds": [
+        3379,
+        189,
+        3547,
+        341
+      ],
+      "sources": [
+        254
+      ],
+      "sha256": "0cc45d77536a2fd82c9ae4e22e79100c0e221633e2669fd0ac8b5e2be3d58d93"
+    },
+    {
+      "name": "CageBack",
+      "bounds": [
+        3378,
+        191,
+        3548,
+        342
+      ],
+      "sources": [
+        242
+      ],
+      "sha256": "761386ecfddf443be2a754e030bc2c4f3d7c9455530365261405b7cf77b23510"
+    },
+    {
+      "name": "RecyclerMouth",
+      "bounds": [
+        3368,
+        559,
+        3728,
+        684
+      ],
+      "sources": [
+        267
+      ],
+      "sha256": "028d46dde3993d874790973593ee4f286fa65b1127117bb608712e65f6ef366d"
+    },
+    {
+      "name": "RecyclerLip",
+      "bounds": [
+        3367,
+        538,
+        3730,
+        577
+      ],
+      "sources": [
+        268
+      ],
+      "sha256": "b343e4aba2ffecc28612fb6f6b10b1a97c7a357b151ea32e2f8ad51d57db781a"
+    },
+    {
+      "name": "BreedingPod",
+      "bounds": [
+        2014,
+        235,
+        2219,
+        497
+      ],
+      "sources": [
+        114
+      ],
+      "sha256": "ca28a828fed2014430541cea7ba2bb147334604dd8ba99965d711dfb67057c48"
+    },
+    {
+      "name": "BreedingTubeLeft",
+      "bounds": [
+        2184,
+        267,
+        2265,
+        440
+      ],
+      "sources": [
+        115
+      ],
+      "sha256": "f69f48de28850f9f60ecb80383d0a95af35d65ee4a1ef82b20f611b9855decbd"
+    },
+    {
+      "name": "BreedingTubeRight",
+      "bounds": [
+        2301,
+        268,
+        2382,
+        441
+      ],
+      "sources": [
+        117
+      ],
+      "sha256": "7c92f37d3bb9bcc14d64cd61781b8ae0a52ef6d936f2ffba4a73ea86422cf394"
+    },
+    {
+      "name": "BreedingChild",
+      "bounds": [
+        2237,
+        301,
+        2337,
+        496
+      ],
+      "sources": [
+        118
+      ],
+      "sha256": "ce4643a3eb4cf31ddd8327391ab878fc0c70eadf642f372057bbcc9eaea63b41"
+    },
+    {
+      "name": "BreedingChildRim",
+      "bounds": [
+        2222,
+        320,
+        2350,
+        344
+      ],
+      "sources": [
+        120
+      ],
+      "sha256": "75983a3b947fcca7b9658acd192dc65ad2b2d6f9e75d0d505f30b51fd95a96a7"
+    },
+    {
+      "name": "GenePlus",
+      "bounds": [
+        2503,
+        127,
+        2600,
+        218
+      ],
+      "sources": [
+        123
+      ],
+      "sha256": "9ba9a91366b40e87921e71c3a1d473b5171139bae4459b67bcfb278400815d58"
+    },
+    {
+      "name": "LampCone",
+      "bounds": [
+        2114,
+        117,
+        2479,
+        518
+      ],
+      "sources": [
+        201
+      ],
+      "sha256": "0f09bba53e66a6bedc3b2af935d8438a619ffecac3af6b6def1d35f8ed767b1f"
+    },
+    {
+      "name": "LampTube",
+      "bounds": [
+        2152,
+        109,
+        2432,
+        144
+      ],
+      "sources": [
+        212
+      ],
+      "sha256": "14ce6da930fb2956f9406eb15a53ce503dd1d213439e8e40da59911d784d288b"
+    },
+    {
+      "name": "Monster01",
+      "bounds": [
+        2473,
+        727,
+        2676,
+        948
+      ],
+      "sources": [
+        100
+      ],
+      "sha256": "1c81166df0976e084b99f053df2602f14147666a36cbbbe6044501f736801e55"
+    },
+    {
+      "name": "Monster02",
+      "bounds": [
+        2716,
+        662,
+        2916,
+        893
+      ],
+      "sources": [
+        103
+      ],
+      "sha256": "e3c1477783f6eebe8b2b42ab0fdf79b53fd72d6f301f3adbfe4ae83e71b3a1ac"
+    },
+    {
+      "name": "Monster03",
+      "bounds": [
+        2004,
+        716,
+        2181,
+        950
+      ],
+      "sources": [
+        105
+      ],
+      "sha256": "33ead238b8a5905048da07bf35f876d4f602687a48bdbff930529bd0fff542a8"
+    },
+    {
+      "name": "Monster04",
+      "bounds": [
+        2919,
+        707,
+        3091,
+        950
+      ],
+      "sources": [
+        107
+      ],
+      "sha256": "b1041bc6cdd74b71bfce5cd3faaa8fe24c2e8f0c614faf3ddb1fbdf7a0a392f8"
+    },
+    {
+      "name": "Monster05",
+      "bounds": [
+        2187,
+        583,
+        2474,
+        961
+      ],
+      "sources": [
+        110
+      ],
+      "sha256": "bf57039f31568c3253949e1f0e3554d87c19bcd3e154c22b57e3d3937573bc0e"
+    },
+    {
+      "name": "CageRowBack",
+      "bounds": [
+        0,
+        0,
+        344,
+        154
+      ],
+      "sources": [
+        242
+      ],
+      "sha256": "4b3b00587ef4bcc1bcae9234946b50b7e2d6d9fdf42b666b021dfcfafe01d8a6"
+    },
+    {
+      "name": "CageRowFront",
+      "bounds": [
+        0,
+        0,
+        344,
+        154
+      ],
+      "sources": [
+        254
+      ],
+      "sha256": "17e265cc7126250e4b1b0a5b8794067824cb199df9bae2443faf8f7241330936"
+    },
+    {
+      "name": "RecyclerUpper",
+      "bounds": [
+        3368,
+        559,
+        3728,
+        621
+      ],
+      "sources": [
+        267
+      ],
+      "sha256": "f950d47ea79d49d11cf6201422aa54b50ffdb8028e32be2d0a3b3998ee517b4a"
+    },
+    {
+      "name": "RecyclerLower",
+      "bounds": [
+        3368,
+        621,
+        3728,
+        684
+      ],
+      "sources": [
+        267
+      ],
+      "sha256": "091ad0c7912fae00a3d7b74d5c400afc3f730bb90b74d279bb906a0e9d06c87c"
+    }
+  ]
+}

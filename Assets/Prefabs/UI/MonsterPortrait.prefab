@@ -71,6 +71,8 @@ MonoBehaviour:
   _motionProfile: {fileID: 11400000, guid: e261783848b774b4c9c5fb6010f76668, type: 2}
   _assemblyCatalog: {fileID: 0}
   _fitToViewport: 1
+  _useShadow: 1
+  _shadowTint: {r: 0.078431375, g: 0.16862746, b: 0.2, a: 1}
   _editorPreview: 1
   _editorPreviewSeed: 48291
 --- !u!1 &804664364443362080

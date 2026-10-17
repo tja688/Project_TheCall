@@ -9,6 +9,7 @@ namespace TheCall
     public sealed class LabSceneView : MonoBehaviour
     {
         public OperationScreenView operation;
+        public FacilitySceneView facility;
         public Image[] lamps;
         public Image collectorGlow;
         public RectTransform needle;
@@ -32,6 +33,7 @@ namespace TheCall
 
         public void Render(IReadOnlyList<BreedingPlanView> plans, int energy, int target, int cage, int genes)
         {
+            if (facility != null) return;
             _target = Mathf.Max(1, target);
             _energy = energy;
             _ratio = Mathf.Clamp01(energy / (float)_target);
@@ -62,6 +64,7 @@ namespace TheCall
 
         public void EnergyShown(int total)
         {
+            if (facility != null) { facility.EnergyShown(total); return; }
             if (total == _energy) return;
             _energy = total;
             _ratio = Mathf.Clamp01(total / (float)_target);
@@ -77,6 +80,7 @@ namespace TheCall
 
         void Update()
         {
+            if (facility != null) return;
             var time = Time.unscaledTime;
             var dt = Time.unscaledDeltaTime;
             _pulse = Mathf.MoveTowards(_pulse, 0, dt * 2.5f);

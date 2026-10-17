@@ -9,11 +9,9 @@ using UnityEngine.UI;
 namespace TheCall
 {
     /// <summary>
-    /// Shared runtime renderer for the componentized monster assembly.
-    /// Rules supply stable part IDs; the catalog supplies sprites, anchors and layer data.
-    /// 有骨架时待机、拖拽、计分反应都由 MonsterMotionController 在同一副骨架上叠加；
-    /// 没有骨架时退回旧的分组装配，只为兼容保留。
-    /// 编辑器里用同一条拼接路径画预览，矩形就是视口：游戏和拖拽虚影都把怪物放进这个矩形的中心。
+    /// Shared portrait for game slots, scoring and drag previews.
+    /// The game uses whole authored silhouettes. The assembly renderer and its motion
+    /// controller remain selectable for the retained workbench and legacy rig tests.
     /// </summary>
     [ExecuteAlways]
     public sealed class MonsterPortrait : MonoBehaviour
@@ -34,6 +32,13 @@ namespace TheCall
         [SerializeField] MonsterMotionProfile _motionProfile;
         [SerializeField] MonsterAssemblyCatalog _assemblyCatalog;
         [SerializeField] bool _fitToViewport = true;
+        [SerializeField] bool _useShadow;
+        [SerializeField] Color _shadowTint = new Color32(20, 43, 51, 255);
+        Image _shadow;
+        Vector3 _shadowHome;
+        Vector3 _shadowGrip;
+        bool _shadowReturning;
+        float _shadowReaction;
 #if UNITY_EDITOR
         [SerializeField] bool _editorPreview = true;
         [SerializeField] int _editorPreviewSeed = 48291;
@@ -85,10 +90,25 @@ namespace TheCall
         };
 
         /// <summary>是否已经装上了一只可以拖拽、会摆动的怪物。</summary>
-        public bool HasCreature => _motion != null;
+        public bool HasCreature => _useShadow ? Painted(_shadow) : _motion != null;
+        public bool UsesShadow => _useShadow;
+        public Sprite ShadowSprite => _shadow != null ? _shadow.sprite : null;
+        public void SetShadowTint(Color color)
+        { _shadowTint = color; if (_shadow != null) _shadow.color = color; }
 
         /// <summary>抓取分量和反应都已回到静止。没有怪物时视为静止。</summary>
-        public bool Settled => _motion == null || _motion.Settled;
+        public bool Settled => _useShadow ? !_shadowReturning : _motion == null || _motion.Settled;
+
+        public void UseShadowArtwork()
+        {
+            _useShadow = true;
+            _showed = false;
+            DropSkeleton();
+            HideRig();
+            HideLegacy();
+            var baked = transform.Find("Rig");
+            if (baked != null) baked.gameObject.SetActive(false);
+        }
 
 #if UNITY_EDITOR
         void OnEnable()
@@ -147,6 +167,12 @@ namespace TheCall
 
         void ShowAppearance(MonsterAppearance appearance, float seed)
         {
+            if (_useShadow)
+            {
+                ShowShadow(appearance, seed);
+                return;
+            }
+            if (_shadow != null) _shadow.enabled = false;
             MonsterPartLibrary.Ensure();
             var key = AppearanceSalt(appearance);
             // 同一只怪物每帧都会被刷新一次：外观和种子没变时保留它的运动状态，否则拖拽会被打断。
@@ -217,6 +243,22 @@ namespace TheCall
 
         void Update()
         {
+            if (_useShadow)
+            {
+                if (_shadow == null || !_showed) return;
+                var dt = Application.isPlaying ? Time.unscaledDeltaTime : 0;
+                _shadowReaction = Mathf.MoveTowards(_shadowReaction, 0, dt * 24);
+                var breath = Application.isPlaying ? Mathf.Sin(Time.unscaledTime * 1.7f + _idleSeed) * 0.012f : 0;
+                _shadow.rectTransform.localScale = new Vector3(1 - breath * 0.35f, 1 + breath, 1);
+                _shadow.rectTransform.localEulerAngles = new Vector3(0, 0, _shadowReaction);
+                if (_shadowReturning)
+                {
+                    transform.position = Vector3.Lerp(transform.position, _shadowHome, 1 - Mathf.Exp(-dt * 16));
+                    if (Vector3.Distance(transform.position, _shadowHome) < 0.5f)
+                    { transform.position = _shadowHome; _shadowReturning = false; }
+                }
+                return;
+            }
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
@@ -279,6 +321,7 @@ namespace TheCall
         /// <summary>计分时头和脚弹一下（度）。有骨架时由控制器平滑过去，松开后自动回落。</summary>
         public void SetSpringMotion(float headAngle, float feetAngle)
         {
+            if (_useShadow) { _shadowReaction = Mathf.Clamp(headAngle * 0.25f, -7, 7); return; }
             _reacting = true;
             if (_motion != null)
             {
@@ -291,6 +334,7 @@ namespace TheCall
 
         public void RestoreMotion()
         {
+            if (_useShadow) { _shadowReaction = 0; return; }
             _reacting = false;
             if (_motion != null)
             {
@@ -304,6 +348,14 @@ namespace TheCall
         /// <summary>抓住怪物。screenPoint 是按下时的屏幕坐标；这里只改变抓取状态，不做任何视觉切换。</summary>
         public void Grab(Vector2 screenPoint, Camera eventCamera)
         {
+            if (_useShadow)
+            {
+                _shadowHome = transform.position;
+                if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
+                    _shadowGrip = transform.position - world;
+                _shadowReturning = false;
+                return;
+            }
             if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
                 return;
 
@@ -312,14 +364,26 @@ namespace TheCall
 
         public void Hold(Vector2 screenPoint, Camera eventCamera)
         {
+            if (_useShadow)
+            {
+                if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
+                    transform.position = world + _shadowGrip;
+                return;
+            }
             if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
                 return;
 
             _motion.Hold(point.x, point.y);
         }
 
-        public void Release()
+        public void Release(Vector3? returnPoint = null)
         {
+            if (_useShadow)
+            {
+                if (returnPoint.HasValue) _shadowHome = returnPoint.Value;
+                _shadowReturning = true;
+                return;
+            }
             if (_motion != null)
                 _motion.Release();
         }
@@ -394,10 +458,12 @@ namespace TheCall
             var ghost = go.AddComponent<MonsterPortrait>();
             ghost._motionProfile = source._motionProfile;
             ghost._assemblyCatalog = source._assemblyCatalog;
+            ghost._useShadow = source._useShadow;
+            ghost._shadowTint = source._shadowTint;
             if (source._showed)
                 ghost.ShowAppearance(source._appearance, source._idleSeed);
             // 虚影继续留在覆盖层上接指针。离开卡片后由世界精灵吃 2D 灯，UI 着色器采不到那张灯图。
-            if (Application.isPlaying)
+            if (Application.isPlaying && !source._useShadow)
             {
                 var body = go.AddComponent<MonsterLightBody>();
                 body.YieldToOverlay();
@@ -409,6 +475,8 @@ namespace TheCall
         public void Clear()
         {
             _showed = false;
+            if (_shadow != null) _shadow.enabled = false;
+            _shadowReturning = false;
             DropSkeleton();
             HideRig();
             ClearImage(_tail);
@@ -565,6 +633,7 @@ namespace TheCall
         /// </summary>
         bool RigVisualIntact()
         {
+            if (_useShadow) return Painted(_shadow);
             if (_motion == null)
                 return Painted(_body) || Painted(_head) || Painted(_tail) || Painted(_foot)
                     || Painted(_hand) || Painted(_eye) || Painted(_mouth) || Painted(_hat) || Painted(_accessory);
@@ -595,6 +664,7 @@ namespace TheCall
             _motion.Compose(_frame);
             var rebuilt = _rigRoot == null;
             EnsureRigRoot();
+            _rigRoot.gameObject.SetActive(true);
             for (var i = _rigImages.Count - 1; i >= 0; i--)
             {
                 if (_rigImages[i] == null)
@@ -722,7 +792,7 @@ namespace TheCall
 
         void HideLegacy()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && !_useShadow)
                 return;
 
             Deactivate(_tail);
@@ -740,6 +810,44 @@ namespace TheCall
         {
             if (image != null && image.gameObject.activeSelf)
                 image.gameObject.SetActive(false);
+        }
+
+        void ShowShadow(MonsterAppearance appearance, float seed)
+        {
+            var key = AppearanceSalt(appearance);
+            var sprite = ShadowMonsterCatalog.Runtime?.Pick(unchecked(appearance.Recipe * 19349663 + appearance.Palette * 83492791));
+            if (_showed && key == _showKey && Painted(_shadow) && _shadow.sprite == sprite) return;
+            _showed = true;
+            _showKey = key;
+            _appearance = appearance;
+            _idleSeed = seed;
+            DropSkeleton();
+            HideRig();
+            HideLegacy();
+            if (_shadow == null)
+            {
+                var existing = transform.Find("ShadowCreature");
+                if (existing != null) _shadow = existing.GetComponent<Image>();
+                if (_shadow == null)
+                {
+                    var node = new GameObject("ShadowCreature", typeof(RectTransform), typeof(Image));
+                    if (!Application.isPlaying) node.hideFlags = HideFlags.HideAndDontSave;
+                    node.transform.SetParent(transform, false);
+                    _shadow = node.GetComponent<Image>();
+                }
+            }
+            if (!Application.isPlaying) _shadow.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            var rect = _shadow.rectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            rect.pivot = new Vector2(0.5f, 0.05f);
+            _shadow.sprite = sprite;
+            _shadow.color = _shadowTint;
+            _shadow.preserveAspect = true;
+            _shadow.raycastTarget = false;
+            _shadow.enabled = sprite != null;
+            _shadow.gameObject.SetActive(true);
         }
 
 #if UNITY_EDITOR

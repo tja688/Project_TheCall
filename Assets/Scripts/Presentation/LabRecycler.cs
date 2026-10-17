@@ -9,6 +9,9 @@ namespace TheCall
         public RectTransform upperJaw;
         public RectTransform lowerJaw;
         public Image glow;
+        public bool useAuthoredJaws;
+        public Vector2 upperRest;
+        public Vector2 lowerRest;
         bool _hover;
         float _chew;
         float _open;
@@ -27,6 +30,13 @@ namespace TheCall
         void OnDisable() { _hover = false; _chew = _open = 0; Paint(); }
         void Paint()
         {
+            if (useAuthoredJaws)
+            {
+                if (upperJaw != null) upperJaw.anchoredPosition = upperRest + Vector2.up * (_open * 22);
+                if (lowerJaw != null) lowerJaw.anchoredPosition = lowerRest - Vector2.up * (_open * 22);
+                if (glow != null) glow.color = new Color(0.35f, 0.95f, 0.85f, _chew > 0 ? 0.8f : 0.08f);
+                return;
+            }
             if (upperJaw != null) upperJaw.anchoredPosition = new Vector2(-3, 74 + _open * 12);
             if (lowerJaw != null) lowerJaw.anchoredPosition = new Vector2(-3, 37 - _open * 12);
             if (glow != null) glow.color = new Color(1, 1, 1, _chew > 0 ? 0.85f : 0.08f * (1 - _open));

@@ -1,0 +1,11 @@
+[
+  {
+    "mode": 0,
+    "rawFile": "docs/audit/2026-10-17/facility/replay-history/mode-0-469a5cda9842.txt",
+    "rawSha256": "469a5cda9842a64885258a9d6d21d10327d0fe2f151c34031f2a4c43c94d9f53",
+    "sessions": 2,
+    "lastSessionByteOffset": 395189,
+    "lastSessionSha256": "f376ed72f6e352330e5921e001c909b704b21b64112686c7c5d89079611490db",
+    "exactBaselineMatchBeforeExtraction": true
+  }
+]

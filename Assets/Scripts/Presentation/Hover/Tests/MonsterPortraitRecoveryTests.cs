@@ -18,6 +18,7 @@ namespace TheCall.Hover.Tests
             var portrait = instance.GetComponent<MonsterPortrait>();
             var serialized = new SerializedObject(portrait);
             serialized.FindProperty("_editorPreview").boolValue = false;
+            serialized.FindProperty("_useShadow").boolValue = false;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             try
             {
@@ -46,6 +47,7 @@ namespace TheCall.Hover.Tests
             var portrait = instance.GetComponent<MonsterPortrait>();
             var serialized = new SerializedObject(portrait);
             serialized.FindProperty("_editorPreview").boolValue = false;
+            serialized.FindProperty("_useShadow").boolValue = false;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             instance.SetActive(true);
 
@@ -77,6 +79,7 @@ namespace TheCall.Hover.Tests
             var portrait = instance.GetComponent<MonsterPortrait>();
             var serialized = new SerializedObject(portrait);
             serialized.FindProperty("_editorPreview").boolValue = true;
+            serialized.FindProperty("_useShadow").boolValue = false;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             instance.SetActive(true);
 

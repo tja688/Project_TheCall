@@ -132,6 +132,7 @@ namespace TheCall
                 }
             if (lab != null) lab.Render(architecture.SendQuery(new BreedingPlansQuery()), energy, target.EnergyDue,
                 architecture.SendQuery(new MonsterCageQuery()).Count, run.GeneCapacity);
+            if (lab != null && lab.facility != null) lab.facility.Render(architecture, catalog);
         }
     }
 }

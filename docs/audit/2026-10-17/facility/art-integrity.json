@@ -1,0 +1,84 @@
+{
+  "checks": [
+    {
+      "check": "source PSD and all exported-layer hashes",
+      "count": 33,
+      "passed": true
+    },
+    {
+      "check": "five whole silhouettes preserve the authored outlines",
+      "passed": true,
+      "silhouettes": [
+        {
+          "name": "Monster01",
+          "sourceLayer": 100,
+          "size": [
+            203,
+            221
+          ],
+          "exactAuthoredAlpha": true
+        },
+        {
+          "name": "Monster02",
+          "sourceLayer": 103,
+          "size": [
+            200,
+            231
+          ],
+          "exactAuthoredAlpha": true
+        },
+        {
+          "name": "Monster03",
+          "sourceLayer": 105,
+          "size": [
+            177,
+            234
+          ],
+          "exactAuthoredAlpha": true
+        },
+        {
+          "name": "Monster04",
+          "sourceLayer": 107,
+          "size": [
+            172,
+            243
+          ],
+          "exactAuthoredAlpha": true
+        },
+        {
+          "name": "Monster05",
+          "sourceLayer": 110,
+          "size": [
+            287,
+            378
+          ],
+          "exactAuthoredAlpha": true
+        }
+      ]
+    },
+    {
+      "check": "real Light2D toggle changes rendered room illumination",
+      "passed": true,
+      "roi": [
+        1000,
+        225,
+        1180,
+        420
+      ],
+      "meanChannelBrightnessGain": 7.049,
+      "changedPixelFraction": 0.7945
+    },
+    {
+      "check": "wide and tall viewports mask adjacent-room art outside their bounds",
+      "passed": true,
+      "maximumBorderChannels": [
+        13,
+        13,
+        13,
+        13
+      ]
+    }
+  ],
+  "passed": true,
+  "sourceSha256": "09c7423a364f1805a607b6d452437aa64857dcd2437d2c61ea34b90e3c8b940b"
+}
