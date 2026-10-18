@@ -117,14 +117,14 @@ namespace TheCall.Editor
             var facility = Component<FacilitySceneView>(op.gameObject);
             facility.operation = op; facility.panorama = panorama; op.lab.facility = facility;
             WorldArt(content, "DormShell", Warm, 0);
-            WorldArt(content, "ProductionShell", Cold, 0);
+            WorldArt(content, "ProductionShell", "ProductionWorkShell", Cold, 0);
 
             // Move authoritative controls before retiring only the superseded paintings.
             for (var i = 0; i < op.extractionSlots.Length; i++)
             {
                 var slot = op.extractionSlots[i]; slot.transform.SetParent(content, false);
-                SkinSlot(slot, 1920 + 83 + i * 185, 687, 178, 280);
-                At(slot.portrait.transform, 8, 17, 162, 235);
+                SkinSlot(slot, 1920 + 70 + i * 188, 687, 178, 290);
+                At(slot.portrait.transform, 26, 57, 146, 190);
                 var platform = Picture(slot.transform, "FacilityPlatform", "Platform", 0, 134, 178, 156, Cold);
                 platform.transform.SetAsFirstSibling();
             }
@@ -244,10 +244,88 @@ namespace TheCall.Editor
             for (var i = 0; i < lights.Length; i++)
                 Lamp(content, "FacilityLamp"+i, lights[i], i < 4 ? new Color(1, 0.7f, 0.65f) : new Color(0.64f, 0.91f, 1), 0.55f, i*2.73f);
             facility.collectorLamp = Lamp(content, "CollectorLamp", new Rect(3045, 539, 288, 434), new Color(0.45f, 1, 0.97f), 0.32f, 5);
+            AuthorSettlement(op, facility, content);
             foreach (Transform child in root.Cast<Transform>().ToArray())
                 if (child.name.StartsWith("Lab", StringComparison.Ordinal) || child.name == "PrototypeArchive") child.gameObject.SetActive(false);
             op.dragLayer.SetAsLastSibling();
             EditorUtility.SetDirty(op); EditorUtility.SetDirty(op.lab); EditorUtility.SetDirty(op.pointer);
+        }
+
+        // Also used on its own to upgrade the saved Main without rebuilding unrelated UI.
+        public static string ApplySettlementLayout()
+        {
+            if (EditorApplication.isPlaying) throw new InvalidOperationException("Exit Play Mode before authoring.");
+            var op = Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
+            if (EditorSceneManager.GetActiveScene().path != "Assets/Scenes/Main.unity" || op?.lab?.facility == null)
+                throw new InvalidOperationException("Open the authored Main facility first.");
+            AssetDatabase.Refresh();
+            foreach (var file in new[] { "GaugeHousing", "ProductionWorkShell" })
+            {
+                var importer = (TextureImporter)AssetImporter.GetAtPath(ArtPath + file + ".png");
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spritePixelsPerUnit = 100; importer.mipmapEnabled = false;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.alphaIsTransparency = true; importer.maxTextureSize = 2048;
+                importer.SaveAndReimport();
+            }
+            _lit = AssetDatabase.LoadAssetAtPath<Material>(ArtPath + "FacilityLit.mat");
+            _font = op.dayLabel.font;
+            _lights = SceneNode("FacilityLighting").transform;
+            var facility = op.lab.facility;
+            AuthorSettlement(op, facility, facility.panorama.content);
+            EditorSceneManager.MarkSceneDirty(op.gameObject.scene);
+            EditorSceneManager.SaveScene(op.gameObject.scene);
+            return "PASS saved spaced extraction seats, six charge columns and compact gauge";
+        }
+
+        static void AuthorSettlement(OperationScreenView op, FacilitySceneView facility, Transform content)
+        {
+            content.Find("ProductionShell").GetComponent<FacilitySprite>().sprite = Sprite("ProductionWorkShell");
+            facility.energyColumns = new FacilityEnergyColumn[op.extractionSlots.Length];
+            for (var i = 0; i < op.extractionSlots.Length; i++)
+            {
+                var slot = op.extractionSlots[i];
+                At(slot.portrait.transform, 26, 57, 146, 190);
+                var platform = slot.transform.Find("FacilityPlatform");
+                platform.GetComponent<Image>().enabled = false;
+                var platformArt = Component<FacilitySprite>(platform.gameObject);
+                platformArt.sprite = Sprite("Platform"); platformArt.material = _lit; platformArt.tint = Cold; platformArt.order = 14;
+                var track = Node(slot.transform, "FacilityColumnTrack", 29, 149, 10, 88);
+                var trackArt = Component<FacilitySprite>(track.gameObject);
+                trackArt.sprite = Sprite("CollectorCore"); trackArt.material = _lit; trackArt.tint = new Color(0.13f, 0.25f, 0.28f, 1); trackArt.order = 15;
+                var fluid = Node(slot.transform, "FacilityColumnFluid", 29, 149, 10, 88);
+                fluid.pivot = new Vector2(0.5f, 0);
+                fluid.anchoredPosition = new Vector2(34, -237);
+                var art = Component<FacilitySprite>(fluid.gameObject);
+                art.sprite = Sprite("CollectorCore"); art.material = _lit; art.order = 16;
+                var lamp = Lamp(slot.transform, "FacilityColumnLamp" + i, new Rect(-55, 60, 190, 220), new Color(0.42f, 1, 0.86f), 0.015f, i * 0.73f);
+                lamp.lightSource.lightType = Light2D.LightType.Point;
+                lamp.lightSource.pointLightOuterRadius = 1.45f;
+                lamp.lightSource.pointLightInnerRadius = 0.16f;
+                lamp.flicker = false;
+                var column = Component<FacilityEnergyColumn>(slot.gameObject);
+                column.fluid = fluid; column.fluidArt = art; column.lamp = lamp;
+                column.seat = facility.seatLamps[i];
+                column.Show(0, 0);
+                facility.energyColumns[i] = column;
+            }
+            facility.LayoutExtraction();
+            var housing = Node(content, "FacilityGaugeHousing", 1956, 507, 356, 238);
+            housing.localScale = Vector3.one * 0.59f;
+            var shell = Component<FacilitySprite>(housing.gameObject);
+            shell.sprite = Sprite("GaugeHousing"); shell.material = _lit; shell.tint = Cold; shell.order = 14;
+            facility.needle.SetParent(housing, false);
+            At(facility.needle, 0, 0, 47, 82);
+            facility.needle.pivot = new Vector2(11f / 47f, -12f / 82f);
+            facility.needle.anchoredPosition = new Vector2(141, -125);
+            op.currentNumber.transform.SetParent(housing, false);
+            At(op.currentNumber.transform, 38, 131, 205, 46);
+            Style(op.currentNumber, 36, Ink);
+            if (facility.collectorLamp != null) facility.collectorLamp.intensity = 0.1f;
+            var collectorGlow = content.Find("CollectorGlow")?.GetComponent<FacilitySprite>();
+            if (collectorGlow != null) collectorGlow.tint = new Color(0.3f, 0.6f, 0.64f, 0.22f);
+            EditorUtility.SetDirty(facility);
+            EditorUtility.SetDirty(op);
         }
 
         static void AuthorDorm(OperationScreenView op, Transform content, FacilitySceneView facility)

@@ -24,6 +24,7 @@ namespace TheCall
         public RectTransform needle;
         public RectTransform collectorFluid;
         public FacilityLamp collectorLamp;
+        public FacilityEnergyColumn[] energyColumns;
         public RectTransform[] motes;
         public Image[] seatLamps;
         public FacilityUpgradeView[] upgrades;
@@ -45,6 +46,10 @@ namespace TheCall
         bool _roomOpen;
         int _target = 1;
         int _shownEnergy;
+        bool _energyPlayback;
+        float _receiving;
+        public float PresentedEnergy { get; private set; }
+        public float DialProgress => _dial;
 
         public void Render(IArchitecture architecture, PresentationSpriteCatalog catalog)
         {
@@ -87,6 +92,8 @@ namespace TheCall
             _target = Mathf.Max(1, architecture.SendQuery(new LevelTargetQuery()).EnergyDue);
             _shownEnergy = architecture.SendQuery(new LevelEnergyQuery());
             _targetDial = Mathf.Clamp01(_shownEnergy / (float)_target);
+            PresentedEnergy = _shownEnergy;
+            LayoutExtraction();
             cageCaption.text = "收容 " + architecture.SendQuery(new MonsterCageQuery()).Count;
             geneCaption.text = "基因仓储  " + architecture.SendQuery(new GeneSlotsQuery()).Count + "/" + run.GeneCapacity;
             for (var i = 0; i < seatLamps.Length; i++)
@@ -96,6 +103,47 @@ namespace TheCall
                 seatLamps[i].color = !string.IsNullOrEmpty(operation.extractionSlots[i].monsterId)
                     ? new Color32(165, 238, 233, 255) : new Color32(67, 104, 116, 255);
             }
+        }
+
+        public void LayoutExtraction()
+        {
+            var active = operation.extractionSlots.Count(s => s.gameObject.activeSelf);
+            var step = 940f / Mathf.Max(1, active - 1);
+            for (var i = 0; i < operation.extractionSlots.Length; i++)
+                LabSceneView.Place((RectTransform)operation.extractionSlots[i].transform, 1990 + i * step, 687, 178, 290);
+        }
+
+        public void BeginEnergyPlayback(int initial)
+        {
+            _energyPlayback = true;
+            ReceiveEnergy(initial, 0);
+            if (energyColumns != null) foreach (var column in energyColumns) if (column != null) column.Show(0, 0);
+        }
+
+        public void ReceiveEnergy(float total, float receiving)
+        {
+            if (_receiving <= 0 && receiving > 0) EnergyArrivals++;
+            PresentedEnergy = total;
+            _shownEnergy = Mathf.RoundToInt(total);
+            _targetDial = Mathf.Clamp01(total / _target);
+            _dial = _targetDial;
+            _receiving = receiving;
+            if (collectorLamp != null) collectorLamp.Energy = receiving * 0.35f;
+            UpdateEnergyInstruments();
+        }
+
+        public void EndEnergyPlayback()
+        {
+            _energyPlayback = false;
+            _receiving = 0;
+            if (collectorLamp != null) collectorLamp.Energy = 0;
+            if (energyColumns != null) foreach (var column in energyColumns) if (column != null) column.Show(0, 0);
+        }
+
+        void UpdateEnergyInstruments()
+        {
+            if (needle != null) needle.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(70, -28, _dial));
+            if (collectorFluid != null) collectorFluid.localScale = new Vector3(1, Mathf.Lerp(0.035f, 1, _dial), 1);
         }
 
         public void PageDorm(int delta)
@@ -154,6 +202,7 @@ namespace TheCall
         {
             if (total == _shownEnergy) return;
             _shownEnergy = total;
+            PresentedEnergy = total;
             _targetDial = Mathf.Clamp01(total / (float)_target);
             _pulse = 1;
             _moteTime = 0;
@@ -165,16 +214,15 @@ namespace TheCall
         {
             var dt = Time.unscaledDeltaTime;
             _pulse = Mathf.MoveTowards(_pulse, 0, dt * 2);
-            _dial = Mathf.Lerp(_dial, _targetDial, 1 - Mathf.Exp(-dt * 7));
-            needle.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(70, -28, _dial) + Mathf.Sin(Time.unscaledTime * 36) * _pulse * 2);
+            if (!_energyPlayback) _dial = Mathf.Lerp(_dial, _targetDial, 1 - Mathf.Exp(-dt * 7));
+            UpdateEnergyInstruments();
             _door = Mathf.MoveTowards(_door, _roomOpen ? 0 : 1, dt * 1.45f);
             shutter.localScale = new Vector3(1, Mathf.Max(0.001f, _door), 1);
-            if (collectorFluid != null) collectorFluid.localScale = new Vector3(1, 0.6f + Mathf.Sin(Time.unscaledTime * 1.3f) * 0.07f + _pulse * 0.3f, 1);
             _moteTime += dt;
             for (var i = 0; i < motes.Length; i++)
             {
                 var t = _moteTime * 1.4f - i * 0.06f;
-                var live = t >= 0 && t <= 1;
+                var live = !_energyPlayback && t >= 0 && t <= 1;
                 motes[i].gameObject.SetActive(live);
                 if (!live) continue;
                 // Collected energy follows the authored horizontal pipe to the right-hand tank.
@@ -185,6 +233,7 @@ namespace TheCall
 
         void OnDisable()
         {
+            EndEnergyPlayback();
             _pulse = 0;
             _moteTime = 10;
             foreach (var mote in motes) if (mote != null) mote.gameObject.SetActive(false);

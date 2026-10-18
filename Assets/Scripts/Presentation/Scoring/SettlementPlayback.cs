@@ -36,7 +36,8 @@ namespace TheCall.Scoring
                     say, Finish, initialEnergy, initialGold,
                     (actor, target) => _architecture.SendCommand(new MoveSettlementSightCommand(actor, target)),
                     cell => _architecture.SendCommand(new ClearSettlementSightCommand(cell)),
-                    energy => { if (screen.lab != null) screen.lab.EnergyShown(energy); }));
+                    energy => { if (screen.lab != null && screen.lab.facility == null) screen.lab.EnergyShown(energy); },
+                    screen.lab != null ? screen.lab.facility : null));
                 return true;
             }
             catch

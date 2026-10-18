@@ -1,7 +1,9 @@
 #Requires -Version 7.3
+param([string]$EvidenceDirectory='docs/audit/2026-10-17/facility')
 $ErrorActionPreference='Stop'
 $project=Split-Path $PSScriptRoot -Parent
-$evidence=Join-Path $project 'docs/audit/2026-10-17/facility'
+$evidence=Join-Path $project $EvidenceDirectory
+New-Item -ItemType Directory -Path $evidence -Force | Out-Null
 function Invoke-Editor([string]$Name,[string[]]$Arguments=@()) {
     $raw=& unity --no-banner --non-interactive command $Name --project-path $project --caller plugin --skill unity-cli --format json -- @Arguments
     $response=($raw -join "`n") | ConvertFrom-Json
@@ -25,7 +27,9 @@ Invoke-Editor 'editor_play' | Out-Null
 & unity --no-banner --non-interactive status --until-ready --project-path $project --timeout 300 --format json | Out-Null
 $report=[Collections.Generic.List[object]]::new()
 try {
-    Eval 'return TheCall.Editor.FacilityArtAcceptance.Fixture(8);' | Write-Output
+    $fixtureDirectory=(Join-Path $evidence 'fixtures').Replace('\','/')
+    Eval "return TheCall.Editor.PresentationFixtureAcceptance.Begin(`"capacity`",8,`"$fixtureDirectory`");" | Write-Output
+    Eval 'UnityEngine.Object.FindAnyObjectByType<TheCall.OperationScreenView>().lab.facility.panorama.Focus(true,true);' | Out-Null
     foreach($size in @(@(1280,720),@(1920,1200),@(2560,1080))) {
         $width=$size[0]; $height=$size[1]
         $set=@"
@@ -52,7 +56,14 @@ var point=UnityEngine.RectTransformUtility.WorldToScreenPoint(null,rect.Transfor
 var hits=new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
 UnityEngine.EventSystems.EventSystem.current.RaycastAll(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){position=point},hits);
 if(hits.Count==0 || hits[0].gameObject.GetComponentInParent<TheCall.MonsterSlotView>()!=slot) throw new System.Exception("Aspect changed cage hit alignment");
-return new {width=UnityEngine.Screen.width,height=UnityEngine.Screen.height,rayAligned=true,renderer=((UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset)UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline).GetRenderer(0).GetType().Name};
+foreach(var extraction in op.extractionSlots.Where(s=>s.gameObject.activeInHierarchy)) {
+    var r=(UnityEngine.RectTransform)extraction.transform;
+    var p=UnityEngine.RectTransformUtility.WorldToScreenPoint(null,r.TransformPoint(r.rect.center));
+    hits.Clear();
+    UnityEngine.EventSystems.EventSystem.current.RaycastAll(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){position=p},hits);
+    if(hits.Count==0 || hits[0].gameObject.GetComponentInParent<TheCall.MonsterSlotView>()!=extraction) throw new System.Exception("Aspect changed extraction hit alignment");
+}
+return new {width=UnityEngine.Screen.width,height=UnityEngine.Screen.height,rayAligned=true,extractionAligned=true,renderer=((UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset)UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline).GetRenderer(0).GetType().Name};
 '@
         $report.Add($actual)
         $capture=Invoke-Editor 'capture_game_view' @('--source','screen','--width',[string]$width,'--height',[string]$height)

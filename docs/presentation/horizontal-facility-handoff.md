@@ -10,8 +10,8 @@
 | 两层宿舍 | 展示当前未上工的怪物，每页六只；保留悬停详情与拖放，可把工作区怪物拖回来休息 | `DormResidents`、原 `ReturnMonsterCommand` 路径 |
 | 右上培养舱 | 两个亲本；研究“大乱炖”后显示三个亲本。技能加号仍是培育基因预约落点 | 原 `breedingSlots`、`breedingSkills` |
 | 右上卷帘门 | “槽位扩容”研究入口；解锁后卷帘向上收起，露出第二培育室 | `FacilityRoomLock`、`Shutter` |
-| 下层基座 | 五个提取槽；员工证开放第六格。编号灯显示位置，已有结算仍按规则顺序播放 | 原 `extractionSlots` |
-| 表盘和收集罐 | 指针跟随已演出到的能量；收集罐自主脉动，结算能量沿管线流入并触发灯光脉冲 | `FacilitySceneView.EnergyShown` |
+| 下层基座 | 五格均匀铺开；员工证开放第六格后重新等距排列。独立分柱蓄能，离开当前格时压缩传能 | 原 `extractionSlots`、`FacilityEnergyColumn` |
+| 表盘和收集罐 | 分柱传能的同一进度驱动液面和指针；接收过程中触发小幅灯光变化 | `FacilitySceneView.ReceiveEnergy` |
 | 右侧收容柜 | 一怪一笼，独立铁栏前景与开口裁切，滚轮/上下按钮按整排升降 | `LabCageLift`，新尺寸为 344×308、每排高 154 |
 | 回收口 | 悬停张开独立上下颚；有效废弃后吞咽，并由原规则提取一个基因 | 原 `OperationZone`、`LabRecycler` |
 | 右侧药剂柜 | 三个基因格及扩容后的第四格，保留技能安装和预约规则 | 原 `SkillChipView` |
@@ -19,6 +19,20 @@
 | 商店 | 怪物/工具分类、购买、出售、付费刷新和下一天；摇杆随成功刷新动作，博士屏幕可交谈 | `FacilityShopView`、原 `ShopScreenView` 与 Commands |
 
 宿舍是休息状态的可视化入口。工作与休息天数、次日心情继续由原回合规则计算，拖回宿舍不会立即加心情。监控按“怪物笼 + 提取槽 + 培育槽”的当前归属汇总，商品和开局候选不计入全员。
+
+## 怪物结算的文字与传能
+
+`ScoringShow.Energy.cs` 在当前怪物头顶保留技能名和能量数字。辅助效果在实际来源怪物上方出现，然后把 TMP 字形的两个三角形拆开，汇入当前数字。数字单独膨胀，按结算记录的逐次结果变化。侧向计数、负加成、倍率、工具和永久写回使用同一条表现路径。
+
+辅助飘字避让当前主飘字和表盘，并限制在画面内。工具提示从工具栏下方出现。较大的能量数字自动缩小字号。进入支付前先收齐尾柱；跳过不会补播尾柱的传能动画。
+
+一格内的多次技能产出先进入本格分柱。结算轴离开时，分柱向下压缩，碎屑沿底部进入主柱；下一格可以同时开始出字。第一批碎屑到达后，主柱、指针和累计数字才开始增长。主柱和指针使用相同的连续进度，不再各自追赶最终整数。换位、消灭和支付等待已蓄能量传完。零能量只上浮淡出。
+
+`FacilityEnergyColumn` 控制液面和对应 `FacilityLamp.Energy`。底座与液面使用 `FacilityLit.mat`，真实 `Light2D` 照亮分柱附近。`ScoringGlyphShard` 保留字形的 UV、颜色和字体材质，兼容中文与备用字体。自然加速、点击快进、再次点击跳过沿用 `ScoringShow` 的节奏控制。取消时统一清理碎屑、液面和灯光。
+
+表盘外壳独立为 `GaugeHousing`，生产界面使用移除固定表盘的 `ProductionWorkShell`。开局、科研和结果页继续使用原 `ProductionShell`。场景升级入口为 `FacilityArtIntegration.ApplySettlementLayout()`；完整重建入口仍为 `Apply()`。两者均通过 Editor API 保存场景。
+
+局部演出验收运行 `scripts/verify-settlement-visuals.ps1`，逐帧与灯光像素检查运行 `scripts/audit-settlement-visuals.py`。证据位于 `docs/audit/2026-10-18/settlement/`，其中注入怪物的 fixture 与七天自然回放分别记录。
 
 ## 两区切换
 
@@ -28,7 +42,7 @@
 
 ## 灯光、配色与素材
 
-`Assets/Arts/Facility/manifest.json` 保存 PSD 的 SHA-256、图层来源、像素位置和导出 PNG 的哈希。背景按两个 1920×1080 区域导出，商店为独立的 1920×1080。33 张导出 PNG 使用无压缩、无 mipmap、双线性过滤。
+`Assets/Arts/Facility/manifest.json` 保存 PSD 的 SHA-256、图层来源、像素位置和导出 PNG 的哈希。背景按两个 1920×1080 区域导出，商店为独立的 1920×1080。35 张导出 PNG 使用无压缩、无 mipmap、双线性过滤。
 
 原画的色罩没有固化到导出图。底材保留明暗，以 `FacilitySprite.tint` 控制暖红、冷蓝和商店绿色。`FacilitySprite` 把同一套 RectTransform 坐标投影为 `SpriteRenderer`，实际使用 `FacilityLit.mat` 的 `Sprite-Lit-Default` 材质。语义槽位和文字继续留在 uGUI，保证拖放、遮罩和悬停一致。
 

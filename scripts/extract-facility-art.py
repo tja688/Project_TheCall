@@ -71,6 +71,11 @@ def main():
     save("DormShell", world.crop((0, 0, 1920, 1080)), (0, 0, 1920, 1080), [58])
     save("ProductionShell", world.crop((1920, 0, 3840, 1080)), (1920, 0, 3840, 1080), [58])
     save("ShopShell", painting.crop(SHOP), (0, 0, 1920, 1080), [3])
+    # Only the operation screen relocates its gauge. Other screens keep their original background.
+    work_skip = skip | blocked([150])
+    work_painting = psd.composite(layer_filter=lambda l: l.is_visible() and id(l) not in work_skip)
+    save("ProductionWorkShell", work_painting.crop((WORLD[0]+1920, WORLD[1], WORLD[0]+3840, WORLD[3])),
+         (1920, 0, 3840, 1080), [58])
     for name, index in [("DormGeometry", 68), ("DormTelevision", 69), ("DormCandy", 70),
                         ("DormPlant", 71), ("Platform", 127), ("Shutter", 132),
                         ("GaugeNeedle", 172), ("CollectorGlow", 98), ("CollectorCore", 93), ("CageDoor", 254),
@@ -81,6 +86,7 @@ def main():
         export(name, index)
     for j, i in enumerate([100, 103, 105, 107, 110]):
         export("Monster%02d" % (j+1), i)
+    export("GaugeHousing", 150, exclude=(172,))
     for name, part in [("CageRowBack", "CageBack"), ("CageRowFront", "CageDoor")]:
         picture = Image.open(OUT / (part + ".png"))
         row = Image.new("RGBA", (344, 154))

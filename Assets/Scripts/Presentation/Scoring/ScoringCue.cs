@@ -56,13 +56,14 @@ namespace TheCall.Scoring
 
     public readonly struct ScoreBeat
     {
-        public ScoreBeat(string text, BeatRole role, string sourceName, string caption, string sourceMonsterId = "", string sourceSkillInstanceId = "", string sourceToolId = "")
+        public ScoreBeat(string text, BeatRole role, string sourceName, string caption, string sourceMonsterId = "", string sourceSkillInstanceId = "", string sourceToolId = "", int energyAfter = 0)
         {
             Text = text;
             Role = role;
             SourceName = sourceName ?? "";
             SourceMonsterId = sourceMonsterId ?? ""; SourceSkillInstanceId = sourceSkillInstanceId ?? ""; SourceToolId = sourceToolId ?? "";
             Caption = caption ?? "";
+            EnergyAfter = energyAfter;
         }
 
         public string Text { get; }
@@ -72,6 +73,7 @@ namespace TheCall.Scoring
         public string SourceSkillInstanceId { get; }
         public string SourceToolId { get; }
         public string Caption { get; }
+        public int EnergyAfter { get; }
     }
 
     public sealed class MarkCue : ScoringCue
@@ -120,7 +122,7 @@ namespace TheCall.Scoring
             int writeback,
             Figure[] figures,
             int[] bits,
-            ScoreBeat[] beats)
+            ScoreBeat[] beats, int quotedEnergy = 0)
         {
             SlotIndex = slotIndex;
             SkillName = skillName;
@@ -130,11 +132,13 @@ namespace TheCall.Scoring
             Figures = figures ?? Array.Empty<Figure>();
             Bits = bits ?? Array.Empty<int>();
             Beats = beats ?? Array.Empty<ScoreBeat>();
+            QuotedEnergy = quotedEnergy;
         }
 
         public int SlotIndex { get; }
         public string SkillName { get; }
         public int Energy { get; }
+        public int QuotedEnergy { get; }
         public int Multiplier { get; }
         public int Writeback { get; }
         public IReadOnlyList<Figure> Figures { get; }

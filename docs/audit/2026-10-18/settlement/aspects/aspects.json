@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1280,
+    "height": 720,
+    "rayAligned": true,
+    "extractionAligned": true,
+    "renderer": "Renderer2D"
+  },
+  {
+    "width": 1920,
+    "height": 1200,
+    "rayAligned": true,
+    "extractionAligned": true,
+    "renderer": "Renderer2D"
+  },
+  {
+    "width": 2560,
+    "height": 1080,
+    "rayAligned": true,
+    "extractionAligned": true,
+    "renderer": "Renderer2D"
+  }
+]

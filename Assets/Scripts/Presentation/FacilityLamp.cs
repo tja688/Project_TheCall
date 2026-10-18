@@ -12,6 +12,7 @@ namespace TheCall
         public float phase;
         public bool flicker = true;
         public float Pulse { get; set; }
+        public float Energy { get; set; }
         readonly Vector3[] _corners = new Vector3[4];
 
         void LateUpdate()
@@ -33,7 +34,7 @@ namespace TheCall
             var cycle = Mathf.Repeat(time, 17.3f);
             var amount = flicker && cycle < 0.17f ? (Mathf.Sin(cycle * 110) > 0 ? 0.6f : 0.82f) : 0.97f + Mathf.Sin(time * 1.5f) * 0.03f;
             Pulse = Mathf.MoveTowards(Pulse, 0, Time.unscaledDeltaTime * 1.8f);
-            lightSource.intensity = intensity * amount + Pulse * 0.4f;
+            lightSource.intensity = intensity * amount + Pulse * 0.4f + Energy * 1.1f;
             lightSource.color = color;
             lightSource.enabled = isActiveAndEnabled;
         }

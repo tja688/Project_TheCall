@@ -6,6 +6,35 @@ namespace TheCall.Scoring
     public sealed class ScoringTapeTests
     {
         [Test]
+        public void 蜜能量体保留原值并按来源逐次加到四和十六()
+        {
+            var tape = ScoringTape.Arrange(new SettlementEntry[]
+            {
+                new SettlementLanding("honey", "蜜能量体", 4, 4, 16, 0, 3, 0, false,
+                    new[] { LandingAdd.Of("奇异香", 1, "scent", 0, "辅助怪物", "scent-instance") },
+                    new[] { LandingFactor.Of("自私", 2, "honey", -1, "蜜怪物"), LandingFactor.Of("瞩目", 2, "scent", 1, "辅助怪物") })
+            }, new[] { "empty", "honey", "third", "scent" });
+            var pop = tape.Cues.OfType<PopCue>().Single();
+            Assert.That(pop.QuotedEnergy, Is.EqualTo(3));
+            Assert.That(pop.SlotIndex, Is.EqualTo(1));
+            Assert.That(pop.Beats.Where(b => b.Role == BeatRole.Add || b.Role == BeatRole.Factor).Select(b => b.EnergyAfter), Is.EqualTo(new[] { 4, 8, 16 }));
+            Assert.That(pop.Beats.First(b => b.Role == BeatRole.Add).SourceMonsterId, Is.EqualTo("scent"));
+            Assert.That(tape.Produced, Is.EqualTo(16));
+        }
+
+        [Test]
+        public void 侧向与负加成保留真实的逐次数字()
+        {
+            var pop = ScoringTape.Arrange(new SettlementEntry[]
+            {
+                new SettlementLanding("left", "左能量体", 4, 2, 8, 0, 3, 2, true,
+                    new[] { LandingAdd.Of("心情", -2, "left", -1, "自身") },
+                    new[] { LandingFactor.Of("孤僻", 2, "left", -1, "自身") })
+            }, new[] { "left" }).Cues.OfType<PopCue>().Single();
+            Assert.That(pop.Beats.Where(b => b.Role == BeatRole.Side || b.Role == BeatRole.Add || b.Role == BeatRole.Factor).Select(b => b.EnergyAfter), Is.EqualTo(new[] { 6, 4, 8 }));
+        }
+
+        [Test]
         public void 加班支付解释区分带入本轮与累计()
         {
             var tape = ScoringTape.Arrange(new SettlementEntry[]

@@ -20,7 +20,7 @@ namespace TheCall.Scoring
             Action<string> say,
             Action completed,
             int initialEnergy = 0, int initialGold = 0,
-            Action<int, int> moved = null, Action<int> removed = null, Action<int> energyShown = null)
+            Action<int, int> moved = null, Action<int> removed = null, Action<int> energyShown = null, FacilitySceneView facility = null)
         {
             Tape = tape;
             ExtractionSlots = extractionSlots;
@@ -35,6 +35,7 @@ namespace TheCall.Scoring
             Moved = moved;
             Removed = removed;
             EnergyShown = energyShown;
+            Facility = facility;
         }
 
         public ScoringTape Tape { get; }
@@ -50,32 +51,24 @@ namespace TheCall.Scoring
         public Action<int, int> Moved { get; }
         public Action<int> Removed { get; }
         public Action<int> EnergyShown { get; }
+        public FacilitySceneView Facility { get; }
     }
 
-    public sealed class ScoringShow : MonoBehaviour, ICueSink
+    public sealed partial class ScoringShow : MonoBehaviour, ICueSink
     {
-        const float PlayheadLift = 70f;
-        const float FigureLift = 64f;
         const float WalkSeconds = 0.18f;
         const float SwapSeconds = 0.28f;
         const float RemoveSeconds = 0.22f;
         const float ShakeSeconds = 0.28f;
-        const float EatSquashSeconds = 0.07f;
-        const float EatSettleSeconds = 0.14f;
         const float PaceWarmup = 10f;
         const float PacePerStep = 0.08f;
         const float PaceCeiling = 3f;
         const float PayPaceCeiling = 2f;
         const float SkipPace = 4f;
         const float FigureLinger = 1.5f;
-        const float RiseSeconds = 0.12f * FigureLinger;
-        const float HoldSeconds = 0.14f * FigureLinger;
-        const float FlightSeconds = 0.36f * FigureLinger;
         const float FigureInSeconds = 0.12f * FigureLinger;
         const float FigureStaySeconds = 0.1f * FigureLinger;
         const float FigureOutSeconds = 0.1f * FigureLinger;
-        const float BeatGrowSeconds = 0.1f * FigureLinger;
-        const float BeatFlySeconds = 0.26f * FigureLinger;
         const float PunchSeconds = 0.08f * FigureLinger;
         const float SettleSeconds = 0.1f * FigureLinger;
         const float FigureShakeSeconds = 0.16f * FigureLinger;
@@ -168,11 +161,14 @@ namespace TheCall.Scoring
                 _boardHeld = true;
                 BindCurrent();
                 BuildOverlay();
+                BeginEnergy();
                 for (var i = 0; i < _tape.Cues.Count; i++)
                 {
                     var cue = _tape.Cues[i];
                     if (cue is PayCue)
                     {
+                        // Finish receiving energy with the current fast-forward/skip state.
+                        yield return FlushEnergy();
                         // Pay presentation is the first actual settlement screen, not Confirm().
                         MusicManager.EnterSettlement();
                         _cutToPay = false;
@@ -190,6 +186,7 @@ namespace TheCall.Scoring
                         _paying = false;
                 }
 
+                yield return FlushEnergy();
                 Finish();
             }
             finally
@@ -232,6 +229,7 @@ namespace TheCall.Scoring
         void TeardownPresentation()
         {
             DOTween.Kill(TweenId);
+            EndEnergy();
             RestoreCurrent();
             RestoreSlots();
             if (_boardHeld && _stage.BoardRoot != null)
@@ -293,6 +291,8 @@ namespace TheCall.Scoring
 
         IEnumerator Walk(WalkCue cue)
         {
+            while (_draining) yield return null;
+            BeginDrain();
             var point = PointOf(cue.ToIndex);
             if (point == null)
             {
@@ -300,7 +300,7 @@ namespace TheCall.Scoring
                 yield break;
             }
 
-            var target = point.Value + new Vector2(0f, PlayheadLift);
+            var target = HeadOf(cue.ToIndex) + new Vector2(0f, 70);
             _playhead.gameObject.SetActive(true);
             if (cue.FromIndex < 0 || SkipWait())
             {
@@ -314,175 +314,13 @@ namespace TheCall.Scoring
             _playhead.rectTransform.anchoredPosition = target;
         }
 
-        IEnumerator Pop(PopCue cue)
-        {
-            if (SkipWait())
-            {
-                AddShown(cue.Energy);
-                yield break;
-            }
-
-            var banked = false;
-            var beats = cue.Beats;
-            for (var i = 0; i < beats.Count; i++)
-            {
-                if (SkipWait())
-                    break;
-
-                var beat = beats[i];
-                if (beat.Role == BeatRole.Energy)
-                {
-                    yield return Bank(cue, beat);
-                    banked = true;
-                    continue;
-                }
-
-                yield return PlayBeat(cue.SlotIndex, beat);
-            }
-
-            if (!banked)
-                AddShown(cue.Energy);
-
-            RestoreSlot(cue.SlotIndex);
-        }
-
-        IEnumerator Bank(PopCue cue, ScoreBeat beat)
-        {
-            if (cue.Energy == 0)
-            {
-                yield return Bloom(cue.SlotIndex, beat);
-                AddShown(0);
-                yield break;
-            }
-
-            var portrait = PortraitAt(cue.SlotIndex);
-            var root = RootAt(cue.SlotIndex);
-            var rest = root != null && InRange(cue.SlotIndex) ? _slots[cue.SlotIndex].RestScale : Vector3.one;
-            if (portrait != null)
-                portrait.SetSpringMotion(-18f, 12f);
-
-            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
-            yield return ThrowScore(cue.Energy, head, root, rest, 78f);
-            if (portrait != null)
-                portrait.RestoreMotion();
-            if (root != null)
-                root.localScale = rest;
-        }
-
-        IEnumerator PlayBeat(int subject, ScoreBeat beat)
-        {
-            var actor = string.IsNullOrEmpty(beat.SourceToolId) ? ActorOf(subject, beat.SourceMonsterId) : -1;
-            if (actor == subject)
-            {
-                yield return Bloom(subject, beat);
-                yield break;
-            }
-
-            if (actor >= 0)
-                yield return ShakeFree(actor);
-
-            if (SkipWait())
-                yield break;
-
-            var origin = actor >= 0
-                ? OriginOf(actor) + new Vector2(0f, FigureLift)
-                : OriginOf(subject) + new Vector2(0f, FigureLift + 110f);
-            if (!string.IsNullOrEmpty(beat.SourceToolId))
-            {
-                foreach (var tool in _stage.BoardRoot.GetComponentsInChildren<ToolArtView>())
-                    if (tool.toolName == beat.SourceToolId)
-                    {
-                        origin = (Vector2)_stage.DragLayer.InverseTransformPoint(tool.transform.position);
-                        break;
-                    }
-            }
-            var label = SpawnMark(beat, origin);
-            label.rectTransform.localScale = Vector3.one * 0.35f;
-            var grow = Live(label.rectTransform.DOScale(1.05f, Span(BeatGrowSeconds)).SetEase(Ease.OutBack));
-            yield return Wait(BeatGrowSeconds);
-            grow.Kill(false);
-            label.rectTransform.localScale = Vector3.one;
-            if (SkipWait())
-            {
-                Destroy(label.gameObject);
-                yield break;
-            }
-
-            var target = OriginOf(subject) + new Vector2(0f, 36f);
-            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, 70f, 1, Span(BeatFlySeconds)));
-            yield return Wait(BeatFlySeconds);
-            fly.Kill(false);
-            label.rectTransform.anchoredPosition = target;
-            if (SkipWait())
-            {
-                Destroy(label.gameObject);
-                yield break;
-            }
-
-            yield return Absorb(subject, label);
-        }
-
-        IEnumerator Bloom(int subject, ScoreBeat beat)
-        {
-            var portrait = PortraitAt(subject);
-            if (portrait != null)
-                portrait.SetSpringMotion(-14f, 9f);
-
-            var head = OriginOf(subject) + new Vector2(0f, FigureLift);
-            var label = SpawnMark(beat, head + new Vector2(0f, -22f));
-            label.rectTransform.localScale = Vector3.one * 0.4f;
-            var rise = Live(label.rectTransform.DOAnchorPos(head + new Vector2(0f, 18f), Span(FigureInSeconds)).SetEase(Ease.OutBack));
-            var grow = Live(label.rectTransform.DOScale(1f, Span(FigureInSeconds)).SetEase(Ease.OutBack));
-            yield return Wait(FigureInSeconds);
-            rise.Kill(false);
-            grow.Kill(false);
-            if (SkipWait())
-            {
-                Release(label, subject);
-                yield break;
-            }
-
-            yield return Wait(FigureStaySeconds);
-            var fade = Live(label.DOFade(0f, Span(FigureOutSeconds)));
-            yield return Wait(FigureOutSeconds);
-            fade.Kill(false);
-            Release(label, subject);
-        }
-
-        IEnumerator Absorb(int subject, TextMeshProUGUI label)
-        {
-            var root = RootAt(subject);
-            var rest = InRange(subject) ? _slots[subject].RestScale : Vector3.one;
-            var portrait = PortraitAt(subject);
-            if (portrait != null)
-                portrait.SetSpringMotion(12f, -8f);
-
-            Tween punch = null;
-            if (root != null)
-                punch = Live(root.DOScale(rest * 1.12f, Span(PunchSeconds)).SetEase(Ease.OutQuad));
-            var pop = Live(label.rectTransform.DOScale(1.22f, Span(PunchSeconds)).SetEase(Ease.OutQuad));
-            yield return Wait(PunchSeconds);
-            punch?.Kill(false);
-            pop.Kill(false);
-            Tween back = null;
-            if (root != null)
-                back = Live(root.DOScale(rest, Span(SettleSeconds)).SetEase(Ease.OutQuad));
-            var fade = Live(label.DOFade(0f, Span(FigureOutSeconds)));
-            yield return Wait(SettleSeconds);
-            back?.Kill(false);
-            fade.Kill(false);
-            if (root != null)
-                root.localScale = rest;
-            if (portrait != null)
-                portrait.RestoreMotion();
-            if (label != null)
-                Destroy(label.gameObject);
-        }
-
         IEnumerator Mark(MarkCue cue)
         {
+            ActiveSlot = cue.SlotIndex;
+            EnergyPhase = cue.Tone == MarkTone.Miss ? "zero" : "mark";
+            if (cue.Tone == MarkTone.Miss) DisplayedSkillEnergy = 0;
             if (cue.Tone == MarkTone.Gold && cue.Amount != 0) yield return RollGold(cue.Amount);
-            var head = OriginOf(cue.SlotIndex) + new Vector2(0f, FigureLift);
+            var head = HeadOf(cue.SlotIndex);
             var label = Spawn(cue.Label, head + new Vector2(0f, -22f));
             label.fontSize = cue.Label.Length > 6 ? 40f : 52f;
             label.color = ToneColor(cue.Tone);
@@ -593,68 +431,6 @@ namespace TheCall.Scoring
             return -1;
         }
 
-        TextMeshProUGUI SpawnMark(ScoreBeat beat, Vector2 anchored)
-        {
-            var label = Spawn(MarkText(beat), anchored);
-            label.fontSize = SizeOf(beat.Role);
-            label.color = ColorOf(beat.Role);
-            label.richText = true;
-            return label;
-        }
-
-        static string MarkText(ScoreBeat beat)
-        {
-            if (string.IsNullOrEmpty(beat.Caption))
-                return beat.Text;
-
-            return beat.Text + "\n<size=46%>" + beat.Caption + "</size>";
-        }
-
-        static float SizeOf(BeatRole role)
-        {
-            switch (role)
-            {
-                case BeatRole.Energy:
-                    return 78f;
-                case BeatRole.Factor:
-                case BeatRole.Side:
-                    return 58f;
-                case BeatRole.Add:
-                case BeatRole.Again:
-                    return 52f;
-                case BeatRole.Writeback:
-                    return 32f;
-                default:
-                    return 44f;
-            }
-        }
-
-        static Color ColorOf(BeatRole role)
-        {
-            switch (role)
-            {
-                case BeatRole.Add:
-                    return new Color(0.45f, 1f, 0.62f, 1f);
-                case BeatRole.Factor:
-                case BeatRole.Side:
-                    return new Color(1f, 0.45f, 0.72f, 1f);
-                case BeatRole.Again:
-                    return new Color(0.45f, 0.9f, 1f, 1f);
-                case BeatRole.Writeback:
-                    return new Color(0.65f, 0.82f, 1f, 1f);
-                default:
-                    return new Color(1f, 0.93f, 0.55f, 1f);
-            }
-        }
-
-        void Release(TextMeshProUGUI label, int subject)
-        {
-            if (label != null)
-                Destroy(label.gameObject);
-
-            RestoreSlot(subject);
-        }
-
         void RestoreSlot(int index)
         {
             var portrait = PortraitAt(index);
@@ -668,6 +444,7 @@ namespace TheCall.Scoring
 
         IEnumerator Swap(SwapCue cue)
         {
+            yield return FlushEnergy();
             if (!cue.Happened)
             {
                 if (cue.ActorIndex >= 0)
@@ -702,6 +479,7 @@ namespace TheCall.Scoring
 
         IEnumerator Remove(RemovalCue cue)
         {
+            yield return FlushEnergy();
             if (cue.Happened)
             {
                 var root = RootAt(cue.VictimIndex);
@@ -948,94 +726,12 @@ namespace TheCall.Scoring
                 slot.View.monsterId = null;
         }
 
-        IEnumerator ThrowScore(int amount, Vector2 head, RectTransform monster, Vector3 monsterRest, float fontSize)
-        {
-            if (SkipWait())
-            {
-                AddShown(amount);
-                yield break;
-            }
-
-            var heavy = fontSize >= 70f;
-            var label = Spawn(Signed(amount), head + new Vector2(0f, -36f));
-            label.fontSize = fontSize;
-            label.color = new Color(1f, 0.93f, 0.55f, 1f);
-            label.rectTransform.localScale = Vector3.one * 0.4f;
-            var rise = Live(label.rectTransform.DOAnchorPos(head, Span(RiseSeconds)).SetEase(Ease.OutQuad));
-            var grow = Live(label.rectTransform.DOScale(heavy ? 1.3f : 1.12f, Span(RiseSeconds)).SetEase(Ease.OutBack));
-            Tween monsterUp = null;
-            if (monster != null)
-                monsterUp = Live(monster.DOScale(monsterRest * (heavy ? 1.18f : 1.1f), Span(RiseSeconds)).SetEase(Ease.OutQuad));
-
-            yield return Wait(RiseSeconds);
-            rise.Kill(false);
-            grow.Kill(false);
-            monsterUp?.Kill(false);
-            label.rectTransform.anchoredPosition = head;
-            label.rectTransform.localScale = Vector3.one;
-            if (monster != null)
-            {
-                var monsterDown = Live(monster.DOScale(monsterRest, Span(HoldSeconds)));
-                yield return Wait(HoldSeconds);
-                monsterDown.Kill(false);
-                monster.localScale = monsterRest;
-            }
-            else
-            {
-                yield return Wait(HoldSeconds);
-            }
-
-            if (SkipWait() || _current == null)
-            {
-                Destroy(label.gameObject);
-                AddShown(amount);
-                if (_current != null)
-                    yield return Eat();
-                yield break;
-            }
-
-            var target = CurrentPoint();
-            var fly = Live(label.rectTransform.DOJumpAnchorPos(target, heavy ? 96f : 72f, 1, Span(FlightSeconds)));
-            var shrink = Live(label.rectTransform.DOScale(0.35f, Span(FlightSeconds)).SetEase(Ease.InQuad));
-            yield return Wait(FlightSeconds);
-            fly.Kill(false);
-            shrink.Kill(false);
-            Destroy(label.gameObject);
-            AddShown(amount);
-            yield return Eat();
-        }
-
         void AddShown(int amount)
         {
             _shown += amount;
             _stage.EnergyShown?.Invoke(_shown);
             if (_current != null)
                 _current.text = _shown.ToString();
-        }
-
-        IEnumerator Eat()
-        {
-            if (_current == null)
-                yield break;
-
-            if (SkipWait())
-            {
-                RestoreCurrent();
-                yield break;
-            }
-
-            var rect = _current.rectTransform;
-            var rest = _currentRestScale;
-            _current.color = new Color(1f, 0.95f, 0.62f, _currentRestColor.a);
-            var squash = Live(rect.DOScale(new Vector3(rest.x * 1.28f, rest.y * 0.78f, rest.z), Span(EatSquashSeconds)).SetEase(Ease.OutQuad));
-            yield return Wait(EatSquashSeconds);
-            squash.Kill(false);
-            var settle = Live(rect.DOScale(rest, Span(EatSettleSeconds)).SetEase(Ease.OutBack));
-            var tint = Live(_current.DOColor(_currentRestColor, Span(EatSettleSeconds)));
-            yield return Wait(EatSettleSeconds);
-            settle.Kill(false);
-            tint.Kill(false);
-            RestoreCurrent();
         }
 
         void BindCurrent()
@@ -1146,7 +842,7 @@ namespace TheCall.Scoring
             }
 
             _playhead.gameObject.SetActive(true);
-            _playhead.rectTransform.anchoredPosition = point.Value + new Vector2(0f, PlayheadLift);
+            _playhead.rectTransform.anchoredPosition = HeadOf(index) + new Vector2(0f, 70);
         }
 
         void OnBlocked()
@@ -1182,14 +878,6 @@ namespace TheCall.Scoring
 
             var view = _slots[index].View.transform as RectTransform;
             return view != null ? BlockerPoint(view) : (Vector2?)null;
-        }
-
-        Vector2 OriginOf(int slotIndex)
-        {
-            var point = PointOf(slotIndex);
-            if (slotIndex >= 0 && point != null)
-                return point.Value;
-            return BesideTotal();
         }
 
         Vector2 BesideTotal() => CurrentPoint() + new Vector2(0f, -90f);

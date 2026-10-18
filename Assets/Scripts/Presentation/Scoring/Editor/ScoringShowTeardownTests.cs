@@ -209,6 +209,29 @@ namespace TheCall.Scoring
             yield return null;
         }
 
+        [UnityTest]
+        public IEnumerator 不含支付页的演出也收齐最后一格能量后再完成()
+        {
+            var root = new GameObject("EnergyOnlyPlayback", typeof(RectTransform), typeof(Canvas));
+            var completed = 0;
+            var shown = 0;
+            try
+            {
+                var board = (RectTransform)root.transform;
+                var tape = ScoringTape.Arrange(new SettlementEntry[]
+                    { new SettlementLanding("sample", "能量体", 3, 1, 3, 0) }, Array.Empty<string>());
+                var show = ScoringShow.Play(new ScoringStage(tape, Array.Empty<MonsterSlotView>(), board, board,
+                    null, null, null, () => completed++, energyShown: total => shown = total));
+                show.Advance();
+                show.Advance();
+                var deadline = Time.realtimeSinceStartup + 2;
+                while (completed == 0 && Time.realtimeSinceStartup < deadline) yield return null;
+                Assert.That(completed, Is.EqualTo(1));
+                Assert.That(shown, Is.EqualTo(3));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); }
+        }
+
         static Action CompletionOf(TheCallPresentation presentation) =>
             (Action)Delegate.CreateDelegate(typeof(Action), presentation,
                 typeof(TheCallPresentation).GetMethod("FinishSettle", BindingFlags.NonPublic | BindingFlags.Instance));

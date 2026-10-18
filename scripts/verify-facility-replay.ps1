@@ -1,8 +1,11 @@
 #Requires -Version 7.3
-param([int[]]$Modes=@(0,1,2))
+param([int[]]$Modes=@(0,1,2), [string]$EvidenceDirectory='docs/audit/2026-10-17/facility')
 $ErrorActionPreference='Stop'
 $project=Split-Path $PSScriptRoot -Parent
-$evidence=Join-Path $project 'docs/audit/2026-10-17/facility'
+$evidence=Join-Path $project $EvidenceDirectory
+New-Item -ItemType Directory -Path $evidence -Force | Out-Null
+$recording=Join-Path $project ('Temp/FacilityReplay/'+[Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $recording -Force | Out-Null
 function Invoke-Editor([string]$Name,[string[]]$Arguments=@()) {
     $raw=& unity --no-banner --non-interactive command $Name --project-path $project --caller plugin --skill unity-cli --format json -- @Arguments
     $response=($raw -join "`n") | ConvertFrom-Json
@@ -21,7 +24,39 @@ $plan=(Join-Path $project 'docs/audit/2026-10-12/remediation/evidence/natural-pl
 try {
     foreach($mode in $Modes) {
         if($mode -notin 0,1,2) {throw 'Modes must be 0, 1 or 2'}
-        $directory=(Join-Path $evidence "natural-$mode").Replace('\','/')
+        if($mode -eq 0) {
+            $instrumentPath=(Join-Path $evidence 'instrument-transforms.json').Replace('\','/')
+            $probe=@"
+var samples=0; var maxNeedleError=0f; var maxTankError=0f; var peakLight=0f;
+var energyValues=new System.Collections.Generic.HashSet<int>();
+var observed=false; var lastFrame=-1;
+UnityEditor.EditorApplication.CallbackFunction probe=null;
+probe=()=> {
+    if(!UnityEngine.Application.isPlaying) {UnityEditor.EditorApplication.update-=probe; return;}
+    var show=UnityEngine.Object.FindAnyObjectByType<TheCall.Scoring.ScoringShow>();
+    if(show==null) {
+        if(!observed) return;
+        System.IO.File.WriteAllText("$instrumentPath",Newtonsoft.Json.JsonConvert.SerializeObject(new {samples, distinctEnergyValues=energyValues.Count,maxNeedleError,maxTankError,peakLight},Newtonsoft.Json.Formatting.Indented));
+        UnityEditor.EditorApplication.update-=probe; return;
+    }
+    if(lastFrame==UnityEngine.Time.frameCount) return;
+    lastFrame=UnityEngine.Time.frameCount; observed=true;
+    var view=UnityEngine.Object.FindAnyObjectByType<TheCall.FacilitySceneView>();
+    var due=TheCall.TheCallApp.Interface.SendQuery(new TheCall.LevelTargetQuery()).EnergyDue;
+    var ratio=UnityEngine.Mathf.Clamp01(view.PresentedEnergy/UnityEngine.Mathf.Max(1,due));
+    var actual=UnityEngine.Mathf.DeltaAngle(0,view.needle.localEulerAngles.z);
+    maxNeedleError=UnityEngine.Mathf.Max(maxNeedleError,UnityEngine.Mathf.Abs(actual-UnityEngine.Mathf.Lerp(70,-28,ratio)));
+    maxTankError=UnityEngine.Mathf.Max(maxTankError,UnityEngine.Mathf.Abs(view.collectorFluid.localScale.y-UnityEngine.Mathf.Lerp(0.035f,1,ratio)));
+    peakLight=UnityEngine.Mathf.Max(peakLight,view.collectorLamp.lightSource.intensity);
+    energyValues.Add(UnityEngine.Mathf.RoundToInt(view.PresentedEnergy*1000)); samples++;
+};
+UnityEditor.EditorApplication.update+=probe;
+"@
+            Eval $probe | Out-Null
+        }
+        # Live traces are repeatedly rewritten. Keep their single writer in ignored Temp,
+        # away from repository readers that can memory-map text files on Windows.
+        $directory=(Join-Path $recording "natural-$mode").Replace('\','/')
         Eval "return TheCall.Editor.M5PlayModeAutomation.BeginPlan(`"$plan`",$mode,`"$directory`");" | Out-Null
         $deadline=(Get-Date).AddMinutes(20); $previous=''
         do {
@@ -32,6 +67,9 @@ try {
             if((Get-Date) -gt $deadline) {throw "Replay timeout mode=$mode"}
         } while($progress -match '^running')
         if($progress -ne 'completed 125') {throw "Wrong input count: $progress"}
+        $published=Join-Path $evidence "natural-$mode"
+        New-Item -ItemType Directory -Path $published -Force | Out-Null
+        Get-ChildItem -LiteralPath $directory -File | Copy-Item -Destination $published -Force
         $oldFailure=Join-Path $directory 'player-replay-failure.txt'
         if(Test-Path -LiteralPath $oldFailure) {
             $archive=Join-Path $project 'Temp/FacilityArt/previous-replay-failures'
@@ -54,6 +92,10 @@ try {
         }
     }
     $comparison | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $evidence 'replay-comparison.json') -Encoding utf8
+    if(0 -in $Modes) {
+        $instruments=Get-Content -LiteralPath (Join-Path $evidence 'instrument-transforms.json') -Raw | ConvertFrom-Json
+        if($instruments.samples -lt 5 -or $instruments.distinctEnergyValues -lt 5 -or $instruments.maxNeedleError -gt 0.001 -or $instruments.maxTankError -gt 0.00001 -or $instruments.peakLight -lt 0.2) {throw 'Actual instrument transforms or receiving light failed'}
+    }
     $console=Invoke-Editor 'console' @('--tail','50','--level','error')
     $console | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $evidence 'replay-console.json') -Encoding utf8
     if($console.entries.Count -gt 0) {throw 'Runtime Unity error during recorded player replay'}

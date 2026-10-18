@@ -1,0 +1,105 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "normal total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 25,
+      "shown": 25,
+      "frames": 884,
+      "seconds": 16.68,
+      "maximumDialError": 1.4305114759416426e-08,
+      "maximumTankError": 3.404617310298619e-08
+    },
+    {
+      "check": "fast total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 25,
+      "shown": 25,
+      "frames": 253,
+      "seconds": 4.651,
+      "maximumDialError": 1.1920928966180355e-08,
+      "maximumTankError": 1.8739700347047972e-08
+    },
+    {
+      "check": "skip total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 25,
+      "shown": 25,
+      "frames": 48,
+      "seconds": 0.895,
+      "maximumDialError": 2.682209010451686e-09,
+      "maximumTankError": 1.6689300497141346e-08
+    },
+    {
+      "check": "complex-six total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 50,
+      "shown": 50,
+      "frames": 2947,
+      "seconds": 54.542,
+      "maximumDialError": 2.8610229518832853e-08,
+      "maximumTankError": 5.264282232353423e-08
+    },
+    {
+      "check": "retained total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 60,
+      "shown": 60,
+      "frames": 902,
+      "seconds": 16.801,
+      "maximumDialError": 2.8610229518832853e-08,
+      "maximumTankError": 5.7411193910006375e-08
+    },
+    {
+      "check": "zero total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 0,
+      "shown": 0,
+      "frames": 332,
+      "seconds": 6.16,
+      "maximumDialError": 0.0,
+      "maximumTankError": 1.490116086078075e-10
+    },
+    {
+      "check": "tools total, cleanup, continuous needle and tank",
+      "passed": true,
+      "expected": 28,
+      "shown": 28,
+      "frames": 979,
+      "seconds": 18.262,
+      "maximumDialError": 2.1457672083613488e-08,
+      "maximumTankError": 4.301071165890846e-08
+    },
+    {
+      "check": "honey 3 -> scent -> 4, real glyph fragments, charge held until next seat, proportional drain",
+      "passed": true,
+      "transferSamples": 29,
+      "maximumConservationError": 1.223328383315181e-07
+    },
+    {
+      "check": "existing natural acceleration still runs",
+      "passed": true,
+      "maximumPace": 1.2400000095367432
+    },
+    {
+      "check": "zero energy floats away without fragments, charging or transfer",
+      "passed": true
+    },
+    {
+      "check": "captions avoid each other, the gauge and screen edges throughout all seven fixtures",
+      "passed": true
+    },
+    {
+      "check": "actual Light2D changes rendered column pixels at fixed fill",
+      "passed": true,
+      "roi": [
+        305,
+        805,
+        368,
+        932
+      ],
+      "meanPixelDifference": 17.8953
+    }
+  ]
+}

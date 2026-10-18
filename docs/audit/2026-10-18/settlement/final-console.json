@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "tail": "25",
+      "level": "error"
+    },
+    "result": {
+      "entries": [],
+      "cursor": 562553,
+      "session": "b0376a5cdf584514ad1420f1a8ed2821",
+      "returned": 0,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 52,
+        "log": 42
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-18T04:41:48.7685207Z",
+        "ageMs": 34,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 58,
+        "consoleLogs": 42,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

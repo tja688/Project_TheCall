@@ -72,7 +72,7 @@ namespace TheCall.Scoring
                     landing.Writeback,
                     FiguresOf(landing),
                     BitsOf(landing),
-                    BeatsOf(landing)));
+                    BeatsOf(landing), landing.Quote));
                 produced += landing.Energy;
                 return;
             }
@@ -173,6 +173,7 @@ namespace TheCall.Scoring
         static ScoreBeat[] BeatsOf(SettlementLanding landing)
         {
             var beats = new List<ScoreBeat>();
+            var running = landing.Quote;
             var formula = landing.Side || landing.Adds.Count > 0 || landing.Factors.Count > 0;
             if (formula)
             {
@@ -180,18 +181,23 @@ namespace TheCall.Scoring
                     beats.Add(new ScoreBeat(landing.Quote.ToString(), BeatRole.Quote, "", ""));
 
                 if (landing.Side)
-                    beats.Add(new ScoreBeat("×" + landing.SideCount, BeatRole.Side, "", landing.CountedSideName));
+                {
+                    running *= landing.SideCount;
+                    beats.Add(new ScoreBeat("×" + landing.SideCount, BeatRole.Side, "", landing.CountedSideName, energyAfter: running));
+                }
 
                 for (var i = 0; i < landing.Adds.Count; i++)
                 {
                     var add = landing.Adds[i];
-                    beats.Add(new ScoreBeat(Signed(add.Amount), BeatRole.Add, Other(add.SourceName, landing.MonsterName), add.Label, add.SourceMonsterId, add.SourceSkillInstanceId, add.SourceToolId));
+                    running += add.Amount;
+                    beats.Add(new ScoreBeat(Signed(add.Amount), BeatRole.Add, Other(add.SourceName, landing.MonsterName), add.Label, add.SourceMonsterId, add.SourceSkillInstanceId, add.SourceToolId, running));
                 }
 
                 for (var i = 0; i < landing.Factors.Count; i++)
                 {
                     var factor = landing.Factors[i];
-                    beats.Add(new ScoreBeat("×" + factor.Factor, BeatRole.Factor, Other(factor.SourceName, landing.MonsterName), factor.Label, factor.SourceMonsterId, factor.SourceSkillInstanceId, factor.SourceToolId));
+                    running *= factor.Factor;
+                    beats.Add(new ScoreBeat("×" + factor.Factor, BeatRole.Factor, Other(factor.SourceName, landing.MonsterName), factor.Label, factor.SourceMonsterId, factor.SourceSkillInstanceId, factor.SourceToolId, running));
                 }
             }
 
