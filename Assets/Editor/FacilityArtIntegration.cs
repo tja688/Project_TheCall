@@ -448,12 +448,14 @@ namespace TheCall.Editor
             shop.balanceLabel.transform.SetParent(stage, false); At(shop.balanceLabel.transform, 925, 929, 180, 46); Style(shop.balanceLabel, 28, Ink);
             Label(stage, "FacilityShopGoldCaption", "账户金币", 511, 932, 260, 42, 23, Ink);
             shop.portraitBalanceLabel.gameObject.SetActive(false);
-            var screen = Solid(stage, "FacilityDoctorScreen", new Color32(15, 44, 38, 247), 1344, 257, 440, 385);
-            view.screenText = Label(screen.transform, "Transmission", "博士通讯", 23, 19, 394, 310, 20, new Color32(163, 240, 207, 255));
+            var screen = Solid(stage, "FacilityDoctorScreen", new Color32(8, 28, 24, 232), 1344, 508, 410, 68);
+            view.screenText = Label(screen.transform, "Transmission", "", 12, 14, 386, 48, 18, new Color32(236, 255, 246, 255));
             view.screenText.alignment = TextAlignmentOptions.TopLeft;
-            view.signalBars = new RectTransform[19];
-            for (var i = 0; i < view.signalBars.Length; i++)
-                view.signalBars[i] = Solid(screen.transform, "Signal"+i, new Color32(112, 205, 172, 160), 26+i*20, 339, 8, 22).rectTransform;
+            view.doctorSprite = Sprite("Doctor");
+            view.signalBars = System.Array.Empty<RectTransform>();
+            for (var i = screen.transform.childCount - 1; i >= 0; i--)
+                if (screen.transform.GetChild(i).name.StartsWith("Signal")) screen.transform.GetChild(i).gameObject.SetActive(false);
+            view.LayoutDoctor(stage);
             var talk = NewButton(stage, "FacilityDoctorTalk", "交谈", 1577, 726, 210, 91, 25);
             talk.onClick = new Button.ButtonClickedEvent(); UnityEventTools.AddPersistentListener(talk.onClick, view.Talk);
             var hud = Node(root, "FacilityShopHud", 0, 0, 1920, 1080);
