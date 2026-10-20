@@ -49,33 +49,13 @@ namespace TheCall.Editor
             var global = Object.FindObjectsByType<Light2D>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .First(x => x.lightType == Light2D.LightType.Global);
             global.color = Color.white; global.intensity = 0.84f;
-            var catalog = AssetDatabase.LoadAssetAtPath<ShadowMonsterCatalog>("Assets/Resources/ShadowMonsterCatalog.asset");
-            if (catalog == null)
-            { catalog = ScriptableObject.CreateInstance<ShadowMonsterCatalog>(); AssetDatabase.CreateAsset(catalog, "Assets/Resources/ShadowMonsterCatalog.asset"); }
-            catalog.silhouettes = Enumerable.Range(1, 5).Select(i => Sprite("Monster" + i.ToString("00"))).ToArray();
-            EditorUtility.SetDirty(catalog);
             AuthorOperation(op);
             AuthorShop(Object.FindAnyObjectByType<ShopScreenView>(FindObjectsInactive.Include));
             AuthorSupportingScreens();
-            foreach (var portrait in Object.FindObjectsByType<MonsterPortrait>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-            { portrait.UseShadowArtwork(); EditorUtility.SetDirty(portrait); }
-            // Runtime clones inherit the scene templates. The retained assembly workbench remains opt-in.
-            foreach (var path in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Prefabs" }).Select(AssetDatabase.GUIDToAssetPath))
-            {
-                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (asset.GetComponentInChildren<MonsterPortrait>(true) == null) continue;
-                var root = PrefabUtility.LoadPrefabContents(path);
-                try
-                {
-                    foreach (var portrait in root.GetComponentsInChildren<MonsterPortrait>(true)) portrait.UseShadowArtwork();
-                    PrefabUtility.SaveAsPrefabAsset(root, path);
-                }
-                finally { PrefabUtility.UnloadPrefabContents(root); }
-            }
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             AssetDatabase.SaveAssets();
-            return "PASS saved horizontal facility, formal shop, five silhouettes, live URP 2D lamps and semantic slots";
+            return "PASS saved horizontal facility, formal shop, modular monsters, live URP 2D lamps and semantic slots";
         }
 
         static void Import()
@@ -345,7 +325,6 @@ namespace TheCall.Editor
                 foreach (Transform child in slot.transform)
                     if (child.name.StartsWith("Facility", StringComparison.Ordinal)) child.gameObject.SetActive(false);
                 At(slot.portrait.transform, 13, 0, 174, 222);
-                slot.portrait.SetShadowTint(new Color32(82, 25, 28, 255));
                 slot.title = Label(slot.transform, "ResidentCaption", "", -20, 215, 240, 28, 16, new Color32(255, 216, 204, 255));
                 var zone = Component<OperationZone>(slot.gameObject); zone.Place = LandingPlace.Cage; zone.monsterView = slot;
                 var drag = Component<OperationPayloadDrag>(slot.gameObject); drag.payloadKind = PayloadKind.Monster; drag.session = op.pointer;
@@ -450,9 +429,8 @@ namespace TheCall.Editor
             {
                 card.transform.SetParent(buy, false);
                 var image = Component<Image>(card.gameObject); image.sprite = null; image.color = new Color32(16, 43, 40, 241); image.raycastTarget = false;
-                foreach (var portrait in card.GetComponentsInChildren<MonsterPortrait>(true)) portrait.UseShadowArtwork();
                 if (card.portrait != null)
-                { At(card.portrait.transform, 18, 28, 136, 155); card.portrait.SetShadowTint(new Color32(113, 181, 165, 255)); }
+                { At(card.portrait.transform, 18, 28, 136, 155); }
                 if (card.icon != null) At(card.icon.transform, 25, 39, 120, 132);
                 At(card.title.transform, 163, 18, 182, 40); Style(card.title, 23, Ink);
                 At(card.body.transform, 163, 67, 178, 96); Style(card.body, 16, Ink); card.body.alignment = TextAlignmentOptions.TopLeft;
@@ -481,7 +459,6 @@ namespace TheCall.Editor
                 var slot = shop.sellSlots[i]; SkinSlot(slot, i%2*394, i/2*192, 380, 180);
                 slot.GetComponent<Image>().color = new Color32(18, 43, 39, 242);
                 At(slot.portrait.transform, 10, 9, 136, 158);
-                slot.portrait.SetShadowTint(new Color32(113, 181, 165, 255));
                 slot.title.gameObject.SetActive(true); At(slot.title.transform, 153, 16, 212, 49); Style(slot.title, 19, Ink);
                 slot.subtitle.gameObject.SetActive(true); At(slot.subtitle.transform, 153, 70, 212, 56); Style(slot.subtitle, 15, Ink);
                 var bar = slot.transform.Find("ActionBar");
@@ -552,7 +529,6 @@ namespace TheCall.Editor
         {
             At(slot.transform, x, y, w, h);
             var image = Component<Image>(slot.gameObject); image.sprite = null; image.color = new Color(0, 0, 0, 0.001f); image.raycastTarget = true;
-            slot.portrait.UseShadowArtwork();
             foreach (var text in slot.GetComponentsInChildren<TMP_Text>(true)) text.gameObject.SetActive(false);
             foreach (var badge in new[] { slot.personalityIcon, slot.raceIcon, slot.moodIcon }) if (badge != null) badge.gameObject.SetActive(false);
             foreach (Transform child in slot.transform)
@@ -577,8 +553,6 @@ namespace TheCall.Editor
                 { background.sprite = Sprite("ProductionShell"); background.color = new Color32(40, 72, 80, 255); background.type = Image.Type.Simple; background.raycastTarget = false; }
                 var ambience = root.Find("Ambience"); if (ambience != null) ambience.gameObject.SetActive(false);
             }
-            foreach (var slot in opening.candidates) slot.portrait.SetShadowTint(new Color32(121, 190, 197, 255));
-            result.portrait.SetShadowTint(new Color32(121, 190, 197, 255));
             var research = Object.FindAnyObjectByType<ResearchScreenView>(FindObjectsInactive.Include);
             var researchShell = research.transform.Find("LabResearchShell")?.GetComponent<Image>();
             if (researchShell != null) { researchShell.sprite = Sprite("ProductionShell"); researchShell.color = Cold; }

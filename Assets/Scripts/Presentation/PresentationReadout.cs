@@ -15,7 +15,7 @@ namespace TheCall
             if (slot.portrait != null)
             {
                 slot.portrait.gameObject.SetActive(occupied);
-                if (occupied) slot.portrait.Show(monster.Appearance);
+                if (occupied) slot.portrait.Show(monster);
                 else slot.portrait.Clear();
             }
             if (slot.emptyMark != null) slot.emptyMark.SetActive(!occupied);

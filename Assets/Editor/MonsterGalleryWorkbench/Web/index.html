@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>怪物立绘抽查</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="title">
+      <strong>怪物立绘抽查</strong>
+      <span>按开局、商店和培育的真实抽取来换图。浅色方块是游戏里 279×299 的画像框，放大了两倍。</span>
+    </div>
+    <div class="status">
+      <span id="connectionBadge" data-ok="0">未连接</span>
+      <span id="statusLine">正在连接编辑器</span>
+    </div>
+  </header>
+  <div class="filters" id="filters">
+    <button type="button" data-source="any">全部</button>
+    <button type="button" data-source="opening">开局</button>
+    <button type="button" data-source="shop">商店</button>
+    <button type="button" data-source="breed">培育</button>
+  </div>
+  <main>
+    <section class="stage">
+      <img id="portrait" alt="当前怪物立绘" />
+      <p id="empty">还没有怪物。</p>
+    </section>
+    <aside>
+      <h2 id="summary">—</h2>
+      <dl id="facts"></dl>
+      <details>
+        <summary>部件叠放顺序</summary>
+        <div class="parts" id="parts"></div>
+      </details>
+    </aside>
+  </main>
+  <footer>
+    <div class="actions">
+      <button type="button" id="previous">上一只</button>
+      <button type="button" id="roll" class="primary">随机下一只</button>
+      <button type="button" id="next">下一只</button>
+      <button type="button" id="pose">换个姿势</button>
+    </div>
+    <p id="errorLine"></p>
+    <p class="hint">空格随机新的一只，左右方向键翻记录，P 换姿势。</p>
+    <div class="strip" id="strip"></div>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>

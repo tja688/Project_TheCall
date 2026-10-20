@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "checks": 15,
+  "observedFrames": 1316,
+  "transitions": [
+    {
+      "transition": "01-opening-production",
+      "frames": 90,
+      "seconds": 0.966,
+      "maximumWithinFrameAlphaSpread": 0.661,
+      "movingTracks": 46
+    },
+    {
+      "transition": "02-research-open",
+      "frames": 175,
+      "seconds": 0.777,
+      "maximumWithinFrameAlphaSpread": 0.846,
+      "movingTracks": 46
+    },
+    {
+      "transition": "03-research-close",
+      "frames": 119,
+      "seconds": 0.959,
+      "maximumWithinFrameAlphaSpread": 0.884,
+      "movingTracks": 46
+    },
+    {
+      "transition": "04-research-unscaled",
+      "frames": 165,
+      "seconds": 0.785,
+      "maximumWithinFrameAlphaSpread": 0.835,
+      "movingTracks": 46
+    },
+    {
+      "transition": "05-settlement-shop",
+      "frames": 88,
+      "seconds": 0.933,
+      "maximumWithinFrameAlphaSpread": 0.699,
+      "movingTracks": 62
+    },
+    {
+      "transition": "06-shop-research",
+      "frames": 212,
+      "seconds": 0.775,
+      "maximumWithinFrameAlphaSpread": 0.845,
+      "movingTracks": 26
+    },
+    {
+      "transition": "07-research-shop",
+      "frames": 194,
+      "seconds": 0.955,
+      "maximumWithinFrameAlphaSpread": 0.823,
+      "movingTracks": 25
+    },
+    {
+      "transition": "08-shop-next-day",
+      "frames": 153,
+      "seconds": 0.732,
+      "maximumWithinFrameAlphaSpread": 0.508,
+      "movingTracks": 21
+    },
+    {
+      "transition": "09-level-production",
+      "frames": 120,
+      "seconds": 0.956,
+      "maximumWithinFrameAlphaSpread": 0.885,
+      "movingTracks": 43
+    }
+  ]
+}

@@ -10,7 +10,7 @@ namespace TheCall
 {
     /// <summary>
     /// 把场景里已经摆好的界面接到核心命令和查询上。
-    /// 这里不创建控件，也不改 RectTransform。换图、挪位置都在场景里做。
+    /// 这里只协调输入、界面交接和演出生命周期。素材布局在场景中，临时姿态归 ScreenAssembly。
     /// </summary>
     public sealed partial class TheCallPresentation : MonoBehaviour, IController
     {
@@ -78,6 +78,7 @@ namespace TheCall
 
         void RetirePlayback()
         {
+            CancelTransition();
             var panorama = _operation != null ? _operation.pointer?.panorama : null;
             if (panorama != null) panorama.Locked = false;
             _sessionVersion++;
@@ -96,6 +97,7 @@ namespace TheCall
         public void StartSession()
         {
             RetirePlayback();
+            _visibleScreen = null;
             _sessionStarted = true;
             // Session resets stop pooled effects and both BGM tracks before reopening the menu.
             GameSfx.StopAll();
@@ -273,6 +275,11 @@ namespace TheCall
 
         public void Refresh()
         {
+            if (Transitioning)
+            {
+                _refreshAfterTransition = true;
+                return;
+            }
             if (_playback != null && _playback.IsPlaying)
                 return;
 
@@ -309,38 +316,32 @@ namespace TheCall
 
         void DrawOpening()
         {
-            Show(_opening);
-            _opening?.Render(GetArchitecture(), _spriteCatalog);
+            Show(_opening, () => _opening?.Render(GetArchitecture(), _spriteCatalog));
         }
 
         void DrawLevelStart()
         {
-            Show(_levelStart);
-            _levelStart?.Render(GetArchitecture());
+            Show(_levelStart, () => _levelStart?.Render(GetArchitecture()));
         }
 
         void DrawOperation()
         {
-            Show(_operation);
-            _operation?.Render(GetArchitecture(), _spriteCatalog);
+            Show(_operation, () => _operation?.Render(GetArchitecture(), _spriteCatalog));
         }
 
         void DrawShop()
         {
-            Show(_shop);
-            _shop?.Render(GetArchitecture(), _spriteCatalog, _sellTab, BindSellSlot);
+            Show(_shop, () => _shop?.Render(GetArchitecture(), _spriteCatalog, _sellTab, BindSellSlot));
         }
 
         void DrawResearch()
         {
-            Show(_research);
-            if (_research != null) _selectedTech = _research.Render(GetArchitecture(), _selectedTech);
+            Show(_research, () => { if (_research != null) _selectedTech = _research.Render(GetArchitecture(), _selectedTech); });
         }
 
         void DrawResult(bool victory)
         {
-            Show(_result);
-            _result?.Render(victory);
+            Show(_result, () => _result?.Render(victory));
         }
 
         void BindSellSlot(MonsterSlotView slot) => Listen(slot != null ? slot.button : null, () => OnSell(slot), false);
@@ -382,7 +383,7 @@ namespace TheCall
 
         internal bool CommitDrop(OperationDrop drop)
         {
-            if (_busy || !isActiveAndEnabled) return false;
+            if (_busy || Transitioning || !isActiveAndEnabled) return false;
             var applied = this.SendCommand(new CommitOperationDropCommand(drop));
             if (applied)
             {

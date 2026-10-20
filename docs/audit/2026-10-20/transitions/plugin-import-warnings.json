@@ -1,0 +1,150 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "tail": "30",
+      "level": "warn"
+    },
+    "result": {
+      "entries": [
+        {
+          "seq": 565248,
+          "timestampUtc": "2026-10-20T10:42:48.5253999Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DemiLib/Core/Editor/DemiEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565249,
+          "timestampUtc": "2026-10-20T10:42:48.5264033Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DemiLib/Core/DemiLib.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565250,
+          "timestampUtc": "2026-10-20T10:42:48.5274028Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTween/Editor/DOTweenEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565251,
+          "timestampUtc": "2026-10-20T10:42:48.5274028Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565252,
+          "timestampUtc": "2026-10-20T10:42:48.5289067Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTween/DOTween.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565253,
+          "timestampUtc": "2026-10-20T10:42:48.5289067Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTweenPro/DOTweenPro.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565254,
+          "timestampUtc": "2026-10-20T10:42:48.5310283Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DemiLib/Core/Editor/DemiEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565255,
+          "timestampUtc": "2026-10-20T10:42:48.5320315Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DemiLib/Core/DemiLib.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565256,
+          "timestampUtc": "2026-10-20T10:42:48.5320315Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTween/Editor/DOTweenEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565257,
+          "timestampUtc": "2026-10-20T10:42:48.5320315Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565258,
+          "timestampUtc": "2026-10-20T10:42:48.5330324Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTween/DOTween.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 565259,
+          "timestampUtc": "2026-10-20T10:42:48.533535Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Serialized file \"Assets/Plugins/Demigiant/DOTweenPro/DOTweenPro.dll.meta\" contains a PluginImporter object at version 1, below the supported minimum (2). Open and re-save the file to upgrade.",
+          "stackTrace": "UnityEditor.Compilation.CompilationPipeline:GetAssemblies ()\nES3Postprocessor:UpdateAssembliesContainingES3Types () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:200)\nES3Postprocessor/<>c:<ScheduleUpdateAssembliesContainingES3Types>b__10_0 () (at Assets/Plugins/Easy Save 3/Editor/ES3Postprocessor.cs:194)\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 565259,
+      "session": "5c9659d22094403095b2615c2ee2c7ff",
+      "returned": 12,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 12,
+        "log": 5
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-20T11:00:19.0542572Z",
+        "ageMs": 224,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 12,
+        "consoleLogs": 5,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

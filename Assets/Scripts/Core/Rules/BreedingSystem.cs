@@ -22,13 +22,10 @@ namespace TheCall
                     continue;
                 }
 
-                var firstParent = parents[slot % parents.Count];
-                var secondParent = parents[(slot + 1) % parents.Count];
-                // 外观只剩配方和色板。旧部件遗传已删除，见 Assets/Notes/新怪物系统交接.md。
-                var appearance = MonsterAppearance.Breed(
-                    firstParent.Appearance,
-                    secondParent.Appearance,
-                    AppearanceSeed(firstParent.Id, secondParent.Id, slot));
+                var appearances = new MonsterAppearance[parents.Count];
+                for (var parent = 0; parent < parents.Count; parent++)
+                    appearances[parent] = parents[(slot + parent) % parents.Count].Appearance;
+                var appearance = MonsterAppearance.Breed(appearances, AppearanceSeed(parents, run.LevelNumber, slot));
 
                 string personality;
                 if (draw.Chance(40))
@@ -88,18 +85,17 @@ namespace TheCall
             }
         }
 
-        static int AppearanceSeed(string firstParentId, string secondParentId, int slot)
+        static int AppearanceSeed(IReadOnlyList<Monster> parents, int level, int slot)
         {
             unchecked
             {
                 var seed = 17;
-                var first = firstParentId ?? string.Empty;
-                for (var i = 0; i < first.Length; i++)
-                    seed = seed * 31 + first[i];
-                var second = secondParentId ?? string.Empty;
-                for (var i = 0; i < second.Length; i++)
-                    seed = seed * 31 + second[i];
-                return seed * 397 + slot;
+                foreach (var parent in parents)
+                {
+                    for (var i = 0; i < parent.Id.Length; i++) seed = seed * 31 + parent.Id[i];
+                    seed = seed * 31 + 0x1F;
+                }
+                return (seed * 397 + level) * 397 + slot;
             }
         }
 

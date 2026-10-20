@@ -1,0 +1,1819 @@
+{
+  "schema": 1,
+  "source_png_count": 70,
+  "category_counts": {
+    "01_眼睛": 10,
+    "04_嘴与外舌": 7,
+    "05_口腔与牙齿": 7,
+    "06_手脚与触肢": 14,
+    "07_角翼与配饰": 14,
+    "08_表情与花纹": 5,
+    "身体组件": 13
+  },
+  "portrait_design_size": [
+    279,
+    299
+  ],
+  "psb": {
+    "path": "Assets/Arts/Psds/怪物拼接件.psb",
+    "bytes": 27537917,
+    "sha256": "9cede505ed8b84219d5f58c249ccedd30d4b48cf0be26093adfb1f215ef85de3",
+    "signature": "8BPS",
+    "version": 2,
+    "size": [
+      2665,
+      799
+    ],
+    "channels": 3,
+    "depth": 8,
+    "color_mode": 3
+  },
+  "references": [
+    {
+      "path": "Assets/示意图/怪物核心视觉示意图.jpg",
+      "bytes": 101298,
+      "sha256": "0fe43b4ae378e3fadeefdbf94d643a7378f96ab64a4c29eea650e3ac827d922f",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        762,
+        888
+      ]
+    },
+    {
+      "path": "Assets/示意图/怪物拼接草图.jpg",
+      "bytes": 81238,
+      "sha256": "ab6a2c1065da6dbf1b62873f73af22951fa8d886c61c44ee262179cc1b71c7b1",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        688,
+        375
+      ]
+    }
+  ],
+  "design_document": {
+    "path": "Assets/Notes/怪物性格遗传与技能设计参考.docx",
+    "bytes": 259540,
+    "sha256": "62a278a67879c048ba331ac8e11a81afc348801ea16c521413acd809e24b23cf",
+    "embedded_images": 2
+  },
+  "components": [
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_713_怠惰.png",
+      "bytes": 1968,
+      "sha256": "4b615c5b62c560a5552832830683da4895d74e41eb5e822085204cb4afb1989a",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        49,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        45,
+        40
+      ],
+      "visible_size": [
+        41,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_768_焦虑.png",
+      "bytes": 2070,
+      "sha256": "c17c1b28ee0f8ca3bc61a667afc8edc40bda4502ca836e3e8973df682b6ec71e",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        61,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        57,
+        40
+      ],
+      "visible_size": [
+        53,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_854_冷漠_疲惫.png",
+      "bytes": 1497,
+      "sha256": "c223e27c7ded3d472e56aae8cbc231ba9e1e5c21e9d960953181869b59a4eaf7",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        68,
+        36
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        64,
+        32
+      ],
+      "visible_size": [
+        60,
+        28
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_857_焦虑2.png",
+      "bytes": 1633,
+      "sha256": "199f0e039ff88155ce4df96b2815673a1122131905809c8baafa2d4ceb279d3c",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        63,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        59,
+        40
+      ],
+      "visible_size": [
+        55,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_861_冷漠.png",
+      "bytes": 739,
+      "sha256": "a394f56529927303a13aa64699fb5002760601e9cc5be89de5c239f78990553a",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        46,
+        25
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        42,
+        21
+      ],
+      "visible_size": [
+        38,
+        17
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_863_冷漠.png",
+      "bytes": 1474,
+      "sha256": "8a23d109ec6a2492e7a145a34eed325417cd8e490c135a87ffa29685dc08bc53",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        57,
+        34
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        53,
+        30
+      ],
+      "visible_size": [
+        49,
+        26
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_867_渴爱.png",
+      "bytes": 841,
+      "sha256": "0b1cb30f8ecb8709bc878187640f4da572b9ff15e88243ac9938d9b84e79ac3d",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        36,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        32,
+        40
+      ],
+      "visible_size": [
+        28,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_872_渴爱2.png",
+      "bytes": 1344,
+      "sha256": "fde81b8e474bc7653ad5d89bf5fed86bba79d4497a9b105ad5d19b374008e37d",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        44,
+        35
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        40,
+        31
+      ],
+      "visible_size": [
+        36,
+        27
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_909_狂躁.png",
+      "bytes": 1707,
+      "sha256": "24e48dfeff64574b1dca13e155a4e148fc625c795def5621ce8517cdeff23d6e",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        60,
+        42
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        56,
+        38
+      ],
+      "visible_size": [
+        52,
+        34
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/01_眼睛/eye_912_狂躁2.png",
+      "bytes": 2107,
+      "sha256": "e6b2d03b77a5ac9ab9604701388d00ea9b8847364144fd76a046173673a759ed",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        53,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        49,
+        40
+      ],
+      "visible_size": [
+        45,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mark_844_讨好.png",
+      "bytes": 945,
+      "sha256": "7f1505cdd8f215b6c1668af247f55fab705fce5f196735d6f5906b82addbd31c",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        99,
+        39
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        95,
+        35
+      ],
+      "visible_size": [
+        91,
+        31
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_407_大舌头.png",
+      "bytes": 2323,
+      "sha256": "d83d867ad36631a85c4a4e4e429da0f5df4927daa7060685b3a5ee3e07acb995",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        116,
+        70
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        112,
+        66
+      ],
+      "visible_size": [
+        108,
+        62
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_482_分叉舌.png",
+      "bytes": 2359,
+      "sha256": "e9c51c73bb29e84ed09c623d618e34a758fbd0d21bad16785069e70471720a9a",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        101,
+        64
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        97,
+        60
+      ],
+      "visible_size": [
+        93,
+        56
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_538_缝合嘴.png",
+      "bytes": 1293,
+      "sha256": "fa491a9ed159bd6e225077a4c1403495605fac02d5cbc1f14073a1b820007ce4",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        113,
+        50
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        109,
+        46
+      ],
+      "visible_size": [
+        105,
+        42
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_835_奸笑.png",
+      "bytes": 2971,
+      "sha256": "c80e527a6125b1f4c6e8d20d0fce05b71ed1fee95f0dabd0ee369b874a56edbd",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        108,
+        47
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        104,
+        43
+      ],
+      "visible_size": [
+        100,
+        39
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_837_不爽.png",
+      "bytes": 2210,
+      "sha256": "b7a8754e59eba5b9be1eeab093c633106434ba459e3f5b4c3b90bb03f6f97a77",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        103,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        99,
+        40
+      ],
+      "visible_size": [
+        95,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/04_嘴与外舌/mouth_848_厌恶_不耐烦.png",
+      "bytes": 938,
+      "sha256": "18e63376c69731b2676071241c62a54ea7301e76f47ce36a1827fb3743ff2b6e",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        85,
+        43
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        81,
+        39
+      ],
+      "visible_size": [
+        77,
+        35
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_484_完整口腔.png",
+      "bytes": 1996,
+      "sha256": "d08b0699536a814f414352fe065b55bc1a764c527678d105e4bef65388114edc",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        160,
+        111
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        156,
+        107
+      ],
+      "visible_size": [
+        152,
+        103
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_506_口内舌头.png",
+      "bytes": 1394,
+      "sha256": "f66926975d99c453478ff1a92280534601162f30b2ee9561e6a30d45fc5a95ff",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        92,
+        37
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        88,
+        33
+      ],
+      "visible_size": [
+        84,
+        29
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_718_牙齿（可单独开关.png",
+      "bytes": 2261,
+      "sha256": "b0df9a0bccd5c80989e9e352bdbf2855ca7f5c4947f23e4e3715a8787be6f70d",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        113,
+        42
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        109,
+        38
+      ],
+      "visible_size": [
+        105,
+        34
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_719_牙齿（可单独开关.png",
+      "bytes": 2291,
+      "sha256": "30326da5f5bfdfda2262c47f24d8749ca15cca73ad9f496451635b7f910a7248",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        103,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        99,
+        40
+      ],
+      "visible_size": [
+        95,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_721_牙齿.png",
+      "bytes": 852,
+      "sha256": "40283eff02920ce05a2b349c26b924d58f655777c477d8bc039dc46b69d0e029",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        40,
+        41
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        36,
+        37
+      ],
+      "visible_size": [
+        32,
+        33
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_725_牙齿（可单独开关.png",
+      "bytes": 2291,
+      "sha256": "30326da5f5bfdfda2262c47f24d8749ca15cca73ad9f496451635b7f910a7248",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        103,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        99,
+        40
+      ],
+      "visible_size": [
+        95,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/05_口腔与牙齿/oral_728_牙齿.png",
+      "bytes": 1095,
+      "sha256": "0e6a26b93097a91a993676e96cb197ce862c392431a800b7b987a5de071d1134",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        35,
+        62
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        31,
+        58
+      ],
+      "visible_size": [
+        27,
+        54
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_468_前肢统一描边_前脚_1.png",
+      "bytes": 722,
+      "sha256": "78f7ae73b12dcfb024ffabc465ed48afafa19cfc9839485d6224e5eb5521857c",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        45,
+        62
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        41,
+        58
+      ],
+      "visible_size": [
+        37,
+        54
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_729_前肢统一描边_前手_1.png",
+      "bytes": 1711,
+      "sha256": "327d4c5faa018214452c71616bdcbeb2b6ecfba50992eb40122b268256ac7153",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        71,
+        86
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        67,
+        82
+      ],
+      "visible_size": [
+        63,
+        78
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_745_单手肥大.png",
+      "bytes": 6096,
+      "sha256": "52f439049c8178f543452c774f75aa952fba7249d94a4b8f8ee9930668e33def",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        139,
+        159
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        135,
+        155
+      ],
+      "visible_size": [
+        131,
+        151
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_752_单手萎缩.png",
+      "bytes": 4541,
+      "sha256": "8e4dd7980efa6b8c7d3bc00844000ff11b3073cb8ae64eccffa153c74a1fe3d5",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        69,
+        96
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        65,
+        92
+      ],
+      "visible_size": [
+        61,
+        88
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_754_前肢统一描边_前手_椭圆 10.png",
+      "bytes": 2151,
+      "sha256": "a3f750e5bce5678e0705719fe850d8be6dca38b72f90dbaff1b32f934d95a763",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        66,
+        104
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        62,
+        100
+      ],
+      "visible_size": [
+        58,
+        96
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_799_触手.png",
+      "bytes": 9216,
+      "sha256": "fe795598e484bac90391ce5677a2e9d2ac91e669ca87177f66143519d63b4123",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        170,
+        100
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        166,
+        96
+      ],
+      "visible_size": [
+        162,
+        92
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_801_手指手.png",
+      "bytes": 3574,
+      "sha256": "e3ee75cb1d53b556486e0a89eaa601aba38d46b8f3e58932a80c5d2a509e59c8",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        68,
+        135
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        64,
+        131
+      ],
+      "visible_size": [
+        60,
+        127
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_806_黑手.png",
+      "bytes": 1995,
+      "sha256": "0ffda525d4bb97680073879ea865ae587120e26d98966ff35c8ac2309a6c291c",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        53,
+        130
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        49,
+        126
+      ],
+      "visible_size": [
+        45,
+        122
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_807_前肢统一描边_前脚_手脚通用_2.png",
+      "bytes": 1514,
+      "sha256": "9d32a99ab839df4742fef14da63b24a5a77174dab93e654c074feaac1e09c178",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        47,
+        92
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        43,
+        88
+      ],
+      "visible_size": [
+        39,
+        84
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_810_前肢统一描边_前脚_手脚通用_1.png",
+      "bytes": 1469,
+      "sha256": "d8242250b550ddbbfad784145c13f5a75aa904a52289343c8a709a44391a58ba",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        51,
+        68
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        47,
+        64
+      ],
+      "visible_size": [
+        43,
+        60
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_812_黑脚.png",
+      "bytes": 656,
+      "sha256": "1e33745b36a7b13c0e0e1cec80dfad14c6440e873c1d3c80183a37d753dfae16",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        63,
+        51
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        59,
+        47
+      ],
+      "visible_size": [
+        55,
+        43
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_817_小爪.png",
+      "bytes": 2866,
+      "sha256": "5b07bfecbe6f6578dfb499cb77d1b3b147c1a7a7a64bd9c9b838c3c9aa87a8cf",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        76,
+        78
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        72,
+        74
+      ],
+      "visible_size": [
+        68,
+        70
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_822_虫肢.png",
+      "bytes": 3008,
+      "sha256": "b971517516220edc07468222de0f1402cc71297dc8c0845d498d0cce7e855eae",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        148,
+        119
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        144,
+        115
+      ],
+      "visible_size": [
+        140,
+        111
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/06_手脚与触肢/limb_833_触须脚.png",
+      "bytes": 4032,
+      "sha256": "f2e4179ab444b2802ef8feaf38755a28cfa6c1c90f6a882f317bf7ae6e986269",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        139,
+        123
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        135,
+        119
+      ],
+      "visible_size": [
+        131,
+        115
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_406_角1.png",
+      "bytes": 1396,
+      "sha256": "4be9c33b05b7869c32722deb1447ec15dd00028438d1288ce999fd00429fdfae",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        59,
+        62
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        55,
+        58
+      ],
+      "visible_size": [
+        51,
+        54
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_545_钉子.png",
+      "bytes": 1288,
+      "sha256": "111c8a007f47e50fa745a9f84012dafa6be0e80ac0db47caae9785f0ed215db7",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        49,
+        46
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        45,
+        42
+      ],
+      "visible_size": [
+        41,
+        38
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_551_羽翼5.png",
+      "bytes": 2385,
+      "sha256": "38e5442cd007262cbe5427b10fd6e9bca80f5c654ec868041a8a886bf1b73e31",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        109,
+        67
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        105,
+        63
+      ],
+      "visible_size": [
+        101,
+        59
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_552_蝙蝠翅.png",
+      "bytes": 2406,
+      "sha256": "e8fa96d370fb37aa3b1cdf320b8a7a8d382577b74771d680085c37919646d6e3",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        99,
+        72
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        95,
+        68
+      ],
+      "visible_size": [
+        91,
+        64
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_634_开盖大脑.png",
+      "bytes": 5541,
+      "sha256": "0897340f2a0aa7f51ea16ddec4f8f0e4ee1113963d9b0323b84905c201032c25",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        135,
+        72
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        131,
+        68
+      ],
+      "visible_size": [
+        127,
+        64
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_635_脑力全开.png",
+      "bytes": 8815,
+      "sha256": "e88878fd161ac4533bcf88bf08aae2b1a9d135f3b755b90f53940fa3b1cfdb7a",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        170,
+        137
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        166,
+        133
+      ],
+      "visible_size": [
+        162,
+        129
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_639_角2.png",
+      "bytes": 2948,
+      "sha256": "4d2c6e58fe44bc1aeb39ded8846f475e4bd47a253d321004973ea231d716cfd7",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        77,
+        73
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        73,
+        69
+      ],
+      "visible_size": [
+        69,
+        65
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_649_角3.png",
+      "bytes": 820,
+      "sha256": "899516cad0dba16b65db315b6f6c8a2bcd6f8358a7cb791681fd7558fd5cd975",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        43,
+        41
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        39,
+        37
+      ],
+      "visible_size": [
+        35,
+        33
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_650_配饰_配饰(统一描边_圆角矩形 1.png",
+      "bytes": 2231,
+      "sha256": "c97002f83f91eb593621b666a833472c6bfd1c970b6678d7946978f6e6a80a21",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        101,
+        74
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        97,
+        70
+      ],
+      "visible_size": [
+        93,
+        66
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_658_配饰_配饰(统一描边_多边形 1.png",
+      "bytes": 1071,
+      "sha256": "e4aaed9380be67f4710a988f5ab69c1c30ef0ef30e8bfb5a17eef98300508dcc",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        50,
+        39
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        46,
+        35
+      ],
+      "visible_size": [
+        42,
+        31
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_662_配饰_配饰(统一描边_圆角矩形 2.png",
+      "bytes": 1469,
+      "sha256": "dd3bb098e71430c00a42410b5a2d054de53125231e30573cb9c4bbf77399963d",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        56,
+        53
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        52,
+        49
+      ],
+      "visible_size": [
+        48,
+        45
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_704_配饰_配饰(统一描边_椭圆 9.png",
+      "bytes": 2737,
+      "sha256": "1e1d25c5fb194f15136f12a4ac9521445994d697823d34343a694bd5c2424bc1",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        67,
+        65
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        63,
+        61
+      ],
+      "visible_size": [
+        59,
+        57
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_705_配饰_配饰(统一描边_圆角矩形 3.png",
+      "bytes": 1823,
+      "sha256": "e10bab8323c9e19d38bd5aa5a196b109b67d52adedf350d1bbfae513e2efe484",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        56,
+        79
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        52,
+        75
+      ],
+      "visible_size": [
+        48,
+        71
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/07_角翼与配饰/acc_730_身体尖刺.png",
+      "bytes": 1681,
+      "sha256": "4b42ef4b87ae133263810eb6d23ea8b5a96418b9ca1ef0dffa67365a31e8e295",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        83,
+        61
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        79,
+        57
+      ],
+      "visible_size": [
+        75,
+        53
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/08_表情与花纹/mark_674_缝线.png",
+      "bytes": 1053,
+      "sha256": "70839afbd74aee5538e1a65769fc168052e40d8d365d51de0d4cdedf90286cb8",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        61,
+        51
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        57,
+        47
+      ],
+      "visible_size": [
+        53,
+        43
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/08_表情与花纹/mark_684_粗缝线.png",
+      "bytes": 1115,
+      "sha256": "26393d8dd6cea061e6a7ad5fee7120c31dc6ed077af0b6f37aee1f111c8ffb4e",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        50,
+        55
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        46,
+        51
+      ],
+      "visible_size": [
+        42,
+        47
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/08_表情与花纹/mark_709_斑.png",
+      "bytes": 679,
+      "sha256": "535a4b32b1dfdb8c9939e6be036ac694aeccc958897a0fcb98412b58e02cbe4d",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        42,
+        35
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        38,
+        31
+      ],
+      "visible_size": [
+        34,
+        27
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/08_表情与花纹/mark_710_星星.png",
+      "bytes": 631,
+      "sha256": "ea32cbfb44c37727213e28e9ecd6160438137d273ec914b9fdc71e0d0501c3c4",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        48,
+        44
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        44,
+        40
+      ],
+      "visible_size": [
+        40,
+        36
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/08_表情与花纹/mark_712_腮红或者晕染色.png",
+      "bytes": 1214,
+      "sha256": "1073d6af02ddfbb0e41512114454858e91d6e3e21521df4cd9e2e6039ce8d5ce",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        61,
+        54
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        57,
+        50
+      ],
+      "visible_size": [
+        53,
+        46
+      ],
+      "alpha_extrema": [
+        0,
+        140
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/body_arc_port_997.png",
+      "bytes": 11871,
+      "sha256": "9803fbdd9705600ef34aa524477cf1c508af278164bc14883d55aa281b63e64a",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        146,
+        221
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        142,
+        217
+      ],
+      "visible_size": [
+        138,
+        213
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/body_bend_918.png",
+      "bytes": 5082,
+      "sha256": "785d459fea14fa3de2d6612466bda8056c63f74306d8728787eaf776243bd9ca",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        177,
+        162
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        173,
+        158
+      ],
+      "visible_size": [
+        169,
+        154
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/body_cup_943.png",
+      "bytes": 3778,
+      "sha256": "0abfea2a8836fa732f3db9cbc596b69a2d255bce8360fadb58d0c0985045b99b",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        136,
+        140
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        132,
+        136
+      ],
+      "visible_size": [
+        128,
+        132
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_large_closed_520.png",
+      "bytes": 6537,
+      "sha256": "60d91608d34bc7a92ee985ee03ec75727e35b6de95e6b04b7edfef6cdcfa3ee9",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        197,
+        207
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        193,
+        203
+      ],
+      "visible_size": [
+        189,
+        199
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_large_openA_516.png",
+      "bytes": 8115,
+      "sha256": "3d974f293312e4ef9878b3057894635fcc5890c1e83e8d8b67fa4e76185eff70",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        197,
+        207
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        193,
+        203
+      ],
+      "visible_size": [
+        189,
+        199
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_large_openB_517.png",
+      "bytes": 8207,
+      "sha256": "4134d88852a2d9af1be8e246a2808119bc55617d7a8e9ad7ee0c5a1dc7532a6e",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        197,
+        207
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        193,
+        203
+      ],
+      "visible_size": [
+        189,
+        199
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_small_closed_508.png",
+      "bytes": 5824,
+      "sha256": "e8088196c7836aa7c59e8e78434894b08dc0610e1accf21e99479df409608dbe",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        167,
+        194
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        163,
+        190
+      ],
+      "visible_size": [
+        159,
+        186
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_small_openA_464.png",
+      "bytes": 6598,
+      "sha256": "583882c9b5abf2c6c66613950aab09239e500cb261db105637d2216b0e7d8856",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        167,
+        194
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        163,
+        190
+      ],
+      "visible_size": [
+        159,
+        186
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/fat_small_openB_507.png",
+      "bytes": 6498,
+      "sha256": "e12c378b85ad956ea73a2a9f6196a426e5646ca318c8730ef4f2e44480692d30",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        167,
+        194
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        163,
+        190
+      ],
+      "visible_size": [
+        159,
+        186
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/head_flat_951.png",
+      "bytes": 3074,
+      "sha256": "5af5dd49d8a291300c54d4d9d62a6ac9200c8bc76245aa31b5ca940522ace894",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        139,
+        95
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        135,
+        91
+      ],
+      "visible_size": [
+        131,
+        87
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/head_round_936.png",
+      "bytes": 3548,
+      "sha256": "e4a1c497e5910b444eb58df0d186e4c46ba5358ad4f43c565e686a59f1c683f5",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        143,
+        115
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        139,
+        111
+      ],
+      "visible_size": [
+        135,
+        107
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/head_star_990.png",
+      "bytes": 10613,
+      "sha256": "538091ec05c067a3876e7b6f59780eaae810ce46d1ce4aa378076ec2ff406d8f",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        276,
+        226
+      ],
+      "alpha_bounds": [
+        4,
+        4,
+        272,
+        222
+      ],
+      "visible_size": [
+        268,
+        218
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "Assets/Arts/Pngs/部位组件/身体组件/neck_curve_942.png",
+      "bytes": 5260,
+      "sha256": "b1eea7eb4d3a444c8b62e2d7be75989a7faa23bf22dca5cb2ab569945b492a6f",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        156,
+        204
+      ],
+      "alpha_bounds": [
+        43,
+        56,
+        148,
+        189
+      ],
+      "visible_size": [
+        105,
+        133
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    }
+  ],
+  "warnings": [
+    "neck_curve_942.png has asymmetric transparent padding; use alpha bounds or an authored pivot.",
+    "The PSB is an artwork board, not one runtime monster; its visible layers include overlapping examples.",
+    "White fills are tintable; eyes, teeth, and black outlines need independent color treatment."
+  ],
+  "errors": []
+}

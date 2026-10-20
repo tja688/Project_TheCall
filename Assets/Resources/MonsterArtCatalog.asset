@@ -1,0 +1,803 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be762631f3a5204db5fe63cd4b363e6, type: 3}
+  m_Name: MonsterArtCatalog
+  m_EditorClassIdentifier: TheCall.Hover::TheCall.MonsterArtCatalog
+  parts:
+  - id: 713
+    sprite: {fileID: 21300000, guid: 1c584fc52129cde4a80998f19a3d9533, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 41
+      height: 36
+  - id: 768
+    sprite: {fileID: 21300000, guid: 4a4e75210ead08c40b7e1767ab4e6496, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 53
+      height: 36
+  - id: 854
+    sprite: {fileID: 21300000, guid: 009f37e893929844fb6c08d289cf8ad0, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 5
+      width: 59
+      height: 27
+  - id: 857
+    sprite: {fileID: 21300000, guid: 814bc9e3ba0ed9946a8bfb9761470857, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 54
+      height: 35
+  - id: 861
+    sprite: {fileID: 21300000, guid: c8e6c74606930f64db332ab68f6e6ab5, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 38
+      height: 17
+  - id: 863
+    sprite: {fileID: 21300000, guid: fbf95bd9fd2dc8346a7ffae24fbf43d1, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 49
+      height: 26
+  - id: 867
+    sprite: {fileID: 21300000, guid: 35f541b3dff694f4f827a3708e493454, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 28
+      height: 36
+  - id: 872
+    sprite: {fileID: 21300000, guid: 4a103bb8635dbfd4495d5243a396afe1, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 36
+      height: 27
+  - id: 909
+    sprite: {fileID: 21300000, guid: 9049a165cb314384997fffc0badd08e3, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 51
+      height: 32
+  - id: 912
+    sprite: {fileID: 21300000, guid: fe5d05b9611905b4e8f8d2a65cec7e42, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 45
+      height: 36
+  - id: 844
+    sprite: {fileID: 21300000, guid: f9cccca547288f54a9cf59e6262d1b7a, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 91
+      height: 31
+  - id: 407
+    sprite: {fileID: 21300000, guid: 2030289b182b4b944ad637b7cf4c5cb5, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 108
+      height: 62
+  - id: 482
+    sprite: {fileID: 21300000, guid: ae20164c840cc84499134ec83e313153, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 93
+      height: 56
+  - id: 538
+    sprite: {fileID: 21300000, guid: 6f8584d87b460894e94d3e23c6e5ca37, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 105
+      height: 40
+  - id: 835
+    sprite: {fileID: 21300000, guid: afda3bbd282733d45ac999d7dc8be73b, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 99
+      height: 39
+  - id: 837
+    sprite: {fileID: 21300000, guid: 0a53c95e19b810c48a5b31af06083e8f, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 95
+      height: 35
+  - id: 848
+    sprite: {fileID: 21300000, guid: 8b94bd33b1e88db4f9ee084c0fb0185c, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 77
+      height: 35
+  - id: 484
+    sprite: {fileID: 21300000, guid: c205d30d1139cdf43a0f669b17242bf7, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 152
+      height: 103
+  - id: 506
+    sprite: {fileID: 21300000, guid: 3fe229ca2c760214fbb7e1f21bef7cd1, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 84
+      height: 29
+  - id: 718
+    sprite: {fileID: 21300000, guid: 145bc8b716198a745ac4a649d504fe69, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 105
+      height: 34
+  - id: 719
+    sprite: {fileID: 21300000, guid: b6b6da4dacb032348baeea2a0d4d4cd6, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 95
+      height: 36
+  - id: 721
+    sprite: {fileID: 21300000, guid: f36eaef2dfc320a448dd51ef3c38edc3, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 32
+      height: 32
+  - id: 725
+    sprite: {fileID: 21300000, guid: 97dcd4e531e835849a6ef35f76877152, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 95
+      height: 36
+  - id: 728
+    sprite: {fileID: 21300000, guid: 5e26d0132a61ac847aa6b772004aca90, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 27
+      height: 54
+  - id: 468
+    sprite: {fileID: 21300000, guid: 5ddfa6c984acb4343a89d54720e87d35, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 37
+      height: 54
+  - id: 729
+    sprite: {fileID: 21300000, guid: e738daeca2b54b044ba39e0e323cae7c, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 62
+      height: 78
+  - id: 745
+    sprite: {fileID: 21300000, guid: 2c87c4d338251bf4fa4270c83ff52b88, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 131
+      height: 150
+  - id: 752
+    sprite: {fileID: 21300000, guid: 1a28cb9b9ea45dc4ca3a3b863b998625, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 60
+      height: 88
+  - id: 754
+    sprite: {fileID: 21300000, guid: 1f644d5f78e9ac74fb97f2718217d906, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 58
+      height: 96
+  - id: 799
+    sprite: {fileID: 21300000, guid: a02eaf10c96479b45931baaff08de486, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 162
+      height: 92
+  - id: 801
+    sprite: {fileID: 21300000, guid: 7cbb147b4edf6cb49a670e1580857bcb, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 60
+      height: 127
+  - id: 806
+    sprite: {fileID: 21300000, guid: 6bfbb932ed990f944adc21a80007584c, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 45
+      height: 122
+  - id: 807
+    sprite: {fileID: 21300000, guid: 2b34d3f665691194ab21131a57a3656c, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 39
+      height: 84
+  - id: 810
+    sprite: {fileID: 21300000, guid: b849b9fa1955c1c4f8116f1db9bed572, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 43
+      height: 60
+  - id: 812
+    sprite: {fileID: 21300000, guid: 24eebc42c18998d458c983206a8cfdf0, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 55
+      height: 43
+  - id: 817
+    sprite: {fileID: 21300000, guid: 8652cfbfb2b305c42af79240bc8b39ec, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 68
+      height: 69
+  - id: 822
+    sprite: {fileID: 21300000, guid: e67adc34a290ae644af25503b8f097f6, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 140
+      height: 111
+  - id: 833
+    sprite: {fileID: 21300000, guid: c5c89b85f3ef71a4f9e4ce32569e6fd8, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 5
+      width: 131
+      height: 114
+  - id: 406
+    sprite: {fileID: 21300000, guid: 7607dedfba47ef549adda6803ff81b57, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 50
+      height: 53
+  - id: 545
+    sprite: {fileID: 21300000, guid: 75f4a3081c962bf4f9bf8572206d1a3b, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 40
+      height: 38
+  - id: 551
+    sprite: {fileID: 21300000, guid: 14566eeff7e5c6a49a65feafbe618119, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 100
+      height: 59
+  - id: 552
+    sprite: {fileID: 21300000, guid: d4be315556b81bc45b5d3e83f2ad6c6f, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 91
+      height: 64
+  - id: 634
+    sprite: {fileID: 21300000, guid: a3b6ce6c40563db46aa9c1c9fb19041e, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 126
+      height: 64
+  - id: 635
+    sprite: {fileID: 21300000, guid: 401503bb22402b3479047d58a1748ed1, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 161
+      height: 129
+  - id: 639
+    sprite: {fileID: 21300000, guid: 100e3399d39e4174aa5758a41defc479, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 69
+      height: 65
+  - id: 649
+    sprite: {fileID: 21300000, guid: 0d80663429c367449b980a95c7464dcc, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 35
+      height: 33
+  - id: 650
+    sprite: {fileID: 21300000, guid: a62cc46219bcf3543ab2a3ee4dcd7291, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 93
+      height: 66
+  - id: 658
+    sprite: {fileID: 21300000, guid: ffd3f8776c6334643926a6771194e5f9, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 42
+      height: 31
+  - id: 662
+    sprite: {fileID: 21300000, guid: fac8201ad72c7cc43a07a1feba2b20bf, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 48
+      height: 45
+  - id: 704
+    sprite: {fileID: 21300000, guid: 68fd2f9412d51844e9cf56f164549e72, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 59
+      height: 57
+  - id: 705
+    sprite: {fileID: 21300000, guid: be17a0ac4a2271f459c6817c33b48227, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 47
+      height: 71
+  - id: 730
+    sprite: {fileID: 21300000, guid: 2d41974cf0b3fb84a9d5820385b1dbca, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 74
+      height: 53
+  - id: 674
+    sprite: {fileID: 21300000, guid: 0d7fe1fc2fae03e4b8ff6ab6b4bb3a0d, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 53
+      height: 43
+  - id: 684
+    sprite: {fileID: 21300000, guid: d32965eec03edb74ea77c63764b9731e, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 42
+      height: 47
+  - id: 709
+    sprite: {fileID: 21300000, guid: 82c73d6b1770e734ba6ede289ff6893d, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 34
+      height: 27
+  - id: 710
+    sprite: {fileID: 21300000, guid: 9ddf8d75c5997364f94b20d808bbc0d2, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 40
+      height: 36
+  - id: 712
+    sprite: {fileID: 21300000, guid: c96732bf618b8f040b237491e3798a52, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 6
+      y: 6
+      width: 49
+      height: 42
+  - id: 997
+    sprite: {fileID: 21300000, guid: cee232c423bd8e243805d4c711739eb7, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 138
+      height: 213
+  - id: 918
+    sprite: {fileID: 21300000, guid: bde50a604662dc143b4bb3d110c17e17, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 169
+      height: 154
+  - id: 943
+    sprite: {fileID: 21300000, guid: 0005d86c54965f646a6580163fdd6517, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 128
+      height: 132
+  - id: 520
+    sprite: {fileID: 21300000, guid: 592099570f17162488e50b00cad74846, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 189
+      height: 199
+  - id: 516
+    sprite: {fileID: 21300000, guid: 45474128f15b6e442982e1c2236179f3, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 189
+      height: 199
+  - id: 517
+    sprite: {fileID: 21300000, guid: 36c1de1c30ca4e34c827db1e5d7fdf76, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 189
+      height: 199
+  - id: 508
+    sprite: {fileID: 21300000, guid: 45dee71b2a3be444fb96b5fee5852138, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 159
+      height: 186
+  - id: 464
+    sprite: {fileID: 21300000, guid: 0844a617277295346a3377ff3376154d, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 159
+      height: 186
+  - id: 507
+    sprite: {fileID: 21300000, guid: 0cb37b6acff9ebf408c0aab5b94a7c1d, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 159
+      height: 186
+  - id: 951
+    sprite: {fileID: 21300000, guid: 88b93985cc8a72a48b1188a61dede656, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 131
+      height: 87
+  - id: 936
+    sprite: {fileID: 21300000, guid: 9d4e69c8e02a457469a0e07978aec21c, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 135
+      height: 107
+  - id: 990
+    sprite: {fileID: 21300000, guid: 13eb763e467bc474e8da38d6ec9fe2ac, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 5
+      y: 4
+      width: 267
+      height: 217
+  - id: 942
+    sprite: {fileID: 21300000, guid: 03acd62fa324d1d41979831e103c01fc, type: 3}
+    ink:
+      serializedVersion: 2
+      x: 45
+      y: 15
+      width: 103
+      height: 133
+  bodies:
+  - name: "\u5C0F\u80D6\u4F53"
+    pieces:
+    - part: 508
+      position: {x: -5, y: 130}
+      size: {x: 153, y: 178}
+      angle: 0
+      mirror: 0
+    face: {x: -9, y: 185}
+    faceWidth: 64
+    mouth: {x: 27, y: 149}
+    mouthWidth: 65
+    leftShoulder: {x: -57, y: 128}
+    rightShoulder: {x: 17, y: 114}
+    leftHip: {x: -35, y: 59}
+    rightHip: {x: 7, y: 56}
+    crown: {x: -7, y: 219}
+    integratedHead: 1
+    twin: 0
+    secondFace: {x: 0, y: 0}
+    oral:
+      serializedVersion: 2
+      x: -33
+      y: 124
+      width: 103
+      height: 52
+  - name: "\u5927\u80D6\u4F53"
+    pieces:
+    - part: 520
+      position: {x: -3, y: 131}
+      size: {x: 174, y: 183}
+      angle: 0
+      mirror: 0
+    face: {x: -7, y: 187}
+    faceWidth: 74
+    mouth: {x: 34, y: 151}
+    mouthWidth: 73
+    leftShoulder: {x: -66, y: 130}
+    rightShoulder: {x: 66, y: 130}
+    leftHip: {x: -38, y: 60}
+    rightHip: {x: 37, y: 61}
+    crown: {x: -11, y: 223}
+    integratedHead: 1
+    twin: 0
+    secondFace: {x: 0, y: 0}
+    oral:
+      serializedVersion: 2
+      x: -28
+      y: 131
+      width: 98
+      height: 49
+  - name: "\u5F2F\u957F\u8EAF"
+    pieces:
+    - part: 997
+      position: {x: 0, y: 124}
+      size: {x: 108, y: 164}
+      angle: 0
+      mirror: 0
+    - part: head
+      position: {x: -26, y: 217}
+      size: {x: 102, y: 77}
+      angle: 0
+      mirror: 0
+    face: {x: -26, y: 222}
+    faceWidth: 64
+    mouth: {x: -24, y: 199}
+    mouthWidth: 52
+    leftShoulder: {x: 26, y: 142}
+    rightShoulder: {x: 42, y: 147}
+    leftHip: {x: -27, y: 61}
+    rightHip: {x: 2, y: 65}
+    crown: {x: -26, y: 253}
+    integratedHead: 0
+    twin: 0
+    secondFace: {x: 0, y: 0}
+    oral:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  - name: "\u5F2F\u8EAF"
+    pieces:
+    - part: 918
+      position: {x: 7, y: 106}
+      size: {x: 145, y: 133}
+      angle: 0
+      mirror: 0
+    - part: 942
+      position: {x: -47, y: 161}
+      size: {x: 49, y: 79}
+      angle: -13
+      mirror: 0
+    - part: head
+      position: {x: -43, y: 216}
+      size: {x: 107, y: 80}
+      angle: 0
+      mirror: 0
+    face: {x: -43, y: 223}
+    faceWidth: 65
+    mouth: {x: -42, y: 198}
+    mouthWidth: 52
+    leftShoulder: {x: -50, y: 123}
+    rightShoulder: {x: 22, y: 104}
+    leftHip: {x: -11, y: 66}
+    rightHip: {x: 45, y: 63}
+    crown: {x: -43, y: 253}
+    integratedHead: 0
+    twin: 0
+    secondFace: {x: 0, y: 0}
+    oral:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  - name: "\u957F\u9888\u676F\u8EAB"
+    pieces:
+    - part: 943
+      position: {x: 0, y: 105}
+      size: {x: 125, y: 129}
+      angle: 0
+      mirror: 0
+    - part: 942
+      position: {x: 2, y: 169}
+      size: {x: 53, y: 82}
+      angle: 5
+      mirror: 0
+    - part: head
+      position: {x: 0, y: 218}
+      size: {x: 110, y: 82}
+      angle: 0
+      mirror: 0
+    face: {x: 0, y: 224}
+    faceWidth: 66
+    mouth: {x: 0, y: 199}
+    mouthWidth: 54
+    leftShoulder: {x: -49, y: 126}
+    rightShoulder: {x: 49, y: 126}
+    leftHip: {x: -28, y: 62}
+    rightHip: {x: 28, y: 62}
+    crown: {x: 0, y: 255}
+    integratedHead: 0
+    twin: 0
+    secondFace: {x: 0, y: 0}
+    oral:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  - name: "\u53CC\u7AEF\u5BBD\u80A9"
+    pieces:
+    - part: 918
+      position: {x: -32, y: 117}
+      size: {x: 105, y: 117}
+      angle: 0
+      mirror: 0
+    - part: 918
+      position: {x: 32, y: 117}
+      size: {x: 105, y: 117}
+      angle: 0
+      mirror: 1
+    - part: 942
+      position: {x: -48, y: 175}
+      size: {x: 34, y: 44}
+      angle: -6
+      mirror: 0
+    - part: 942
+      position: {x: 48, y: 175}
+      size: {x: 34, y: 44}
+      angle: 6
+      mirror: 1
+    - part: head
+      position: {x: -48, y: 202}
+      size: {x: 84, y: 65}
+      angle: 0
+      mirror: 0
+    - part: head
+      position: {x: 48, y: 202}
+      size: {x: 84, y: 65}
+      angle: 0
+      mirror: 0
+    face: {x: -48, y: 209}
+    faceWidth: 48
+    mouth: {x: -48, y: 187}
+    mouthWidth: 40
+    leftShoulder: {x: -68, y: 120}
+    rightShoulder: {x: 68, y: 120}
+    leftHip: {x: -35, y: 85}
+    rightHip: {x: 35, y: 85}
+    crown: {x: -48, y: 233}
+    integratedHead: 0
+    twin: 1
+    secondFace: {x: 48, y: 209}
+    oral:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  palettes:
+  - name: "\u8393\u7D2B\u4E0E\u82D4\u7EFF"
+    body: {r: 0.5568628, g: 0.3882353, b: 0.6117647, a: 1}
+    limbs: {r: 0.5176471, g: 0.65882355, b: 0.44705883, a: 1}
+    accent: {r: 0.95686275, g: 0.7490196, b: 0.48235294, a: 1}
+  - name: "\u94DC\u7EFF\u4E0E\u5976\u9EC4"
+    body: {r: 0.39607844, g: 0.6431373, b: 0.6, a: 1}
+    limbs: {r: 0.77254903, g: 0.63529414, b: 0.39215687, a: 1}
+    accent: {r: 0.95686275, g: 0.78039217, b: 0.60784316, a: 1}
+  - name: "\u8D6D\u9EC4\u4E0E\u7070\u84DD"
+    body: {r: 0.75686276, g: 0.59607846, b: 0.3764706, a: 1}
+    limbs: {r: 0.45882353, g: 0.58431375, b: 0.6392157, a: 1}
+    accent: {r: 0.81960785, g: 0.4627451, b: 0.49019608, a: 1}
+  - name: "\u96FE\u84DD\u4E0E\u85D5\u7D2B"
+    body: {r: 0.4509804, g: 0.5764706, b: 0.7176471, a: 1}
+    limbs: {r: 0.64705884, g: 0.5019608, b: 0.6666667, a: 1}
+    accent: {r: 0.9019608, g: 0.7176471, b: 0.45490196, a: 1}
+  - name: "\u80ED\u8102\u4E0E\u9F20\u5C3E\u8349"
+    body: {r: 0.7254902, g: 0.4627451, b: 0.5294118, a: 1}
+    limbs: {r: 0.5294118, g: 0.6745098, b: 0.5764706, a: 1}
+    accent: {r: 0.9607843, g: 0.81960785, b: 0.57254905, a: 1}
+  - name: "\u82D4\u7EFF\u4E0E\u9676\u571F"
+    body: {r: 0.6, g: 0.6784314, b: 0.44313726, a: 1}
+    limbs: {r: 0.7058824, g: 0.5019608, b: 0.4117647, a: 1}
+    accent: {r: 0.89411765, g: 0.7607843, b: 0.5411765, a: 1}
+  viewportFill: 0.91
+  idleMotion: 1

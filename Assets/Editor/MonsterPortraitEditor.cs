@@ -9,7 +9,7 @@ namespace TheCall.Editor
         public override void OnInspectorGUI()
         {
             EditorGUILayout.HelpBox(
-                "这个矩形里目前只画整张剪影。旧拼接零件已删除。移动、缩放或改宽高，游戏里的怪物和拖拽松手后的位置都会落在同一个矩形里。新怪物系统见 Assets/Notes/新怪物系统交接.md。",
+                "这个矩形承载规则组合的怪物部件。性格决定眼型，技能添加身体改造，心情改变动作强度。移动、缩放或改宽高，游戏中的画像和拖拽返回位置会一起跟随。外观由怪物数据生成，请在预览种子和部件目录中检查组合。",
                 MessageType.Info);
             DrawDefaultInspector();
         }

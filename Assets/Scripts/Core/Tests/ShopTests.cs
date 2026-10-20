@@ -185,6 +185,13 @@ namespace TheCall.Tests
             Assert.That(App.SendQuery(new RunLedgerQuery()).Gold, Is.EqualTo(before - 10));
             var cage = App.SendQuery(new MonsterCageQuery()).Single(monster => monster.Id == bought.Id);
             Assert.That(cage.SkillNames, Is.EqualTo(new[] { "能量体" }));
+            Assert.That(bought.Monster, Is.Not.Null);
+            Assert.That(bought.Monster.Id, Is.EqualTo(cage.Id));
+            Assert.That(bought.Monster.Appearance, Is.EqualTo(cage.Appearance));
+            Assert.That(bought.Monster.Personality, Is.EqualTo(cage.Personality));
+            Assert.That(bought.Monster.Mood, Is.EqualTo(cage.Mood));
+            Assert.That(bought.Monster.Race, Is.EqualTo(cage.Race));
+            Assert.That(bought.Monster.Skills.Select(skill => skill.InstanceId), Is.EqualTo(cage.Skills.Select(skill => skill.InstanceId)));
             var again = App.SendQuery(new ShelfQuery());
             Assert.That(again.Monsters.Select(monster => monster.Id).ToArray(), Is.EqualTo(kept));
             Assert.That(again.Monsters.Select(monster => monster.Id), Does.Not.Contain(bought.Id));

@@ -13,6 +13,7 @@ namespace TheCall
         public void Perform(PresentationAction action)
         {
             if (!isActiveAndEnabled) return;
+            if (Transitioning && action != PresentationAction.ReturnToTitle && action != PresentationAction.Quit) return;
             // Menu and reset controls remain available while gameplay is blocked by playback.
             if (_busy && action != PresentationAction.ReturnToTitle && action != PresentationAction.ToggleSettings
                 && action != PresentationAction.OpenHandbook && action != PresentationAction.ToggleLog
@@ -48,7 +49,7 @@ namespace TheCall
 
         void OnSettle()
         {
-            if (_busy)
+            if (_busy || Transitioning)
                 return;
 
             _busy = true;
@@ -175,6 +176,7 @@ namespace TheCall
 
         void OnSelectTech(TechNodeView node)
         {
+            if (Transitioning) return;
             _selectedTech = node.techName;
             Refresh();
         }
@@ -295,7 +297,7 @@ namespace TheCall
 
         bool CanQuitFromOpening()
         {
-            if (_busy || _opening == null || !_opening.gameObject.activeInHierarchy)
+            if (_busy || Transitioning || _opening == null || !_opening.gameObject.activeInHierarchy)
                 return false;
 
             return this.SendQuery(new RunPhaseQuery()) == RunPhase.Opening;
@@ -312,7 +314,7 @@ namespace TheCall
 
         void Run(Action send)
         {
-            if (_busy)
+            if (_busy || Transitioning)
                 return;
 
             _busy = true;
@@ -323,7 +325,7 @@ namespace TheCall
 
         void Run(Action send, Func<bool> succeeded, string failureNotice)
         {
-            if (_busy)
+            if (_busy || Transitioning)
                 return;
 
             _busy = true;
@@ -344,7 +346,7 @@ namespace TheCall
             _noticeUntil = Time.unscaledTime + 2.6f;
         }
 
-        void Show(MonoBehaviour screen)
+        void ShowImmediate(MonoBehaviour screen)
         {
             Activate(_opening, screen == _opening);
             Activate(_levelStart, screen == _levelStart);

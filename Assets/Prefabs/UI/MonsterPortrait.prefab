@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a63e1e09768e4874ca87b930be5f9946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TheCall.Hover::TheCall.MonsterPortrait
-  _shadowTint: {r: 0.078431375, g: 0.16862746, b: 0.2, a: 1}
   _editorPreview: 1
   _editorPreviewSeed: 48291
+  _previewPersonality: "\u7A33\u5B9A"
+  _previewMood: "\u666E\u901A"
+  _previewSkills: []

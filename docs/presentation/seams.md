@@ -5,6 +5,7 @@
 | module | interface 与 seam | implementation 的职责 |
 | --- | --- | --- |
 | `TheCallPresentation` | `Perform`、`Refresh` | 玩家动作、命令、界面流程、当前界面对应的音乐 |
+| `ScreenAssembly`、`AssemblySurface` | `Prepare`、`Sample`、`Restore` | 已有分层的临时姿态、透明度和底图分块；总控拥有交接与输入生命周期 |
 | 各 `ScreenView` | `Render` | 查询投影、控件文字与显隐、当前界面的素材 |
 | `PresentationReadout` | 怪物绘制 | 开局、怪物笼、提取槽、培育槽共用的画像与徽标 |
 | `MonsterInventory` | 怪物笼绘制 | 扩容、内容排列、选中态；新出售槽回调 |
@@ -14,7 +15,7 @@
 | `ScoringTape` | `Arrange` | 已确认的结算记录转成演出 cue |
 | `ScoringShow` | tape、进展通知、`Cancel`、`Advance` | cue 的 Unity 演出 adapter |
 
-怪物画像目前只画剪影。拼接系统已删除，新系统见 [新怪物系统交接](../../Assets/Notes/新怪物系统交接.md)。
+怪物画像由 `MonsterPortrait.Show(MonsterView)` 接收状态快照。`MonsterVisualTraits` 将性格、心情和技能投影为眼型、动作强度与部件特征；`MonsterComposition` 按 `MonsterArtCatalog` 的六套挂点组合原始部件。画像、拖动虚影与结算共享同一份外观，画像不查询正在变化的玩法状态。新系统的素材规则和维护入口见[怪物部件说明](monster-art-direction.md)。已删除的旧拼接系统仍不恢复。
 
 `Render` 只查询规则。原有命令保留 QFramework 路由职责，Model 仍是对局状态的主人。总控控制界面显隐和音乐，界面 module 不独立改变流程。
 

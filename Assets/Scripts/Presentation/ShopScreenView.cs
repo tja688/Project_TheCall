@@ -70,7 +70,7 @@ namespace TheCall
             if (card.portrait != null)
             {
                 card.portrait.gameObject.SetActive(true);
-                card.portrait.Show(item.Appearance);
+                card.portrait.Show(item.Monster);
             }
             if (card.icon != null) card.icon.enabled = false;
             PresentationReadout.Text(card.title, item.DisplayName);

@@ -210,6 +210,7 @@ namespace TheCall.Editor
         static void AdvancePlan()
         {
             if (!_running || EditorApplication.timeSinceStartup < _nextInput) return;
+            if (Presentation().Transitioning) return;
             if (Playing)
             {
                 if (_playbackMode != 0)
