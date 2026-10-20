@@ -1,0 +1,44 @@
+[
+  {
+    "name": "苔绿",
+    "body": "96B3A2",
+    "pattern": "738E7E",
+    "eye": "F2CA75",
+    "mouth": "8B536C"
+  },
+  {
+    "name": "莓紫",
+    "body": "A792C2",
+    "pattern": "826F9A",
+    "eye": "A9D8B0",
+    "mouth": "C97864"
+  },
+  {
+    "name": "灰玫瑰",
+    "body": "C38F9C",
+    "pattern": "9B6C78",
+    "eye": "92CDD2",
+    "mouth": "596A9D"
+  },
+  {
+    "name": "奶黄",
+    "body": "DEC384",
+    "pattern": "B69D63",
+    "eye": "7DAFC4",
+    "mouth": "9A5A78"
+  },
+  {
+    "name": "雾蓝",
+    "body": "8FAEC2",
+    "pattern": "6D899B",
+    "eye": "E9C174",
+    "mouth": "AF6675"
+  },
+  {
+    "name": "骨白",
+    "body": "D5CDB5",
+    "pattern": "AEA791",
+    "eye": "9A8CC4",
+    "mouth": "9B5C70"
+  }
+]

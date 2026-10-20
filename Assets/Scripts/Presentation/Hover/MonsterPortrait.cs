@@ -18,8 +18,8 @@ namespace TheCall
 #if UNITY_EDITOR
         [SerializeField] bool _editorPreview = true;
         [SerializeField] int _editorPreviewSeed = 48291;
+        [SerializeField] int _previewTemplate = -1, _previewPalette = 0, _previewHeadAccessory, _previewBackAccessory;
         [SerializeField] string _previewPersonality = "稳定", _previewMood = "普通";
-        [SerializeField] string[] _previewSkills = Array.Empty<string>();
 #endif
         sealed class PaintedPart
         {
@@ -39,7 +39,7 @@ namespace TheCall
         Rect _inkBounds;
         string _assemblySignature;
         int _catalogRevision;
-        float _floor;
+        float _fitScale;
 
         public bool HasCreature
         {
@@ -84,7 +84,11 @@ namespace TheCall
         void RefreshEditorPreview()
         {
             if (this == null || Application.isPlaying || !_editorPreview || EditorUtility.IsPersistent(this)) return;
-            Show(MonsterVisualTraits.Create(MonsterAppearance.FromSeed(_editorPreviewSeed), _previewPersonality, _previewMood, _previewSkills));
+            var appearance = _previewTemplate < 0 ? MonsterAppearance.FromSeed(_editorPreviewSeed) :
+                new MonsterAppearance(_previewTemplate, _previewPalette,
+                    MonsterAppearance.Compatible(_previewTemplate, _previewHeadAccessory, _previewBackAccessory) ? _previewHeadAccessory : 0,
+                    MonsterAppearance.Compatible(_previewTemplate, _previewHeadAccessory, _previewBackAccessory) ? _previewBackAccessory : 0, 0);
+            Show(MonsterVisualTraits.Create(appearance, _previewPersonality, _previewMood, Array.Empty<string>()));
         }
 #endif
         public void Show(string monsterId) => Show(MonsterAppearance.FromSeed(Seed(monsterId)));
@@ -101,7 +105,7 @@ namespace TheCall
             _idleSeed = traits.Appearance.Variation * 1.37f + traits.Appearance.Recipe * .71f;
             MonsterComposition.Compose(catalog, traits, _composition);
             var signature = new StringBuilder();
-            _floor = float.PositiveInfinity;
+
             for (var i = 0; i < _composition.Count; i++)
             {
                 var piece = _composition[i]; var painted = Part(i);
@@ -112,9 +116,9 @@ namespace TheCall
                 painted.Node.localEulerAngles = new Vector3(0, 0, piece.Angle);
                 painted.Node.localScale = Vector3.one;
                 var image = painted.Image;
-                image.sprite = piece.Art.sprite; image.color = piece.Color;
+                image.sprite = piece.Sprite; image.color = piece.Color;
                 image.enabled = true; image.raycastTarget = false; image.maskable = true; image.preserveAspect = false;
-                var rect = image.rectTransform; var ink = piece.Art.ink; var spriteSize = piece.Art.sprite.rect.size;
+                var rect = image.rectTransform; var ink = piece.Art.ink; var spriteSize = piece.Sprite.rect.size;
                 var factor = new Vector2(piece.Size.x / ink.width, piece.Size.y / ink.height);
                 rect.anchorMin = rect.anchorMax = piece.Pivot;
                 rect.sizeDelta = Vector2.Scale(spriteSize, factor);
@@ -125,8 +129,6 @@ namespace TheCall
                 rect.localScale = new Vector3(piece.Mirror ? -1 : 1, 1, 1);
                 painted.Node.gameObject.SetActive(true);
                 var bounds = Bounds(piece);
-                if (piece.Role == MonsterComposition.Motion.LeftFoot || piece.Role == MonsterComposition.Motion.RightFoot)
-                    _floor = Mathf.Min(_floor,bounds.yMin);
                 _inkBounds = i == 0 ? bounds : Rect.MinMaxRect(Mathf.Min(_inkBounds.xMin,bounds.xMin),Mathf.Min(_inkBounds.yMin,bounds.yMin),
                     Mathf.Max(_inkBounds.xMax,bounds.xMax),Mathf.Max(_inkBounds.yMax,bounds.yMax));
                 signature.Append(piece.Name).Append(':').Append(piece.Art.id).Append(':').Append((Color32)piece.Color)
@@ -137,7 +139,6 @@ namespace TheCall
                     .Append(':').Append(piece.Mirror ? '1' : '0').Append(';');
             }
             for (var i = _composition.Count; i < _parts.Count; i++) _parts[i].Node.gameObject.SetActive(false);
-            if (float.IsPositiveInfinity(_floor)) _floor = 0;
             _assemblySignature = signature.ToString(); _showed = true;
             _creature.gameObject.SetActive(true); FitViewport();
             PreviewPose(Application.isPlaying ? Time.unscaledTime : 0);
@@ -174,9 +175,11 @@ namespace TheCall
         {
             if (_creature == null || _catalog == null) return;
             var size = ((RectTransform)transform).rect.size;
-            var scale = Mathf.Min(size.x / 264f, size.y / 292f) * _catalog.viewportFill;
-            _creature.localScale = Vector3.one * scale;
-            _creature.anchoredPosition = new Vector2(0, Mathf.Max(3, size.y * .025f) - _floor * scale);
+            var frame = _catalog.Body(_traits.Appearance.Recipe).frame;
+            _fitScale = Mathf.Min(size.x / frame.width, size.y / frame.height) * _catalog.viewportFill;
+            _creature.localScale = Vector3.one * _fitScale;
+            _creature.anchoredPosition = new Vector2(-frame.center.x * _fitScale,
+                (size.y - frame.height * _fitScale) * .5f - frame.yMin * _fitScale);
         }
         void OnRectTransformDimensionsChange() => FitViewport();
         void Update()
@@ -200,34 +203,24 @@ namespace TheCall
             if (_catalog == null || _creature == null || !_showed) return;
             var vigor = (.38f + _traits.MoodTier * .19f) * _catalog.idleMotion;
             var t = seconds * (.95f + _traits.MoodTier * .22f) + _idleSeed;
-            var wave = Mathf.Sin(t * 1.7f); var breath = wave * .012f * vigor;
+            var breath = Mathf.Sin(t * 1.7f) * .008f * vigor;
             var phase = Mathf.Repeat(seconds + _idleSeed, 4.8f);
-            var blink = phase < .17f ? 1 - Mathf.Sin(phase / .17f * Mathf.PI) * .9f : 1;
-            var droop = (2 - _traits.MoodTier) * .65f;
-            _creature.localEulerAngles = new Vector3(0, 0, _headReaction * .16f + _heldLean);
+            var blink = phase < .17f ? 1 - Mathf.Sin(phase / .17f * Mathf.PI) * .92f : 1;
+            _creature.localEulerAngles = new Vector3(0,0,_headReaction * .13f + _heldLean + (2-_traits.MoodTier)*.3f);
+            _creature.localScale = new Vector3(_fitScale * (1-breath*.25f), _fitScale * (1+breath), _fitScale);
+            var groups = _catalog.Body(_traits.Appearance.Recipe).groups;
             MotionSample = 0;
             for (var i = 0; i < _composition.Count; i++)
             {
-                var part = _parts[i]; var piece = part.Piece;
-                var at = new Vector2(piece.Position.x * (1 - breath * .35f),piece.Position.y * (1 + breath));
-                var angle = piece.Angle; var sx = 1f; var sy = 1f; var sway = wave * vigor;
-                switch (piece.Role)
-                {
-                    case MonsterComposition.Motion.Head: angle += _headReaction * .13f + sway * .65f; at.y -= droop; break;
-                    case MonsterComposition.Motion.Eye:
-                        sx = 1 - breath * .35f; sy = blink * (1 - _traits.MoodTier * .006f);
-                        at.x += Mathf.Sin(t * .57f) * .8f; at.y -= droop; angle += _headReaction * .1f; break;
-                    case MonsterComposition.Motion.Mouth: at.y -= droop; sy = 1 + breath * 2; break;
-                    case MonsterComposition.Motion.LeftArm: angle += sway * 3 + _feetReaction * .19f + (_held ? -9 : 0); break;
-                    case MonsterComposition.Motion.RightArm: angle -= sway * 2.7f + _feetReaction * .16f + (_held ? -9 : 0); break;
-                    case MonsterComposition.Motion.LeftFoot: angle += _feetReaction * .23f + sway * .8f; break;
-                    case MonsterComposition.Motion.RightFoot: angle -= _feetReaction * .19f + sway * .8f; break;
-                    case MonsterComposition.Motion.Ornament: angle += Mathf.Sin(t * 1.7f - .45f) * vigor * 1.8f; break;
-                    default: sx = 1 - breath * .35f; sy = 1 + breath; break;
-                }
-                part.Node.anchoredPosition = at; part.Node.localEulerAngles = new Vector3(0,0,angle);
-                part.Node.localScale = new Vector3(sx,sy,1);
-                MotionSample += at.x * .013f + at.y * .017f + angle * .023f + sy * .031f;
+                var part = _parts[i]; var piece = part.Piece; var group = groups[piece.Group];
+                var turn = Mathf.Sin(t * 1.7f + group.phase) * group.swing * vigor;
+                if (piece.Group == 1 || piece.Group == 2) turn += _headReaction * .08f;
+                if (piece.Group == 3 || piece.Group == 4) turn += _feetReaction * .09f + (_held ? 3 : 0);
+                var at = group.pivot + (Vector2)(Quaternion.Euler(0,0,turn) * (Vector3)(piece.Position-group.pivot));
+                part.Node.anchoredPosition = at;
+                part.Node.localEulerAngles = new Vector3(0,0,piece.Angle+turn);
+                part.Node.localScale = new Vector3(1,piece.Role == MonsterComposition.Motion.Eye ? blink : 1,1);
+                MotionSample += at.x*.013f + at.y*.017f + turn*.023f + blink*.031f;
             }
         }
         public void SetSpringMotion(float headAngle, float feetAngle)

@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "苔绿",
+      "bodyPatternLightnessDifference": 0.11904144235097125,
+      "bodyPatternHueDifference": 0.5123536101044976,
+      "passed": true
+    },
+    {
+      "name": "莓紫",
+      "bodyPatternLightnessDifference": 0.11977823973468738,
+      "bodyPatternHueDifference": 0.005020453144766179,
+      "passed": true
+    },
+    {
+      "name": "灰玫瑰",
+      "bodyPatternLightnessDifference": 0.12053713980753467,
+      "bodyPatternHueDifference": 0.02917360567715832,
+      "passed": true
+    },
+    {
+      "name": "奶黄",
+      "bodyPatternLightnessDifference": 0.12077699424084809,
+      "bodyPatternHueDifference": 0.27580700980985284,
+      "passed": true
+    },
+    {
+      "name": "雾蓝",
+      "bodyPatternLightnessDifference": 0.11948847220904169,
+      "bodyPatternHueDifference": 0.04901573692197303,
+      "passed": true
+    },
+    {
+      "name": "骨白",
+      "bodyPatternLightnessDifference": 0.12016395962174475,
+      "bodyPatternHueDifference": 0.6981111084795657,
+      "passed": true
+    }
+  ]
+}

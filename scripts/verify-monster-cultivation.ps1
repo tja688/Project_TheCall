@@ -1,5 +1,5 @@
 #Requires -Version 7.3
-param([string]$EvidenceDirectory = 'docs/audit/2026-10-20/monsters/cultivation')
+param([string]$EvidenceDirectory = 'docs/audit/2026-10-20/templates/cultivation')
 $ErrorActionPreference = 'Stop'
 $project = Split-Path $PSScriptRoot -Parent
 $evidence = if ([IO.Path]::IsPathRooted($EvidenceDirectory)) { $EvidenceDirectory } else { Join-Path $project $EvidenceDirectory }
@@ -26,6 +26,16 @@ function Wait-Shop {
     $condition = '{"member":"TheCall.Editor.MonsterCultivationAcceptance.ReadyForCheck","op":"equals","value":true}'
     $result = Invoke-Editor 'wait_for' @('--condition', $condition, '--timeout_s', '45')
     if (!$result.met) { throw "Actual shop did not become ready: $(Eval 'return TheCall.Editor.MonsterCultivationAcceptance.Stage;')" }
+}
+function Wait-Stage([string]$Member) {
+    $condition = '{"member":"TheCall.Editor.MonsterCultivationAcceptance.' + $Member + '","op":"equals","value":true}'
+    $result = Invoke-Editor 'wait_for' @('--condition', $condition, '--timeout_s', '45')
+    if (!$result.met) { throw "UI stage $Member not ready: $(Eval 'return TheCall.Editor.MonsterCultivationAcceptance.Stage;')" }
+}
+function Enter-PendingDay {
+    Wait-Stage 'ReadyForDayStart'
+    Step 'real begin-day after transition' 'return TheCall.Editor.MonsterCultivationAcceptance.BeginPendingDay();'
+    Wait-Stage 'ReadyForOperation'
 }
 function Step([string]$Name, [string]$Code) {
     $result = Eval $Code
@@ -70,25 +80,31 @@ try {
     Step 'install before' "return TheCall.Editor.MonsterCultivationAcceptance.InstallBegin(`"$evidenceCode`");"
     Capture '01-install-before'
     Step 'real gene install' 'return TheCall.Editor.MonsterCultivationAcceptance.InstallGene();'
-    Capture '02-install-after-wings'
+    Capture '02-install-after-unchanged-appearance'
 
     Step 'real parent and worker placements' "return TheCall.Editor.MonsterCultivationAcceptance.BreedingBegin(`"$evidenceCode`",false);"
     Capture '03-breeding-parent-layout'
     Step 'real breeding-day settlement' 'return TheCall.Editor.MonsterCultivationAcceptance.BreedingSettle();'
     Wait-Shop
     Capture '04-breeding-day-shop'
-    Step 'real child birth and next-day portrait' 'return TheCall.Editor.MonsterCultivationAcceptance.BreedingCheck();'
+    Step 'real child birth' 'return TheCall.Editor.MonsterCultivationAcceptance.BreedingCheck();'
+    Enter-PendingDay
+    Step 'real next-day child portrait' 'return TheCall.Editor.MonsterCultivationAcceptance.BreedingNextDay();'
     Capture '05-inherited-child-next-day'
 
     foreach ($day in 1, 2) {
         Step "parent work day $day begin" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodDayBegin();'
         Wait-Shop
+        Step "parent work leave shop" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodLeaveShop();'
+        Enter-PendingDay
         Step "parent work day $day check" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodDayCheck();'
         Capture $(if ($day -eq 1) { '06-parent-work-day-one' } else { '07-parent-tired-after-two-work-days' })
     }
     foreach ($day in 1, 2) {
         Step "parent rest day $day begin" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodDayBegin(false);'
         Wait-Shop
+        Step "parent rest leave shop" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodLeaveShop();'
+        Enter-PendingDay
         Step "parent rest day $day check" 'return TheCall.Editor.MonsterCultivationAcceptance.MoodDayCheck();'
         Capture $(if ($day -eq 1) { '08-parent-rest-day-one' } else { '09-parent-enthusiastic-after-two-rest-days' })
     }

@@ -2,8 +2,7 @@
 param(
     [switch]$KeepPlaying,
     [int]$Seeds = 600,
-    [int]$SupportCases = 144,
-    [string]$EvidenceDirectory = 'docs/audit/2026-10-20/monsters'
+    [string]$EvidenceDirectory = 'docs/audit/2026-10-20/templates'
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path $PSScriptRoot -Parent
@@ -16,7 +15,6 @@ $started = $false
 $passed = $false
 $failure = $null
 if ($Seeds -lt 600) { throw 'At least 600 seeds are required for complete matrix acceptance.' }
-if ($SupportCases -lt 144) { throw 'At least 144 alpha-support cases are required for full limb and acquired-combination coverage.' }
 
 function Invoke-Editor([string]$Name, [string[]]$Arguments = @()) {
     $raw = & unity --no-banner --non-interactive command $Name --project-path $project --caller plugin --skill unity-cli --timeout 600 --format json -- @Arguments
@@ -69,7 +67,7 @@ try {
     Eval 'UnityEngine.Application.runInBackground=true;' | Out-Null
     Next-Frame
     Step "return TheCall.Editor.MonsterArtAcceptance.Matrix(`"$evidenceCode`",$Seeds);" 300000
-    Step "return TheCall.Editor.MonsterArtAcceptance.SupportMatrix(`"$evidenceCode`",$SupportCases);" 300000
+    Step "return TheCall.Editor.MonsterArtAcceptance.TintContracts(`"$evidenceCode`");" 300000
     Step "return TheCall.Editor.MonsterArtAcceptance.Contracts(`"$evidenceCode`");"
 
     foreach ($page in 0..4) {
@@ -140,7 +138,7 @@ finally {
     @{
         kind = 'LOCAL_VISUAL_AND_POINTER_FIXTURES_NOT_NATURAL_RUN'
         passed = $passed; failure = $failure; checks = $checks; count = $checks.Count; captures = $captures
-        requestedSeeds = $Seeds; supportCases = $SupportCases; savedSceneHash = $savedHash; finalSceneHash = $finalHash
+        requestedSeeds = $Seeds; tintContracts = "source-aligned semantic masks"; savedSceneHash = $savedHash; finalSceneHash = $finalHash
         recordedPlayerReplay = 'Run scripts/verify-facility-replay.ps1 with a separate EvidenceDirectory; these fixtures do not prove seven-day completion.'
     } | ConvertTo-Json -Depth 9 | Set-Content -LiteralPath (Join-Path $evidence 'acceptance.json') -Encoding utf8
 }

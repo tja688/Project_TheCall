@@ -209,12 +209,8 @@ namespace TheCall.Editor
         {
             specimen.Recipe = appearance.Recipe;
             specimen.Palette = appearance.Palette;
-            specimen.Head = appearance.Head;
-            specimen.Mouth = appearance.Mouth;
-            specimen.Arms = appearance.Arms;
-            specimen.Legs = appearance.Legs;
-            specimen.Crest = appearance.Crest;
-            specimen.Pattern = appearance.Pattern;
+            specimen.HeadAccessory = appearance.HeadAccessory;
+            specimen.BackAccessory = appearance.BackAccessory;
             specimen.Variation = appearance.Variation;
         }
 
@@ -252,7 +248,7 @@ namespace TheCall.Editor
         {
             var catalog = MonsterArtCatalog.Runtime;
             var body = catalog != null && catalog.bodies != null && specimen.Recipe < catalog.bodies.Length
-                ? catalog.bodies[specimen.Recipe].name
+                ? catalog.Body(specimen.Recipe).name
                 : "体型 " + specimen.Recipe;
             return body + " · " + specimen.Personality + " · " + specimen.Mood + " · " + Join(specimen.Skills);
         }

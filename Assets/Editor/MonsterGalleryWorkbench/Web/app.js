@@ -85,6 +85,45 @@
     return pressed ? pressed.getAttribute("data-source") : "any";
   }
 
+  let optionKey = "";
+  const choice = (name) => document.getElementById(name + "-choice");
+  function populate(select, items) {
+    select.replaceChildren(...items.map((item) => {
+      const option = document.createElement("option");
+      option.value = item.id; option.textContent = item.name; return option;
+    }));
+  }
+  function accessories() {
+    const template = state?.options?.templates.find((t) => t.id === Number(choice("template").value));
+    const pairs = template?.pairs || [0];
+    for (const option of choice("head").options) option.disabled = !pairs.some((p) => Math.floor(p / 3) === Number(option.value));
+    if (choice("head").selectedOptions[0]?.disabled) choice("head").value = "0";
+    for (const option of choice("back").options) option.disabled = !pairs.includes(Number(choice("head").value) * 3 + Number(option.value));
+    if (choice("back").selectedOptions[0]?.disabled) choice("back").value = "0";
+  }
+  function swatches() {
+    const palette = state?.options?.palettes[Number(choice("palette").value)];
+    const host = document.getElementById("palette-preview"); host.replaceChildren(); if (!palette) return;
+    for (const [key, label] of [["body", "身体"], ["pattern", "花纹"], ["eye", "眼部"], ["mouth", "嘴部"]]) {
+      const item = document.createElement("div");
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 64 28");
+      const rect = document.createElementNS(svg.namespaceURI, "rect");
+      rect.setAttribute("width", "64"); rect.setAttribute("height", "28"); rect.setAttribute("rx", "5"); rect.setAttribute("fill", "#" + palette[key]); svg.append(rect);
+      const text = document.createElement("small"); text.textContent = label + " #" + palette[key]; item.append(svg, text); host.append(item);
+    }
+  }
+  document.getElementById("preview-controls").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const payload = {};
+    for (const key of ["template", "palette", "head", "back"]) payload[key] = Number(choice(key).value);
+    for (const key of ["personality", "mood"]) payload[key] = choice(key).value;
+    run(() => command("preview", payload));
+  });
+  choice("template").addEventListener("change", () => { choice("head").value = choice("back").value = "0"; accessories(); });
+  choice("head").addEventListener("change", accessories);
+  choice("palette").addEventListener("change", swatches);
+
   function render() {
     badge.textContent = state ? "已连接" : "未连接";
     badge.dataset.ok = state ? "1" : "0";
@@ -94,6 +133,16 @@
     filters.querySelectorAll("button").forEach((button) => {
       button.setAttribute("aria-pressed", button.getAttribute("data-source") === state.filter ? "true" : "false");
     });
+    if (state.options) {
+      const key = JSON.stringify(state.options);
+      if (key !== optionKey) {
+        populate(choice("template"), state.options.templates); populate(choice("palette"), state.options.palettes);
+        populate(choice("personality"), state.options.personalities.map((name) => ({id: name, name})));
+        populate(choice("mood"), state.options.moods.map((name) => ({id: name, name}))); optionKey = key;
+      }
+      if (state.selection) for (const [key, value] of Object.entries(state.selection)) choice(key).value = value;
+      accessories(); swatches();
+    }
     const specimen = state.specimen;
     if (specimen && specimen.png) images.set(specimen.id, specimen.png);
     if (specimen && images.get(specimen.id)) {
@@ -183,7 +232,7 @@
     });
   });
   document.addEventListener("keydown", (event) => {
-    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement) return;
     if (event.key === " " || event.key === "n" || event.key === "N") {
       event.preventDefault();
       document.getElementById("roll").click();
@@ -201,6 +250,7 @@
 
   async function connectStream() {
     await refreshSnapshot();
+    if (!state.webSockets) { longPollLoop(); return; }
     let failed = false;
     try {
       const socket = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/stream");

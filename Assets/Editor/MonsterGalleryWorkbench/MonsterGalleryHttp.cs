@@ -66,6 +66,14 @@ namespace TheCall.Editor
                     return;
                 }
 
+                if (path.Equals("/reference.jpg", StringComparison.Ordinal))
+                {
+                    var bytes=File.ReadAllBytes(Path.Combine(_webRoot,"../../../示意图/怪物实例.jpg"));
+                    context.Response.ContentType="image/jpeg";context.Response.Headers["Cache-Control"]="no-store";
+                    context.Response.Headers["X-Content-Type-Options"]="nosniff";context.Response.ContentLength64=bytes.Length;
+                    context.Response.OutputStream.Write(bytes,0,bytes.Length);context.Response.OutputStream.Close();return;
+                }
+
                 if (path.Equals("/stream", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!_sockets || !context.Request.IsWebSocketRequest)

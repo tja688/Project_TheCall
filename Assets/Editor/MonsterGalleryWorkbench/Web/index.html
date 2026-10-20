@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
   <title>怪物立绘抽查</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -10,7 +11,7 @@
   <header>
     <div class="title">
       <strong>怪物立绘抽查</strong>
-      <span>按开局、商店和培育的真实抽取来换图。浅色方块是游戏里 279×299 的画像框，放大了两倍。</span>
+      <span>12 个成品模板，整套色卡与出生饰品。浅色方块是游戏里 279×299 的画像框，放大了两倍。</span>
     </div>
     <div class="status">
       <span id="connectionBadge" data-ok="0">未连接</span>
@@ -29,6 +30,20 @@
       <p id="empty">还没有怪物。</p>
     </section>
     <aside>
+      <form id="preview-controls">
+        <div class="control-grid">
+          <label>模板<select id="template-choice" name="template"></select></label>
+          <label>整套色卡<select id="palette-choice" name="palette"></select></label>
+          <label>头饰<select id="head-choice" name="head"><option value="0">无附加头饰</option><option value="1">短角</option><option value="2">纹角</option><option value="3">蝴蝶结</option></select></label>
+          <label>背饰<select id="back-choice" name="back"><option value="0">无附加背饰</option><option value="1">蝙蝠翼</option><option value="2">羽翼</option></select></label>
+          <label>性格<select id="personality-choice" name="personality"></select></label>
+          <label>心情<select id="mood-choice" name="mood"></select></label>
+        </div>
+        <div id="palette-preview" aria-label="身体、花纹、眼部、嘴部色卡"></div>
+        <button type="submit">应用固定预览</button>
+        <p class="hint">只调整抽查样本，不改对局。花纹同色略深，眼嘴异色。</p>
+      </form>
+      <details class="reference"><summary>美术成品参考图</summary><img src="/reference.jpg" alt="12 个成品怪物参考图" /></details>
       <h2 id="summary">—</h2>
       <dl id="facts"></dl>
       <details>

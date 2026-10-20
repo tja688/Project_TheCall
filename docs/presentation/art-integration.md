@@ -20,11 +20,13 @@
 
 ## 换怪物画像
 
-当前 `MonsterPortrait.Show(MonsterView)` 接收完整怪物投影，按出生时固定的结构基因、当前性格、心情和技能组合部件。正式素材来自 `Assets/Arts/Pngs/部位组件/` 的 70 张原图。拖动虚影复制同一份视觉快照；结算仍消费既有快照和 `SetSpringMotion`，不会提前读取下一天的状态。
+当前 `MonsterPortrait.Show(MonsterView)` 接收完整怪物投影，绘制出生时确定的成品模板、完整色卡与兼容饰品。性格决定固定眼位中的眼型，真实心情影响动作；技能不改变身体结构。拖动虚影复制同一快照，结算继续消费既有快照与 `SetSpringMotion`。
 
-在 `Assets/Resources/MonsterArtCatalog.asset` 调整六种体型的挂点、脸区、口腔和六套配色。`viewportFill` 控制外框留白，`idleMotion` 控制动作幅度。更换原图后执行 `TheCall/Monster/更新部件目录与图集`，该操作更新原图引用、透明边界与共享图集，并保留已调好的体型参数。画像 Inspector 可固定种子、性格、心情和技能来核对组合。素材语义、优先级与缺图复用清单见[怪物部件说明](monster-art-direction.md)。
+在 `Assets/Resources/MonsterArtCatalog.asset` 调整 12 套成品模板的分层、眼位、颜色角色、动作组与取景。六套色卡遵循身体与花纹同色略深、眼嘴异色。原始 70 张 PNG 保留；高光、牙齿与爪尖通过独立着色遮罩保护。
 
-`MonsterAppearance` 保存九项结构基因。两亲和三亲培育逐项从亲本选取，色板沿次亲本，外观哈希不消费玩法随机数。性格眼型和技能附肢根据真实规则状态派生，不参与技能数量或能量结算。旧 `MonsterRig` 相关类型和工作区不恢复。
+更换原图后执行 `TheCall/Monster/更新部件目录与图集`，更新引用、遮罩和共享图集，同时保留人工布局与色卡。`MonsterArtIntegration.Apply(true)` 会明确恢复默认值。维护、配色与遗传规则见[成品模板系统](monster-system.md)。
+
+画像 Inspector 可固定模板、色卡、饰品、性格与心情。需要逐个对照参考图时使用菜单 `TheCall/Monster/打开立绘抽查台`。这些预览不修改正式对局，也不增加玩家装扮界面。
 
 ## 接入新的按钮
 
@@ -62,7 +64,9 @@
 
 ## 验证改动
 
-怪物部件的完整局部验收运行 `pwsh -NoProfile -File scripts/verify-monster-system.ps1`。它在实际 Unity Canvas 中检查 600 个结构种子、34 项技能、120 组原始 alpha 关节交叠、心情与技能刷新、跨区拖动虚影和拒绝回弹，并输出五页样本与多帧动作证据。`scripts/audit-monster-art.py --check` 单独复查原始素材。培养与基因安装的端到端证据以及三模式自然七天回放应分别保留，局部注入样本不视为自然通关。
+成品怪物的局部验收运行 `pwsh -NoProfile -File scripts/verify-monster-system.ps1`，覆盖全部合法饰品、72 个模板与色卡组合、五类眼型与五档心情、600 个出生种子、技能变化稳定性、实际跨区拖拽及拒绝回弹。运行 `scripts/verify-monster-cultivation.ps1` 检查真实基因安装保持外观、培育出生与跨天心情。原图独立检查使用 `scripts/audit-monster-art.py --check`。
+
+通过 Unity CLI 调用 `MonsterArtAcceptance.ExportTemplates()` 导出真实 Canvas 画像，然后运行 `python scripts/monster-template-evidence.py` 整理参考对照、完整色卡矩阵与动作 GIF，并检查配色和原始 alpha 连通性。局部注入样本不视为自然通关，七天普通、快进、跳过回放另行运行并比较规则记录。新证据位于 `docs/audit/2026-10-20/templates/`。
 
 当前横向设施先运行 `scripts/verify-facility-art.ps1`。它检查实际跨区拖放、监控、收容柜末尾、科研扩建、回收和商店。运行 `scripts/verify-facility-replay.ps1`，再对照正常、快进、跳过三种七天流程的全部状态与生产记录。图层与灯光的独立校验使用 `scripts/audit-facility-art.py`。证据位于 `docs/audit/2026-10-17/facility/`。
 

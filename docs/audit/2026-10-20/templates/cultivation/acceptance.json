@@ -1,0 +1,124 @@
+{
+  "kind": "LOCAL_CULTIVATION_UI_FIXTURES_NOT_NATURAL_RUN",
+  "passed": true,
+  "savedMainUnchanged": true,
+  "savedMainSha256": "E39275F4BB7942B9BA29A60F2E8FA2E92BFE7D6E9EB7003F5DAAC2E09DFF6927",
+  "checks": [
+    {
+      "name": "install before",
+      "result": "PASS install-ready: actual cage slot and 奇异香 gene prepared; capture before calling InstallGene",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real gene install",
+      "result": "PASS real gene drag consumes 奇异香, preserves birth genes, preserves template, colors, eye positions and accessories",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real parent and worker placements",
+      "result": "PASS breeding-prepared: two real parent drags and one real production drag; capture the layout before calling BreedingSettle",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real breeding-day settlement",
+      "result": "PASS breeding-playing: two real parent drags, one real production drag and settlement click; wait for ReadyForCheck then call BreedingCheck",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real child birth",
+      "result": "PASS child born by real LeaveShop; wait for ReadyForDayStart before BeginPendingDay",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real begin-day after transition",
+      "result": "PASS begin-day clicked; wait for ReadyForOperation before checking portraits",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real next-day child portrait",
+      "result": "PASS production settlement and LeaveShop create one inherited child; actual next-day cage portrait matches current rules. MoodDayBegin/Check can now run twice for work, then optionally twice with false for rest",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work day 1 begin",
+      "result": "PASS mood-playing: tracked parent works; wait for ReadyForCheck then call MoodDayCheck",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work leave shop",
+      "result": "PASS mood-day LeaveShop clicked; wait for ReadyForDayStart",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real begin-day after transition",
+      "result": "PASS begin-day clicked; wait for ReadyForOperation before checking portraits",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work day 1 check",
+      "result": "PASS actual parent mood 普通; work=1; rest=0; current portrait refreshed with unchanged genes and eye family",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work day 2 begin",
+      "result": "PASS mood-playing: tracked parent works; wait for ReadyForCheck then call MoodDayCheck",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work leave shop",
+      "result": "PASS mood-day LeaveShop clicked; wait for ReadyForDayStart",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real begin-day after transition",
+      "result": "PASS begin-day clicked; wait for ReadyForOperation before checking portraits",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent work day 2 check",
+      "result": "PASS actual parent mood 疲倦; work=2; rest=0; current portrait refreshed with unchanged genes and eye family",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest day 1 begin",
+      "result": "PASS mood-playing: tracked parent rests; wait for ReadyForCheck then call MoodDayCheck",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest leave shop",
+      "result": "PASS mood-day LeaveShop clicked; wait for ReadyForDayStart",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real begin-day after transition",
+      "result": "PASS begin-day clicked; wait for ReadyForOperation before checking portraits",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest day 1 check",
+      "result": "PASS actual parent mood 普通; work=0; rest=1; current portrait refreshed with unchanged genes and eye family",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest day 2 begin",
+      "result": "PASS mood-playing: tracked parent rests; wait for ReadyForCheck then call MoodDayCheck",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest leave shop",
+      "result": "PASS mood-day LeaveShop clicked; wait for ReadyForDayStart",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "real begin-day after transition",
+      "result": "PASS begin-day clicked; wait for ReadyForOperation before checking portraits",
+      "kind": "LOCAL_NOT_NATURAL"
+    },
+    {
+      "name": "parent rest day 2 check",
+      "result": "PASS actual parent mood 热情; work=0; rest=2; current portrait refreshed with unchanged genes and eye family",
+      "kind": "LOCAL_NOT_NATURAL"
+    }
+  ],
+  "failures": []
+}

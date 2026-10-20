@@ -1,0 +1,6939 @@
+{
+  "kind": "BASELINE_AND_ALL_COMPATIBLE_ACCESSORIES_ORIGINAL_ALPHA_CONNECTIVITY",
+  "rows": [
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "HeadLeft",
+        "HeadRight",
+        "SpineL",
+        "SpineR",
+        "SpineLower"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadLeft",
+      "neighbors": [
+        "Core",
+        "EarL",
+        "EarR",
+        "SpineL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadRight",
+      "neighbors": [
+        "Core",
+        "EarR",
+        "FixedHorn"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "EarL",
+      "neighbors": [
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "EarR",
+      "neighbors": [
+        "HeadLeft",
+        "HeadRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "HeadRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "SpineL",
+      "neighbors": [
+        "Core",
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "SpineR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 0,
+      "back": 0,
+      "layer": "SpineLower",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "HeadLeft",
+        "HeadRight",
+        "SpineL",
+        "SpineR",
+        "SpineLower"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadLeft",
+      "neighbors": [
+        "Core",
+        "EarL",
+        "EarR",
+        "SpineL",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadRight",
+      "neighbors": [
+        "Core",
+        "EarR",
+        "FixedHorn"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "EarL",
+      "neighbors": [
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "EarR",
+      "neighbors": [
+        "HeadLeft",
+        "HeadRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "HeadRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "SpineL",
+      "neighbors": [
+        "Core",
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "SpineR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "SpineLower",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 0,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 0,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 1,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 0,
+      "back": 2,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StalkLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StalkLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearFoot",
+        "StalkLeft",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "StalkLeft",
+      "neighbors": [
+        "Core",
+        "StalkTop",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "StalkTop",
+      "neighbors": [
+        "StalkLeft",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "StalkLeft",
+        "StalkTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 1,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StalkLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 0,
+      "layer": "StarRight",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 0,
+      "layer": "StarLeft",
+      "neighbors": [
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 1,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 1,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 2,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 0,
+      "back": 2,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 0,
+      "layer": "StarRight",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 0,
+      "layer": "StarLeft",
+      "neighbors": [
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 1,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 1,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 2,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 2,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 1,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 0,
+      "layer": "StarRight",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 0,
+      "layer": "StarLeft",
+      "neighbors": [
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 1,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 1,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 2,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 0,
+      "layer": "StarRight",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 0,
+      "layer": "StarLeft",
+      "neighbors": [
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 1,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 1,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "StarRight",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 2,
+      "layer": "StarRight",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 2,
+      "layer": "StarLeft",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "StarRight",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 2,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "StarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilUpperL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilUpperR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilMiddleL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilMiddleR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilLowerL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "TendrilLowerR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "CrossLeft",
+      "neighbors": [
+        "TendrilUpperL",
+        "TendrilMiddleL",
+        "TendrilLowerL",
+        "CrossRight",
+        "HeadLeft",
+        "RivetBelly"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "CrossRight",
+      "neighbors": [
+        "TendrilUpperR",
+        "TendrilMiddleR",
+        "TendrilLowerR",
+        "CrossLeft",
+        "HeadRight",
+        "RivetBelly"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadLeft",
+      "neighbors": [
+        "CrossLeft",
+        "EarLeft",
+        "RivetL",
+        "RivetTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadRight",
+      "neighbors": [
+        "CrossRight",
+        "EarRight",
+        "RivetR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "EarLeft",
+      "neighbors": [
+        "HeadLeft",
+        "RivetL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "EarRight",
+      "neighbors": [
+        "HeadRight",
+        "RivetR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetL",
+      "neighbors": [
+        "HeadLeft",
+        "EarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetR",
+      "neighbors": [
+        "HeadRight",
+        "EarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "HeadLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetBelly",
+      "neighbors": [
+        "CrossLeft",
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilUpperL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilUpperR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilMiddleL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilMiddleR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilLowerL",
+      "neighbors": [
+        "CrossLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "TendrilLowerR",
+      "neighbors": [
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "CrossLeft",
+      "neighbors": [
+        "TendrilUpperL",
+        "TendrilMiddleL",
+        "TendrilLowerL",
+        "CrossRight",
+        "HeadLeft",
+        "RivetBelly"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "CrossRight",
+      "neighbors": [
+        "TendrilUpperR",
+        "TendrilMiddleR",
+        "TendrilLowerR",
+        "CrossLeft",
+        "HeadRight",
+        "RivetBelly"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadLeft",
+      "neighbors": [
+        "CrossLeft",
+        "EarLeft",
+        "RivetL",
+        "RivetTop",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadRight",
+      "neighbors": [
+        "CrossRight",
+        "EarRight",
+        "RivetR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "EarLeft",
+      "neighbors": [
+        "HeadLeft",
+        "RivetL",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "EarRight",
+      "neighbors": [
+        "HeadRight",
+        "RivetR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetL",
+      "neighbors": [
+        "HeadLeft",
+        "EarLeft"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetR",
+      "neighbors": [
+        "HeadRight",
+        "EarRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "HeadLeft",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetBelly",
+      "neighbors": [
+        "CrossLeft",
+        "CrossRight"
+      ],
+      "connected": true
+    },
+    {
+      "template": 3,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "HeadLeft",
+        "EarLeft",
+        "RivetTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelLeft",
+      "neighbors": [
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "StarRearTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelRight",
+      "neighbors": [
+        "StarRearTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelLower",
+      "neighbors": [
+        "StarRearBottom"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FootL",
+      "neighbors": [
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "FootR",
+      "neighbors": [
+        "StarRearBottom"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "StarRearTop",
+      "neighbors": [
+        "FeelTop",
+        "FeelRight",
+        "StarRearBottom",
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "StarRearBottom",
+      "neighbors": [
+        "FeelLower",
+        "FootR",
+        "StarRearTop",
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 0,
+      "back": 0,
+      "layer": "StarFront",
+      "neighbors": [
+        "FeelLeft",
+        "FootL",
+        "StarRearTop",
+        "StarRearBottom"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelLeft",
+      "neighbors": [
+        "StarFront",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "StarRearTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelRight",
+      "neighbors": [
+        "StarRearTop"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelLower",
+      "neighbors": [
+        "StarRearBottom"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FootL",
+      "neighbors": [
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "FootR",
+      "neighbors": [
+        "StarRearBottom"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "StarRearTop",
+      "neighbors": [
+        "FeelTop",
+        "FeelRight",
+        "StarRearBottom",
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "StarRearBottom",
+      "neighbors": [
+        "FeelLower",
+        "FootR",
+        "StarRearTop",
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "StarFront",
+      "neighbors": [
+        "FeelLeft",
+        "FootL",
+        "StarRearTop",
+        "StarRearBottom",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 4,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "FeelLeft",
+        "StarFront"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 0,
+      "layer": "Brain",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 1,
+      "layer": "Brain",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 0,
+      "back": 2,
+      "layer": "Brain",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "Brain",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "Brain",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 5,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core",
+        "Brain"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 1,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "CatEarL",
+        "CatEarR",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "CatEarL",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "CatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 6,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "CatEarL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "Head",
+        "BackWing"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 0,
+      "back": 0,
+      "layer": "Head",
+      "neighbors": [
+        "Core",
+        "HeadWingL",
+        "HeadWingR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadWingL",
+      "neighbors": [
+        "Head"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 0,
+      "back": 0,
+      "layer": "HeadWingR",
+      "neighbors": [
+        "Head"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 0,
+      "back": 0,
+      "layer": "BackWing",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "Head",
+        "BackWing"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "Head",
+      "neighbors": [
+        "Core",
+        "HeadWingL",
+        "HeadWingR",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadWingL",
+      "neighbors": [
+        "Head"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadWingR",
+      "neighbors": [
+        "Head",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "BackWing",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Head",
+        "HeadWingR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "Head",
+        "BackWing"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "Head",
+      "neighbors": [
+        "Core",
+        "HeadWingL",
+        "HeadWingR",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadWingL",
+      "neighbors": [
+        "Head",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadWingR",
+      "neighbors": [
+        "Head",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "BackWing",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 7,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Head",
+        "HeadWingL",
+        "HeadWingR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 0,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 1,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 0,
+      "back": 2,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 1,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 2,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "RivetTop",
+        "RivetSide",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "RivetTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "RivetSide",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 8,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 1,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 0,
+      "back": 2,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 1,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 2,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "FixedHorn",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "FixedHorn",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 9,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "FeelLow",
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "FeelLow",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 0,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "FeelLow",
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "FeelLow",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 1,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "FeelLow",
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "FeelLow",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 2,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "RearArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontArm",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "FeelLow",
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "FeelLow",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 1,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryL",
+      "neighbors": [
+        "Core",
+        "FrontArm"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "BackAccessoryR",
+      "neighbors": [
+        "RearArm",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "FeelTop",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "FeelMid",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "FeelLow",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "RearArm",
+      "neighbors": [
+        "BackAccessoryR",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "RearFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "Core",
+      "neighbors": [
+        "BackAccessoryL",
+        "BackAccessoryR",
+        "FeelTop",
+        "FeelMid",
+        "FeelLow",
+        "RearArm",
+        "RearFoot",
+        "FrontArm",
+        "FrontFoot",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontArm",
+      "neighbors": [
+        "BackAccessoryL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "FrontFoot",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 10,
+      "head": 3,
+      "back": 2,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "RearTentacleL",
+      "neighbors": [
+        "MidTentacleL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "RearTentacleR",
+      "neighbors": [
+        "MidTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "MidTentacleL",
+      "neighbors": [
+        "RearTentacleL",
+        "Core",
+        "FrontTentacleL",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "MidTentacleR",
+      "neighbors": [
+        "RearTentacleR",
+        "Core",
+        "FrontTentacleL",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearTentacleL",
+        "MidTentacleL",
+        "MidTentacleR",
+        "BatEarL",
+        "BatEarR",
+        "FrontTentacleL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "BatEarL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "BatEarR",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontTentacleL",
+      "neighbors": [
+        "MidTentacleL",
+        "MidTentacleR",
+        "Core",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 0,
+      "back": 0,
+      "layer": "FrontTentacleR",
+      "neighbors": [
+        "MidTentacleL",
+        "MidTentacleR",
+        "FrontTentacleL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "RearTentacleL",
+      "neighbors": [
+        "MidTentacleL",
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "RearTentacleR",
+      "neighbors": [
+        "MidTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "MidTentacleL",
+      "neighbors": [
+        "RearTentacleL",
+        "Core",
+        "FrontTentacleL",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "MidTentacleR",
+      "neighbors": [
+        "RearTentacleR",
+        "Core",
+        "FrontTentacleL",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "Core",
+      "neighbors": [
+        "RearTentacleL",
+        "MidTentacleL",
+        "MidTentacleR",
+        "BatEarL",
+        "BatEarR",
+        "FrontTentacleL",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "BatEarL",
+      "neighbors": [
+        "Core"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "BatEarR",
+      "neighbors": [
+        "Core",
+        "HeadAccessory"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontTentacleL",
+      "neighbors": [
+        "MidTentacleL",
+        "MidTentacleR",
+        "Core",
+        "FrontTentacleR"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "FrontTentacleR",
+      "neighbors": [
+        "MidTentacleL",
+        "MidTentacleR",
+        "FrontTentacleL"
+      ],
+      "connected": true
+    },
+    {
+      "template": 11,
+      "head": 3,
+      "back": 0,
+      "layer": "HeadAccessory",
+      "neighbors": [
+        "Core",
+        "BatEarR"
+      ],
+      "connected": true
+    }
+  ],
+  "disconnected": []
+}

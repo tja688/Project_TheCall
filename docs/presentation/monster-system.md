@@ -1,34 +1,47 @@
-# 怪物组合系统的实现与维护
+# 成品模板怪物的实现与维护
 
-这版将固定剪影替换成原始组件的动态组合。轮廓由六套受约束体型控制，结构在出生时固定；性格、心情和技能随真实玩法状态更新。各界面只交给画像一份查询快照，画像不持有玩法状态，也不重新抽取组合。
+正式怪物使用 `Assets/示意图/怪物实例.jpg` 中的 12 个完整造型。每个模板固定身体、肢体、嘴型、花纹和眼位。出生时确定模板、整套色卡及头饰、背饰；技能增减不改变这些内容。性格决定眼型，真实心情控制呼吸、姿态与动作强度。
 
-## 调用和数据归属
+## 数据与调用
 
 ```csharp
 portrait.Show(monsterView);
 var ghost = MonsterPortrait.SpawnGhost(dragLayer, portrait);
 ```
 
-`RunModel` 持有怪物，怪物的 `MonsterAppearance` 保存配方、色板、头、嘴、手、脚、顶饰、花纹和变体。生成使用固定哈希，培育对每个结构槽选择一名亲本，支持实际的两亲与三亲流程。同亲本跨天使用不同出生种子，出生后查询和刷新不改变基因。外观不额外消费 `IDraw`，原有技能、性格、种族和经济抽取顺序保持一致。
+`RunModel` 中的怪物拥有唯一的 `MonsterAppearance`，保存 `Recipe`、`Palette`、`HeadAccessory`、`BackAccessory`、`Variation`。`Recipe` 对应稳定的 `MonsterTemplate` 标识，`Palette` 对应稳定的 `MonsterPalette` 标识，均不依赖 Inspector 数组排序。画像、商店、结果、拖动虚影与结算都消费同一快照，不自行抽取或查询下一天状态。
 
-`MonsterView` 同时携带外观、性格、心情和技能。商店货架现在也携带完整投影，所以购买前后的怪物身份一致。`SettlementSight` 已保存开场快照，演出期间画像继续使用该快照，不偷读下一天心情或已经被规则消除的技能。胜负页为固定示范个体，分别显示热爱和倦怠状态。
+出生均匀选择 12 个模板、6 套色卡与模板允许的饰品组合。两亲、三亲培育有 80% 概率继承一名亲本的完整模板，20% 从亲本未出现的其他模板中选择。整套色卡沿用现有次亲本规则。饰品候选来自亲本，筛选兼容组合；没有适配项时使用无附加饰品。外观哈希不调用 `IDraw`，性格、技能、种族、经济与亲本来源仍由原规则处理。
 
-`MonsterVisualTraits` 是无引擎的值快照。五类眼型是当前 25 种机制性格的美术归类。34 个正式技能映射为有上限的部件特征集合，重复技能不无限复制附件。心情单独改变呼吸、姿态、眨眼和嘴型，不替换性格眼型。视觉特征不反向赋予技能。
+饰品兼容规则只在无 Unity 依赖的 `MonsterAppearance.Compatible` 中维护。资源目录必须覆盖该清单。头饰编号为无、短角、纹角、蝴蝶结；背饰编号为无、蝙蝠翼、羽翼。成对翅膀算一个背饰。复杂模板可以只开放蝴蝶结，或关闭背饰。
 
-`MonsterArtCatalog` 保存原图引用、有效透明边界、六套体型和配色。`MonsterComposition` 处理前后遮挡、嘴型兼容、花纹优先级与副头位置。`MonsterPortrait` 复用 Image 节点，内部动画不改结算拥有的根缩放和位置；根位置只沿既有拖拽与返回合约移动。共享 SpriteAtlas 用于部件批次，源 PNG 和 PSB 不重绘、不覆盖。
+## 作者化资源
 
-## 设计选择
+`Assets/Resources/MonsterArtCatalog.asset` 是当前美术调参入口，schemaVersion 为 2。
 
-考虑过只保存出生种子并在每个界面重新组合。它便于增加素材，却会让素材排序变化改掉已有怪物，也难以说明子代继承了什么。因此保存显式结构基因，由表现目录解释其编号。
+- `bodies`：按稳定 ID 查找的 12 套固定分层、表达眼位、饰品挂点、动作分组与取景框。
+- `palettes`：身体、花纹、眼部强调色、嘴部四个颜色角色。完整色卡共同遗传。
+- `parts`：70 张原始透明图片及有效 alpha 范围，部分含派生着色遮罩。
+- `viewportFill` 与 `idleMotion`：外框留白与动作幅度。
 
-也考虑过把心情、性格和所有技能件都写进遗传结构。它会产生两份状态主人，安装技能或推进一天后容易留下旧件。因此只遗传稳定结构，动态表现从规则快照派生。面具、闭环尾等尚未交付的专属件不凭空生成，复用范围在[美术规则](monster-art-direction.md)中列明。
+`MonsterComposition` 按数据绘制，不包含随机头型、手脚、口型或技能改造。各层按颜色角色取色。眼睛只在标记为 expression 的固定位置替换；纽扣外壳等装饰眼不改变数量与位置。眼睛、嘴和身体通过动作分组共同运动，着色遮罩与原图使用相同变换。
 
-## 复查入口
+菜单 `TheCall/Monster/更新部件目录与图集` 更新原图引用、遮罩与图集，同时保留现有模板和色卡。首次由旧目录迁移时填入 12 套成品默认值。开发调用 `MonsterArtIntegration.Apply(true)` 会明确重置为 `MonsterTemplateDefaults` 中的布局及色卡，日常换图不要传 true。
 
-1. 在画像 Inspector 固定种子、性格、心情和技能，检查同一只怪物的变化。
-2. 调整 `Assets/Resources/MonsterArtCatalog.asset`，保持肩髋挂点进入真实不透明轮廓，避免把透明外框当连接处。
-3. 执行部件目录更新菜单，保留作者化布局。开发时 `MonsterArtIntegration.Apply(true)` 可恢复默认体型与配色。
-4. 运行 `scripts/verify-monster-system.ps1` 和原图审计。检查实际 Game View 样本，alpha 交叠只能证明连接，不能代替审美复核。
-5. 跑实际基因安装、培育、跨天心情、结算、商店买卖与三模式七天回放。局部样本与自然玩家输入证据分别记录。
+原始 PNG 不修改。`MonsterTintMasks` 生成 `Assets/Resources/MonsterTintMasks/` 下的着色遮罩，保留黑线、瞳孔、白色高光、爪尖和吸盘。需要改变语义分区时调整生成器，并检查原图与遮罩叠加后的实际画像。
 
-验收记录位于 `docs/audit/2026-10-20/monsters/`。原始交接文档保留作历史输入，当前维护以本文件和美术规则为准。
+## 抽查与验证
+
+编辑器菜单 `TheCall/Monster/打开立绘抽查台` 使用现有 localhost 控制面板。可选择固定模板、完整色卡、兼容饰品、性格与心情，对照原始参考图。预览只改变抽查记录，不修改当前对局。旧版九结构槽缓存已用 v2 会话键隔离。
+
+```powershell
+python scripts/audit-monster-art.py --check
+pwsh -NoProfile -File scripts/verify-monster-system.ps1
+pwsh -NoProfile -File scripts/verify-monster-cultivation.ps1
+pwsh -NoProfile -File scripts/verify-facility-replay.ps1 -EvidenceDirectory docs/audit/2026-10-20/templates/replay
+python scripts/monster-template-evidence.py
+```
+
+导出真实画像使用 Unity CLI 调用 `MonsterArtAcceptance.ExportTemplates()`，生成 72 个真实 Canvas 色卡画像与模板几何数据。`monster-template-evidence.py` 需要 Pillow，将这些截图整理为对照图、色卡图与动作 GIF，同时检查 OKLab 色差、全部合法饰品的原始 alpha 结构连通性及饰品对表情眼位的遮挡，不绘制替代怪物。
+
+证据目录为 `docs/audit/2026-10-20/templates/`。画像矩阵、局部资源注入、真实指针交互与七天玩家输入回放分别记录，不能相互代替。审美判断仍需查看实际图片与动作，不能仅凭测试或几何连通性通过。

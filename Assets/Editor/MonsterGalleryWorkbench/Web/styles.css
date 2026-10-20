@@ -155,3 +155,12 @@ footer { border-top: 1px solid var(--line); }
   main { grid-template-columns: 1fr; }
   .status { white-space: normal; }
 }
+
+.control-grid { display:grid; grid-template-columns:1fr 1fr; gap:.65rem; }
+.control-grid label { display:flex; flex-direction:column; gap:.2rem; font-size:.8rem; color:var(--muted); }
+.control-grid select { font:inherit; color:var(--ink); width:100%; min-width:0; padding:.45rem; border:1px solid var(--line); border-radius:.45rem; background:var(--card); }
+#preview-controls { padding:.8rem; border:1px solid var(--line); border-radius:.7rem; margin-bottom:1rem; }
+#palette-preview { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; margin:.8rem 0; }
+#palette-preview svg { display:block; width:100%; height:28px; }
+#palette-preview small { font-size:9px; white-space:nowrap; }
+.reference { margin-bottom:1rem; }.reference img { width:100%; border-radius:.5rem; margin-top:.6rem; }

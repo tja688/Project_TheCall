@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "masks": [
+    "713",
+    "768",
+    "854",
+    "857",
+    "861",
+    "863",
+    "867",
+    "872",
+    "909",
+    "912",
+    "745",
+    "752",
+    "799",
+    "817",
+    "635",
+    "704"
+  ],
+  "originalParts": 70,
+  "note": "Mask/source alignment and authored eye anchors. Attachment appearance is reviewed in actual Unity galleries."
+}

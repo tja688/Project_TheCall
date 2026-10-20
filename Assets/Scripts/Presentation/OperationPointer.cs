@@ -212,7 +212,9 @@ namespace TheCall
 
             _card = Instantiate(source.gameObject, dragLayer);
             _cardOffset = (Vector2)source.transform.position - eventData.position;
-            var group = _card.AddComponent<CanvasGroup>();
+            var group = _card.GetComponent<CanvasGroup>();
+            if (group == null)
+                group = _card.AddComponent<CanvasGroup>();
             group.blocksRaycasts = false;
             group.interactable = false;
             var copy = _card.GetComponent<OperationPayloadDrag>();

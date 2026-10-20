@@ -51,6 +51,8 @@ namespace TheCall.Editor
             EditorApplication.delayCall += ResumeIfNeeded;
         }
 
+        public static bool SupportsWebSockets => _sockets;
+
         public static string LaunchUrl
         {
             get

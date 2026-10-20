@@ -10,6 +10,41 @@ namespace TheCall.Scoring
 {
     public sealed class PresentationSeamTests
     {
+        [TestCase(true)]
+        [TestCase(false)]
+        public void 基因拖拽复制件始终只有一个不拦截射线的透明组(bool hasGroup)
+        {
+            var root = new GameObject("GeneDragTest", typeof(RectTransform));
+            var layer = (RectTransform)new GameObject("DragLayer", typeof(RectTransform)).transform;
+            layer.SetParent(root.transform, false);
+            try
+            {
+                var pointer = root.AddComponent<OperationPointer>();
+                pointer.dragLayer = layer;
+                var source = new GameObject("Gene", typeof(RectTransform));
+                source.transform.SetParent(root.transform, false);
+                if (hasGroup) source.AddComponent<CanvasGroup>();
+                source.AddComponent<SkillChipView>().RenderGene(0, new GeneSlotView(0, "奇异香", false, null), false);
+                var drag = source.AddComponent<OperationPayloadDrag>();
+                drag.payloadKind = PayloadKind.SkillChip;
+                var data = new PointerEventData(null) { position = new Vector2(50, 50), pressPosition = new Vector2(50, 50) };
+                pointer.Press(drag, data);
+                pointer.BeginDrag(drag, data);
+                Assert.That(layer.childCount, Is.EqualTo(1));
+                var copy = layer.GetChild(0);
+                Assert.That(copy.GetComponents<CanvasGroup>().Length, Is.EqualTo(1));
+                Assert.That(copy.GetComponent<CanvasGroup>().blocksRaycasts, Is.False);
+                Assert.That(copy.GetComponent<CanvasGroup>().interactable, Is.False);
+                Assert.That(copy.GetComponent<OperationPayloadDrag>().enabled, Is.False);
+                if (hasGroup) Assert.That(source.GetComponent<CanvasGroup>().blocksRaycasts, Is.True);
+            }
+            finally
+            {
+                if (layer.childCount > 0) UnityEngine.Object.DestroyImmediate(layer.GetChild(0).gameObject);
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+        }
+
         [TestCase(PayloadKind.SkillChip)]
         [TestCase(PayloadKind.BreedingSkill)]
         public void 删除按钮与标签仍能携带存在的基因(PayloadKind kind)

@@ -62,54 +62,5 @@ namespace TheCall.Hover.Tests
             }
         }
 
-        [Test]
-        public void AcquiredStarRemainsVisibleBesideInheritedStitchesAndSealedMouthSuppressesTongue()
-        {
-            var root = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/MonsterPortrait.prefab"));
-            try
-            {
-                var portrait = root.GetComponent<MonsterPortrait>();
-                var genes = new MonsterAppearance(0, 0, 0, 0, 0, 0, 0, 1, 0);
-                portrait.Show(MonsterVisualTraits.Create(genes, "稳定", "普通", new[] { "优秀能量体" }));
-                var nodes = root.GetComponentsInChildren<RectTransform>();
-                Assert.That(System.Array.Exists(nodes, node => node.name == "BodyStar_710"), Is.True, "An inherited pattern must not hide an acquired skill mark");
-                Assert.That(System.Array.Exists(nodes, node => node.name == "BodyStitchSecondary_674"), Is.True);
-
-                portrait.Show(MonsterVisualTraits.Create(genes, "稳定", "普通", new[] { "祭品腺", "回响嗓" }));
-                nodes = root.GetComponentsInChildren<RectTransform>();
-                Assert.That(System.Array.Exists(nodes, node => node.name == "Mouth_538"), Is.True);
-                Assert.That(System.Array.Exists(nodes, node => node.name.StartsWith("OuterTongue_", System.StringComparison.Ordinal)), Is.False,
-                    "A tongue must not pass through the sealed mouth");
-            }
-            finally { Object.DestroyImmediate(root); }
-        }
-
-        [Test]
-        public void TwinTemplateConnectsBothHeadsAndFatBodyExtraHeadPaintsBehindTheMainEyes()
-        {
-            var root = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/MonsterPortrait.prefab"));
-            try
-            {
-                var portrait = root.GetComponent<MonsterPortrait>();
-                portrait.Show(new MonsterAppearance(5, 0));
-                var nodes = root.GetComponentsInChildren<RectTransform>();
-                Assert.That(System.Array.FindAll(nodes, node => node.name.StartsWith("Body_", System.StringComparison.Ordinal) && node.name.EndsWith("_942", System.StringComparison.Ordinal)).Length,
-                    Is.EqualTo(2), "Both raised heads need a neck that overlaps the shoulder body");
-
-                portrait.Show(MonsterVisualTraits.Create(new MonsterAppearance(0, 0), "稳定", "普通", new[] { "双头能量体" }));
-                nodes = root.GetComponentsInChildren<RectTransform>();
-                var extra = System.Array.Find(nodes, node => node.name == "ExtraHead_936");
-                var mainEye = System.Array.Find(nodes, node => node.name.StartsWith("EyeL_", System.StringComparison.Ordinal));
-                Assert.That(extra, Is.Not.Null);
-                Assert.That(mainEye, Is.Not.Null);
-                Assert.That(extra.GetSiblingIndex(), Is.LessThan(mainEye.GetSiblingIndex()), "The extra head must not paint over the main eyes");
-                var extraCorners = new Vector3[4]; var eyeCorners = new Vector3[4];
-                extra.GetWorldCorners(extraCorners); mainEye.GetWorldCorners(eyeCorners);
-                var rightEdge = Mathf.Max(extraCorners[0].x, extraCorners[1].x, extraCorners[2].x, extraCorners[3].x);
-                var leftEdge = Mathf.Min(eyeCorners[0].x, eyeCorners[1].x, eyeCorners[2].x, eyeCorners[3].x);
-                Assert.That(rightEdge, Is.LessThan(leftEdge), "The extra head must leave horizontal room for the main eye");
-            }
-            finally { Object.DestroyImmediate(root); }
-        }
     }
 }

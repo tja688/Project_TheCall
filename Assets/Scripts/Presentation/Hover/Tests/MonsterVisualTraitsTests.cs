@@ -28,41 +28,28 @@ namespace TheCall.Hover.Tests
                     MonsterAppearance.FromSeed(124), personality.name, mood, new[] { "双头能量体" })).ToArray();
                 Assert.That(states.Select(state => state.MoodTier), Is.EqualTo(new[] { 0, 1, 2, 3, 4 }), personality.name);
                 Assert.That(states.Select(state => state.EyeFamily).Distinct().Count(), Is.EqualTo(1), personality.name);
-                Assert.That(states.All(state => state.Mutations == MonsterMutation.ExtraHead), Is.True, "Personality and mood must not replace skill mutations");
                 Assert.That(states.Select(state => state.Signature).Distinct().Count(), Is.EqualTo(5), "Mood must participate in refresh identity");
                 families.Add(states[0].EyeFamily);
             }
             Assert.That(families.Count, Is.EqualTo(5), "All five delivered eye families must be reachable");
         }
 
-        [Test]
-        public void EveryActualSkillHasAVisibleMappingAndMechanismAnchorsStayRecognizable()
+        [Test] public void AllActualSkillsLeaveTheBirthAppearanceUnchanged()
         {
-            var book = ActualBook();
-            var appearance = MonsterAppearance.FromSeed(218);
-            Assert.That(book.skills.Length, Is.EqualTo(34));
-            foreach (var skill in book.skills)
-            {
-                var traits = MonsterVisualTraits.Create(appearance, "稳定", "普通", new[] { skill.name });
-                Assert.That(traits.Mutations, Is.Not.EqualTo(MonsterMutation.None), skill.name + " has no delivered-part interpretation");
-                Assert.That(traits.MutationDescription, Is.Not.EqualTo("基础体态"), skill.name);
-            }
-            Assert.That(ForSkill("双头能量体") & MonsterMutation.ExtraHead, Is.Not.EqualTo(MonsterMutation.None));
-            Assert.That(ForSkill("换位手") & MonsterMutation.LargeHand, Is.Not.EqualTo(MonsterMutation.None));
-            Assert.That(ForSkill("情绪收集器") & MonsterMutation.ExposedBrain, Is.Not.EqualTo(MonsterMutation.None));
-            Assert.That(ForSkill("回响嗓"), Is.EqualTo(MonsterMutation.ForkTongue));
-            Assert.That(ForSkill("镜眼"), Is.EqualTo(MonsterMutation.ButtonEye));
+            var appearance=MonsterAppearance.FromSeed(218); var baseline=MonsterVisualTraits.From(appearance).Signature;
+            foreach(var skill in ActualBook().skills)
+                Assert.That(MonsterVisualTraits.Create(appearance,"稳定","普通",new[]{skill.name}).Signature,Is.EqualTo(baseline));
         }
 
         [Test]
-        public void SameAppearanceRefreshesForSkillsPersonalityAndMood()
+        public void OnlyPersonalityAndMoodRefreshVisualTraits()
         {
             var appearance = MonsterAppearance.FromSeed(12);
             var baseline = MonsterVisualTraits.From(appearance);
             var mood = MonsterVisualTraits.Create(appearance, "稳定", "倦怠", Array.Empty<string>());
             var personality = MonsterVisualTraits.Create(appearance, "恋爱脑", "普通", Array.Empty<string>());
             var skills = MonsterVisualTraits.Create(appearance, "稳定", "普通", new[] { "双头能量体" });
-            Assert.That(new[] { baseline.Signature, mood.Signature, personality.Signature, skills.Signature }.Distinct().Count(), Is.EqualTo(4));
+            Assert.That(new[] { baseline.Signature, mood.Signature, personality.Signature, skills.Signature }.Distinct().Count(), Is.EqualTo(3));
         }
 
         [Test]
@@ -74,9 +61,8 @@ namespace TheCall.Hover.Tests
             var signature = snapshot.Signature;
             skills.Clear();
             skills.Add("回响嗓");
-            Assert.That(snapshot.Mutations, Is.EqualTo(MonsterMutation.ExtraHead));
             Assert.That(snapshot.Signature, Is.EqualTo(signature));
-            Assert.That(MonsterVisualTraits.Create(appearance, "稳定", "普通", skills).Signature, Is.Not.EqualTo(signature));
+            Assert.That(MonsterVisualTraits.Create(appearance, "稳定", "普通", skills).Signature, Is.EqualTo(signature));
         }
 
         [Test]
@@ -88,7 +74,5 @@ namespace TheCall.Hover.Tests
             Assert.That(first.Signature, Is.EqualTo(second.Signature));
         }
 
-        static MonsterMutation ForSkill(string name) => MonsterVisualTraits.Create(
-            MonsterAppearance.FromSeed(17), "稳定", "普通", new[] { name }).Mutations;
     }
 }

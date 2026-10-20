@@ -9,7 +9,7 @@ namespace TheCall.Editor
         public override void OnInspectorGUI()
         {
             EditorGUILayout.HelpBox(
-                "这个矩形承载规则组合的怪物部件。性格决定眼型，技能添加身体改造，心情改变动作强度。移动、缩放或改宽高，游戏中的画像和拖拽返回位置会一起跟随。外观由怪物数据生成，请在预览种子和部件目录中检查组合。",
+                "成品模板画像。性格决定固定眼位内的眼型，心情改变动作，技能不改变造型。预览模板 -1 使用种子，否则填写 0–11；色卡 0–5，头饰 0–3，背饰 0–2。非法预览饰品使用无饰品版本。正式外观在出生时确定。",
                 MessageType.Info);
             DrawDefaultInspector();
         }
