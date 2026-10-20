@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,105 +8,50 @@ using UnityEngine.UI;
 namespace TheCall
 {
     /// <summary>
-    /// Shared portrait for game slots, scoring and drag previews.
-    /// The game uses whole authored silhouettes. The assembly renderer and its motion
-    /// controller remain selectable for the retained workbench and legacy rig tests.
+    /// 槽位、结算和拖拽共用的怪物画像。
+    /// 旧拼接骨架已删除。这里只画 ShadowMonsterCatalog 里的整张剪影。
+    /// 新怪物系统替换 ShowAppearance。见 Assets/Notes/新怪物系统交接.md。
     /// </summary>
     [ExecuteAlways]
     public sealed class MonsterPortrait : MonoBehaviour
     {
-        [SerializeField] Image _tail;
-        [SerializeField] Image _foot;
-        [SerializeField] Image _body;
-        [SerializeField] Image _hand;
-        [SerializeField] Image _head;
-        [SerializeField] Image _eye;
-        [SerializeField] Image _mouth;
-        [SerializeField] Image _hat;
-        [SerializeField] Image _accessory;
-        [SerializeField] Transform _headGroup;
-        [SerializeField] Transform _feetGroup;
-        [SerializeField] Transform _bodyGroup;
-        [SerializeField] Transform _tailGroup;
-        [SerializeField] MonsterMotionProfile _motionProfile;
-        [SerializeField] MonsterAssemblyCatalog _assemblyCatalog;
-        [SerializeField] bool _fitToViewport = true;
-        [SerializeField] bool _useShadow;
+        public const float ViewportWidth = 279f;
+        public const float ViewportHeight = 299f;
+
+        /// <summary>新建画像矩形的尺寸。与当前 MonsterPortrait 预制体一致。</summary>
+        public static Vector2 RecommendedViewportSize => new Vector2(ViewportWidth, ViewportHeight);
+
         [SerializeField] Color _shadowTint = new Color32(20, 43, 51, 255);
-        Image _shadow;
-        Vector3 _shadowHome;
-        Vector3 _shadowGrip;
-        bool _shadowReturning;
-        float _shadowReaction;
 #if UNITY_EDITOR
         [SerializeField] bool _editorPreview = true;
         [SerializeField] int _editorPreviewSeed = 48291;
 #endif
 
-        public const float LegacyViewportWidth = 142f;
-        public const float LegacyViewportHeight = 102f;
-
-        static Vector2? _recommendedViewport;
-
-        /// <summary>UI 卡面上 MonsterPortrait 矩形建议尺寸，按当前 Rig 静止姿势采样。</summary>
-        public static Vector2 RecommendedViewportSize =>
-            _recommendedViewport ??= MonsterRigRuntime.RecommendedPortraitViewport();
-
-        bool _layersBound;
+        Image _shadow;
+        Vector3 _shadowHome;
+        Vector3 _shadowGrip;
+        bool _shadowReturning;
+        float _shadowReaction;
         bool _showed;
-        bool _worldLit;
-        bool _reacting;
-        float _idlePhase;
         float _idleSeed;
         int _showKey;
         MonsterAppearance _appearance;
-        MonsterRigSkeleton _skeleton;
-        MonsterRigFrame _frame;
-        MonsterMotionController _motion;
-        Sprite[] _boneSprites;
-        RectTransform _rigRoot;
-        readonly List<Image> _rigImages = new List<Image>();
-#if UNITY_EDITOR
-        Vector2 _editorViewport;
-#endif
 
-        public MonsterMotionProfile MotionProfile => _motionProfile != null
-            ? _motionProfile
-            : MonsterMotionProfile.Fallback;
-
-        public MonsterAssemblyCatalog AssemblyCatalog => _assemblyCatalog != null
-            ? _assemblyCatalog
-            : MonsterAssemblyCatalog.Runtime;
-
-        public static readonly Color[] Palette =
-        {
-            new Color32(238, 115, 101, 255),
-            new Color32(100, 190, 132, 255),
-            new Color32(100, 166, 218, 255),
-            new Color32(236, 190, 85, 255),
-            new Color32(185, 133, 210, 255),
-            new Color32(88, 196, 191, 255),
-        };
-
-        /// <summary>是否已经装上了一只可以拖拽、会摆动的怪物。</summary>
-        public bool HasCreature => _useShadow ? Painted(_shadow) : _motion != null;
-        public bool UsesShadow => _useShadow;
+        public bool HasCreature => Painted(_shadow);
+        public bool UsesShadow => true;
         public Sprite ShadowSprite => _shadow != null ? _shadow.sprite : null;
+
         public void SetShadowTint(Color color)
-        { _shadowTint = color; if (_shadow != null) _shadow.color = color; }
+        {
+            _shadowTint = color;
+            if (_shadow != null) _shadow.color = color;
+        }
 
-        /// <summary>抓取分量和反应都已回到静止。没有怪物时视为静止。</summary>
-        public bool Settled => _useShadow ? !_shadowReturning : _motion == null || _motion.Settled;
+        public bool Settled => !_shadowReturning;
 
+        /// <summary>旧拼接开关已删除。画像只有剪影。</summary>
         public void UseShadowArtwork()
         {
-            _useShadow = true;
-            _showed = false;
-            DropSkeleton();
-            HideRig();
-            HideLegacy();
-            var baked = transform.Find("Rig");
-            if (baked != null) baked.gameObject.SetActive(false);
         }
 
 #if UNITY_EDITOR
@@ -135,10 +79,6 @@ namespace TheCall
             EditorApplication.delayCall += RefreshEditorPreview;
         }
 
-        /// <summary>
-        /// 退出播放后，预制体资源上的组件也会进 OnValidate，并排进这次预览。
-        /// 资源上的 Transform 禁止 SetParent，只能刷新场景里的实例。
-        /// </summary>
         bool CanRefreshEditorPreview()
         {
             return !Application.isPlaying && _editorPreview && !EditorUtility.IsPersistent(this);
@@ -149,7 +89,6 @@ namespace TheCall
             if (this == null || !CanRefreshEditorPreview())
                 return;
 
-            RemoveBakedRig();
             Show(MonsterAppearance.FromSeed(_editorPreviewSeed));
         }
 #endif
@@ -167,231 +106,60 @@ namespace TheCall
 
         void ShowAppearance(MonsterAppearance appearance, float seed)
         {
-            if (_useShadow)
-            {
-                ShowShadow(appearance, seed);
-                return;
-            }
-            if (_shadow != null) _shadow.enabled = false;
-            MonsterPartLibrary.Ensure();
-            var key = AppearanceSalt(appearance);
-            // 同一只怪物每帧都会被刷新一次：外观和种子没变时保留它的运动状态，否则拖拽会被打断。
-            if (_showed && key == _showKey && Mathf.Approximately(seed, _idleSeed) && RigVisualIntact())
-                return;
-
-            _showed = true;
-            _showKey = key;
-            _appearance = appearance;
-            _idleSeed = seed;
-            if (MonsterRigRuntime.TryBuildSkeleton(appearance.Recipe, key, out var skeleton))
-            {
-                AdoptSkeleton(skeleton);
-                return;
-            }
-
-            DropSkeleton();
-            HideRig();
-            BindLayerParents();
-
-            var catalog = AssemblyCatalog;
-            var template = catalog.GetTemplateOrFallback(appearance.TemplateId, appearance.Recipe);
-            var selectedHeadId = string.IsNullOrEmpty(appearance.HeadId)
-                ? template == null ? null : template.head.partId
-                : appearance.HeadId;
-            var headDefinition = catalog.GetPartOrNull(selectedHeadId);
-
-            ApplyPart(MonsterPartKind.Tail, _tail, _tailGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Foot, _foot, _feetGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Body, _body, _bodyGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Hand, _hand, _bodyGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Head, _head, _headGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Eye, _eye, _headGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Mouth, _mouth, _headGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Hat, _hat, _headGroup, catalog, template, appearance, headDefinition);
-            ApplyPart(MonsterPartKind.Accessory, _accessory, _bodyGroup, catalog, template, appearance, headDefinition);
-            ApplyGroupPivot(_headGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Head));
-            ApplyGroupPivot(_feetGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Foot));
-            ApplyGroupPivot(_bodyGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Body));
-            ApplyGroupPivot(_tailGroup, catalog.ResolveGroupPivot(template, MonsterPartKind.Tail));
-            RestoreMotion();
-        }
-
-        void AdoptSkeleton(MonsterRigSkeleton skeleton)
-        {
-            _skeleton = skeleton;
-            _frame = new MonsterRigFrame(skeleton);
-            _motion = new MonsterMotionController(skeleton, MotionProfile, _idleSeed);
-            _boneSprites = new Sprite[skeleton.Bones.Count];
-            for (var i = 0; i < _boneSprites.Length; i++)
-                _boneSprites[i] = MonsterRigRuntime.SpriteFor(skeleton.Bones[i].PartId);
-
-            _reacting = false;
-            HideLegacy();
-            _motion.Compose(_frame);
-            ApplyRig();
-            FitCreatureToViewport();
-        }
-
-        void DropSkeleton()
-        {
-            _skeleton = null;
-            _frame = null;
-            _motion = null;
-            _boneSprites = null;
-            _reacting = false;
+            ShowShadow(appearance, seed);
         }
 
         void Update()
         {
-            if (_useShadow)
+            if (_shadow == null || !_showed) return;
+            var dt = Application.isPlaying ? Time.unscaledDeltaTime : 0;
+            _shadowReaction = Mathf.MoveTowards(_shadowReaction, 0, dt * 24);
+            var breath = Application.isPlaying ? Mathf.Sin(Time.unscaledTime * 1.7f + _idleSeed) * 0.012f : 0;
+            _shadow.rectTransform.localScale = new Vector3(1 - breath * 0.35f, 1 + breath, 1);
+            _shadow.rectTransform.localEulerAngles = new Vector3(0, 0, _shadowReaction);
+            if (_shadowReturning)
             {
-                if (_shadow == null || !_showed) return;
-                var dt = Application.isPlaying ? Time.unscaledDeltaTime : 0;
-                _shadowReaction = Mathf.MoveTowards(_shadowReaction, 0, dt * 24);
-                var breath = Application.isPlaying ? Mathf.Sin(Time.unscaledTime * 1.7f + _idleSeed) * 0.012f : 0;
-                _shadow.rectTransform.localScale = new Vector3(1 - breath * 0.35f, 1 + breath, 1);
-                _shadow.rectTransform.localEulerAngles = new Vector3(0, 0, _shadowReaction);
-                if (_shadowReturning)
+                transform.position = Vector3.Lerp(transform.position, _shadowHome, 1 - Mathf.Exp(-dt * 16));
+                if (Vector3.Distance(transform.position, _shadowHome) < 0.5f)
                 {
-                    transform.position = Vector3.Lerp(transform.position, _shadowHome, 1 - Mathf.Exp(-dt * 16));
-                    if (Vector3.Distance(transform.position, _shadowHome) < 0.5f)
-                    { transform.position = _shadowHome; _shadowReturning = false; }
+                    transform.position = _shadowHome;
+                    _shadowReturning = false;
                 }
-                return;
             }
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                EditorTrackViewport();
-                return;
-            }
-#endif
-            EnsureWorldLight();
-            if (_motion != null)
-            {
-                _motion.Advance(Time.unscaledDeltaTime);
-                ApplyRig();
-                return;
-            }
-
-            if (!MotionProfile.idleEnabled || _reacting)
-                return;
-
-            _idlePhase += Time.unscaledDeltaTime;
-            SetIdleMotion(_idlePhase, _idleSeed);
         }
 
-        /// <summary>
-        /// 世界画布上的怪物要吃 2D 灯。覆盖层上的卡片保持 UI，拖拽虚影自己再挂灯光。
-        /// </summary>
-        void EnsureWorldLight()
-        {
-            if (_worldLit)
-                return;
-
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            _worldLit = true;
-            if (canvas.rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
-                return;
-
-            if (GetComponent<MonsterLightBody>() == null)
-                gameObject.AddComponent<MonsterLightBody>();
-        }
-
-        /// <summary>旧装配路径的待机。有骨架时待机由控制器负责，这里不做任何事。</summary>
-        public void SetIdleMotion(float time, float phase = 0f)
-        {
-            if (_motion != null)
-                return;
-
-            var profile = MotionProfile;
-            var wave = Mathf.Sin((time + phase) * Mathf.PI * 2f * profile.idleCyclesPerSecond);
-            var slowWave = Mathf.Sin((time + phase * 0.7f) * Mathf.PI * profile.idleCyclesPerSecond);
-            SetMotion(
-                wave * profile.idleHeadDegrees,
-                wave * profile.idleFeetDegrees,
-                slowWave * profile.idleTailDegrees,
-                slowWave * profile.idleBodyDegrees,
-                wave * profile.idleBodyLift);
-        }
-
-        /// <summary>计分时头和脚弹一下（度）。有骨架时由控制器平滑过去，松开后自动回落。</summary>
+        /// <summary>结算反应。旧骨架弹簧已删除，头角只换成剪影的小幅倾斜。</summary>
         public void SetSpringMotion(float headAngle, float feetAngle)
         {
-            if (_useShadow) { _shadowReaction = Mathf.Clamp(headAngle * 0.25f, -7, 7); return; }
-            _reacting = true;
-            if (_motion != null)
-            {
-                _motion.SetReaction(headAngle, feetAngle);
-                return;
-            }
-
-            SetMotion(headAngle, feetAngle, 0f, 0f, 0f);
+            _ = feetAngle;
+            _shadowReaction = Mathf.Clamp(headAngle * 0.25f, -7, 7);
         }
 
         public void RestoreMotion()
         {
-            if (_useShadow) { _shadowReaction = 0; return; }
-            _reacting = false;
-            if (_motion != null)
-            {
-                _motion.SetReaction(0f, 0f);
-                return;
-            }
-
-            SetMotion(0f, 0f, 0f, 0f, 0f);
+            _shadowReaction = 0;
         }
 
-        /// <summary>抓住怪物。screenPoint 是按下时的屏幕坐标；这里只改变抓取状态，不做任何视觉切换。</summary>
         public void Grab(Vector2 screenPoint, Camera eventCamera)
         {
-            if (_useShadow)
-            {
-                _shadowHome = transform.position;
-                if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
-                    _shadowGrip = transform.position - world;
-                _shadowReturning = false;
-                return;
-            }
-            if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
-                return;
-
-            _motion.Grab(point.x, point.y);
+            _shadowHome = transform.position;
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
+                _shadowGrip = transform.position - world;
+            _shadowReturning = false;
         }
 
         public void Hold(Vector2 screenPoint, Camera eventCamera)
         {
-            if (_useShadow)
-            {
-                if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
-                    transform.position = world + _shadowGrip;
-                return;
-            }
-            if (_motion == null || !TryRigPoint(screenPoint, eventCamera, out var point))
-                return;
-
-            _motion.Hold(point.x, point.y);
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform.parent, screenPoint, eventCamera, out var world))
+                transform.position = world + _shadowGrip;
         }
 
         public void Release(Vector3? returnPoint = null)
         {
-            if (_useShadow)
-            {
-                if (returnPoint.HasValue) _shadowHome = returnPoint.Value;
-                _shadowReturning = true;
-                return;
-            }
-            if (_motion != null)
-                _motion.Release();
+            if (returnPoint.HasValue) _shadowHome = returnPoint.Value;
+            _shadowReturning = true;
         }
 
-        /// <summary>
-        /// 把这只怪物的屏幕尺寸对齐到目标。拖拽虚影靠近容器时调用。
-        /// 先改矩形，再按同一比例收回骨架本地坐标，布娃娃仍抓住原来的屏幕位置。
-        /// </summary>
         public void MatchScreenUniform(float screenUniform)
         {
             var rect = transform as RectTransform;
@@ -404,11 +172,8 @@ namespace TheCall
                 return;
 
             transform.localScale *= ratio;
-            if (_motion != null)
-                _motion.RescaleGrip(1f / ratio);
         }
 
-        /// <summary>整只怪物的透明度（用于拖拽时把原位淡下去）。不挡射线。</summary>
         public void SetVisibility(float alpha)
         {
             var group = GetComponent<CanvasGroup>();
@@ -426,10 +191,6 @@ namespace TheCall
             group.interactable = visible;
         }
 
-        /// <summary>
-        /// 拖拽时的怪物实体：与原位同样的位置、大小和外观，由自己的控制器驱动。
-        /// 不复制卡片、文字或窗口，只有怪物本身。
-        /// </summary>
         public static MonsterPortrait SpawnGhost(RectTransform layer, MonsterPortrait source)
         {
             var go = new GameObject("MonsterGhost", typeof(RectTransform), typeof(CanvasGroup));
@@ -456,18 +217,9 @@ namespace TheCall
             rect.position = sourceRect.TransformPoint(sourceRect.rect.center);
 
             var ghost = go.AddComponent<MonsterPortrait>();
-            ghost._motionProfile = source._motionProfile;
-            ghost._assemblyCatalog = source._assemblyCatalog;
-            ghost._useShadow = source._useShadow;
             ghost._shadowTint = source._shadowTint;
             if (source._showed)
                 ghost.ShowAppearance(source._appearance, source._idleSeed);
-            // 虚影继续留在覆盖层上接指针。离开卡片后由世界精灵吃 2D 灯，UI 着色器采不到那张灯图。
-            if (Application.isPlaying && !source._useShadow)
-            {
-                var body = go.AddComponent<MonsterLightBody>();
-                body.YieldToOverlay();
-            }
 
             return ghost;
         }
@@ -475,341 +227,9 @@ namespace TheCall
         public void Clear()
         {
             _showed = false;
-            if (_shadow != null) _shadow.enabled = false;
             _shadowReturning = false;
-            DropSkeleton();
-            HideRig();
-            ClearImage(_tail);
-            ClearImage(_foot);
-            ClearImage(_body);
-            ClearImage(_hand);
-            ClearImage(_head);
-            ClearImage(_eye);
-            ClearImage(_mouth);
-            ClearImage(_hat);
-            ClearImage(_accessory);
-            RestoreMotion();
-            if (_rigRoot != null)
-            {
-                _rigRoot.localScale = Vector3.one;
-                _rigRoot.anchoredPosition = Vector2.zero;
-            }
-        }
-
-        bool TryRigPoint(Vector2 screenPoint, Camera eventCamera, out Vector2 point)
-        {
-            point = Vector2.zero;
-            return _rigRoot != null
-                && RectTransformUtility.ScreenPointToLocalPointInRectangle(_rigRoot, screenPoint, eventCamera, out point);
-        }
-
-        void BindLayerParents()
-        {
-            if (_layersBound)
-                return;
-
-            Reparent(_tail, _tailGroup);
-            Reparent(_foot, _feetGroup);
-            Reparent(_body, _bodyGroup);
-            Reparent(_hand, _bodyGroup);
-            Reparent(_head, _headGroup);
-            Reparent(_eye, _headGroup);
-            Reparent(_mouth, _headGroup);
-            Reparent(_hat, _headGroup);
-            Reparent(_accessory, _bodyGroup);
-            _layersBound = true;
-        }
-
-        void ApplyPart(
-            MonsterPartKind kind,
-            Image image,
-            Transform parent,
-            MonsterAssemblyCatalog catalog,
-            MonsterAssemblyTemplate template,
-            MonsterAppearance appearance,
-            MonsterPartDefinition headDefinition)
-        {
-            if (image == null)
-                return;
-
-            var appearancePartId = appearance.PartId(kind);
-            var slot = catalog.ResolveSlot(template, kind, appearancePartId, appearance.HasExplicitParts);
-            var definition = catalog.GetPartOrNull(slot.partId);
-            var valid = slot.enabled
-                        && definition != null
-                        && definition.sprite != null
-                        && catalog.IsCompatible(slot, definition);
-            var rect = image.rectTransform;
-
-            if (!image.gameObject.activeSelf)
-                image.gameObject.SetActive(true);
-
-            if (parent != null && image.transform.parent != parent)
-                image.transform.SetParent(parent, false);
-
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = definition != null && definition.sprite != null
-                ? definition.sprite.rect.size
-                : MonsterAssemblyCatalog.CanvasSize;
-            var animationPivot = ClampPivot(slot.pivot, definition);
-            rect.pivot = animationPivot;
-            rect.anchoredPosition = catalog.ResolveSpritePivotPosition(template, slot, definition, headDefinition);
-            rect.localRotation = Quaternion.Euler(0f, 0f, slot.rotation);
-            rect.localScale = new Vector3(
-                Mathf.Approximately(slot.scale.x, 0f) ? 1f : slot.scale.x,
-                Mathf.Approximately(slot.scale.y, 0f) ? 1f : slot.scale.y,
-                1f);
-
-            image.sprite = valid ? definition.sprite : null;
-            image.color = valid ? Tint(definition.colorRole, appearance.Palette) : Color.white;
-            image.enabled = valid;
-            image.preserveAspect = false;
-        }
-
-        static Vector2 ClampPivot(Vector2 pivot, MonsterPartDefinition definition)
-        {
-            if (pivot == Vector2.zero && definition != null)
-                pivot = definition.defaultPivot;
-
-            return new Vector2(
-                Mathf.Clamp01(pivot.x),
-                Mathf.Clamp01(pivot.y));
-        }
-
-        static void ApplyGroupPivot(Transform group, Vector2 localPosition)
-        {
-            var rect = group as RectTransform;
-            if (rect == null)
-                return;
-
-            rect.pivot = new Vector2(
-                Mathf.Clamp01(0.5f + localPosition.x / MonsterAssemblyCatalog.CanvasSize.x),
-                Mathf.Clamp01(0.5f + localPosition.y / MonsterAssemblyCatalog.CanvasSize.y));
-        }
-
-        static Color Tint(MonsterColorRole role, int palette)
-        {
-            if (role == MonsterColorRole.None || palette < 0)
-                return Color.white;
-
-            return Palette[Mathf.Clamp(palette, 0, Palette.Length - 1)];
-        }
-
-        void SetMotion(float headAngle, float feetAngle, float tailAngle, float bodyAngle, float bodyLift)
-        {
-            if (_headGroup != null)
-                _headGroup.localRotation = Quaternion.Euler(0f, 0f, headAngle);
-            if (_feetGroup != null)
-                _feetGroup.localRotation = Quaternion.Euler(0f, 0f, feetAngle);
-            if (_tailGroup != null)
-                _tailGroup.localRotation = Quaternion.Euler(0f, 0f, tailAngle);
-            if (_bodyGroup != null)
-            {
-                _bodyGroup.localRotation = Quaternion.Euler(0f, 0f, bodyAngle);
-                _bodyGroup.localPosition = new Vector3(0f, bodyLift, 0f);
-            }
-        }
-
-        static void Reparent(Image image, Transform parent)
-        {
-            if (image != null && parent != null && image.transform.parent != parent)
-                image.transform.SetParent(parent, false);
-        }
-
-        static void ClearImage(Image image)
-        {
-            if (image == null)
-                return;
-
-            image.sprite = null;
-            image.enabled = false;
-            image.color = Color.white;
-        }
-
-        /// <summary>
-        /// 编辑器预览用 HideAndDontSave 画出骨架。进入播放时这些物体会被清掉，
-        /// 而项目关掉了域重载，组件字段还指着它们。画面要能在下一帧重新装上。
-        /// </summary>
-        bool RigVisualIntact()
-        {
-            if (_useShadow) return Painted(_shadow);
-            if (_motion == null)
-                return Painted(_body) || Painted(_head) || Painted(_tail) || Painted(_foot)
-                    || Painted(_hand) || Painted(_eye) || Painted(_mouth) || Painted(_hat) || Painted(_accessory);
-
-            if (_rigRoot == null || _rigImages.Count == 0)
-                return false;
-
-            for (var i = 0; i < _rigImages.Count; i++)
-            {
-                if (_rigImages[i] == null)
-                    return false;
-            }
-
-            return true;
-        }
-
-        static bool Painted(Image image) => image != null && image.enabled && image.sprite != null && image.gameObject.activeSelf;
-
-        /// <summary>
-        /// 把当前帧的骨架写到画面上。每根骨头一个 Image，挂在 rig 根下，位置、旋转、镜像都来自同一帧数据；
-        /// 根骨头的安装点是原点，所以整只怪物跟着抓取位置平移。
-        /// </summary>
-        void ApplyRig()
-        {
-            if (_motion == null || _skeleton == null)
-                return;
-
-            _motion.Compose(_frame);
-            var rebuilt = _rigRoot == null;
-            EnsureRigRoot();
-            _rigRoot.gameObject.SetActive(true);
-            for (var i = _rigImages.Count - 1; i >= 0; i--)
-            {
-                if (_rigImages[i] == null)
-                {
-                    _rigImages.RemoveAt(i);
-                    rebuilt = true;
-                }
-            }
-
-            var order = _skeleton.DrawOrder;
-            while (_rigImages.Count < order.Length)
-                _rigImages.Add(CreateRigImage());
-
-            var bones = _skeleton.Bones;
-            var originX = bones[0].MountX;
-            var originY = bones[0].MountY;
-            for (var slot = 0; slot < _rigImages.Count; slot++)
-            {
-                var image = _rigImages[slot];
-                if (slot >= order.Length)
-                {
-                    image.enabled = false;
-                    continue;
-                }
-
-                var index = order[slot];
-                var bone = bones[index];
-                var sprite = _boneSprites[index];
-                var rect = image.rectTransform;
-                rect.anchorMin = new Vector2(0.5f, 0.5f);
-                rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.pivot = new Vector2(
-                    bone.Width <= 0 ? 0.5f : bone.MountX / bone.Width,
-                    bone.Height <= 0 ? 0.5f : bone.MountY / bone.Height);
-                rect.sizeDelta = sprite != null ? sprite.rect.size : new Vector2(bone.Width, bone.Height);
-                rect.anchoredPosition = new Vector2(_frame.X[index] - originX, _frame.Y[index] - originY);
-                rect.localRotation = Quaternion.Euler(0f, 0f, _frame.Rotation[index]);
-                rect.localScale = new Vector3(_frame.Mirror[index] ? -1f : 1f, 1f, 1f);
-                image.sprite = sprite;
-                image.color = sprite == null ? Color.white : Tint(bone.Color, bone.PaletteIndex);
-                image.enabled = sprite != null;
-                image.preserveAspect = false;
-                image.raycastTarget = false;
-                image.transform.SetSiblingIndex(slot);
-            }
-
-            if (rebuilt)
-                FitCreatureToViewport();
-        }
-
-        void FitCreatureToViewport()
-        {
-            if (!_fitToViewport)
-                return;
-
-            if (_motion != null && _rigRoot != null)
-                FitRigToViewport();
-        }
-
-        void FitRigToViewport()
-        {
-            var host = transform as RectTransform;
-            if (host == null || _rigRoot == null)
-                return;
-
-            _rigRoot.localRotation = Quaternion.identity;
-            _rigRoot.localScale = Vector3.one;
-            _rigRoot.anchoredPosition = Vector2.zero;
-            if (!MonsterPortraitLayout.TryMeasure(_rigRoot, out var min, out var max))
-                return;
-
-            if (!MonsterPortraitLayout.TryFit(min, max, ViewportSize(host), out var scale, out var position))
-                return;
-
-            _rigRoot.localScale = new Vector3(scale, scale, 1f);
-            _rigRoot.anchoredPosition = position;
-#if UNITY_EDITOR
-            _editorViewport = host.rect.size;
-#endif
-        }
-
-        static Vector2 ViewportSize(RectTransform host)
-        {
-            var size = host.rect.size;
-            if (size.x >= 1f && size.y >= 1f)
-                return size;
-
-            if (host.anchorMin == host.anchorMax && Mathf.Abs(host.sizeDelta.x) >= 1f && Mathf.Abs(host.sizeDelta.y) >= 1f)
-                return new Vector2(Mathf.Abs(host.sizeDelta.x), Mathf.Abs(host.sizeDelta.y));
-
-            return RecommendedViewportSize;
-        }
-
-        void EnsureRigRoot()
-        {
-            if (_rigRoot != null)
-                return;
-
-            var go = new GameObject("Rig", typeof(RectTransform));
-            go.transform.SetParent(transform, false);
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                go.hideFlags = HideFlags.HideAndDontSave;
-#endif
-            _rigRoot = go.GetComponent<RectTransform>();
-            _rigRoot.anchorMin = new Vector2(0.5f, 0.5f);
-            _rigRoot.anchorMax = new Vector2(0.5f, 0.5f);
-            _rigRoot.pivot = new Vector2(0.5f, 0.5f);
-            _rigRoot.anchoredPosition = Vector2.zero;
-            _rigRoot.sizeDelta = Vector2.zero;
-        }
-
-        Image CreateRigImage()
-        {
-            var go = new GameObject("Part", typeof(RectTransform), typeof(Image));
-            go.transform.SetParent(_rigRoot, false);
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                go.hideFlags = HideFlags.HideAndDontSave;
-#endif
-            var image = go.GetComponent<Image>();
-            image.raycastTarget = false;
-            return image;
-        }
-
-        void HideLegacy()
-        {
-            if (!Application.isPlaying && !_useShadow)
-                return;
-
-            Deactivate(_tail);
-            Deactivate(_foot);
-            Deactivate(_body);
-            Deactivate(_hand);
-            Deactivate(_head);
-            Deactivate(_eye);
-            Deactivate(_mouth);
-            Deactivate(_hat);
-            Deactivate(_accessory);
-        }
-
-        static void Deactivate(Image image)
-        {
-            if (image != null && image.gameObject.activeSelf)
-                image.gameObject.SetActive(false);
+            _shadowReaction = 0;
+            if (_shadow != null) _shadow.enabled = false;
         }
 
         void ShowShadow(MonsterAppearance appearance, float seed)
@@ -821,9 +241,6 @@ namespace TheCall
             _showKey = key;
             _appearance = appearance;
             _idleSeed = seed;
-            DropSkeleton();
-            HideRig();
-            HideLegacy();
             if (_shadow == null)
             {
                 var existing = transform.Find("ShadowCreature");
@@ -836,6 +253,7 @@ namespace TheCall
                     _shadow = node.GetComponent<Image>();
                 }
             }
+
             if (!Application.isPlaying) _shadow.gameObject.hideFlags = HideFlags.HideAndDontSave;
             var rect = _shadow.rectTransform;
             rect.anchorMin = Vector2.zero;
@@ -850,76 +268,15 @@ namespace TheCall
             _shadow.gameObject.SetActive(true);
         }
 
-#if UNITY_EDITOR
-        void RemoveBakedRig()
-        {
-            for (var i = transform.childCount - 1; i >= 0; i--)
-            {
-                var child = transform.GetChild(i);
-                if (child.name != "Rig" || (child.gameObject.hideFlags & HideFlags.DontSave) != 0)
-                    continue;
-
-                DestroyImmediate(child.gameObject);
-                _rigRoot = null;
-                _rigImages.Clear();
-                _showed = false;
-            }
-        }
-
-        void EditorTrackViewport()
-        {
-            if (!_editorPreview || _rigRoot == null)
-                return;
-
-            var host = transform as RectTransform;
-            if (host == null)
-                return;
-
-            var size = host.rect.size;
-            if (size == _editorViewport)
-                return;
-
-            FitCreatureToViewport();
-        }
-#endif
-
-        void HideRig()
-        {
-            for (var i = 0; i < _rigImages.Count; i++)
-            {
-                if (_rigImages[i] != null)
-                    _rigImages[i].enabled = false;
-            }
-        }
+        static bool Painted(Image image) =>
+            image != null && image.enabled && image.sprite != null && image.gameObject.activeSelf;
 
         static int AppearanceSalt(MonsterAppearance appearance)
         {
             unchecked
             {
                 var salt = appearance.Palette * 131 + appearance.Recipe * 17 + 1;
-                salt = Mix(salt, appearance.BodyId);
-                salt = Mix(salt, appearance.HeadId);
-                salt = Mix(salt, appearance.EyeId);
-                salt = Mix(salt, appearance.MouthId);
-                salt = Mix(salt, appearance.HandId);
-                salt = Mix(salt, appearance.FootId);
-                salt = Mix(salt, appearance.TailId);
-                salt = Mix(salt, appearance.HatId);
-                salt = Mix(salt, appearance.AccessoryId);
                 return salt == 0 ? 1 : salt;
-            }
-        }
-
-        static int Mix(int salt, string value)
-        {
-            unchecked
-            {
-                if (string.IsNullOrEmpty(value))
-                    return salt * 31 + 1;
-
-                for (var i = 0; i < value.Length; i++)
-                    salt = salt * 31 + value[i];
-                return salt;
             }
         }
 
@@ -932,42 +289,6 @@ namespace TheCall
             for (var i = 0; i < id.Length; i++)
                 seed = seed * 31 + id[i];
             return seed;
-        }
-    }
-
-    public static class MonsterPartLibrary
-    {
-        public static Sprite[] Body { get; private set; }
-        public static Sprite[] Head { get; private set; }
-        public static Sprite[] Eye { get; private set; }
-        public static Sprite[] Mouth { get; private set; }
-        public static Sprite[] Hand { get; private set; }
-        public static Sprite[] Foot { get; private set; }
-        public static Sprite[] Tail { get; private set; }
-        public static Sprite[] Hat { get; private set; }
-        public static Sprite[] Accessory { get; private set; }
-
-        public static void Ensure()
-        {
-            if (Body != null)
-                return;
-
-            Body = Load("MonsterParts/Body");
-            Head = Load("MonsterParts/Head");
-            Eye = Load("MonsterParts/Eye");
-            Mouth = Load("MonsterParts/Mouth");
-            Hand = Load("MonsterParts/Hand");
-            Foot = Load("MonsterParts/Foot");
-            Tail = Load("MonsterParts/Tail");
-            Hat = Load("MonsterParts/Hat");
-            Accessory = Load("MonsterParts/Accessory");
-        }
-
-        static Sprite[] Load(string path)
-        {
-            var sprites = Resources.LoadAll<Sprite>(path);
-            Array.Sort(sprites, (a, b) => string.CompareOrdinal(a.name, b.name));
-            return sprites;
         }
     }
 }

@@ -24,6 +24,7 @@ namespace TheCall
 
                 var firstParent = parents[slot % parents.Count];
                 var secondParent = parents[(slot + 1) % parents.Count];
+                // 外观只剩配方和色板。旧部件遗传已删除，见 Assets/Notes/新怪物系统交接.md。
                 var appearance = MonsterAppearance.Breed(
                     firstParent.Appearance,
                     secondParent.Appearance,

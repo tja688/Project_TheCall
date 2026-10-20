@@ -16,14 +16,9 @@
 
 各界面的按钮、标签、槽位数组可以缺省。保留界面根对象和正在使用的玩法槽位，以便玩家仍能执行所需操作。运行时扩容的卡片继承第一张卡片的美术，新增出售卡片由总控绑定出售动作。
 
-## 接入拆好图层的怪物
+## 换怪物画像
 
-1. 在 `The Call/怪物拼装工作区` 中接入部件 Sprite、挂点和运动支点。
-2. 将骨架与姿势保存到 `Assets/Resources/MonsterRig.json`。
-3. 在 `MonsterMotionProfile` 中调整抓取、回弹和计分反应的参数。
-4. 检查开局、怪物笼、商店、拖动虚影和结算中的同一只怪物。
-
-当前游戏中的 `MonsterPortrait.Show` 默认从 `ShadowMonsterCatalog` 选择整张剪影，拖动虚影和结算共用同一张图。旧 `MonsterRigRuntime`、`MonsterAssemblyCatalog`、拼装工作区和运动资源保留；需要恢复拼接表现时，关闭画像的 `_useShadow` 并按以上骨架流程接入。外观路径不改变技能或结算规则。
+当前 `MonsterPortrait.Show` 从 `ShadowMonsterCatalog` 选择整张剪影。拖动虚影和结算共用同一张图。旧拼接系统已删除。新怪物系统从 [新怪物系统交接](../../Assets/Notes/新怪物系统交接.md) 开始，不要恢复骨架或部件目录。外观路径不改变技能或结算规则。
 
 ## 接入新的按钮
 

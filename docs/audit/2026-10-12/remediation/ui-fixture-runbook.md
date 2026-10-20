@@ -1,5 +1,8 @@
 # 独立UI夹具分步验收
 
+> 2026-10-20 起，怪物拼接、骨架、部件目录和拼装工作区已从工程删除。下文若提到它们，只作当时记录。新系统从 `Assets/Notes/新怪物系统交接.md` 开始。
+
+
 所有调用由主控通过Unity CLI `eval` 执行。禁止与自然七天并发；先完成自然轨迹归档，再启用本工具。此处资源注入只检查局部UI和原子拒绝，不能计为自然七天资源来源。
 
 `PresentationFixtureAcceptance`将结果写至 `docs/audit/2026-10-12/remediation/evidence/ui-fixtures/<scenario>-report.json`，每条包含输入、frame、实际文本/Sprite/ID状态和断言判定。断言失败会保存失败记录并抛异常。`Capture()`保存含Overlay的截图，调用后等待frame推进再读取图，不能把capture返回成功当作图片验收。

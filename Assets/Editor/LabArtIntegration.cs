@@ -367,7 +367,7 @@ namespace TheCall.Editor
             if (slot.portrait != null)
             {
                 At(slot.portrait.transform, 3, 10, width - 6, height - 31);
-                foreach (var mirror in slot.portrait.GetComponentsInChildren<MonsterLightBody>(true)) Object.DestroyImmediate(mirror);
+                // 旧布娃娃灯光镜像已删除。画像只保留剪影。
             }
             foreach (var badge in new[] { slot.personalityIcon, slot.raceIcon, slot.moodIcon }) if (badge != null) badge.gameObject.SetActive(false);
             if (slot.title != null) slot.title.gameObject.SetActive(false);

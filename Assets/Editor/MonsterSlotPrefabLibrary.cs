@@ -107,31 +107,14 @@ namespace TheCall.Editor
             var size = MonsterPortrait.RecommendedViewportSize;
             return "立绘视口保持各张卡上已经摆好的 Portrait 矩形。建议新卡起点 "
                    + size.x + "×" + size.y
-                   + "。已关掉 " + hidden + " 张静态零件图，预制体里显示的是拼接预览。";
+                   + "。旧零件图已删除。";
         }
 
+        /// <summary>旧拼接会关掉预制体里的零件图。那些图已删除，这里不再改预制体。</summary>
         public static int HideBakedPortraitParts()
         {
-            var root = PrefabUtility.LoadPrefabContents(PortraitPrefabPath);
-            if (root == null)
-                return 0;
-
-            var count = 0;
-            var images = root.GetComponentsInChildren<UnityEngine.UI.Image>(true);
-            for (var i = 0; i < images.Length; i++)
-            {
-                if (images[i] == null || !images[i].gameObject.activeSelf)
-                    continue;
-
-                images[i].gameObject.SetActive(false);
-                count++;
-            }
-
-            if (count > 0)
-                PrefabUtility.SaveAsPrefabAsset(root, PortraitPrefabPath);
-
-            PrefabUtility.UnloadPrefabContents(root);
-            return count;
+            _ = PortraitPrefabPath;
+            return 0;
         }
 
         static TemplateGroup[] BuildGroups()

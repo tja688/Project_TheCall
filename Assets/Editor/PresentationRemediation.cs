@@ -19,7 +19,7 @@ namespace TheCall.Editor
             HandbookSceneSetup.Ensure();
             var book = ContentBook.Parse(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json")));
             M3PresentationSetup.CreateSpriteCatalog();
-            RepairAssemblyCatalog();
+            // 旧拼接目录修复已删除。见 Assets/Notes/新怪物系统交接.md。
             var research = UnityEngine.Object.FindAnyObjectByType<ResearchScreenView>(FindObjectsInactive.Include);
             if (research != null) MigrateResearch(research, book);
             var operation = UnityEngine.Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
@@ -97,82 +97,9 @@ namespace TheCall.Editor
             }
             foreach (var slot in UnityEngine.Object.FindObjectsByType<MonsterSlotView>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 if (slot.personalityIcon == null || slot.raceIcon == null || slot.moodIcon == null) throw new InvalidOperationException("Missing badge consumer: " + slot.name);
-            var assembly = AssetDatabase.LoadAssetAtPath<MonsterAssemblyCatalog>("Assets/Resources/MonsterAssemblyCatalog.asset");
-            if (assembly == null || assembly.parts.Count != 39 || assembly.templates.Count != 6 || assembly.parts.Any(part => part.sprite == null)) throw new InvalidOperationException("Saved assembly references mismatch.");
-            var operation = UnityEngine.Object.FindAnyObjectByType<OperationScreenView>(FindObjectsInactive.Include);
-            if (operation == null || operation.ownedToolViews.Length != 18) throw new InvalidOperationException("Owned tool views mismatch.");
-            foreach (var tool in operation.ownedToolViews)
-                if (tool.iconImage == null || tool.iconImage.transform == tool.transform) throw new InvalidOperationException("Tool icon overwrites layout root.");
-            return "Saved references verified: 25 personalities, 18 tools, six research nodes, monster badge consumers, 39 assembly parts / six templates.";
+            // 旧拼接目录校验已删除。
+            return "Saved references verified: 25 personalities, 18 tools, six research nodes, monster badge consumers.";
         }
-
-        public static void RepairAssemblyCatalog()
-        {
-            const string path = "Assets/Resources/MonsterAssemblyCatalog.asset";
-            var catalog = AssetDatabase.LoadAssetAtPath<MonsterAssemblyCatalog>(path);
-            if (catalog != null) return;
-            // Fix the missing script through SerializedObject; preserve original part IDs and all authored geometry.
-            var raw = AssetDatabase.LoadMainAssetAtPath(path);
-            if (raw != null)
-            {
-                var probe = ScriptableObject.CreateInstance<MonsterAssemblyCatalog>();
-                var script = MonoScript.FromScriptableObject(probe);
-                var serialized = new SerializedObject(raw);
-                var property = serialized.FindProperty("m_Script");
-                if (property == null) throw new InvalidOperationException("Assembly catalog has no serialized script field.");
-                property.objectReferenceValue = script;
-                serialized.ApplyModifiedPropertiesWithoutUndo();
-                EditorUtility.SetDirty(raw);
-                AssetDatabase.SaveAssets();
-                UnityEngine.Object.DestroyImmediate(probe);
-                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-                catalog = AssetDatabase.LoadAssetAtPath<MonsterAssemblyCatalog>(path);
-            }
-            if (catalog == null)
-            {
-                var recoveryPath = Path.Combine(Application.dataPath, "../docs/audit/2026-10-12/remediation/assembly-catalog-recovery.json");
-                var recovery = JsonUtility.FromJson<AssemblyRecovery>(File.ReadAllText(recoveryPath));
-                using (var sha = System.Security.Cryptography.SHA256.Create())
-                {
-                    var hash = BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(path))).Replace("-", "").ToLowerInvariant();
-                    if (hash != recovery.originalHash) throw new InvalidOperationException("Saved catalog changed since recovery snapshot; do not overwrite authored data.");
-                }
-                var beforeGuid = AssetDatabase.AssetPathToGUID(path);
-                catalog = ScriptableObject.CreateInstance<MonsterAssemblyCatalog>();
-                catalog.schemaVersion = recovery.schemaVersion;
-                catalog.parts = recovery.parts; catalog.templates = recovery.templates;
-                foreach (var reference in recovery.sprites)
-                {
-                    var spritePath = AssetDatabase.GUIDToAssetPath(reference.guid);
-                    var sprite = AssetDatabase.LoadAllAssetsAtPath(spritePath).OfType<Sprite>().FirstOrDefault(candidate =>
-                    {
-                        AssetDatabase.TryGetGUIDAndLocalFileIdentifier(candidate, out string guid, out long localId);
-                        return localId == reference.fileId && guid == reference.guid;
-                    });
-                    if (sprite == null) throw new InvalidOperationException("Cannot recover sprite " + reference.id + " at " + spritePath);
-                    catalog.parts.Single(part => part.id == reference.id).sprite = sprite;
-                }
-                if (catalog.parts.Count != 39 || catalog.templates.Count != 6) throw new InvalidOperationException("Incomplete catalog recovery.");
-                // CreateAsset overwrites the unreadable serialized object while retaining its existing meta GUID.
-                AssetDatabase.CreateAsset(catalog, path);
-                EditorUtility.SetDirty(catalog); AssetDatabase.SaveAssets();
-                if (AssetDatabase.AssetPathToGUID(path) != beforeGuid) throw new InvalidOperationException("Catalog GUID changed during recovery.");
-                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-                catalog = AssetDatabase.LoadAssetAtPath<MonsterAssemblyCatalog>(path);
-            }
-            if (catalog.parts.Count != 39 || catalog.templates.Count != 6 || catalog.parts.Any(part => part == null || part.sprite == null))
-                throw new InvalidOperationException("Assembly catalog recovery must preserve 39 valid parts and six templates.");
-        }
-
-        [Serializable] sealed class AssemblyRecovery
-        {
-            public int schemaVersion;
-            public string originalHash;
-            public List<MonsterPartDefinition> parts;
-            public List<MonsterAssemblyTemplate> templates;
-            public List<SpriteReference> sprites;
-        }
-        [Serializable] sealed class SpriteReference { public string id; public string guid; public long fileId; }
 
         static void MigrateResearch(ResearchScreenView view, ContentBook book)
         {

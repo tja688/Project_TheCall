@@ -108,7 +108,7 @@ namespace TheCall.Editor
             _gesture.position = new Vector2(Screen.width * (fromDorm ? 0.99f : 0.01f), Screen.height * 0.45f);
             _source.OnDrag(_gesture);
             var ghost = Op.dragLayer.Find("MonsterGhost").GetComponent<MonsterPortrait>();
-            Need(ghost.UsesShadow && ghost.ShadowSprite == slot.portrait.ShadowSprite && ghost.GetComponent<MonsterLightBody>() == null, "Ghost uses old ragdoll or wrong silhouette");
+            Need(ghost.UsesShadow && ghost.ShadowSprite == slot.portrait.ShadowSprite, "Ghost silhouette does not match the source");
             return "PASS real monster pointer drag creates matching whole silhouette and waits at room edge";
         }
 

@@ -3,192 +3,44 @@ using System;
 namespace TheCall
 {
     /// <summary>
-    /// Stable, engine-independent appearance selection.
-    /// Recipe/Palette remain as compatibility projections for existing rules and tests.
-    /// Empty part IDs mean "use the selected template's authored slot".
+    /// 怪物外观只保留配方和色板，供剪影选图。
+    /// 旧拼接的部件 ID、模板和遗传已删除。新怪物系统替换本类型。
+    /// 见 Assets/Notes/新怪物系统交接.md。
     /// </summary>
     public readonly struct MonsterAppearance
     {
         public const int RecipeCount = 6;
         public const int PaletteCount = 6;
 
-        static readonly string[] TemplateIds =
-        {
-            "template_01",
-            "template_02",
-            "template_03",
-            "template_04",
-            "template_05",
-            "template_06",
-        };
-
-        static readonly string[] PaletteIds =
-        {
-            "palette_01",
-            "palette_02",
-            "palette_03",
-            "palette_04",
-            "palette_05",
-            "palette_06",
-        };
-
         public MonsterAppearance(int recipe, int palette)
         {
-            TemplateId = TemplateIdForRecipe(recipe);
-            Palette = PositiveModulo(palette, PaletteCount);
-            PaletteId = PaletteIds[Palette];
-            BodyId = string.Empty;
-            HeadId = string.Empty;
-            EyeId = string.Empty;
-            MouthId = string.Empty;
-            HandId = string.Empty;
-            FootId = string.Empty;
-            TailId = string.Empty;
-            HatId = string.Empty;
-            AccessoryId = string.Empty;
-            HasExplicitParts = false;
             Recipe = PositiveModulo(recipe, RecipeCount);
-        }
-
-        public MonsterAppearance(
-            string templateId,
-            int palette,
-            string bodyId,
-            string headId,
-            string eyeId,
-            string mouthId,
-            string handId,
-            string footId,
-            string tailId,
-            string hatId,
-            string accessoryId)
-        {
-            TemplateId = string.IsNullOrEmpty(templateId) ? TemplateIds[0] : templateId;
             Palette = PositiveModulo(palette, PaletteCount);
-            PaletteId = PaletteIds[Palette];
-            BodyId = bodyId ?? string.Empty;
-            HeadId = headId ?? string.Empty;
-            EyeId = eyeId ?? string.Empty;
-            MouthId = mouthId ?? string.Empty;
-            HandId = handId ?? string.Empty;
-            FootId = footId ?? string.Empty;
-            TailId = tailId ?? string.Empty;
-            HatId = hatId ?? string.Empty;
-            AccessoryId = accessoryId ?? string.Empty;
-            HasExplicitParts = true;
-            Recipe = RecipeForTemplate(TemplateId);
         }
 
         public int Recipe { get; }
 
         public int Palette { get; }
 
-        public string TemplateId { get; }
-
-        public string PaletteId { get; }
-
-        public string BodyId { get; }
-
-        public string HeadId { get; }
-
-        public string EyeId { get; }
-
-        public string MouthId { get; }
-
-        public string HandId { get; }
-
-        public string FootId { get; }
-
-        public string TailId { get; }
-
-        public string HatId { get; }
-
-        public string AccessoryId { get; }
-
-        public bool HasExplicitParts { get; }
-
-        public string PartId(MonsterPartKind kind)
-        {
-            switch (kind)
-            {
-                case MonsterPartKind.Body: return BodyId;
-                case MonsterPartKind.Head: return HeadId;
-                case MonsterPartKind.Eye: return EyeId;
-                case MonsterPartKind.Mouth: return MouthId;
-                case MonsterPartKind.Hand: return HandId;
-                case MonsterPartKind.Foot: return FootId;
-                case MonsterPartKind.Tail: return TailId;
-                case MonsterPartKind.Hat: return HatId;
-                case MonsterPartKind.Accessory: return AccessoryId;
-                default: throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
-            }
-        }
-
         public static MonsterAppearance FromSeed(int seed)
         {
             var mixed = seed * 397 + 173;
-            var recipe = PositiveModulo(seed, RecipeCount);
-            return new MonsterAppearance(
-                TemplateIdForRecipe(recipe),
-                PositiveModulo(mixed, PaletteCount),
-                "body_" + (recipe + 1).ToString("00"),
-                "head_" + (recipe % 4 + 1).ToString("00"),
-                "eye_" + (recipe % 5 + 1).ToString("00"),
-                "mouth_" + (recipe + 1).ToString("00"),
-                "hand_" + (recipe % 5 + 1).ToString("00"),
-                "foot_" + (recipe % 3 + 1).ToString("00"),
-                recipe == 2 ? "tail_03" : string.Empty,
-                recipe == 0 || recipe == 3 ? "hat_" + (recipe + 1).ToString("00") : string.Empty,
-                recipe == 1 || recipe == 4 ? "accessory_02" : string.Empty);
+            return new MonsterAppearance(seed, mixed);
         }
 
         public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second) =>
             Breed(first, second, 0);
 
+        /// <summary>
+        /// 旧实现按部件遗传头、眼、嘴、手脚和尾巴。那些字段已删除。
+        /// 子代配方仍用原来的身体抽选，色板仍跟次代亲本，剪影因此保持稳定。
+        /// 新怪物系统替换本方法。first 不再参与。
+        /// </summary>
         public static MonsterAppearance Breed(MonsterAppearance first, MonsterAppearance second, int childSeed)
         {
-            var faceFromFirst = Choice(childSeed, 0x41A7, 2) == 0;
-            var faceSource = faceFromFirst ? first : second;
-            var otherSource = faceFromFirst ? second : first;
-            var bodyIndex = Choice(childSeed, 0x2D39, RecipeCount);
-            var tail = PreferPresent(
-                Choice(childSeed, 0x7813, 2) == 0 ? first.TailId : second.TailId,
-                Choice(childSeed, 0x7813, 2) == 0 ? second.TailId : first.TailId);
-            var hat = PreferPresent(faceSource.HatId, otherSource.HatId);
-            var accessory = PreferPresent(
-                Choice(childSeed, 0x5A21, 2) == 0 ? first.AccessoryId : second.AccessoryId,
-                string.Empty);
-
-            return new MonsterAppearance(
-                TemplateIdForRecipe(bodyIndex),
-                second.Palette,
-                "body_" + (bodyIndex + 1).ToString("00"),
-                PreferPresent(faceSource.HeadId, otherSource.HeadId),
-                PreferPresent(faceSource.EyeId, otherSource.EyeId),
-                PreferPresent(faceSource.MouthId, otherSource.MouthId),
-                PreferPresent(
-                    Choice(childSeed, 0x126B, 2) == 0 ? first.HandId : second.HandId,
-                    string.Empty),
-                PreferPresent(
-                    Choice(childSeed, 0x64D5, 2) == 0 ? first.FootId : second.FootId,
-                    string.Empty),
-                tail,
-                hat,
-                accessory);
-        }
-
-        public static string TemplateIdForRecipe(int recipe) =>
-            TemplateIds[PositiveModulo(recipe, RecipeCount)];
-
-        static int RecipeForTemplate(string templateId)
-        {
-            for (var i = 0; i < TemplateIds.Length; i++)
-            {
-                if (string.Equals(TemplateIds[i], templateId, StringComparison.Ordinal))
-                    return i;
-            }
-
-            return 0;
+            _ = first;
+            var recipe = Choice(childSeed, 0x2D39, RecipeCount);
+            return new MonsterAppearance(recipe, second.Palette);
         }
 
         static int PositiveModulo(int value, int modulus)
@@ -210,8 +62,5 @@ namespace TheCall
                 return PositiveModulo(value, count);
             }
         }
-
-        static string PreferPresent(string preferred, string fallback) =>
-            string.IsNullOrEmpty(preferred) ? fallback ?? string.Empty : preferred;
     }
 }

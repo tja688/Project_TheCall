@@ -306,12 +306,8 @@ namespace TheCall.Editor
                 finally { PrefabUtility.UnloadPrefabContents(root); }
             }
             Need(count >= 9, "Fewer than nine relevant prefab loads");
-            var catalog = AssetDatabase.LoadAssetAtPath<MonsterAssemblyCatalog>("Assets/Resources/MonsterAssemblyCatalog.asset");
-            Need(catalog.parts.Count == 39 && catalog.templates.Count == 6 && catalog.parts.All(part => part.sprite != null), "Saved assembly content incomplete");
-            foreach (var template in catalog.templates)
-                foreach (MonsterPartKind kind in Enum.GetValues(typeof(MonsterPartKind)))
-                { var slot = template.GetSlot(kind); if (slot.enabled) Need(catalog.GetPartOrNull(slot.partId)?.sprite != null, "Saved template reference missing: " + slot.partId); }
-            return Save("asset-audit", "prefabs=" + count + ";39 saved parts / 6 templates complete");
+            // 旧 39 部件目录检查已删除。
+            return Save("asset-audit", "prefabs=" + count);
         }
         public static string Idempotency()
         {

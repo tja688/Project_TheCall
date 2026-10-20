@@ -1,5 +1,8 @@
 # Issue #16 三阶段结项整改规格
 
+> 2026-10-20 起，怪物拼接、骨架、部件目录和拼装工作区已从工程删除。下文若提到它们，只作当时记录。新系统从 `Assets/Notes/新怪物系统交接.md` 开始。
+
+
 状态：**待执行**。2026-10-12质检已经完成，本文件是后续整改的执行与验收合同，不能用本文件存在证明整改完成。基准为本地 `a9b964197ae56546376f895d5e8fa11881adfe25`。原 [issue #16](https://github.com/tja688/Project_TheCall/issues/16) / [原规格](new-planning-playable-migration.md) 仍为玩法真值，不以错误代码或旧测试预期替代。
 
 证据入口：[质检报告](../audit/2026-10-12/report.md)、[18组规则明细](../audit/2026-10-12/spec-axis-findings.md)、[93项内容矩阵及A01—A28现状](../audit/2026-10-12/content-coverage.md)、[可复现记录](../audit/2026-10-12/evidence/README.md)。F为规则问题，S为规范问题，U为Unity现场问题；编号有交叉，不能相加当成独立缺陷总数。
@@ -10,7 +13,7 @@
 
 - 继续使用当前checkout和分支；不建worktree，不自行切分支。Unity 6000.6.0f1仅通过Unity CLI操作；先查版本与绝对路径status，复用ready Editor，场景/Prefab通过Editor API保存。
 - 先读仓库domain消费规则、QFramework API和相关ADR。唯一Architecture、唯一状态主人、Controller经Command写、Query只读、下行GetModel/GetSystem/GetUtility；按当前用户Command/Query无字段约定落地。不得让UI或新增全局静态状态成为另一份规则状态。
-- 保留现有Settlement主体、Run/Level状态、单正式内容源、39部件/6模板、MonsterRig动态、经济与商店兼容能力。修正模块边界和接线，不复制一套新游戏等待替换。根目录旧 `call-book.json` 不作为新版来源；Unity、规则测试、Page目前引用的是 `Assets/StreamingAssets/call-book.json`，保持这一同源关系。
+- 保留现有Settlement主体、Run/Level状态、单正式内容源、经济与商店兼容能力。39 部件与 MonsterRig 已删除。修正模块边界和接线，不复制一套新游戏等待替换。根目录旧 `call-book.json` 不作为新版来源；Unity、规则测试、Page目前引用的是 `Assets/StreamingAssets/call-book.json`，保持这一同源关系。
 - “清临时”“日开始”“开工”“工资”“通关”等已有阶段只保留一个触发入口。局部修正不能通过额外一次全场遍历产生补偿性产能或补发事件。
 - 已有有效回归保留；错误断言按原规格修正并补正确的具体输入，不能删测试、只改名称或用当前错误输出生成期望。
 - 局部测试允许设置初始夹具，必须标为规则或UI造景。七天验收严禁追加科技、技能、金币、当日修正、产能，严禁销毁播放器或停协程伪造自然完成。固定种子/可注入随机是允许的可复现条件，不能借此绕过玩家资源取得入口。
@@ -104,7 +107,7 @@
 - 修正式25性格的15个缺名映射、删除不在正式池的旧名称关联；为5种族/5心情及6科技选择有区分意义的既有图集Sprite。Getter必须绑定真实Prefab consumer，显示图标、文字、配色和效果，而不是仅新增列表。
 - 怪物详情分层展示性格机制、种族、心情及连续工作/休息、1—4技能的常驻/临时和来源、实际增减；概率清楚说明。用长名称、四技能、屏幕四边检查可读与不截断，不靠把所有文本缩小塞入Header。
 - 18工具逐份核对图文、价格、稀有度和来源规则；保留已有非空图基础，不因复用素材给出假缺图结论。
-- 恢复历史 `MonsterAssemblyCatalog.asset` 为可加载可编辑的正式资产，保留运行39部件/6模板及现有Rig挂点；先确定旧ID与运行ID迁移关系，再由Editor API保存。核对源图/Resources副本去重后的39份，不把旧`body_01`与运行`身体/身体1`混用。
+- 已撤回：不要恢复 `MonsterAssemblyCatalog.asset`、39 部件或 Rig。该系统已删除，见 `Assets/Notes/新怪物系统交接.md`。
 - 改造Builder为明确局部迁移/幂等更新，保留选定模板和人工RectTransform/动效调参。不能为修六项科研执行无条件Destroy整套UI根。迁移前后记录对象引用，二次执行不新增重复对象、不覆盖无关调整。
 
 检查：实例化9份相关Prefab及所有实际新增/修改Prefab；逐条93项可见内容检查映射、consumer与说明；39部件/6模板运行及保存目录一致；Main/Prefab/Sprite资产保存后重新载入仍生效，无缺脚本、空引用或旧图残留。U08是必须修的交付基础问题，同时保留其“历史缺陷”归因。

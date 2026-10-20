@@ -14,6 +14,8 @@
 | `ScoringTape` | `Arrange` | 已确认的结算记录转成演出 cue |
 | `ScoringShow` | tape、进展通知、`Cancel`、`Advance` | cue 的 Unity 演出 adapter |
 
+怪物画像目前只画剪影。拼接系统已删除，新系统见 [新怪物系统交接](../../Assets/Notes/新怪物系统交接.md)。
+
 `Render` 只查询规则。原有命令保留 QFramework 路由职责，Model 仍是对局状态的主人。总控控制界面显隐和音乐，界面 module 不独立改变流程。
 
 depth 来自一次调用能完成多少行为。怪物绘制把画像、徽标和标签收进一个 implementation，删除它会让同一知识再次散入多个界面。它提供实际 leverage。各界面保持自己的绘制入口，提升美术修改的 locality。

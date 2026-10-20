@@ -156,7 +156,6 @@ namespace TheCall.Editor
 
         static string BuildInternal()
         {
-            ConfigureParts();
             ConfigureUi();
             LoadUi();
             EnsureFolder("Assets/Prefabs", "UI");
@@ -684,90 +683,14 @@ namespace TheCall.Editor
 
         static GameObject CreatePortraitPrefab()
         {
-            var root = new GameObject("MonsterPortrait", typeof(RectTransform));
-            var rect = root.GetComponent<RectTransform>();
+            // 旧部件层已删除。预制体只留画像根，剪影在运行时生成。
+            var rootObject = new GameObject("MonsterPortrait", typeof(RectTransform));
+            var rect = rootObject.GetComponent<RectTransform>();
             rect.sizeDelta = MonsterPortrait.RecommendedViewportSize;
-            var portrait = root.AddComponent<MonsterPortrait>();
-            var tailGroup = PivotGroup(root.transform, "TailMotion", new Vector2(0.5f, 0.5f));
-            var tail = Layer(tailGroup, "Tail", "Tail");
-            var feet = PivotGroup(root.transform, "FeetMotion", new Vector2(0.5f, 0.22f));
-            var foot = Layer(feet, "Foot", "Foot");
-            var bodyGroup = PivotGroup(root.transform, "BodyMotion", new Vector2(0.5f, 0.46f));
-            var body = Layer(bodyGroup, "Body", "Body");
-            var hand = Layer(root.transform, "Hand", "Hand");
-            var headGroup = PivotGroup(root.transform, "HeadMotion", new Vector2(0.5f, 0.67f));
-            var head = Layer(headGroup, "Head", "Head");
-            var eye = Layer(headGroup, "Eye", "Eye");
-            var mouth = Layer(headGroup, "Mouth", "Mouth");
-            var accessory = Layer(root.transform, "Accessory", "Accessory");
-            var hat = Layer(root.transform, "Hat", "Hat");
-            var serialized = new SerializedObject(portrait);
-            serialized.FindProperty("_tail").objectReferenceValue = tail;
-            serialized.FindProperty("_foot").objectReferenceValue = foot;
-            serialized.FindProperty("_body").objectReferenceValue = body;
-            serialized.FindProperty("_hand").objectReferenceValue = hand;
-            serialized.FindProperty("_head").objectReferenceValue = head;
-            serialized.FindProperty("_eye").objectReferenceValue = eye;
-            serialized.FindProperty("_mouth").objectReferenceValue = mouth;
-            serialized.FindProperty("_hat").objectReferenceValue = hat;
-            serialized.FindProperty("_accessory").objectReferenceValue = accessory;
-            serialized.FindProperty("_headGroup").objectReferenceValue = headGroup;
-            serialized.FindProperty("_feetGroup").objectReferenceValue = feet;
-            serialized.FindProperty("_bodyGroup").objectReferenceValue = bodyGroup;
-            serialized.FindProperty("_tailGroup").objectReferenceValue = tailGroup;
-            serialized.FindProperty("_motionProfile").objectReferenceValue = EnsureMotionProfile();
-            serialized.ApplyModifiedPropertiesWithoutUndo();
-            var prefab = PrefabUtility.SaveAsPrefabAsset(root, PortraitPath);
-            UnityEngine.Object.DestroyImmediate(root);
+            rootObject.AddComponent<MonsterPortrait>();
+            var prefab = PrefabUtility.SaveAsPrefabAsset(rootObject, PortraitPath);
+            UnityEngine.Object.DestroyImmediate(rootObject);
             return prefab;
-        }
-
-        static MonsterMotionProfile EnsureMotionProfile()
-        {
-            const string path = "Assets/Resources/MonsterMotionProfile.asset";
-            var profile = AssetDatabase.LoadAssetAtPath<MonsterMotionProfile>(path);
-            if (profile != null)
-            {
-                profile.SetDefaultsIfUninitialized();
-                EditorUtility.SetDirty(profile);
-                return profile;
-            }
-
-            profile = ScriptableObject.CreateInstance<MonsterMotionProfile>();
-            profile.SetDefaultsIfUninitialized();
-            AssetDatabase.CreateAsset(profile, path);
-            AssetDatabase.SaveAssets();
-            return profile;
-        }
-
-        static Transform PivotGroup(Transform parent, string name, Vector2 pivot)
-        {
-            var group = new GameObject(name, typeof(RectTransform));
-            group.transform.SetParent(parent, false);
-            var rect = group.GetComponent<RectTransform>();
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-            rect.pivot = pivot;
-            return group.transform;
-        }
-
-        static Image Layer(Transform parent, string name, string folder)
-        {
-            var image = new GameObject(name, typeof(RectTransform)).AddComponent<Image>();
-            image.transform.SetParent(parent, false);
-            var rect = image.rectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-            image.sprite = FirstSprite("Assets/Resources/MonsterParts/" + folder);
-            image.color = Color.white;
-            image.raycastTarget = false;
-            image.preserveAspect = true;
-            image.gameObject.SetActive(false);
-            return image;
         }
 
         static MonsterPortrait SpawnPortrait(Transform parent, string name)
@@ -1415,86 +1338,6 @@ namespace TheCall.Editor
             return null;
         }
 
-        static void ConfigureParts()
-        {
-            var guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Resources/MonsterParts" });
-            AssetDatabase.StartAssetEditing();
-            try
-            {
-                foreach (var guid in guids)
-                {
-                    var path = AssetDatabase.GUIDToAssetPath(guid);
-                    if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
-                        continue;
-
-                    if (PartImportSettingsMatch(importer))
-                        continue;
-
-                    ApplyPartImportSettings(importer);
-                    importer.SaveAndReimport();
-                }
-            }
-            finally
-            {
-                AssetDatabase.StopAssetEditing();
-            }
-        }
-
-        static bool PartImportSettingsMatch(TextureImporter importer)
-        {
-            return importer.textureType == TextureImporterType.Sprite
-                   && importer.spriteImportMode == SpriteImportMode.Single
-                   && importer.alphaIsTransparency
-                   && !importer.mipmapEnabled
-                   && importer.filterMode == FilterMode.Point
-                   && Mathf.Approximately(importer.spritePixelsPerUnit, 100f)
-                   && importer.textureCompression == TextureImporterCompression.Uncompressed;
-        }
-
-        static void ApplyPartImportSettings(TextureImporter importer)
-        {
-            var settings = new TextureImporterSettings();
-            importer.ReadTextureSettings(settings);
-            settings.textureType = TextureImporterType.Sprite;
-            settings.spriteMode = (int)SpriteImportMode.Single;
-            settings.alphaIsTransparency = true;
-            settings.mipmapEnabled = false;
-            settings.filterMode = FilterMode.Point;
-            settings.spriteMeshType = SpriteMeshType.FullRect;
-            settings.spriteAlignment = (int)SpriteAlignment.Center;
-            settings.spritePivot = new Vector2(0.5f, 0.5f);
-            settings.spritePixelsPerUnit = 100f;
-            importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Single;
-            importer.alphaIsTransparency = true;
-            importer.mipmapEnabled = false;
-            importer.filterMode = FilterMode.Point;
-            importer.spritePixelsPerUnit = 100f;
-            importer.textureCompression = TextureImporterCompression.Uncompressed;
-        }
-
-        static Sprite FirstSprite(string folder)
-        {
-            if (!AssetDatabase.IsValidFolder(folder))
-                return null;
-
-            var paths = new List<string>();
-            foreach (var guid in AssetDatabase.FindAssets("t:Sprite", new[] { folder }))
-                paths.Add(AssetDatabase.GUIDToAssetPath(guid));
-
-            paths.Sort(StringComparer.Ordinal);
-            foreach (var path in paths)
-            {
-                foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(path))
-                {
-                    if (asset is Sprite sprite)
-                        return sprite;
-                }
-            }
-
-            return null;
-        }
-
         static void EnsureFolder(string parent, string child)
         {
             if (!AssetDatabase.IsValidFolder(parent))
@@ -1526,7 +1369,7 @@ namespace TheCall.Editor
             DrawDefaultInspector();
             EditorGUILayout.Space();
             EditorGUILayout.HelpBox(
-                "界面已经放在场景里。点下面的按钮只显示其中一个。怪物立绘看 Portrait 上的矩形：里面是运行时那套拼接怪物，改矩形的位置和大小，游戏里和拖拽松手后的位置会一起变。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
+                "界面已经放在场景里。点下面的按钮只显示其中一个。怪物立绘看 Portrait 上的矩形：里面目前是整张剪影，改矩形的位置和大小，游戏里和拖拽松手后的位置会一起变。重建界面只用于重新生成这套演示，不要覆盖已经人工调整的场景内容。", 
                 MessageType.Info);
             using (new EditorGUILayout.HorizontalScope())
             {

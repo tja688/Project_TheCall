@@ -1,5 +1,8 @@
 # 新版策划落地对齐记录
 
+> 2026-10-20 起，怪物拼接、骨架、部件目录和拼装工作区已从工程删除。下文若提到它们，只作当时记录。新系统从 `Assets/Notes/新怪物系统交接.md` 开始。
+
+
 策划基线：`af170a044b09acfc0ab4e124974deb63c039123d`。两轮对齐已完成。用户最终确认Q17采用默认全来源加成，其余第二轮建议授权按讨论中的理解执行。完整开发与验收以[新版落地规格](../specs/new-planning-playable-migration.md)为准。
 
 完整规格已发布为[GitHub issue #16：新版策划落地：完整七天玩法、Unity内容与界面交付](https://github.com/tja688/Project_TheCall/issues/16)，标记 `ready-for-agent`。issue正文包含整份规格，不依赖本地尚未提交的文档；主交付M0–M5与独立后续音频里程碑均已写明。

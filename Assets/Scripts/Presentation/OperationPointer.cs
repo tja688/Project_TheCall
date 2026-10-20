@@ -103,8 +103,8 @@ namespace TheCall
             if (_carried == null)
                 return;
 
-            // 先按靠近生产区、培育区的程度放大，再把指针交给布娃娃。
-            // 放大会改骨架本地坐标，必须发生在 Hold 之前，抓取弹簧才读得到同一套单位。
+            // 先按靠近生产区、培育区的程度放大，再把指针交给画像。
+            // 旧骨架的本地坐标缩放已删除。放大只改画像的 Transform。
             if (!_releasing && !_returning)
                 ApplyCarryApproach(eventData.position);
             _carried.Hold(eventData.position, eventData.pressEventCamera);
