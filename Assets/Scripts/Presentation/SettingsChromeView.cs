@@ -39,16 +39,16 @@ namespace TheCall
             Prepare();
             HideAll();
             if (settingsCloseButton != null)
-                settingsCloseButton.onClick.AddListener(HideAll);
+                settingsCloseButton.onClick.AddListener(() => { UiSfx.PlayClick(); HideAll(); });
             if (settingsShadeButton != null)
-                settingsShadeButton.onClick.AddListener(HideAll);
+                settingsShadeButton.onClick.AddListener(() => { UiSfx.PlayClick(); HideAll(); });
             if (codex == null)
                 return;
 
             if (codex.closeButton != null)
-                codex.closeButton.onClick.AddListener(CloseCodex);
+                codex.closeButton.onClick.AddListener(() => { UiSfx.PlayClick(); CloseCodex(); });
             if (codex.shadeButton != null)
-                codex.shadeButton.onClick.AddListener(CloseCodex);
+                codex.shadeButton.onClick.AddListener(() => { UiSfx.PlayClick(); CloseCodex(); });
         }
 
         public void Prepare()

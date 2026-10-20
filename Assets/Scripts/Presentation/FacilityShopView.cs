@@ -53,6 +53,7 @@ namespace TheCall
         {
             ToolsSelected = tools;
             if (_selling) shop.buyTabButton.onClick.Invoke();
+            else UiSfx.PlayClick();
             Arrange();
         }
         public void Talk()

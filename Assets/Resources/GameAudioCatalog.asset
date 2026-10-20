@@ -16,6 +16,13 @@ MonoBehaviour:
   tutorial: {fileID: 8300000, guid: e1d9cc6cc6058ae4d92cf4cc16c27444, type: 3}
   level: {fileID: 8300000, guid: e0aa4b437f066ae4d912e07fd60b173f, type: 3}
   shop: {fileID: 8300000, guid: 1748d61838bbada4a9da57abc18c7a1a, type: 3}
+  uiClicks:
+  - {fileID: 8300000, guid: c99ec167f35311742a2a20c0505af8df, type: 3}
+  - {fileID: 8300000, guid: c94a0b17a767e4849826d48bccea5856, type: 3}
+  - {fileID: 8300000, guid: b139117f51c2165419f9dd8287df8980, type: 3}
+  purchase: {fileID: 8300000, guid: 975f43023005b594f84c45eb86aabcfb, type: 3}
+  error: {fileID: 8300000, guid: 95b9598c52eff984093163b5461aed8a, type: 3}
+  clockOut: {fileID: 8300000, guid: 49c88c01c2152b5489da58b28878782a, type: 3}
   mixer: {fileID: 24100000, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}
   bgmGroup: {fileID: 24300004, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}
   sfxGroup: {fileID: 24300006, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}

@@ -49,15 +49,28 @@ namespace TheCall
             for (var i = 0; i < categoryButtons.Length; i++)
             {
                 var category = (HandbookCategory)i;
-                categoryButtons[i].onClick.AddListener(() => ChooseCategory(category));
+                categoryButtons[i].onClick.AddListener(() =>
+                {
+                    UiSfx.PlayClick();
+                    ChooseCategory(category);
+                });
             }
             for (var i = 0; i < rarityButtons.Length; i++)
             {
                 var index = i;
-                rarityButtons[i].onClick.AddListener(() => { _rarity = index == 0 ? (Rarity?)null : Rarities[index - 1]; Rebuild(); });
+                rarityButtons[i].onClick.AddListener(() =>
+                {
+                    UiSfx.PlayClick();
+                    _rarity = index == 0 ? (Rarity?)null : Rarities[index - 1];
+                    Rebuild();
+                });
             }
             search.onValueChanged.AddListener(_ => Rebuild());
-            clearButton.onClick.AddListener(() => search.text = "");
+            clearButton.onClick.AddListener(() =>
+            {
+                UiSfx.PlayClick();
+                search.text = "";
+            });
         }
 
         public void Show(IReadOnlyList<HandbookEntry> entries)
@@ -101,7 +114,11 @@ namespace TheCall
                 var label = row.GetComponentInChildren<TMP_Text>(true);
                 label.text = entry.Name + (entry.Rarity.HasValue ? "  <size=70%>" + HandbookIndexQuery.RarityName(entry.Rarity.Value) + "</size>" : "");
                 label.color = RarityInk(entry.Rarity);
-                row.onClick.AddListener(() => Select(entry));
+                row.onClick.AddListener(() =>
+                {
+                    UiSfx.PlayClick();
+                    Select(entry);
+                });
                 _spawned.Add(row.gameObject); _rows.Add(entry.Id, row);
                 if (first == null) first = entry;
                 if (entry.Id == _selectedId) selected = entry;
@@ -148,7 +165,11 @@ namespace TheCall
                 var link = Instantiate(relatedTemplate, relatedContent);
                 link.gameObject.SetActive(true); link.name = "Related_" + target.Id;
                 link.GetComponentInChildren<TMP_Text>().text = Categories[(int)target.Category] + " · " + target.Name + "  ›";
-                link.onClick.AddListener(() => Navigate(target));
+                link.onClick.AddListener(() =>
+                {
+                    UiSfx.PlayClick();
+                    Navigate(target);
+                });
                 _links.Add(link.gameObject);
             }
             Canvas.ForceUpdateCanvases();

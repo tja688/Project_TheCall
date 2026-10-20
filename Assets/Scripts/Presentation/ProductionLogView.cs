@@ -24,9 +24,9 @@ namespace TheCall
         void Awake()
         {
             if (closeButton != null)
-                closeButton.onClick.AddListener(Hide);
+                closeButton.onClick.AddListener(() => { UiSfx.PlayClick(); Hide(); });
             if (shadeButton != null)
-                shadeButton.onClick.AddListener(Hide);
+                shadeButton.onClick.AddListener(() => { UiSfx.PlayClick(); Hide(); });
             KeepTextInFrame();
         }
 
