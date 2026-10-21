@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "source": "Assets/示意图/怪物实例.jpg",
+  "sourceSha256": "2b874418ff1ea102b46de061c93c9aba284fd9aa4f3b72712173cc985202e92f",
+  "drawings": 12,
+  "colorways": 72,
+  "flatColors": true,
+  "rows": [
+    {
+      "template": 0,
+      "width": 341,
+      "height": 270,
+      "opaque": 35633,
+      "transparent": 53462,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 1,
+      "width": 285,
+      "height": 307,
+      "opaque": 44498,
+      "transparent": 41459,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 2,
+      "width": 370,
+      "height": 187,
+      "opaque": 30367,
+      "transparent": 36801,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 3,
+      "width": 309,
+      "height": 249,
+      "opaque": 36879,
+      "transparent": 37437,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 4,
+      "width": 295,
+      "height": 243,
+      "opaque": 30749,
+      "transparent": 38912,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 5,
+      "width": 225,
+      "height": 214,
+      "opaque": 23860,
+      "transparent": 23283,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 6,
+      "width": 179,
+      "height": 190,
+      "opaque": 21071,
+      "transparent": 12174,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 7,
+      "width": 359,
+      "height": 146,
+      "opaque": 28016,
+      "transparent": 23211,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 8,
+      "width": 159,
+      "height": 195,
+      "opaque": 15819,
+      "transparent": 14256,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 9,
+      "width": 165,
+      "height": 220,
+      "opaque": 15995,
+      "transparent": 19172,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 10,
+      "width": 183,
+      "height": 245,
+      "opaque": 18102,
+      "transparent": 25179,
+      "faithfulOpaqueRatio": 1.0
+    },
+    {
+      "template": 11,
+      "width": 338,
+      "height": 270,
+      "opaque": 36413,
+      "transparent": 53003,
+      "faithfulOpaqueRatio": 1.0
+    }
+  ],
+  "errors": []
+}

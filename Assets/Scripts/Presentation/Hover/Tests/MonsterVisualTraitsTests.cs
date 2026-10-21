@@ -1,78 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
-
 namespace TheCall.Hover.Tests
 {
     public sealed class MonsterVisualTraitsTests
     {
         [Serializable] sealed class Entry { public string name; }
         [Serializable] sealed class Book { public Entry[] skills; public Entry[] personalities; }
-
-        static Book ActualBook() => JsonUtility.FromJson<Book>(
-            File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "call-book.json")));
-
-        [Test]
-        public void EveryActualPersonalityKeepsItsEyeFamilyAcrossAllFiveMoods()
+        [Test] public void EveryRealSkillPersonalityAndMoodLeavesBirthArtworkUnchanged()
         {
-            var book = ActualBook();
-            var moods = new[] { "倦怠", "疲倦", "普通", "热情", "热爱" };
-            var families = new HashSet<MonsterEyeFamily>();
-            Assert.That(book.personalities.Length, Is.EqualTo(25));
-            foreach (var personality in book.personalities)
+            var book=JsonUtility.FromJson<Book>(File.ReadAllText(Path.Combine(Application.streamingAssetsPath,"call-book.json")));
+            var appearance=MonsterAppearance.FromSeed(124);
+            var expected=MonsterVisualTraits.From(appearance).Signature;
+            foreach(var personality in book.personalities)
+            foreach(var mood in new[]{"倦怠","疲倦","普通","热情","热爱"})
             {
-                var states = moods.Select(mood => MonsterVisualTraits.Create(
-                    MonsterAppearance.FromSeed(124), personality.name, mood, new[] { "双头能量体" })).ToArray();
-                Assert.That(states.Select(state => state.MoodTier), Is.EqualTo(new[] { 0, 1, 2, 3, 4 }), personality.name);
-                Assert.That(states.Select(state => state.EyeFamily).Distinct().Count(), Is.EqualTo(1), personality.name);
-                Assert.That(states.Select(state => state.Signature).Distinct().Count(), Is.EqualTo(5), "Mood must participate in refresh identity");
-                families.Add(states[0].EyeFamily);
+                var monster=new MonsterView("probe","probe",book.skills.Select(s=>new SkillView(s.name,0,Rarity.White)).ToArray(),0,false,0,appearance,personality.name,"森林",mood);
+                Assert.That(MonsterVisualTraits.From(monster).Signature,Is.EqualTo(expected),personality.name+"/"+mood);
             }
-            Assert.That(families.Count, Is.EqualTo(5), "All five delivered eye families must be reachable");
         }
-
-        [Test] public void AllActualSkillsLeaveTheBirthAppearanceUnchanged()
+        [Test] public void ArtIdentityChangesOnlyWithCompleteDrawingOrColor()
         {
-            var appearance=MonsterAppearance.FromSeed(218); var baseline=MonsterVisualTraits.From(appearance).Signature;
-            foreach(var skill in ActualBook().skills)
-                Assert.That(MonsterVisualTraits.Create(appearance,"稳定","普通",new[]{skill.name}).Signature,Is.EqualTo(baseline));
+            var original=MonsterVisualTraits.From(new MonsterAppearance(5,0));
+            Assert.That(MonsterVisualTraits.From(new MonsterAppearance(5,0,31)).Signature,Is.EqualTo(original.Signature));
+            Assert.That(MonsterVisualTraits.From(new MonsterAppearance(6,0)).Signature,Is.Not.EqualTo(original.Signature));
+            Assert.That(MonsterVisualTraits.From(new MonsterAppearance(5,1)).Signature,Is.Not.EqualTo(original.Signature));
         }
-
-        [Test]
-        public void OnlyPersonalityAndMoodRefreshVisualTraits()
-        {
-            var appearance = MonsterAppearance.FromSeed(12);
-            var baseline = MonsterVisualTraits.From(appearance);
-            var mood = MonsterVisualTraits.Create(appearance, "稳定", "倦怠", Array.Empty<string>());
-            var personality = MonsterVisualTraits.Create(appearance, "恋爱脑", "普通", Array.Empty<string>());
-            var skills = MonsterVisualTraits.Create(appearance, "稳定", "普通", new[] { "双头能量体" });
-            Assert.That(new[] { baseline.Signature, mood.Signature, personality.Signature, skills.Signature }.Distinct().Count(), Is.EqualTo(3));
-        }
-
-        [Test]
-        public void TraitsSnapshotDoesNotRetainTheCallersMutableSkillList()
-        {
-            var skills = new List<string> { "双头能量体" };
-            var appearance = MonsterAppearance.FromSeed(66);
-            var snapshot = MonsterVisualTraits.Create(appearance, "稳定", "普通", skills);
-            var signature = snapshot.Signature;
-            skills.Clear();
-            skills.Add("回响嗓");
-            Assert.That(snapshot.Signature, Is.EqualTo(signature));
-            Assert.That(MonsterVisualTraits.Create(appearance, "稳定", "普通", skills).Signature, Is.EqualTo(signature));
-        }
-
-        [Test]
-        public void SkillOrderAndDuplicateInstancesDoNotShuffleAnExistingAssembly()
-        {
-            var appearance = MonsterAppearance.FromSeed(998);
-            var first = MonsterVisualTraits.Create(appearance, "自律", "热情", new[] { "换位手", "双头能量体", "换位手" });
-            var second = MonsterVisualTraits.Create(appearance, "自律", "热情", new[] { "双头能量体", "换位手" });
-            Assert.That(first.Signature, Is.EqualTo(second.Signature));
-        }
-
     }
 }

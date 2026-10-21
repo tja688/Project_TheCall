@@ -2,7 +2,7 @@
 param(
     [switch]$KeepPlaying,
     [int]$Seeds = 600,
-    [string]$EvidenceDirectory = 'docs/audit/2026-10-20/templates'
+    [string]$EvidenceDirectory = 'docs/audit/2026-10-21/whole-monsters'
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path $PSScriptRoot -Parent
@@ -138,7 +138,7 @@ finally {
     @{
         kind = 'LOCAL_VISUAL_AND_POINTER_FIXTURES_NOT_NATURAL_RUN'
         passed = $passed; failure = $failure; checks = $checks; count = $checks.Count; captures = $captures
-        requestedSeeds = $Seeds; tintContracts = "source-aligned semantic masks"; savedSceneHash = $savedHash; finalSceneHash = $finalHash
+        requestedSeeds = $Seeds; tintContracts = "complete sprite alpha and original ink"; savedSceneHash = $savedHash; finalSceneHash = $finalHash
         recordedPlayerReplay = 'Run scripts/verify-facility-replay.ps1 with a separate EvidenceDirectory; these fixtures do not prove seven-day completion.'
     } | ConvertTo-Json -Depth 9 | Set-Content -LiteralPath (Join-Path $evidence 'acceptance.json') -Encoding utf8
 }

@@ -15,7 +15,7 @@
 | `ScoringTape` | `Arrange` | 已确认的结算记录转成演出 cue |
 | `ScoringShow` | tape、进展通知、`Cancel`、`Advance` | cue 的 Unity 演出 adapter |
 
-怪物画像由 `MonsterPortrait.Show(MonsterView)` 接收状态快照。`MonsterVisualTraits` 将性格与真实心情投影为眼型和动作状态；`MonsterComposition` 按 `MonsterArtCatalog` 的 12 套成品模板、整套色卡和兼容饰品绘制。身体、嘴型、眼位及主要装饰出生后固定，技能不改变造型。画像、拖动虚影与结算共享同一外观，画像不查询正在变化的玩法状态。维护入口见[成品模板系统](monster-system.md)与[美术规则](monster-art-direction.md)。已删除的旧拼接系统不恢复。
+怪物画像由 `MonsterPortrait.Show(MonsterView)` 接收出生外观快照。`MonsterArtCatalog` 提供参考图中提取的 12 张完整造型和 6 套烘焙纯色，每个画像只显示一张完整图片。开局、商店与技能生成使用六个基础造型，培育子代使用六个复杂造型。技能、继承、性格和心情仅影响规则与状态显示。画像、拖动虚影与结算共享同一张图，动作作用于整图。维护入口见[完整怪物立绘](monster-system.md)与[美术规则](monster-art-direction.md)。
 
 `Render` 只查询规则。原有命令保留 QFramework 路由职责，Model 仍是对局状态的主人。总控控制界面显隐和音乐，界面 module 不独立改变流程。
 

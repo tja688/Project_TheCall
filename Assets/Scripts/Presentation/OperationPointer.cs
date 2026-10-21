@@ -136,6 +136,7 @@ namespace TheCall
                 {
                     _armed = _pressedPayload;
                     _hasArmed = true;
+                    if (_armed.Kind == PayloadKind.Monster) GameplaySfx.Play(GameplayCue.MonsterPickUp);
                     Paint();
                 }
 
@@ -201,6 +202,7 @@ namespace TheCall
             ApplyCarryApproach(eventData.position);
             _carried.Grab(eventData.pressPosition, eventData.pressEventCamera);
             _carried.Hold(eventData.position, eventData.pressEventCamera);
+            GameplaySfx.Play(GameplayCue.MonsterPickUp);
         }
 
         /// <summary>技能芯片没有怪物可以承载，仍按原来的方式跟着指针走。</summary>

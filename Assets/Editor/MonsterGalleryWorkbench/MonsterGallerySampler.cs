@@ -209,8 +209,8 @@ namespace TheCall.Editor
         {
             specimen.Recipe = appearance.Recipe;
             specimen.Palette = appearance.Palette;
-            specimen.HeadAccessory = appearance.HeadAccessory;
-            specimen.BackAccessory = appearance.BackAccessory;
+
+
             specimen.Variation = appearance.Variation;
         }
 
@@ -235,7 +235,7 @@ namespace TheCall.Editor
         static string BreedDetail(int parents, string gene, string mutation, bool duplicates, bool capped)
         {
             var text = parents == 3 ? "三亲培育。" : "两亲培育。";
-            text += "每个亲本贡献一个技能，色板跟随第二亲本。";
+            text += "每个亲本贡献一个技能，完整造型从培育池抽取，渐变配色独立固定。";
             if (duplicates) text += "持有复读腺，同名技能可以留下，但不会因此多画一件。";
             if (gene != null) text += "这个槽放入了基因「" + gene + "」。";
             if (mutation != null) text += "额外技能科技掷中了突变「" + mutation + "」。";

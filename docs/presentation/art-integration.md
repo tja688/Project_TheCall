@@ -20,13 +20,11 @@
 
 ## 换怪物画像
 
-当前 `MonsterPortrait.Show(MonsterView)` 接收完整怪物投影，绘制出生时确定的成品模板、完整色卡与兼容饰品。性格决定固定眼位中的眼型，真实心情影响动作；技能不改变身体结构。拖动虚影复制同一快照，结算继续消费既有快照与 `SetSpringMotion`。
+`MonsterPortrait.Show(MonsterView)` 显示出生时固定的完整图片与纯色配色。画像内部只有一个 Image。拖动虚影复制同一快照，结算继续消费既有快照与 `SetSpringMotion`。
 
-在 `Assets/Resources/MonsterArtCatalog.asset` 调整 12 套成品模板的分层、眼位、颜色角色、动作组与取景。六套色卡遵循身体与花纹同色略深、眼嘴异色。原始 70 张 PNG 保留；高光、牙齿与爪尖通过独立着色遮罩保护。
+执行菜单 `TheCall/Monster/从参考图提取完整怪物`，从 `Assets/示意图/怪物实例.jpg` 更新透明原稿和 72 张纯色立绘。调整 `Assets/Resources/MonsterArtCatalog.asset` 的色卡后重新运行导入；调用 `MonsterArtIntegration.Apply(true)` 才恢复默认色卡。
 
-更换原图后执行 `TheCall/Monster/更新部件目录与图集`，更新引用、遮罩和共享图集，同时保留人工布局与色卡。`MonsterArtIntegration.Apply(true)` 会明确恢复默认值。维护、配色与遗传规则见[成品模板系统](monster-system.md)。
-
-画像 Inspector 可固定模板、色卡、饰品、性格与心情。需要逐个对照参考图时使用菜单 `TheCall/Monster/打开立绘抽查台`。这些预览不修改正式对局，也不增加玩家装扮界面。
+画像 Inspector 可固定完整造型与配色。菜单 `TheCall/Monster/打开立绘抽查台` 提供逐个预览，性格与心情仅显示为状态，不改变画面。素材、抽选池和维护说明见[完整怪物立绘](monster-system.md)。
 
 ## 接入新的按钮
 
@@ -64,9 +62,9 @@
 
 ## 验证改动
 
-成品怪物的局部验收运行 `pwsh -NoProfile -File scripts/verify-monster-system.ps1`，覆盖全部合法饰品、72 个模板与色卡组合、五类眼型与五档心情、600 个出生种子、技能变化稳定性、实际跨区拖拽及拒绝回弹。运行 `scripts/verify-monster-cultivation.ps1` 检查真实基因安装保持外观、培育出生与跨天心情。原图独立检查使用 `scripts/audit-monster-art.py --check`。
+运行 `pwsh -NoProfile -File scripts/verify-monster-system.ps1`，检查 72 个完整造型与配色组合、600 个种子、状态变化不改变图片、透明轮廓和黑线、实际跨区拖拽与拒绝回弹。运行 `scripts/verify-monster-cultivation.ps1` 检查真实基因安装、培育出生与跨天状态。证据位于 `docs/audit/2026-10-21/whole-monsters/`。
 
-通过 Unity CLI 调用 `MonsterArtAcceptance.ExportTemplates()` 导出真实 Canvas 画像，然后运行 `python scripts/monster-template-evidence.py` 整理参考对照、完整色卡矩阵与动作 GIF，并检查配色和原始 alpha 连通性。局部注入样本不视为自然通关，七天普通、快进、跳过回放另行运行并比较规则记录。新证据位于 `docs/audit/2026-10-20/templates/`。
+通过 Unity CLI 调用 `MonsterArtAcceptance.ExportTemplates()` 导出真实 Canvas 画像。局部注入样本不视为自然通关，七天普通、快进、跳过回放另行运行并比较规则记录。
 
 当前横向设施先运行 `scripts/verify-facility-art.ps1`。它检查实际跨区拖放、监控、收容柜末尾、科研扩建、回收和商店。运行 `scripts/verify-facility-replay.ps1`，再对照正常、快进、跳过三种七天流程的全部状态与生产记录。图层与灯光的独立校验使用 `scripts/audit-facility-art.py`。证据位于 `docs/audit/2026-10-17/facility/`。
 

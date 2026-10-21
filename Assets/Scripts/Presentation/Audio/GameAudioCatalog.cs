@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 namespace TheCall
 {
     /// <summary>
-    /// Serialized references. Music stays in Assets/Sound/BGM, UI effects in Assets/Sound/SFX/UI.
+    /// Serialized references. Music and effects stay in Assets/Sound.
     /// Clips are not copied into Resources.
     /// </summary>
     public sealed class GameAudioCatalog : ScriptableObject
@@ -17,6 +17,19 @@ namespace TheCall
         public AudioClip purchase;
         public AudioClip error;
         public AudioClip clockOut;
+        [Header("Gameplay effects")]
+        public AudioClip monsterPickUp;
+        public AudioClip monsterPlace;
+        public AudioClip monsterDiscard;
+        public AudioClip[] monsterEnergyGain;
+        public AudioClip[] obtain;
+        public AudioClip[] skillEnergy;
+        public AudioClip skillMultiply;
+        public AudioClip[] skillKill;
+        public AudioClip settle;
+        public AudioClip reachRequirement;
+        [Header("Ordered settlement assets, awaiting result-stage design")]
+        public AudioClip[] experiencePickup;
         public AudioMixer mixer;
         public AudioMixerGroup bgmGroup;
         public AudioMixerGroup sfxGroup;

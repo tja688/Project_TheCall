@@ -157,7 +157,7 @@ namespace TheCall
             var after = this.SendQuery(new RunLedgerQuery());
             if (Contains(after.UnlockedTech, name) && !Contains(before.UnlockedTech, name))
             {
-                UiSfx.PlayClick();
+                GameplaySfx.Play(GameplayCue.Obtain);
                 Notice("研究完成。");
             }
             else if (Contains(before.UnlockedTech, name))
@@ -258,7 +258,8 @@ namespace TheCall
         }
 
         static bool UsesDedicatedCue(PresentationAction action) =>
-            action == PresentationAction.LeaveShop
+            action == PresentationAction.Settle
+            || action == PresentationAction.LeaveShop
             || action == PresentationAction.RefreshShelf
             || action == PresentationAction.Research
             || action == PresentationAction.AddGeneSlot;

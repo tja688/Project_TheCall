@@ -1,0 +1,236 @@
+{
+  "tintContracts": "complete sprite alpha and original ink",
+  "requestedSeeds": 600,
+  "passed": true,
+  "checks": [
+    {
+      "check": "PASS saved Main, 12 complete source drawings and 72 baked gradients",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 972 real portrait cases; one complete sprite; distinct basic/cultivated pools; gameplay state never changes art",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS all 72 gradients retain extracted alpha and original dark outlines",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS six coordinated gradients; birth art independent of skills, inheritance, personality and mood",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 0",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 1",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 2",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 3",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 4",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS advancing runtime motion gallery started",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=31425 pose=0.002847317",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=37248 pose=-0.001865986",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=40437 pose=-0.00767048",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=46301 pose=-0.006739286",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=49889 pose=0.00639181",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=53762 pose=-0.003218127",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 6 real frames, 6 distinct sampled poses",
+      "result": "PASS"
+    },
+    {
+      "check": "Three captured Unity motion frames have distinct PNG SHA256 values",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS temporary gallery closed without touching the saved scene",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS fixture ownership, five mood states, whole-sprite portraits match their rule projections, deferred upgrades stay hidden",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityDormTab at (124.00, 44.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS invalid cross-room drop leaves the monster resting and starts return toward its actual moved origin",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS rejected ghost follows the moved origin, fades out and restores its source; 233 frames sampled",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "No new Unity compilation or runtime errors",
+      "result": "PASS"
+    }
+  ],
+  "kind": "LOCAL_VISUAL_AND_POINTER_FIXTURES_NOT_NATURAL_RUN",
+  "failure": null,
+  "finalSceneHash": "E39275F4BB7942B9BA29A60F2E8FA2E92BFE7D6E9EB7003F5DAAC2E09DFF6927",
+  "captures": [
+    {
+      "sha256": "3706B5DD685329E0A7F0FA180E69941C5C59B530737C05A148F3F67C651CF97E",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "gallery-0.png"
+    },
+    {
+      "sha256": "5AD5CD64343CB4BBB038B2B59FBE5D96F870A874F1C473B23C25D004C1293060",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "gallery-1.png"
+    },
+    {
+      "sha256": "F0FDBDADA9E3BAA7971164A1E064F0F4BF4988C8A2C8A559E55E1F144D3CA0ED",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "gallery-2.png"
+    },
+    {
+      "sha256": "95C9640B41F53DC9105CF4BF98FE8D6895BD76C7AC81D24276A102F78058EA5F",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "gallery-3.png"
+    },
+    {
+      "sha256": "EE9F89CDE6CB9DFDF7B176AA4C9AF0A03DB9879D66C18DD219E444C778CA02C2",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "gallery-4.png"
+    },
+    {
+      "sha256": "8D538557BC1C9A440BA705271636C2933DDD6F348CE29EE643B2F668604D42E4",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "motion-0.png"
+    },
+    {
+      "sha256": "BC2493546503A3F011F7CE869D841A1E008EB438FFE559F7B2F673AD79C243EC",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "motion-2.png"
+    },
+    {
+      "sha256": "B7E4F4D6CAF11ED31C677D46A7400C357F518EEC4F75137F1554F7FBD333F6AB",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "motion-5.png"
+    },
+    {
+      "sha256": "732A083A458B9D7D9FF172AFC756BC8A868FD205B5141B3D01022C09A70F13A5",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "real-cross-room-ghost.png"
+    },
+    {
+      "sha256": "822F6802FC29B2C23AECC9E3FD1EF57E59755468F44C03FB8DAE95EBD8919D40",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "real-production-monster.png"
+    },
+    {
+      "sha256": "56AB15A7CDD0E1D46D11279AD9D942468DFFF241822C99430D8CCCD0D7CE08AB",
+      "source": "UNITY_GAME_VIEW",
+      "width": 1920,
+      "height": 1080,
+      "file": "rejected-ghost-restored.png"
+    }
+  ],
+  "recordedPlayerReplay": "Run scripts/verify-facility-replay.ps1 with a separate EvidenceDirectory; these fixtures do not prove seven-day completion.",
+  "savedSceneHash": "E39275F4BB7942B9BA29A60F2E8FA2E92BFE7D6E9EB7003F5DAAC2E09DFF6927",
+  "count": 36
+}

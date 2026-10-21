@@ -50,6 +50,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: TheCall.Hover::TheCall.MonsterPortrait
   _editorPreview: 1
   _editorPreviewSeed: 48291
-  _previewPersonality: "\u7A33\u5B9A"
-  _previewMood: "\u666E\u901A"
-  _previewSkills: []
+  _previewTemplate: -1
+  _previewPalette: 0

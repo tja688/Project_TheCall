@@ -1,0 +1,64 @@
+{
+    "kind": "LOCAL_CULTIVATION_UI_FIXTURE_NOT_NATURAL_RUN",
+    "scenario": "install",
+    "unity": "6000.6.0f1",
+    "injectedStartingResources": "PresentationFixtureAcceptance install fixture: one monster with 能量体, 迷恋死亡 personality, one 奇异香 gene. No skill is installed by the fixture.",
+    "failure": "",
+    "completed": true,
+    "steps": [
+        {
+            "step": "before-gene-install",
+            "monsterId": "m4",
+            "phase": "Operation",
+            "personality": "迷恋死亡",
+            "mood": "普通",
+            "appearance": "8,3,28",
+            "visual": "monster-sprite-v3/8/3",
+            "assembly": "Monster-8-3",
+            "note": "",
+            "day": 1,
+            "frame": 4685,
+            "parts": 1,
+            "workDays": 2,
+            "restDays": 3,
+            "parents": [],
+            "skills": [
+                "能量体"
+            ],
+            "skillSources": [
+                "s7|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-8-3"
+            ]
+        },
+        {
+            "step": "after-real-gene-drag",
+            "monsterId": "m4",
+            "phase": "Operation",
+            "personality": "迷恋死亡",
+            "mood": "普通",
+            "appearance": "8,3,28",
+            "visual": "monster-sprite-v3/8/3",
+            "assembly": "Monster-8-3",
+            "note": "Consumed gene g1; birth appearance unchanged",
+            "day": 1,
+            "frame": 8877,
+            "parts": 1,
+            "workDays": 2,
+            "restDays": 3,
+            "parents": [],
+            "skills": [
+                "能量体",
+                "奇异香"
+            ],
+            "skillSources": [
+                "s7|Fixture||",
+                "s8|Gene|g1|"
+            ],
+            "actualParts": [
+                "Portrait|Monster-8-3"
+            ]
+        }
+    ]
+}

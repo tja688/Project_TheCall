@@ -17,9 +17,7 @@ namespace TheCall
             PresentationReadout.Text(body, victory
                 ? "这一局结束。怪物笼、金币和科技都已清空。"
                 : "这一关的目标没有达到。这一局结束。");
-            if (portrait != null) portrait.Show(MonsterVisualTraits.Create(
-                MonsterAppearance.FromSeed(victory ? 73 : 29), victory ? "乐天派" : "厌世",
-                victory ? "热爱" : "倦怠", System.Array.Empty<string>()));
+            if (portrait != null) portrait.Show(MonsterAppearance.FromSeed(victory ? 73 : 29));
         }
     }
 }

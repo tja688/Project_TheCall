@@ -46,7 +46,7 @@ namespace TheCall.Editor
                 Canvas.ForceUpdateCanvases();
                 HideTree(_root);
                 if (!_portrait.HasCreature)
-                    throw new InvalidOperationException("画像没有画出部件。");
+                    throw new InvalidOperationException("画像没有画出完整立绘。");
 
                 _camera.Render();
                 var previous = RenderTexture.active;
@@ -95,7 +95,7 @@ namespace TheCall.Editor
             var catalog = MonsterArtCatalog.Runtime;
             if (catalog == null || !catalog.Ready)
                 throw new InvalidOperationException(catalog == null
-                    ? "找不到怪物部件目录。"
+                    ? "找不到完整怪物目录。"
                     : catalog.ValidationError());
 
             _root = new GameObject("MonsterGalleryCapture");

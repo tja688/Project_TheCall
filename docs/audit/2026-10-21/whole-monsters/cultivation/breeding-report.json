@@ -1,0 +1,314 @@
+{
+    "kind": "LOCAL_CULTIVATION_UI_FIXTURE_NOT_NATURAL_RUN",
+    "scenario": "breeding",
+    "unity": "6000.6.0f1",
+    "injectedStartingResources": "Local fixture resets two starting monsters, then initializes two parents with existing skills, modifier 120, zero work/rest history, different complete base drawings, 独立/自律 personalities; adds one 能量体 worker with modifier 500. No child or daily mood is injected.",
+    "failure": "",
+    "completed": true,
+    "steps": [
+        {
+            "step": "parent-a-before-placement",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 1,
+            "frame": 11926,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "parent-b-before-placement",
+            "monsterId": "m7",
+            "phase": "Operation",
+            "personality": "自律",
+            "mood": "普通",
+            "appearance": "6,3,23",
+            "visual": "monster-sprite-v3/6/3",
+            "assembly": "Monster-6-3",
+            "note": "",
+            "day": 1,
+            "frame": 11926,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "生长能量体",
+                "奇异香"
+            ],
+            "skillSources": [
+                "s11|Fixture||",
+                "s12|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-6-3"
+            ]
+        },
+        {
+            "step": "parent-in-real-breeding-seat-0",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 1,
+            "frame": 11926,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "parent-in-real-breeding-seat-1",
+            "monsterId": "m7",
+            "phase": "Operation",
+            "personality": "自律",
+            "mood": "普通",
+            "appearance": "6,3,23",
+            "visual": "monster-sprite-v3/6/3",
+            "assembly": "Monster-6-3",
+            "note": "",
+            "day": 1,
+            "frame": 11926,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "生长能量体",
+                "奇异香"
+            ],
+            "skillSources": [
+                "s11|Fixture||",
+                "s12|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-6-3"
+            ]
+        },
+        {
+            "step": "worker-in-real-extraction-seat",
+            "monsterId": "m8",
+            "phase": "Operation",
+            "personality": "稳定",
+            "mood": "普通",
+            "appearance": "8,2,9",
+            "visual": "monster-sprite-v3/8/2",
+            "assembly": "Monster-8-2",
+            "note": "",
+            "day": 1,
+            "frame": 11926,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "能量体"
+            ],
+            "skillSources": [
+                "s13|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-8-2"
+            ]
+        },
+        {
+            "step": "actual-shop-stock",
+            "monsterId": "m9",
+            "phase": "Shop",
+            "personality": "上进心",
+            "mood": "普通",
+            "appearance": "6,5,11",
+            "visual": "monster-sprite-v3/6/5",
+            "assembly": "Monster-6-5",
+            "note": "",
+            "day": 1,
+            "frame": 21370,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "右能量体"
+            ],
+            "skillSources": [
+                "s14|Purchase||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-6-5"
+            ]
+        },
+        {
+            "step": "actual-shop-stock",
+            "monsterId": "m10",
+            "phase": "Shop",
+            "personality": "上进心",
+            "mood": "普通",
+            "appearance": "5,2,14",
+            "visual": "monster-sprite-v3/5/2",
+            "assembly": "Monster-5-2",
+            "note": "",
+            "day": 1,
+            "frame": 21370,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "血崩体"
+            ],
+            "skillSources": [
+                "s15|Purchase||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-2"
+            ]
+        },
+        {
+            "step": "actual-shop-stock",
+            "monsterId": "m11",
+            "phase": "Shop",
+            "personality": "恋爱脑",
+            "mood": "普通",
+            "appearance": "6,4,7",
+            "visual": "monster-sprite-v3/6/4",
+            "assembly": "Monster-6-4",
+            "note": "",
+            "day": 1,
+            "frame": 21370,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "啃食体"
+            ],
+            "skillSources": [
+                "s16|Purchase||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-6-4"
+            ]
+        },
+        {
+            "step": "actual-shop-stock",
+            "monsterId": "m12",
+            "phase": "Shop",
+            "personality": "仇恨血脉",
+            "mood": "普通",
+            "appearance": "8,4,16",
+            "visual": "monster-sprite-v3/8/4",
+            "assembly": "Monster-8-4",
+            "note": "",
+            "day": 1,
+            "frame": 21370,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优质肉体",
+                "自爆体"
+            ],
+            "skillSources": [
+                "s17|Purchase||",
+                "s18|Purchase||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-8-4"
+            ]
+        },
+        {
+            "step": "child-born-by-production-leave-shop",
+            "monsterId": "m13",
+            "phase": "LevelStart",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "7,2,16",
+            "visual": "",
+            "assembly": "",
+            "note": "Whole authored template selected by birth rules; independent gradient; both parent skill-instance sources retained",
+            "day": 2,
+            "frame": 21370,
+            "parts": 0,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [
+                "m6",
+                "m7"
+            ],
+            "skills": [
+                "优秀能量体",
+                "生长能量体"
+            ],
+            "skillSources": [
+                "s21|Parent|s9|m6",
+                "s22|Parent|s11|m7"
+            ],
+            "actualParts": []
+        },
+        {
+            "step": "child-on-next-day-cage",
+            "monsterId": "m13",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "7,2,16",
+            "visual": "monster-sprite-v3/7/2",
+            "assembly": "Monster-7-2",
+            "note": "Current start-phase skills and mood, including any legal personality effect, remain visible in the status while birth art is stable",
+            "day": 2,
+            "frame": 25045,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 0,
+            "parents": [
+                "m6",
+                "m7"
+            ],
+            "skills": [
+                "优秀能量体",
+                "生长能量体"
+            ],
+            "skillSources": [
+                "s21|Parent|s9|m6",
+                "s22|Parent|s11|m7"
+            ],
+            "actualParts": [
+                "Portrait|Monster-7-2"
+            ]
+        }
+    ]
+}

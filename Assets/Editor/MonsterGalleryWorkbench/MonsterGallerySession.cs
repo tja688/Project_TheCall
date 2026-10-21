@@ -17,7 +17,7 @@ namespace TheCall.Editor
         public string Detail;
         public string MoodNote;
         public int Seed;
-        public int Recipe, Palette, HeadAccessory, BackAccessory, Variation;
+        public int Recipe, Palette, Variation;
         public string Personality, Mood, Race;
         public List<string> Skills = new List<string>();
         public int Pose;
@@ -25,7 +25,7 @@ namespace TheCall.Editor
         public int ParentCount;
 
         public MonsterAppearance Appearance => new MonsterAppearance(
-            Recipe, Palette, HeadAccessory, BackAccessory, Variation);
+            Recipe, Palette, Variation);
 
         public float PoseSeconds => 0.35f + Pose * 0.72f;
 
@@ -113,10 +113,10 @@ namespace TheCall.Editor
             return new
             {
                 webSockets = MonsterGalleryWorkbench.SupportsWebSockets,
-                options = new { templates = MonsterArtCatalog.Runtime.bodies.OrderBy(b=>(int)b.id).Select(b=>new { id=(int)b.id, name=b.name, pairs=Enumerable.Range(0,12).Where(code=>MonsterAppearance.Compatible((int)b.id,code/3,code%3)).ToArray() }).ToArray(),
-                    palettes = MonsterArtCatalog.Runtime.palettes.OrderBy(p=>(int)p.id).Select(p=>new { id=(int)p.id,name=p.name,body=ColorUtility.ToHtmlStringRGB(p.body),pattern=ColorUtility.ToHtmlStringRGB(p.pattern),eye=ColorUtility.ToHtmlStringRGB(p.eye),mouth=ColorUtility.ToHtmlStringRGB(p.mouth) }).ToArray(),
+                options = new { templates = MonsterArtCatalog.Runtime.bodies.OrderBy(b=>(int)b.id).Select(b=>new { id=(int)b.id, name=b.name }).ToArray(),
+                    palettes = MonsterArtCatalog.Runtime.palettes.OrderBy(p=>(int)p.id).Select(p=>new { id=(int)p.id,name=p.name,body=ColorUtility.ToHtmlStringRGB(p.body),pattern=ColorUtility.ToHtmlStringRGB(p.pattern),eye=ColorUtility.ToHtmlStringRGB(p.eye),mouth=ColorUtility.ToHtmlStringRGB(p.mouth),fill=ColorUtility.ToHtmlStringRGB(Color.Lerp(p.pattern,p.body,.60f)) }).ToArray(),
                     personalities = ContentGate.Current.Personalities.Select(p=>p.Name).ToArray(), moods = new[] { "倦怠","疲倦","普通","热情","热爱" } },
-                selection = Items.Count == 0 ? null : new { template=Find(_currentId).Recipe,palette=Find(_currentId).Palette,head=Find(_currentId).HeadAccessory,back=Find(_currentId).BackAccessory,personality=Find(_currentId).Personality,mood=Find(_currentId).Mood },
+                selection = Items.Count == 0 ? null : new { template=Find(_currentId).Recipe,palette=Find(_currentId).Palette,personality=Find(_currentId).Personality,mood=Find(_currentId).Mood },
                 filter = _filter,
                 currentId = _currentId,
                 error = _error ?? "",
@@ -129,11 +129,11 @@ namespace TheCall.Editor
         {
             EnsureSeeded(); var item=Find(_currentId);
             var template=payload.Value<int?>("template")??item.Recipe; var palette=payload.Value<int?>("palette")??item.Palette;
-            var head=payload.Value<int?>("head")??item.HeadAccessory; var back=payload.Value<int?>("back")??item.BackAccessory;
-            if(template<0||template>=12||palette<0||palette>=6||!MonsterAppearance.Compatible(template,head,back)) throw new InvalidOperationException("该模板不支持这组饰品，请选择无饰品或其他组合。");
+
+            if(template<0||template>=12||palette<0||palette>=6) throw new InvalidOperationException("模板或渐变配色无效。");
             var personality=payload.Value<string>("personality")??item.Personality; var mood=payload.Value<string>("mood")??item.Mood;
             if(ContentGate.Current.FindPersonality(personality)==null||ContentGate.Current.FindMood(mood)==null) throw new InvalidOperationException("未知性格或心情。");
-            item.Recipe=template;item.Palette=palette;item.HeadAccessory=head;item.BackAccessory=back;item.Personality=personality;item.Mood=mood;
+            item.Recipe=template;item.Palette=palette;item.Personality=personality;item.Mood=mood;
             item.Detail="固定模板预览，不修改对局。";item.MoodNote="抽查台手动预览状态。";item.Summary=MonsterArtCatalog.Runtime.Body(template).name+" · "+personality+" · "+mood;
             _view=null;EnsureView();Save();
         }
@@ -300,16 +300,15 @@ namespace TheCall.Editor
     {
         public static SpecimenView Render(Specimen specimen)
         {
-            var catalog=MonsterArtCatalog.Runtime; var traits=MonsterVisualTraits.Create(specimen.Appearance,specimen.Personality,specimen.Mood,specimen.Skills);
-            var pieces=new List<MonsterComposition.Piece>();MonsterComposition.Compose(catalog,traits,pieces);
+            var catalog=MonsterArtCatalog.Runtime; var traits=MonsterVisualTraits.From(specimen.Appearance);
             var palette=catalog.Colorway(specimen.Palette);
             return new SpecimenView { Id=specimen.Id,Summary=specimen.Summary,Png=Convert.ToBase64String(MonsterPortraitCapture.Render(traits,specimen.PoseSeconds)),
-                Facts=new List<object> { Fact("来源",specimen.ChannelLabel),Fact("模板",catalog.Body(specimen.Recipe).name),Fact("色卡",palette.name),
-                    Fact("头饰",new[]{"无附加头饰","短角","纹角","蝴蝶结"}[specimen.HeadAccessory]),Fact("背饰",new[]{"无附加背饰","蝙蝠翼","羽翼"}[specimen.BackAccessory]),
-                    Fact("性格与眼型",specimen.Personality+" / "+new[]{"焦虑","冷漠","狂躁","怠惰","渴爱"}[(int)traits.EyeFamily]),Fact("心情",specimen.Mood),Fact("心情来源",specimen.MoodNote),Fact("技能",string.Join("、",specimen.Skills)),
-                    Fact("外观规则","成品结构固定；花纹同色略深，眼嘴异色；技能不改造身体。"),Fact("本次来源",specimen.Detail) },
-                Parts=pieces.Select((p,i)=>(object)new {order=i+1,name=p.Name,art=p.Art.id,at=p.Position.ToString(),turn=p.Angle.ToString(CultureInfo.InvariantCulture),mirror=p.Mirror}).ToList() };
+                Facts=new List<object> { Fact("来源",specimen.ChannelLabel),Fact("完整造型",catalog.Body(specimen.Recipe).name),Fact("纯色配色",palette.name),
+                    Fact("性格",specimen.Personality),Fact("心情",specimen.Mood),Fact("心情来源",specimen.MoodNote),Fact("技能",string.Join("、",specimen.Skills)),
+                    Fact("外观规则","一张完整立绘。技能、性格、心情与继承只显示为状态，不改变外形。"),Fact("本次来源",specimen.Detail) },
+                Parts=new List<object> {new {order=1,name="完整立绘",art=catalog.Sprite(specimen.Appearance).name,at="(0,0)",turn="0",mirror=false}} };
         }
+
         static object Fact(string label,string value)=>new {label,value};
     }
 }

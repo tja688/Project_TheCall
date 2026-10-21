@@ -100,7 +100,7 @@ namespace TheCall.Editor
             if (!done.Task.IsCompleted) return "FAIL probe timed out " + LaunchUrl;
             var failures = done.Task.GetAwaiter().GetResult();
             var shot = MonsterPortraitCapture.Render(
-                MonsterVisualTraits.Create(MonsterAppearance.FromSeed(48291), "稳定", "普通", Array.Empty<string>()), 0.4f);
+                MonsterVisualTraits.From(MonsterAppearance.FromSeed(48291)), 0.4f);
             var path = Path.Combine(Path.GetTempPath(), "monster-gallery-probe.png");
             File.WriteAllBytes(path, shot);
             var dark = CountDark(shot);

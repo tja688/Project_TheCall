@@ -14,7 +14,7 @@ namespace TheCall.Editor
     /// <summary>Injected starting resources followed by real drag, settlement, breeding and daily-mood flows.</summary>
     public static class MonsterCultivationAcceptance
     {
-        const string DefaultEvidence = "docs/audit/2026-10-20/templates/cultivation";
+        const string DefaultEvidence = "docs/audit/2026-10-21/whole-monsters/cultivation";
         [Serializable] sealed class Reading
         {
             public string step, monsterId, phase, personality, mood, appearance, visual, assembly, note;
@@ -41,7 +41,7 @@ namespace TheCall.Editor
         static string[] _parents;
         static MonsterAppearance[] _parentAppearances;
         static string _workerId, _childId, _moodAppearance, _moodInitialVisual;
-        static MonsterEyeFamily _moodEyeFamily;
+
         static int _workedChecks, _restedChecks, _expectedWork, _expectedRest;
         static bool _pendingMoodWork;
 
@@ -67,7 +67,7 @@ namespace TheCall.Editor
             _installAppearance = Genes(monster.Appearance);
             var portrait = CagePortrait(_installId);
             CheckPortrait(_installId, portrait);
-            _installAssembly = portrait.AssemblySignature;
+            _installAssembly = portrait.ArtworkSignature;
             Read(_install, "before-gene-install", monster, portrait);
             _stage = "install-ready"; Save(_install);
             return "PASS install-ready: actual cage slot and 奇异香 gene prepared; capture before calling InstallGene";
@@ -86,23 +86,23 @@ namespace TheCall.Editor
             Need(Genes(monster.Appearance) == _installAppearance, "Skill installation changed inherited structure genes");
             var portrait = CagePortrait(_installId);
             CheckPortrait(_installId, portrait);
-            Need(portrait.AssemblySignature == _installAssembly, "Skill installation changed the fixed template, colors or accessories");
+            Need(portrait.ArtworkSignature == _installAssembly, "Skill installation changed the fixed template, gradient");
             Read(_install, "after-real-gene-drag", monster, portrait, "Consumed gene " + _installedGeneId + "; birth appearance unchanged");
             _install.completed = true; _stage = "install-completed"; Save(_install);
-            return "PASS real gene drag consumes 奇异香, preserves birth genes, preserves template, colors, eye positions and accessories";
+            return "PASS real gene drag consumes 奇异香, preserves birth genes, preserves complete sprite and gradient";
         }
 
         public static string BreedingBegin(string evidenceDirectory = DefaultEvidence, bool startSettlement = true)
         {
             BeginReport("breeding", evidenceDirectory,
-                "Local fixture resets two starting monsters, then initializes two parents with existing skills, modifier 120, zero work/rest history, different fixed templates and accessories, 独立/自律 personalities; adds one 能量体 worker with modifier 500. No child or daily mood is injected.");
+                "Local fixture resets two starting monsters, then initializes two parents with existing skills, modifier 120, zero work/rest history, different complete base drawings, 独立/自律 personalities; adds one 能量体 worker with modifier 500. No child or daily mood is injected.");
             _breeding = _active;
             PresentationFixtureAcceptance.Begin("breeding", 2, Path.Combine(_evidence, "breeding-fixture"));
             foreach (var old in Run.Cage.ToArray()) Run.TryDestroy(old.Id);
             var first = Run.CreateMonster(new[] { "优秀能量体", "双头能量体" }, 120,
-                new MonsterAppearance(0, 0, 3, 0, 2), personality: "独立", race: "森林");
+                new MonsterAppearance(5, 0, 2), personality: "独立", race: "森林");
             var second = Run.CreateMonster(new[] { "生长能量体", "奇异香" }, 120,
-                new MonsterAppearance(7, 3, 1, 0, 23), personality: "自律", race: "海生");
+                new MonsterAppearance(6, 3, 23), personality: "自律", race: "海生");
             var worker = Run.CreateMonster(new[] { "能量体" }, 500, personality: "稳定", race: "森林");
             Run.AddToCage(first); Run.AddToCage(second); Run.AddToCage(worker);
             _parents = new[] { first.Id, second.Id }; _parentAppearances = new[] { first.Appearance, second.Appearance };
@@ -141,15 +141,15 @@ namespace TheCall.Editor
             var children = Run.LivingMonsters.Where(monster => monster.ParentIds.Count == 2 && monster.ParentIds.SequenceEqual(_parents)).ToArray();
             Need(children.Length == 1, "Production LeaveShop did not create exactly one child with both real parent IDs");
             var child = children[0]; _childId = child.Id;
-            Need(MonsterAppearance.Compatible(child.Appearance.Recipe,child.Appearance.HeadAccessory,child.Appearance.BackAccessory), "Child inherited incompatible accessories");
-            Need(child.Appearance.Palette == _parentAppearances[1].Palette, "Child palette did not follow the second parent");
+            Need(child.Appearance.IsCultivated, "Child did not use the cultivated drawing pool");
+            Need(child.Appearance.Palette >= 0 && child.Appearance.Palette < 6, "Child gradient outside catalog");
             foreach (var skill in child.Skills)
                 Need(skill.SourceKind == SkillSourceKind.Parent && _parents.Contains(skill.SourceMonsterId) &&
                     Run.Find(skill.SourceMonsterId).Skills.Any(source => source.Id == skill.SourceId && source.Name == skill.Name),
                     "Child skill lost its real inherited skill-instance source");
             Need(child.Skills.Select(skill => skill.SourceMonsterId).Distinct().Count() == 2, "Child did not inherit a contribution from each distinct-skill parent");
             // Capture birth provenance before BeginLevel: 好奇 can legitimately rewrite skills at the next start phase.
-            Read(_breeding, "child-born-by-production-leave-shop", child, null, "Whole authored template selected by birth rules; palette follows parent B; both parent skill-instance sources retained");
+            Read(_breeding, "child-born-by-production-leave-shop", child, null, "Whole authored template selected by birth rules; independent gradient; both parent skill-instance sources retained");
             _stage="breeding-born";Save(_breeding);
             return "PASS child born by real LeaveShop; wait for ReadyForDayStart before BeginPendingDay";
         }
@@ -167,12 +167,12 @@ namespace TheCall.Editor
             _active=_breeding;Need(_stage=="breeding-entering-operation"&&ReadyForOperation,"Wait for operation transition before child portrait check");
             FocusProduction();var child=Run.Find(_childId);
             var portrait = CagePortrait(child.Id); CheckPortrait(child.Id, portrait);
-            Read(_breeding, "child-on-next-day-cage", child, portrait, "Current start-phase skills and mood, including any legal personality effect, drive the actual portrait");
+            Read(_breeding, "child-on-next-day-cage", child, portrait, "Current start-phase skills and mood, including any legal personality effect, remain visible in the status while birth art is stable");
             _breeding.completed = true;
             _mood = new Report { scenario = "mood", unity = Application.unityVersion,
                 injectedStartingResources = "Continues the real breeding fixture. Tracks parent A through two actual work days, optionally followed by two actual rest days. Does not set mood, work counters, skills or structure genes after initialization." };
             var tracked = Run.Find(_parents[0]); var trackedPortrait = CagePortrait(tracked.Id);
-            _moodAppearance = Genes(tracked.Appearance); _moodInitialVisual = trackedPortrait.VisualSignature; _moodEyeFamily = trackedPortrait.Traits.EyeFamily;
+            _moodAppearance = Genes(tracked.Appearance); _moodInitialVisual = trackedPortrait.VisualSignature;
             Read(_mood, "before-real-daily-mood-flow", tracked, trackedPortrait);
             _stage = "breeding-completed"; Save(_breeding); Save(_mood);
             return "PASS production settlement and LeaveShop create one inherited child; actual next-day cage portrait matches current rules. MoodDayBegin/Check can now run twice for work, then optionally twice with false for rest";
@@ -215,16 +215,14 @@ namespace TheCall.Editor
                 "Production day transition did not advance/reset the actual parent history");
             var expectedMood = _pendingMoodWork ? (_expectedWork == 2 ? "疲倦" : "普通") : (_expectedRest == 2 ? "热情" : "普通");
             Need(tracked.Mood == expectedMood, "Real daily mood differs from the expected two-day work/rest threshold");
-            Need(Genes(tracked.Appearance) == _moodAppearance, "Daily mood changed inherited structure genes");
-            Need(portrait.Traits.EyeFamily == _moodEyeFamily, "Mood changed personality eye family");
+            Need(Genes(tracked.Appearance) == _moodAppearance, "Daily mood changed the birth appearance");
+            Need(portrait.VisualSignature == _moodInitialVisual, "Daily mood changed the fixed whole sprite");
             if (_pendingMoodWork) _workedChecks++; else _restedChecks++;
-            if (_workedChecks == 2 && _restedChecks == 0 || _restedChecks == 2)
-                Need(portrait.VisualSignature != _moodInitialVisual, "A real changed mood did not refresh portrait identity");
             Read(_mood, "after-real-" + (_pendingMoodWork ? "work-" + _workedChecks : "rest-" + _restedChecks), tracked, portrait,
-                "Expected " + expectedMood + "; eye family and all birth genes retained");
+                "Expected " + expectedMood + "; whole sprite and all birth genes retained");
             _mood.completed = _workedChecks == 2; _stage = _restedChecks == 2 ? "mood-completed" : "mood-day-completed"; Save(_mood);
             return "PASS actual parent mood " + tracked.Mood + "; work=" + tracked.ConsecutiveWorkDays + "; rest=" + tracked.ConsecutiveRestDays +
-                "; current portrait refreshed with unchanged genes and eye family";
+                "; current portrait stable with unchanged genes and whole sprite";
         }
 
         static void BeginReport(string scenario, string evidenceDirectory, string injected)
@@ -259,7 +257,7 @@ namespace TheCall.Editor
         static void CheckPortrait(string id, MonsterPortrait portrait)
         {
             var current = App.SendQuery(new MonsterQuery(id));
-            Need(current != null && portrait != null && portrait.HasCreature && portrait.PartCount >= 8 &&
+            Need(current != null && portrait != null && portrait.HasCreature && portrait.PartCount == 1 &&
                 portrait.VisualSignature == MonsterVisualTraits.From(current).Signature, "Actual portrait differs from current monster projection: " + id);
         }
 
@@ -311,14 +309,14 @@ namespace TheCall.Editor
                 appearance = Genes(monster.Appearance), workDays = monster.ConsecutiveWorkDays, restDays = monster.ConsecutiveRestDays,
                 parents = monster.ParentIds.ToArray(), skills = monster.Skills.Select(skill => skill.Name).ToArray(),
                 skillSources = monster.Skills.Select(skill => skill.Id + "|" + skill.SourceKind + "|" + skill.SourceId + "|" + skill.SourceMonsterId).ToArray(),
-                visual = portrait != null ? portrait.VisualSignature : "", assembly = portrait != null ? portrait.AssemblySignature : "",
+                visual = portrait != null ? portrait.VisualSignature : "", assembly = portrait != null ? portrait.ArtworkSignature : "",
                 parts = portrait != null ? portrait.PartCount : 0, actualParts = portrait != null ? ActualParts(portrait) : Array.Empty<string>(), note = note });
         }
 
         static string[] ActualParts(MonsterPortrait portrait) => portrait.GetComponentsInChildren<Image>(false)
             .Where(image => image.enabled && image.sprite != null).Select(image => image.transform.parent.name + "|" + image.sprite.name).ToArray();
 
-        static int[] GeneValues(MonsterAppearance value) => new[] { value.Recipe,value.Palette,value.HeadAccessory,value.BackAccessory,value.Variation };
+        static int[] GeneValues(MonsterAppearance value) => new[] { value.Recipe,value.Palette,value.Variation };
         static string Genes(MonsterAppearance value) => string.Join(",", GeneValues(value));
 
         static void Need(bool value, string message)

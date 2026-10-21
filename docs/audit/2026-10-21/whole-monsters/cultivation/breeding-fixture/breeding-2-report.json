@@ -1,0 +1,66 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin breeding",
+            "passed": true,
+            "actual": "count=2 IDs=m4,m5",
+            "frame": 11926
+        },
+        {
+            "name": "parent-drag",
+            "passed": true,
+            "actual": "m6 -> flat parent seat 0",
+            "frame": 11926
+        },
+        {
+            "name": "parent-drag",
+            "passed": true,
+            "actual": "m7 -> flat parent seat 1",
+            "frame": 11926
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m8 -> extraction 0",
+            "frame": 11926
+        },
+        {
+            "name": "inventory-drag 1",
+            "passed": true,
+            "actual": "m6 -> extraction 0",
+            "frame": 28186
+        },
+        {
+            "name": "inventory-drag 0",
+            "passed": true,
+            "actual": "m8 -> extraction 1",
+            "frame": 28186
+        },
+        {
+            "name": "inventory-drag 2",
+            "passed": true,
+            "actual": "m6 -> extraction 0",
+            "frame": 37294
+        },
+        {
+            "name": "inventory-drag 2",
+            "passed": true,
+            "actual": "m8 -> extraction 1",
+            "frame": 37294
+        },
+        {
+            "name": "inventory-drag 3",
+            "passed": true,
+            "actual": "m8 -> extraction 0",
+            "frame": 47030
+        },
+        {
+            "name": "inventory-drag 3",
+            "passed": true,
+            "actual": "m8 -> extraction 0",
+            "frame": 55553
+        }
+    ]
+}

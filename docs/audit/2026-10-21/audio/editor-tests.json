@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "command": "command run_tests",
+  "data": {
+    "command": "run_tests",
+    "parameters": {
+      "mode": "editor",
+      "filter": "SfxCatalogTests",
+      "timeout": "60"
+    },
+    "result": {
+      "Summary": {
+        "Total": 3,
+        "Passed": 3,
+        "Failed": 0,
+        "Skipped": 0,
+        "Inconclusive": 0
+      },
+      "Results": [
+        {
+          "FullName": "TheCall.GameplaySfxCatalogTests.交付音效均有直接引用且可解码为非静音短音效",
+          "Status": "Passed",
+          "Duration": 0.0349803,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.GameplaySfxCatalogTests.经验序列保留编号顺序且主动废弃与技能消灭使用不同素材",
+          "Status": "Passed",
+          "Duration": 0.0012535,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "TheCall.UiSfxCatalogTests.界面音效目录绑定本批六条资源",
+          "Status": "Passed",
+          "Duration": 0.0004528,
+          "Message": null,
+          "StackTrace": null
+        }
+      ],
+      "Duration": 0.78,
+      "StatusPath": null,
+      "Mode": "EditMode",
+      "FilterApplied": "testname: SfxCatalogTests",
+      "success": true,
+      "result": null
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\jinji\\Documents\\GitHub\\Project_TheCall"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

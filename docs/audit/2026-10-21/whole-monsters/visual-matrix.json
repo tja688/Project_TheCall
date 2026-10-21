@@ -1,0 +1,6812 @@
+{
+  "passed": true,
+  "samples": 972,
+  "templates": 12,
+  "palettes": 6,
+  "rows": [
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 0,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 1,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 2,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 3,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 4,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 7,
+      "palette": 1,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "倦怠"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "疲倦"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热情"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "自律",
+      "mood": "热爱"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "倦怠"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "疲倦"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热情"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "热爱"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "倦怠"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "疲倦"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热情"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "急躁",
+      "mood": "热爱"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "倦怠"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "疲倦"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热情"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "摸鱼派",
+      "mood": "热爱"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "倦怠"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "疲倦"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热情"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "恋爱脑",
+      "mood": "热爱"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 11,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 5,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 5,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 10,
+      "palette": 0,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 4,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 6,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 1,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 9,
+      "palette": 2,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    },
+    {
+      "template": 8,
+      "palette": 3,
+      "images": 1,
+      "personality": "稳定",
+      "mood": "普通"
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+{
+    "kind": "LOCAL_CULTIVATION_UI_FIXTURE_NOT_NATURAL_RUN",
+    "scenario": "mood",
+    "unity": "6000.6.0f1",
+    "injectedStartingResources": "Continues the real breeding fixture. Tracks parent A through two actual work days, optionally followed by two actual rest days. Does not set mood, work counters, skills or structure genes after initialization.",
+    "failure": "",
+    "completed": true,
+    "steps": [
+        {
+            "step": "before-real-daily-mood-flow",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 2,
+            "frame": 25045,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 1,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "before-real-work-settlement",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 2,
+            "frame": 28186,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 1,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "after-real-work-1",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "Expected 普通; whole sprite and all birth genes retained",
+            "day": 3,
+            "frame": 33275,
+            "parts": 1,
+            "workDays": 1,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "before-real-work-settlement",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 3,
+            "frame": 37294,
+            "parts": 1,
+            "workDays": 1,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "after-real-work-2",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "疲倦",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "Expected 疲倦; whole sprite and all birth genes retained",
+            "day": 4,
+            "frame": 43246,
+            "parts": 1,
+            "workDays": 2,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "before-real-rest-settlement",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "疲倦",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 4,
+            "frame": 47030,
+            "parts": 1,
+            "workDays": 2,
+            "restDays": 0,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "after-real-rest-1",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "Expected 普通; whole sprite and all birth genes retained",
+            "day": 5,
+            "frame": 51933,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 1,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "before-real-rest-settlement",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "普通",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "",
+            "day": 5,
+            "frame": 55553,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 1,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        },
+        {
+            "step": "after-real-rest-2",
+            "monsterId": "m6",
+            "phase": "Operation",
+            "personality": "独立",
+            "mood": "热情",
+            "appearance": "5,0,2",
+            "visual": "monster-sprite-v3/5/0",
+            "assembly": "Monster-5-0",
+            "note": "Expected 热情; whole sprite and all birth genes retained",
+            "day": 6,
+            "frame": 60613,
+            "parts": 1,
+            "workDays": 0,
+            "restDays": 2,
+            "parents": [],
+            "skills": [
+                "优秀能量体",
+                "双头能量体"
+            ],
+            "skillSources": [
+                "s9|Fixture||",
+                "s10|Fixture||"
+            ],
+            "actualParts": [
+                "Portrait|Monster-5-0"
+            ]
+        }
+    ]
+}

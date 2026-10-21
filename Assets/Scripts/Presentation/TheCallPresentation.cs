@@ -166,7 +166,7 @@ namespace TheCall
             _wired = true;
             BindOpeningExitButton();
             BindAction(_opening != null ? _opening.exitButton : null, PresentationAction.Quit);
-            ListenSlots(_opening != null ? _opening.candidates : null, OnKeep);
+            ListenSlots(_opening != null ? _opening.candidates : null, OnKeep, false);
             BindAction(_levelStart != null ? _levelStart.beginButton : null, PresentationAction.BeginLevel);
             Listen(_operation != null ? _operation.shopButton : null, OnShopLocked, false);
             BindAction(_operation != null ? _operation.researchButton : null, PresentationAction.OpenResearch);
@@ -362,7 +362,7 @@ namespace TheCall
                 return;
             }
             this.SendCommand(new UnlockTechCommand("基因仓储"));
-            UiSfx.PlayClick();
+            GameplaySfx.Play(GameplayCue.Obtain);
             Notice("基因仓储解锁成功，基因槽上限扩展为 4。");
             Refresh();
         }
@@ -373,7 +373,10 @@ namespace TheCall
                 return;
 
             var id = slot.monsterId;
+            var before = this.SendQuery(new RunPhaseQuery());
             Run(() => this.SendCommand(new KeepOpeningMonsterCommand(id)));
+            if (before == RunPhase.Opening && this.SendQuery(new RunPhaseQuery()) == RunPhase.Operation)
+                GameplaySfx.Play(GameplayCue.Obtain);
         }
 
         void OnBegin()
@@ -387,6 +390,10 @@ namespace TheCall
             var applied = this.SendCommand(new CommitOperationDropCommand(drop));
             if (applied)
             {
+                if (drop.Payload.Kind == PayloadKind.Monster)
+                    GameplaySfx.Play(drop.Landing.Place == LandingPlace.Discard ? GameplayCue.MonsterDiscard : GameplayCue.MonsterPlace);
+                else if (drop.Payload.Kind == PayloadKind.SkillChip && drop.Landing.Place != LandingPlace.BreedingSocket)
+                    GameplaySfx.Play(GameplayCue.Obtain);
                 if (drop.Landing.Place == LandingPlace.Discard && _operation != null && _operation.lab != null)
                     _operation.lab.recycler?.Consume();
                 Refresh();

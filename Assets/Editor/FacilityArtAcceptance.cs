@@ -49,10 +49,10 @@ namespace TheCall.Editor
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             Need(scene.path == "Assets/Scenes/Main.unity" && !scene.isDirty, "Main not saved");
             Need(Op.pointer.panorama != null && View.dormSlots.Length == 6 && View.upgrades.Length == 4, "Incomplete bindings");
-            Need(Object.FindObjectsByType<MonsterPortrait>(FindObjectsInactive.Include, FindObjectsSortMode.None).All(p => p.UsesAssembly), "Scene portrait does not use modular artwork");
+            Need(Object.FindObjectsByType<MonsterPortrait>(FindObjectsInactive.Include, FindObjectsSortMode.None).All(p => p.UsesWholeSprite), "Scene portrait does not use whole-sprite artwork");
             Need(Object.FindObjectsByType<FacilityLamp>(FindObjectsInactive.Include, FindObjectsSortMode.None).All(l => l.lightSource != null), "Lamp binding lost");
             Need(Object.FindAnyObjectByType<Camera>().orthographic, "Camera is not orthographic");
-            return "PASS saved Main, modular monster portraits, six dorm seats, four deferred upgrades, 2D lamp bindings";
+            return "PASS saved Main, whole-sprite monster portraits, six dorm seats, four deferred upgrades, 2D lamp bindings";
         }
 
         public static string Fixture(int count = 14, string evidenceDirectory = "docs/audit/2026-10-17/facility/fixtures")
@@ -66,10 +66,10 @@ namespace TheCall.Editor
             Canvas.ForceUpdateCanvases();
             Need(View.MonitoredCount == count && App.SendQuery(new FacilityStatusQuery()).Count == count, "Monitor count differs from ownership");
             Need(View.upgrades.All(u => !u.artwork.activeSelf), "Unspecified upgrade appeared by default");
-            Need(Op.cageSlots.Where(s => s.gameObject.activeInHierarchy).All(s => s.portrait.HasCreature && s.portrait.UsesAssembly && s.portrait.PartCount >= 8), "Cage modular portrait missing");
+            Need(Op.cageSlots.Where(s => s.gameObject.activeInHierarchy).All(s => s.portrait.HasCreature && s.portrait.UsesWholeSprite && s.portrait.PartCount == 1), "Cage whole-sprite portrait missing");
             foreach (var slot in Op.cageSlots.Where(s => s.gameObject.activeInHierarchy))
                 Need(slot.portrait.VisualSignature == MonsterVisualTraits.From(App.SendQuery(new MonsterQuery(slot.monsterId))).Signature, "Cage visual state differs from current monster projection");
-            return "PASS fixture ownership, five mood states, modular portraits match their rule projections, deferred upgrades stay hidden";
+            return "PASS fixture ownership, five mood states, whole-sprite portraits match their rule projections, deferred upgrades stay hidden";
         }
 
         public static string PanBegin()
@@ -109,8 +109,8 @@ namespace TheCall.Editor
             _gesture.position = new Vector2(Screen.width * (fromDorm ? 0.99f : 0.01f), Screen.height * 0.45f);
             _source.OnDrag(_gesture);
             var ghost = Op.dragLayer.Find("MonsterGhost").GetComponent<MonsterPortrait>();
-            Need(ghost.UsesAssembly && ghost.PartCount >= 8 && ghost.VisualSignature == slot.portrait.VisualSignature, "Ghost modular portrait does not match the source");
-            return "PASS real monster pointer drag creates matching modular portrait and waits at room edge";
+            Need(ghost.UsesWholeSprite && ghost.PartCount == 1 && ghost.VisualSignature == slot.portrait.VisualSignature, "Ghost whole-sprite portrait does not match the source");
+            return "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge";
         }
 
         static void BeginDrag(MonsterSlotView slot)
@@ -176,8 +176,8 @@ namespace TheCall.Editor
                 App.SendCommand(new PlaceMonsterCommand(cage[0].Id, OperationArea.Extraction, i));
             }
             Presentation.Refresh();
-            Need(Op.extractionSlots.All(s => s.portrait.HasCreature && s.portrait.UsesAssembly && s.portrait.PartCount >= 8), "Production modular portraits missing");
-            return "PASS fixture production seats display six owned modular monsters";
+            Need(Op.extractionSlots.All(s => s.portrait.HasCreature && s.portrait.UsesWholeSprite && s.portrait.PartCount == 1), "Production whole-sprite portraits missing");
+            return "PASS fixture production seats display six owned whole-sprite monsters";
         }
 
         public static string RecyclerHover()

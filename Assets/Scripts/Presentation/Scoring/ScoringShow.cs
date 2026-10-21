@@ -20,7 +20,8 @@ namespace TheCall.Scoring
             Action<string> say,
             Action completed,
             int initialEnergy = 0, int initialGold = 0,
-            Action<int, int> moved = null, Action<int> removed = null, Action<int> energyShown = null, FacilitySceneView facility = null)
+            Action<int, int> moved = null, Action<int> removed = null, Action<int> energyShown = null, FacilitySceneView facility = null,
+            int energyDue = 0)
         {
             Tape = tape;
             ExtractionSlots = extractionSlots;
@@ -36,6 +37,7 @@ namespace TheCall.Scoring
             Removed = removed;
             EnergyShown = energyShown;
             Facility = facility;
+            EnergyDue = energyDue;
         }
 
         public ScoringTape Tape { get; }
@@ -52,6 +54,7 @@ namespace TheCall.Scoring
         public Action<int> Removed { get; }
         public Action<int> EnergyShown { get; }
         public FacilitySceneView Facility { get; }
+        public int EnergyDue { get; }
     }
 
     public sealed partial class ScoringShow : MonoBehaviour, ICueSink
@@ -99,6 +102,7 @@ namespace TheCall.Scoring
         bool _finishPay;
         bool _paying;
         bool _finished;
+        bool _cancelled;
 
         struct BoardSlot
         {
@@ -135,6 +139,7 @@ namespace TheCall.Scoring
 
         public void Cancel()
         {
+            _cancelled = true;
             StopAllCoroutines();
             Finish();
         }
@@ -147,6 +152,7 @@ namespace TheCall.Scoring
         {
             _stage = stage;
             _shownGold = stage.InitialGold;
+            BeginSfx();
             StartCoroutine(Run());
         }
 
@@ -215,6 +221,7 @@ namespace TheCall.Scoring
         {
             if (!_finished)
             {
+                _cancelled = true;
                 _finished = true;
                 if (_active == this)
                     _active = null;
@@ -228,6 +235,7 @@ namespace TheCall.Scoring
 
         void TeardownPresentation()
         {
+            if (_cancelled) StopSfx();
             DOTween.Kill(TweenId);
             EndEnergy();
             RestoreCurrent();
@@ -318,6 +326,8 @@ namespace TheCall.Scoring
         {
             ActiveSlot = cue.SlotIndex;
             EnergyPhase = cue.Tone == MarkTone.Miss ? "zero" : "mark";
+            if (!SkipWait() && cue.Amount > 0 && (cue.Tone == MarkTone.Gold || cue.Tone == MarkTone.Skills))
+                PlaySfx(GameplayCue.Obtain);
             if (cue.Tone == MarkTone.Miss) DisplayedSkillEnergy = 0;
             if (cue.Tone == MarkTone.Gold && cue.Amount != 0) yield return RollGold(cue.Amount);
             var head = HeadOf(cue.SlotIndex);
@@ -482,6 +492,7 @@ namespace TheCall.Scoring
             yield return FlushEnergy();
             if (cue.Happened)
             {
+                if (!SkipWait()) PlaySfx(GameplayCue.SkillKill);
                 var root = RootAt(cue.VictimIndex);
                 var rest = InRange(cue.VictimIndex) ? _slots[cue.VictimIndex].RestScale : Vector3.one;
                 if (root != null)
@@ -539,7 +550,12 @@ namespace TheCall.Scoring
                 label = Spawn("累计 " + cue.Produced, BesideTotal());
 
             if (cue.Wage > 0)
+            {
+                PlaySfx(GameplayCue.Obtain);
                 yield return RollGold(cue.Wage);
+            }
+            else if (cue.Kind == PayKind.Paid && cue.Excess)
+                PlaySfx(GameplayCue.Obtain);
 
             if (cue.Kind == PayKind.Short)
                 yield return ShakeBoard(14f);
@@ -850,6 +866,7 @@ namespace TheCall.Scoring
             if (_paying)
             {
                 _finishPay = true;
+                StopSfx();
                 return;
             }
 
@@ -861,6 +878,7 @@ namespace TheCall.Scoring
             else
             {
                 _cutToPay = true;
+                StopSfx();
             }
         }
 

@@ -1,0 +1,236 @@
+{
+  "finalSceneHash": "E39275F4BB7942B9BA29A60F2E8FA2E92BFE7D6E9EB7003F5DAAC2E09DFF6927",
+  "captures": [
+    {
+      "file": "gallery-0.png",
+      "sha256": "BDB6F45AB03F436639E6F2269E7AD99AABE93471EEC63C77FB5CFF8C97969BEA",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "gallery-1.png",
+      "sha256": "92299E5CA109FC43E0CF9A1F6BBB2419DD7ED0E84413AAD88F939C7F33C79E4D",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "gallery-2.png",
+      "sha256": "F05E75A9353957036037EACE4B0DEFEEB1B7A1D9695033E7866093C9ACF9AF66",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "gallery-3.png",
+      "sha256": "6F40CCC90B580D7DC2FD34D05321357808551FA188A11C2F2F673530DEDB66A6",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "gallery-4.png",
+      "sha256": "456AEF55D4DC542BE4D176D75850612532F1C104F4D20B2A2A5912F7760ECB89",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "motion-0.png",
+      "sha256": "67C0337C72C319D1E49CC0F2E8A9327FBF96F083D36C05777DDCA7DC9F35C869",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "motion-2.png",
+      "sha256": "71CD50839D3ABAFBE4386D2149F1A01894FC550C1A32A87BD9260087EFEA95FE",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "motion-5.png",
+      "sha256": "D3D004EBE73B0EC3996D5E21AD78D9BC93C7BAECBF7A584A1BA80074AA7E3485",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "real-cross-room-ghost.png",
+      "sha256": "150666F19E6AB6A2151D2C8DDE7E2B92D401B0C6020103E27CFC974A6E5A2FD1",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "real-production-monster.png",
+      "sha256": "31C46BC46329FC4096D9E7AB8E5CEF1AB79DE94BED8EECB7F661DB91EC2A0D9C",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    },
+    {
+      "file": "rejected-ghost-restored.png",
+      "sha256": "9B73492A98E7DAB6C252FCC632DEC995CEC97C03AFBDE049E3DC640357C17FB6",
+      "width": 1920,
+      "height": 1080,
+      "source": "UNITY_GAME_VIEW"
+    }
+  ],
+  "savedSceneHash": "E39275F4BB7942B9BA29A60F2E8FA2E92BFE7D6E9EB7003F5DAAC2E09DFF6927",
+  "failure": null,
+  "recordedPlayerReplay": "Run scripts/verify-facility-replay.ps1 with a separate EvidenceDirectory; these fixtures do not prove seven-day completion.",
+  "checks": [
+    {
+      "check": "PASS saved Main, 12 complete source drawings and 72 flat colorways",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 972 real portrait cases; one complete sprite; distinct basic/cultivated pools; gameplay state never changes art",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS all 72 colorways retain extracted alpha and original dark outlines",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS six flat colorways; birth art independent of skills, inheritance, personality and mood",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 0",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 1",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 2",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 3",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real Canvas gallery 4",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS advancing runtime motion gallery started",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=27571 pose=-0.003463461",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=32699 pose=-0.002613134",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=34263 pose=-0.002799604",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=39504 pose=0.00632742",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=42229 pose=0.004097084",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual pose sample frame=45339 pose=0.007934316",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 6 real frames, 6 distinct sampled poses",
+      "result": "PASS"
+    },
+    {
+      "check": "Three captured Unity motion frames have distinct PNG SHA256 values",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS temporary gallery closed without touching the saved scene",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS fixture ownership, five mood states, whole-sprite portraits match their rule projections, deferred upgrades stay hidden",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS visible raycast+pointer click: FacilityDormTab at (124.00, 44.50)",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS cross-room drag commits through actual landing and updates monitor without duplicating ownership",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS real monster pointer drag creates matching whole-sprite portrait and waits at room edge",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS actual cross-room pointer ghost has identical traits and parts to its visible source",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS invalid cross-room drop leaves the monster resting and starts return toward its actual moved origin",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS rejected ghost follows the moved origin, fades out and restores its source; 249 frames sampled",
+      "result": "PASS"
+    },
+    {
+      "check": "PASS 20 real occupied consumers use matching projected traits and assembly identities",
+      "result": "PASS"
+    },
+    {
+      "check": "No new Unity compilation or runtime errors",
+      "result": "PASS"
+    }
+  ],
+  "requestedSeeds": 600,
+  "tintContracts": "complete sprite alpha and original ink",
+  "passed": true,
+  "count": 36,
+  "kind": "LOCAL_VISUAL_AND_POINTER_FIXTURES_NOT_NATURAL_RUN"
+}

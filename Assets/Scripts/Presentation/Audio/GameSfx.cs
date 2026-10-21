@@ -11,12 +11,17 @@ namespace TheCall
     public static class GameSfx
     {
         static readonly HashSet<LoopSfxOwner> ActiveLoops = new HashSet<LoopSfxOwner>();
+        static readonly HashSet<SfxVoice> ActiveShots = new HashSet<SfxVoice>();
 
-        public static void PlayOneShot(AudioClip clip, float volume = 1f, float pitch = 1f)
+        public static SfxVoice PlayOneShot(AudioClip clip, float volume = 1f, float pitch = 1f)
         {
-            if (clip == null || !AudioKit.Settings.IsSoundOn.Value) return;
-            var player = AudioKit.PlaySound(clip, false, null, Mathf.Clamp01(volume), pitch);
+            if (clip == null || !AudioKit.Settings.IsSoundOn.Value) return null;
+            var voice = new SfxVoice();
+            var player = AudioKit.PlaySound(clip, false, _ => voice.Finished(), Mathf.Clamp01(volume), pitch);
             Route(player);
+            voice.Attach(player);
+            ActiveShots.Add(voice);
+            return voice;
         }
 
         public static void PlayLoop(GameObject owner, AudioClip clip, float volume = 1f)
@@ -37,6 +42,7 @@ namespace TheCall
 
         public static void StopAll()
         {
+            foreach (var voice in new List<SfxVoice>(ActiveShots)) voice.Stop();
             // Stop owner handles before the AudioKit pool recycles them.
             var handles = new List<LoopSfxOwner>(ActiveLoops);
             foreach (var handle in handles)
@@ -47,6 +53,7 @@ namespace TheCall
 
         internal static void Track(LoopSfxOwner owner) { ActiveLoops.Add(owner); }
         internal static void Untrack(LoopSfxOwner owner) { ActiveLoops.Remove(owner); }
+        internal static void Untrack(SfxVoice voice) { ActiveShots.Remove(voice); }
 
         internal static AudioPlayer StartLoop(AudioClip clip, float volume)
         {
@@ -61,6 +68,25 @@ namespace TheCall
             var catalog = Resources.Load<GameAudioCatalog>("GameAudioCatalog");
             if (catalog != null && catalog.sfxGroup != null)
                 player.OutputMixerGroup = catalog.sfxGroup;
+        }
+    }
+
+    // The handle retires when playback ends, before AudioKit reuses its pooled player.
+    public sealed class SfxVoice
+    {
+        AudioPlayer _player;
+        public bool IsPlaying => _player != null;
+        internal void Attach(AudioPlayer player) => _player = player;
+        internal void Finished()
+        {
+            _player = null;
+            GameSfx.Untrack(this);
+        }
+        public void Stop()
+        {
+            var player = _player;
+            Finished();
+            if (player != null) player.Stop();
         }
     }
 

@@ -1,5 +1,5 @@
 #Requires -Version 7.3
-param([string]$EvidenceDirectory = 'docs/audit/2026-10-20/templates/cultivation')
+param([string]$EvidenceDirectory = 'docs/audit/2026-10-21/whole-monsters/cultivation')
 $ErrorActionPreference = 'Stop'
 $project = Split-Path $PSScriptRoot -Parent
 $evidence = if ([IO.Path]::IsPathRooted($EvidenceDirectory)) { $EvidenceDirectory } else { Join-Path $project $EvidenceDirectory }

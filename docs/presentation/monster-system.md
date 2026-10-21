@@ -1,47 +1,45 @@
-# 成品模板怪物的实现与维护
+# 完整怪物立绘
 
-正式怪物使用 `Assets/示意图/怪物实例.jpg` 中的 12 个完整造型。每个模板固定身体、肢体、嘴型、花纹和眼位。出生时确定模板、整套色卡及头饰、背饰；技能增减不改变这些内容。性格决定眼型，真实心情控制呼吸、姿态与动作强度。
+2026-10-21 临时修补：所有正式立绘使用纯色填充，取消渐变及白色保护区，解决眼睛、嘴部周围的大块发白。原稿不改写。
 
-## 数据与调用
+怪物来自 `Assets/示意图/怪物实例.jpg` 的 12 个完整造型。正式素材直接提取原 JPG 像素，保留轮廓、眼睛、针脚和四肢。图像生成工具的去背试稿存在细节重绘，未作为正式素材。
 
-```csharp
-portrait.Show(monsterView);
-var ghost = MonsterPortrait.SpawnGhost(dragLayer, portrait);
-```
+## 造型与配色
 
-`RunModel` 中的怪物拥有唯一的 `MonsterAppearance`，保存 `Recipe`、`Palette`、`HeadAccessory`、`BackAccessory`、`Variation`。`Recipe` 对应稳定的 `MonsterTemplate` 标识，`Palette` 对应稳定的 `MonsterPalette` 标识，均不依赖 Inspector 数组排序。画像、商店、结果、拖动虚影与结算都消费同一快照，不自行抽取或查询下一天状态。
+| 用途 | 完整造型 |
+| --- | --- |
+| 开局、商店、技能生成 | 脑袋兽、纽扣猫、铆钉兽、独角兽、触角兽、章鱼兽 |
+| 培育子代 | 双首爬行者、缝合脑兽、双子星、双首触须、群星、长耳星纹兽 |
 
-出生均匀选择 12 个模板、6 套色卡与模板允许的饰品组合。两亲、三亲培育有 80% 概率继承一名亲本的完整模板，20% 从亲本未出现的其他模板中选择。整套色卡沿用现有次亲本规则。饰品候选来自亲本，筛选兼容组合；没有适配项时使用无附加饰品。外观哈希不调用 `IDraw`，性格、技能、种族、经济与亲本来源仍由原规则处理。
+六套纯色为苔绿、暮紫、莓红、奶油、雾青、月蓝。颜色沿用参考图中的低饱和色调，导入时使用色卡亮色与暗色的固定中间色。所有填充区域统一着色，取消眼白、嘴部等白色保护范围；保留黑色线条与透明轮廓。
 
-饰品兼容规则只在无 Unity 依赖的 `MonsterAppearance.Compatible` 中维护。资源目录必须覆盖该清单。头饰编号为无、短角、纹角、蝴蝶结；背饰编号为无、蝙蝠翼、羽翼。成对翅膀算一个背饰。复杂模板可以只开放蝴蝶结，或关闭背饰。
+`MonsterAppearance` 只保存完整造型、配色与出生随机变化值。两个抽选池都用独立种子抽取造型与颜色，不改变玩法抽取次数。子代沿用原有培育时点和技能继承流程，外观独立选自培育池。心情、性格和技能不会改变图片、眼型、配色或呼吸强度。
 
-## 作者化资源
+## 更新素材
 
-`Assets/Resources/MonsterArtCatalog.asset` 是当前美术调参入口，schemaVersion 为 2。
-
-- `bodies`：按稳定 ID 查找的 12 套固定分层、表达眼位、饰品挂点、动作分组与取景框。
-- `palettes`：身体、花纹、眼部强调色、嘴部四个颜色角色。完整色卡共同遗传。
-- `parts`：70 张原始透明图片及有效 alpha 范围，部分含派生着色遮罩。
-- `viewportFill` 与 `idleMotion`：外框留白与动作幅度。
-
-`MonsterComposition` 按数据绘制，不包含随机头型、手脚、口型或技能改造。各层按颜色角色取色。眼睛只在标记为 expression 的固定位置替换；纽扣外壳等装饰眼不改变数量与位置。眼睛、嘴和身体通过动作分组共同运动，着色遮罩与原图使用相同变换。
-
-菜单 `TheCall/Monster/更新部件目录与图集` 更新原图引用、遮罩与图集，同时保留现有模板和色卡。首次由旧目录迁移时填入 12 套成品默认值。开发调用 `MonsterArtIntegration.Apply(true)` 会明确重置为 `MonsterTemplateDefaults` 中的布局及色卡，日常换图不要传 true。
-
-原始 PNG 不修改。`MonsterTintMasks` 生成 `Assets/Resources/MonsterTintMasks/` 下的着色遮罩，保留黑线、瞳孔、白色高光、爪尖和吸盘。需要改变语义分区时调整生成器，并检查原图与遮罩叠加后的实际画像。
-
-## 抽查与验证
-
-编辑器菜单 `TheCall/Monster/打开立绘抽查台` 使用现有 localhost 控制面板。可选择固定模板、完整色卡、兼容饰品、性格与心情，对照原始参考图。预览只改变抽查记录，不修改当前对局。旧版九结构槽缓存已用 v2 会话键隔离。
+在退出 Play Mode 的 Unity Editor 中执行菜单 `TheCall/Monster/从参考图提取完整怪物`，或通过 Unity CLI 调用：
 
 ```powershell
-python scripts/audit-monster-art.py --check
-pwsh -NoProfile -File scripts/verify-monster-system.ps1
-pwsh -NoProfile -File scripts/verify-monster-cultivation.ps1
-pwsh -NoProfile -File scripts/verify-facility-replay.ps1 -EvidenceDirectory docs/audit/2026-10-20/templates/replay
-python scripts/monster-template-evidence.py
+unity --no-banner --non-interactive command eval --project-path "C:/Users/jinji/Documents/GitHub/Project_TheCall" --caller plugin --skill unity-cli --timeout 600 -- "TheCall.Editor.MonsterArtIntegration.Apply();" 600000
 ```
 
-导出真实画像使用 Unity CLI 调用 `MonsterArtAcceptance.ExportTemplates()`，生成 72 个真实 Canvas 色卡画像与模板几何数据。`monster-template-evidence.py` 需要 Pillow，将这些截图整理为对照图、色卡图与动作 GIF，同时检查 OKLab 色差、全部合法饰品的原始 alpha 结构连通性及饰品对表情眼位的遮挡，不绘制替代怪物。
+工具读取原图的固定裁剪框、移除灰底与封闭空隙、消除灰色边缘，并生成：
 
-证据目录为 `docs/audit/2026-10-20/templates/`。画像矩阵、局部资源注入、真实指针交互与七天玩家输入回放分别记录，不能相互代替。审美判断仍需查看实际图片与动作，不能仅凭测试或几何连通性通过。
+- `Assets/Arts/Monsters/Whole/Source-0.png` 至 `Source-11.png`，保留原图配色的透明提取稿。
+- 同目录 `Monster-{造型编号}-{色卡编号}.png`，共 72 张纯色版本。
+- `Assets/Resources/MonsterArtCatalog.asset`，完整图片、取景与色卡的唯一目录。
+- `Assets/Resources/WholeMonstersAtlas.spriteatlas`，供正式玩家使用的图集。
+
+重复导入保留手动调整的色卡。调用 `Apply(true)` 才恢复默认色卡。原 JPG 不改写。旧部件原图继续保留供美术参考，旧部件图集与染色遮罩已从 Resources 移除，运行时没有部件拼装路径。
+
+修改裁剪框、去背规则与纯色算法时编辑 `Assets/Editor/MonsterArtIntegration.cs`。调整默认色卡时编辑 `MonsterTemplateDefaults.cs`。不要编辑场景 YAML。
+
+## 显示与验证
+
+`MonsterPortrait.Show(MonsterView)` 接收值快照，每个画像只有一个 `UnityEngine.UI.Image`。开局、怪物笼、提取槽、培育槽、商店、结算和拖动虚影共用同一画像。呼吸、拖动倾斜和结算弹动作用于整图。
+
+菜单 `TheCall/Monster/打开立绘抽查台` 可逐个检查完整造型与纯色；抽查台中的性格、技能和心情仅用于核对逻辑状态。
+
+运行 `python scripts/audit-whole-monster-art.py` 检查原稿像素、裁剪边缘、透明度与黑线。运行 `scripts/verify-monster-system.ps1` 检查 72 个造型与配色组合、游戏状态不改变图片、600 个基础与培育种子、原始黑线和透明轮廓、实际跨区拖动及拒绝回弹。运行 `scripts/verify-monster-cultivation.ps1` 检查真实安装、培育出生、技能来源和工作休息后的状态。证据目录为 `docs/audit/2026-10-21/whole-monsters/`。
+
+上述局部场景会注入初始资源，不代表自然七天通关。独立的七天流程使用 `scripts/verify-facility-replay.ps1`。

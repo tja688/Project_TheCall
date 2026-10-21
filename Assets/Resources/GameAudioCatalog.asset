@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42e3a3b03f6b4dc2a5e49e12463f75b1, type: 3}
   m_Name: GameAudioCatalog
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   menu: {fileID: 8300000, guid: faa5603bc64d05c45a8876b210fb8e34, type: 3}
   tutorial: {fileID: 8300000, guid: e1d9cc6cc6058ae4d92cf4cc16c27444, type: 3}
   level: {fileID: 8300000, guid: e0aa4b437f066ae4d912e07fd60b173f, type: 3}
@@ -23,6 +23,35 @@ MonoBehaviour:
   purchase: {fileID: 8300000, guid: 975f43023005b594f84c45eb86aabcfb, type: 3}
   error: {fileID: 8300000, guid: 95b9598c52eff984093163b5461aed8a, type: 3}
   clockOut: {fileID: 8300000, guid: 49c88c01c2152b5489da58b28878782a, type: 3}
+  monsterPickUp: {fileID: 8300000, guid: 7555a1a24e2c0334c9a3909e07988003, type: 3}
+  monsterPlace: {fileID: 8300000, guid: efd3e7800f01c4b4fa6bfee1ecae8e2d, type: 3}
+  monsterDiscard: {fileID: 8300000, guid: 9ffc6f74e8edf4441ac5389a373cb585, type: 3}
+  monsterEnergyGain:
+  - {fileID: 8300000, guid: d441c5c6cbdb3854d9cb87bbe66feb41, type: 3}
+  - {fileID: 8300000, guid: a6486425567682343b2e3aa60fb7fbf2, type: 3}
+  obtain:
+  - {fileID: 8300000, guid: a21ae0731490fb14f90ddeb8337dc160, type: 3}
+  - {fileID: 8300000, guid: 96bc36b90487a4e4da9a7575eaca45fc, type: 3}
+  - {fileID: 8300000, guid: 9465d0e6dfa13ce47b3915b2ae126c43, type: 3}
+  skillEnergy:
+  - {fileID: 8300000, guid: fc2f46b6f2bd02846897c0f4f75e1568, type: 3}
+  - {fileID: 8300000, guid: 9a07f32cbeef49a41ad1d27a9ee91fa5, type: 3}
+  skillMultiply: {fileID: 8300000, guid: 163652662462a44409c164c6090bfa19, type: 3}
+  skillKill:
+  - {fileID: 8300000, guid: 86f6b6ec5e3c7da478ef6825ee03654e, type: 3}
+  - {fileID: 8300000, guid: 4e84a1efad7a6694db5cc7c16bed0df8, type: 3}
+  - {fileID: 8300000, guid: db8dc16aa2337d64a9aa93c47decd0b7, type: 3}
+  - {fileID: 8300000, guid: f2e3978ff1ef0d34fbbb391b695e1cde, type: 3}
+  settle: {fileID: 8300000, guid: ca64ee80f3bd60b458bc45db8bb071c4, type: 3}
+  reachRequirement: {fileID: 8300000, guid: 51f922a64e02d4c48883cbc6a4c781b9, type: 3}
+  experiencePickup:
+  - {fileID: 8300000, guid: 7ed7835db8e595c4b824c26f5d0fd556, type: 3}
+  - {fileID: 8300000, guid: 2f92b29a0c50f7b47bcdb2f2d21ba7a5, type: 3}
+  - {fileID: 8300000, guid: df3ac29000c886b4a8123267b89f8deb, type: 3}
+  - {fileID: 8300000, guid: 22b268ada35a8964aa679fb1592a4b03, type: 3}
+  - {fileID: 8300000, guid: a9297c8aac21b294684ff955aab15430, type: 3}
+  - {fileID: 8300000, guid: 542b3bf1e2277bc48a45aca4194f43f0, type: 3}
+  - {fileID: 8300000, guid: 25d29493345b3544f934866e19937edb, type: 3}
   mixer: {fileID: 24100000, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}
   bgmGroup: {fileID: 24300004, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}
   sfxGroup: {fileID: 24300006, guid: e7769d1dc3f84fbb8964c0441d63c248, type: 2}

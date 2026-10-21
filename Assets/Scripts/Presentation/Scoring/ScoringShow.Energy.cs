@@ -76,6 +76,7 @@ namespace TheCall.Scoring
             }
 
             EnergyPhase = "skill";
+            if (cue.Energy > 0) PlaySfx(GameplayCue.SkillEnergy);
             var column = Column(cue.SlotIndex);
             if (column != null) column.Show(_pendingFill, Mathf.Max(column.Glow, 0.18f));
             var portrait = PortraitAt(cue.SlotIndex);
@@ -106,7 +107,16 @@ namespace TheCall.Scoring
                 var before = _pendingFill;
                 var after = FillFor(_pendingEnergy + cue.Energy);
                 var target = column != null ? Local(column.Surface) : HeadOf(cue.SlotIndex) + new Vector2(-60, -155);
-                yield return Shatter(_energyCaption, target, t => column?.Show(Mathf.Lerp(before, after, t), Mathf.Lerp(0.2f, 0.88f, t)));
+                var charged = false;
+                yield return Shatter(_energyCaption, target, t =>
+                {
+                    if (!charged && column != null && t > 0 && after > before && !SkipWait())
+                    {
+                        charged = true;
+                        PlaySfx(GameplayCue.MonsterEnergyGain);
+                    }
+                    column?.Show(Mathf.Lerp(before, after, t), Mathf.Lerp(0.2f, 0.88f, t));
+                });
                 StoreEnergy(cue.SlotIndex, cue.Energy);
                 EnergyPhase = "charged";
                 yield return Wait(0.12f);
@@ -145,6 +155,8 @@ namespace TheCall.Scoring
             if (actor >= 0) PortraitAt(actor)?.RestoreMotion();
             EnergyPhase = "merge";
             yield return Shatter(effect, NumberPoint(_energyCaption.Value));
+            if (!SkipWait() && beat.Role == BeatRole.Factor && DisplayedSkillEnergy > 0 && beat.EnergyAfter > DisplayedSkillEnergy)
+                PlaySfx(GameplayCue.SkillMultiply);
             DisplayedSkillEnergy = beat.EnergyAfter;
             _energyCaption.Value.text = EnergySigned(DisplayedSkillEnergy);
             EnergyPhase = "number";
@@ -209,6 +221,7 @@ namespace TheCall.Scoring
                 var total = from + amount * received;
                 var flow = t > 0.25f && t < 1 ? Mathf.Sin(received * Mathf.PI) : 0;
                 _stage.Facility?.ReceiveEnergy(total, flow);
+                ObserveRequirement(total);
                 if (_current != null) _current.text = Mathf.RoundToInt(total).ToString();
                 for (var i = 0; i < particles.Length; i++)
                 {

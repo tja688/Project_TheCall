@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "PASS 972 real portrait cases; one complete sprite; distinct basic/cultivated pools; gameplay state never changes art",
+    "PASS all 72 colorways retain extracted alpha and original dark outlines",
+    "PASS real Canvas gallery 0",
+    "PASS real Canvas gallery 1",
+    "PASS real Canvas gallery 2",
+    "PASS real Canvas gallery 3",
+    "PASS real Canvas gallery 4"
+  ],
+  "newErrors": 0,
+  "flatColors": true,
+  "savedMainUnchanged": true,
+  "passed": true
+}

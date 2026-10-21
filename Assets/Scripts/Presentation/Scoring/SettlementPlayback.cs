@@ -21,6 +21,7 @@ namespace TheCall.Scoring
                 || _architecture.SendQuery(new RunPhaseQuery()) != RunPhase.Operation) return false;
             var initialEnergy = _architecture.SendQuery(new LevelEnergyQuery());
             var initialGold = _architecture.SendQuery(new RunLedgerQuery()).Gold;
+            var energyDue = _architecture.SendQuery(new LevelTargetQuery()).EnergyDue;
             var cells = _architecture.SendQuery(new ExtractionSlotsQuery());
             var ids = new string[screen.extractionSlots?.Length ?? 0];
             for (var i = 0; i < ids.Length && i < cells.Count; i++) ids[i] = cells[i].MonsterId;
@@ -37,7 +38,7 @@ namespace TheCall.Scoring
                     (actor, target) => _architecture.SendCommand(new MoveSettlementSightCommand(actor, target)),
                     cell => _architecture.SendCommand(new ClearSettlementSightCommand(cell)),
                     energy => { if (screen.lab != null && screen.lab.facility == null) screen.lab.EnergyShown(energy); },
-                    screen.lab != null ? screen.lab.facility : null));
+                    screen.lab != null ? screen.lab.facility : null, energyDue));
                 return true;
             }
             catch

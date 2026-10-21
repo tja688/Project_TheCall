@@ -1,0 +1,231 @@
+{
+  "commit": "eed3ed53cf5a59657743a3b2b67267f103220b4f",
+  "files": [
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_01.wav",
+      "sourceUnchanged": true,
+      "sha256": "68f71a93ac0a89e32ded68dcede0844944d72f3603ffb3e62b12e33a9afb0962",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_02.wav",
+      "sourceUnchanged": true,
+      "sha256": "d207d9fcd897e10d9d15ed777878460288129f34f149e87532c77f6b555995a7",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_03.wav",
+      "sourceUnchanged": true,
+      "sha256": "df479578c5a84f40d90dc8d610ab7cb5d801bfc89e9cee9237bc9fc725ce6a94",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_04.wav",
+      "sourceUnchanged": true,
+      "sha256": "3647a8fcfe6b9db6b5d33fb8a28c96332c0e3919cefa2bc69341565937a2150c",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_05.wav",
+      "sourceUnchanged": true,
+      "sha256": "ee8b574705f1e46bf1d04cdd39e984b49995cca4b71bf0bb97fd377110891a55",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_06.wav",
+      "sourceUnchanged": true,
+      "sha256": "cc1d48c3f936e90f163cadf515bd4d6d7fe4c1f5734695c2b3d4f5b9a309093b",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_ExperiencePickup_07.wav",
+      "sourceUnchanged": true,
+      "sha256": "389a26823978a37a8e345fb76470dbcc554d163cacd12df03b4a7a03cb0c0599",
+      "seconds": 0.125,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_Reach.wav",
+      "sourceUnchanged": true,
+      "sha256": "cb44e8e80d059161ae5f5cfcfcf9d4310785fc5ac72ac476cffd8766d461e4cb",
+      "seconds": 0.3333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Level/S_Level_Settle.wav",
+      "sourceUnchanged": true,
+      "sha256": "812310729e1b07038361fa20f7ee214d196417a1a11499a13131bc791deaad9b",
+      "seconds": 0.4951,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Monster/S_Monster_Discard.wav",
+      "sourceUnchanged": true,
+      "sha256": "e65c21ba268b649f464337d099d35066a26fb51f1b648af4b6ad08694e2d94be",
+      "seconds": 0.4333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Monster/S_Monster_EnergyGain_01.wav",
+      "sourceUnchanged": true,
+      "sha256": "b85d00efc76db032cf54fc6d466574a6e41bfd25c128ffc233f8e84fd55af1ab",
+      "seconds": 0.7213,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Monster/S_Monster_EnergyGain_02.wav",
+      "sourceUnchanged": true,
+      "sha256": "40a7ce50a1e890c7e131d4edcc3277298c7cbd4e397b4a6410bc0581a8ccd263",
+      "seconds": 0.7034,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Monster/S_Monster_PickUp.wav",
+      "sourceUnchanged": true,
+      "sha256": "09abfcf7e8f35a8316f1edd7f2ef9767e57acfa959a1c2d9843c9fedaed143a8",
+      "seconds": 0.2,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Monster/S_Monster_Place.wav",
+      "sourceUnchanged": true,
+      "sha256": "cae413d78f2d9d48b040dbc662a5d2a52777ef9c314900beabd66c5fe30388ab",
+      "seconds": 0.1333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Player/S_Player_Obtain_01.wav",
+      "sourceUnchanged": true,
+      "sha256": "d920a4bf00ac16907c7f64ce5da9a940cb6d2e2f9b54048d8af8baffb0b022f1",
+      "seconds": 0.3667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Player/S_Player_Obtain_02.wav",
+      "sourceUnchanged": true,
+      "sha256": "60729648d994131d185b220aff9d36a1ff74d2ef5cd856634e394dd12950002a",
+      "seconds": 0.4293,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Player/S_Player_Obtain_03.wav",
+      "sourceUnchanged": true,
+      "sha256": "073b0902da88ac406e3db583e4d31af1c537427819f55c492adb6793373a9287",
+      "seconds": 0.5,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Energy_01.wav",
+      "sourceUnchanged": true,
+      "sha256": "e338ae35746d345f3be11462b9a84e6a9887a2b659fed8e78c02b81524d0b0ca",
+      "seconds": 0.1667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Energy_02.wav",
+      "sourceUnchanged": true,
+      "sha256": "5aa3df10fa76c027ceeda19d8d3dd99f91008ca6ddc1fadcec4f66a4dfe0b030",
+      "seconds": 0.1333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Kill_01.wav",
+      "sourceUnchanged": true,
+      "sha256": "2b3d57d3b0a22b356ed1b1358003470d4bc8b175f5064e29d7b953ba2c1611d2",
+      "seconds": 0.2667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Kill_02.wav",
+      "sourceUnchanged": true,
+      "sha256": "15ec6b9291835add617a07ac0527c167f7e08c3175d02e1dec580b140fd161d0",
+      "seconds": 0.2056,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Kill_03.wav",
+      "sourceUnchanged": true,
+      "sha256": "9bf50ceb1578aec97612e29f70e65d92f864a0af761670457b9e8aeb36e5d3bf",
+      "seconds": 0.2667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Kill_04.wav",
+      "sourceUnchanged": true,
+      "sha256": "f75eb70da5e32fc78d67f1167066edb728848151e4fe8aa371354fd8e7f18f27",
+      "seconds": 0.4333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    },
+    {
+      "path": "Assets/Sound/SFX/Skill/S_Skill_Multiply.wav",
+      "sourceUnchanged": true,
+      "sha256": "4739334c08d51c1fb644361c432af0e43b1755e43a3c1ba853a647fad6599bf7",
+      "seconds": 0.9,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 24
+    }
+  ],
+  "missingEnergyRise": [
+    "S_Level_EnergyRise_01.wav",
+    "S_Level_EnergyRise_02.wav",
+    "S_Level_EnergyRise_03.wav",
+    "S_Level_EnergyRise_04.wav",
+    "S_Level_EnergyRise_05.wav",
+    "S_Level_EnergyRise_06.wav",
+    "S_Level_EnergyRise_07.wav"
+  ],
+  "passed": true
+}

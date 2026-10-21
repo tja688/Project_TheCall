@@ -93,18 +93,10 @@
       option.value = item.id; option.textContent = item.name; return option;
     }));
   }
-  function accessories() {
-    const template = state?.options?.templates.find((t) => t.id === Number(choice("template").value));
-    const pairs = template?.pairs || [0];
-    for (const option of choice("head").options) option.disabled = !pairs.some((p) => Math.floor(p / 3) === Number(option.value));
-    if (choice("head").selectedOptions[0]?.disabled) choice("head").value = "0";
-    for (const option of choice("back").options) option.disabled = !pairs.includes(Number(choice("head").value) * 3 + Number(option.value));
-    if (choice("back").selectedOptions[0]?.disabled) choice("back").value = "0";
-  }
   function swatches() {
     const palette = state?.options?.palettes[Number(choice("palette").value)];
     const host = document.getElementById("palette-preview"); host.replaceChildren(); if (!palette) return;
-    for (const [key, label] of [["body", "身体"], ["pattern", "花纹"], ["eye", "眼部"], ["mouth", "嘴部"]]) {
+    for (const [key, label] of [["fill", "填充颜色"]]) {
       const item = document.createElement("div");
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svg.setAttribute("viewBox", "0 0 64 28");
@@ -116,12 +108,10 @@
   document.getElementById("preview-controls").addEventListener("submit", (event) => {
     event.preventDefault();
     const payload = {};
-    for (const key of ["template", "palette", "head", "back"]) payload[key] = Number(choice(key).value);
+    for (const key of ["template", "palette"]) payload[key] = Number(choice(key).value);
     for (const key of ["personality", "mood"]) payload[key] = choice(key).value;
     run(() => command("preview", payload));
   });
-  choice("template").addEventListener("change", () => { choice("head").value = choice("back").value = "0"; accessories(); });
-  choice("head").addEventListener("change", accessories);
   choice("palette").addEventListener("change", swatches);
 
   function render() {
@@ -141,7 +131,7 @@
         populate(choice("mood"), state.options.moods.map((name) => ({id: name, name}))); optionKey = key;
       }
       if (state.selection) for (const [key, value] of Object.entries(state.selection)) choice(key).value = value;
-      accessories(); swatches();
+      swatches();
     }
     const specimen = state.specimen;
     if (specimen && specimen.png) images.set(specimen.id, specimen.png);

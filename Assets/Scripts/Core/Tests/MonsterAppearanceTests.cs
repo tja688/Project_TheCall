@@ -6,53 +6,42 @@ namespace TheCall.Tests
 {
     public sealed class MonsterAppearanceTests
     {
-        [Test] public void BirthsCoverTwelveTemplatesWithDeterministicLegalAccessories()
+        [Test] public void WildBirthsCoverOnlyTheSixBaseDrawingsWithStableColor()
         {
-            var counts = new int[12];
-            foreach (var seed in Enumerable.Range(-6000,12000).Concat(new[] { int.MinValue,int.MaxValue }))
+            var seen=new HashSet<int>();var palettes=new HashSet<int>();
+            foreach(var seed in Enumerable.Range(-6000,12000).Concat(new[]{int.MinValue,int.MaxValue}))
             {
-                var a = MonsterAppearance.FromSeed(seed); counts[a.Recipe]++;
+                var a=MonsterAppearance.FromSeed(seed);seen.Add(a.Recipe);palettes.Add(a.Palette);
                 Assert.That(a,Is.EqualTo(MonsterAppearance.FromSeed(seed)));
-                Assert.That(a.Palette,Is.InRange(0,5)); Assert.That(a.Variation,Is.InRange(0,31));
-                Assert.That(MonsterAppearance.Compatible(a.Recipe,a.HeadAccessory,a.BackAccessory),Is.True);
+                Assert.That(a.IsCultivated,Is.False);Assert.That(a.Palette,Is.InRange(0,5));
             }
-            Assert.That(counts.All(n => n > 850 && n < 1150),Is.True,string.Join(",",counts));
+            Assert.That(seen.OrderBy(i=>i),Is.EqualTo(new[]{5,6,8,9,10,11}));
+            Assert.That(palettes.Count,Is.EqualTo(6));
         }
-        [Test] public void BreedingKeepsTheWholePaletteAndUsesTwentyPercentOtherTemplates()
+        [Test] public void TwoAndThreeParentBirthsUseOnlyCompleteCultivatedDrawings()
         {
-            foreach (var count in new[] {2,3})
+            foreach(var count in new[]{2,3})
             {
-                var parents = Enumerable.Range(0,count).Select(Uniform).ToArray(); var mutation = 0; var seen = new HashSet<int>();
-                for (var seed = 0; seed < 10000; seed++)
+                var parents=Enumerable.Range(0,count).Select(Uniform).ToArray();
+                var seen=new HashSet<int>();var colors=new HashSet<int>();
+                for(var seed=0;seed<10000;seed++)
                 {
-                    var a = MonsterAppearance.Breed(parents,seed); seen.Add(a.Recipe);
-                    Assert.That(a,Is.EqualTo(MonsterAppearance.Breed(parents,seed)));
-                    Assert.That(a.Palette,Is.EqualTo(parents[1].Palette));
-                    Assert.That(MonsterAppearance.Compatible(a.Recipe,a.HeadAccessory,a.BackAccessory),Is.True);
-                    if (!parents.Any(p => p.Recipe == a.Recipe)) mutation++;
+                    var child=MonsterAppearance.Breed(parents,seed);seen.Add(child.Recipe);colors.Add(child.Palette);
+                    Assert.That(child.IsCultivated,Is.True);
+                    Assert.That(child,Is.EqualTo(MonsterAppearance.Breed(parents,seed)));
+                    Assert.That(child,Is.EqualTo(MonsterAppearance.Breed(new[]{Uniform(9),Uniform(10)},seed)),"Parent features never assemble body parts");
                 }
-                Assert.That(mutation,Is.InRange(1850,2150)); Assert.That(seen.Count,Is.EqualTo(12));
+                Assert.That(seen.OrderBy(i=>i),Is.EqualTo(new[]{0,1,2,3,4,7}));Assert.That(colors.Count,Is.EqualTo(6));
             }
         }
-        [Test] public void BreedingOnlyUsesParentAccessoriesOrTheSafeEmptyPair()
+        [Test] public void BreedingRequiresTwoParentsAndOverloadsAgree()
         {
-            var parents = new[] { new MonsterAppearance(8,2,2,1,3),new MonsterAppearance(9,4,3,2,4) };
-            for (var seed=0;seed<2000;seed++)
-            {
-                var c=MonsterAppearance.Breed(parents,seed);
-                Assert.That(c.HeadAccessory == 0 && c.BackAccessory == 0 || parents.Any(p=>p.HeadAccessory==c.HeadAccessory) && parents.Any(p=>p.BackAccessory==c.BackAccessory),Is.True);
-                Assert.That(c.Palette,Is.EqualTo(4));
-            }
-        }
-        [Test] public void InvalidAccessoryPairsAreRejectedAndTwoParentOverloadsAgree()
-        {
-            Assert.Throws<ArgumentException>(()=>new MonsterAppearance(0,0,1,1,0));
             Assert.Throws<ArgumentNullException>(()=>MonsterAppearance.Breed(null,0));
-            Assert.Throws<ArgumentException>(()=>MonsterAppearance.Breed(new[] {Uniform(0)},0));
-            for (var i=0;i<128;i++) Assert.That(MonsterAppearance.Breed(Uniform(0),Uniform(1),i),Is.EqualTo(MonsterAppearance.Breed(new[] {Uniform(0),Uniform(1)},i)));
+            Assert.Throws<ArgumentException>(()=>MonsterAppearance.Breed(new[]{Uniform(0)},0));
+            for(var i=0;i<128;i++)Assert.That(MonsterAppearance.Breed(Uniform(0),Uniform(1),i),Is.EqualTo(MonsterAppearance.Breed(new[]{Uniform(0),Uniform(1)},i)));
         }
-        internal static MonsterAppearance Uniform(int value) => new MonsterAppearance(value,value,0,0,value);
-        internal static int[] Genes(MonsterAppearance value) => new[] { value.Recipe,value.Palette,value.HeadAccessory,value.BackAccessory,value.Variation };
+        internal static MonsterAppearance Uniform(int value)=>new MonsterAppearance(value,value,value);
+        internal static int[] Genes(MonsterAppearance value)=>new[]{value.Recipe,value.Palette,value.Variation};
     }
 
     public sealed class MonsterAppearanceFlowTests : RulesFixture
@@ -74,8 +63,8 @@ namespace TheCall.Tests
             var model = App.GetModel<RunModel>().Find(child.Id);
             Assert.That(model.ParentIds, Is.EqualTo(parents.Select(value => value.Id).ToArray()));
             Assert.That(child.SkillNames, Is.EqualTo(new[] { "能量体", "左能量体", "右能量体" }));
-            Assert.That(MonsterAppearance.Compatible(child.Appearance.Recipe, child.Appearance.HeadAccessory, child.Appearance.BackAccessory), Is.True);
-            Assert.That(child.Appearance.Palette, Is.EqualTo(1));
+            Assert.That(child.Appearance.IsCultivated, Is.True);
+            Assert.That(child.Appearance.Palette, Is.InRange(0,5));
             Assert.That(draw.Choices, Is.EqualTo(3), "现有规则抽取性格稀有度、性格和一名种族亲本");
             Assert.That(draw.Chances, Is.EqualTo(1), "现有规则只需一次性格继承判定");
         }

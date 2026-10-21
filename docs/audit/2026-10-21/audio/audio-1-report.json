@@ -1,0 +1,12 @@
+{
+    "kind": "LOCAL_UI_FIXTURE_NOT_NATURAL_RUN",
+    "unity": "6000.6.0f1",
+    "checks": [
+        {
+            "name": "begin audio",
+            "passed": true,
+            "actual": "count=1 IDs=m4",
+            "frame": 36137
+        }
+    ]
+}

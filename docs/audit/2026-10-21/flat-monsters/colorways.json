@@ -1,0 +1,38 @@
+[
+  {
+    "name": "苔绿",
+    "light": "BBD6C6",
+    "shade": "536E64",
+    "accent": "F4A7BC"
+  },
+  {
+    "name": "暮紫",
+    "light": "BDB1D4",
+    "shade": "62507F",
+    "accent": "F5A3CD"
+  },
+  {
+    "name": "莓红",
+    "light": "E7ACBC",
+    "shade": "8B405B",
+    "accent": "BFE9D5"
+  },
+  {
+    "name": "奶油",
+    "light": "FFF0B9",
+    "shade": "C4A56C",
+    "accent": "F4BA62"
+  },
+  {
+    "name": "雾青",
+    "light": "D5EAE4",
+    "shade": "719B96",
+    "accent": "A5F4D5"
+  },
+  {
+    "name": "月蓝",
+    "light": "CADCEC",
+    "shade": "667F9D",
+    "accent": "EDC1DE"
+  }
+]
